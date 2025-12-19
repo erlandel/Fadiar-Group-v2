@@ -1,14 +1,16 @@
-import { InputHTMLAttributes } from 'react';
-import { LucideIcon } from 'lucide-react';
+import { InputHTMLAttributes } from "react";
+import { LucideIcon } from "lucide-react";
 
 interface InputAuthProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: LucideIcon;
   error?: string;
   className?: string;
+  hasError?: boolean;
+  hideErrorMessage?: boolean;
 }
 
-export default function InputAuth({ 
+export default function InputAuth({
   type = "text",
   placeholder = "Contraseña",
   label,
@@ -16,6 +18,8 @@ export default function InputAuth({
   value,
   onChange,
   error,
+  hasError = false,
+  hideErrorMessage = false,
   disabled = false,
   className = "",
   ...props
@@ -27,14 +31,14 @@ export default function InputAuth({
           {label}
         </label>
       )}
-      
+
       <div className="relative">
         {Icon && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
             <Icon size={20} />
           </div>
         )}
-        
+
         <input
           type={type}
           placeholder={placeholder}
@@ -42,22 +46,23 @@ export default function InputAuth({
           onChange={onChange}
           disabled={disabled}
           className={`
-            w-full px-4 py-3 
-            ${Icon ? 'pl-11' : 'pl-4'}
+            w-full px-4 py-2 
+            ${Icon ? "pl-11" : "pl-4"}
             border border-[#d1d5db] rounded-xl
-            focus:outline-none focus:ring-3 focus:ring-[#bdbdbd] focus:border-transparent
+            focus:outline-none
+            focus:ring-[0.3px]
+            focus:shadow-[0_0_0_5px_rgba(0,0,0,0.15)]
             disabled:bg-gray-100 disabled:cursor-not-allowed
             placeholder:text-gray-500
-             placeholder:text-lg sm:text-xl
+             placeholder:text-lg sm:text-xl             
             transition-all duration-200
-            ${error ? 'border-red-500 focus:ring-red-500' : ''}
+            ${hasError || !!error ? "border-red-500" : ""}
             ${className}
           `}
           {...props}
         />
       </div>
-      
-      {error && (
+      {!hideErrorMessage && error && (
         <p className="mt-1 text-sm text-red-500">{error}</p>
       )}
     </div>

@@ -13,7 +13,7 @@ export default function MessageErrorAuth({ message, icon }: MessageErrorAuthProp
       {icon || <IxErrorFilled className="w-6 h-6 shrink-0" />}
 
       {/* Mensaje */}
-      <span className="flex-1 text-red-700 font-bold text-sm sm:text-xl ">{message}</span>
+      <span className="flex-1 text-red-700 font-bold text-sm sm:text-lg ">{message}</span>
     </div>
   );
 }
