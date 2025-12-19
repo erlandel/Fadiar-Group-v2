@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: #022854;
+  --color-accent: #d69f04;
+  --color-gray: #D9D9D9;
+    --color-snow: ##E1E5EB;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: #ffffff;
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Ocultar scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Animación para login page */
+@keyframes blink {
+  0% {
+    background: #ffffff;
+  }
+  25% {
+    background: #ffffff;
+  }
+}
+
+.animate-blink {
+  animation: blink 3s linear infinite;
+}
+
+/* Scroll-triggered animations base */
+.animate-on-scroll {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.aos-animate {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    opacity: 1;
+  }
+}
