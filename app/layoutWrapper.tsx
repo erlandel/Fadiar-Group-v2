@@ -2,12 +2,16 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/changePassword') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/verificationCodeEmail');
+  
+  const queryClient = new QueryClient();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -36,10 +40,11 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   }, [pathname]);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       {!isAuthRoute && <Header />}
       {children}
       {!isAuthRoute && <Footer />}
-    </>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
