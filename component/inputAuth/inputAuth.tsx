@@ -59,7 +59,7 @@ export default function InputAuth({
           onChange={onChange}
           disabled={disabled}
           className={`
-            w-full px-4 py-2 
+            w-full px-4 py-1.5 
             ${Icon ? "pl-11" : "pl-4"}
             ${EndIcon && StatusIcon ? "pr-20" : EndIcon || StatusIcon ? "pr-12" : "pr-4"}
             border border-[#d1d5db] rounded-xl
@@ -68,7 +68,7 @@ export default function InputAuth({
             focus:shadow-[0_0_0_5px_rgba(0,0,0,0.15)]
             disabled:bg-gray-100 disabled:cursor-not-allowed
             placeholder:text-gray-500
-             placeholder:text-lg sm:text-xl             
+                     
             transition-all duration-200
             ${(hasError || !!error) && !isFocused ? "border-red-500" : ""}
             ${className}

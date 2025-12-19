@@ -199,21 +199,21 @@ export default function Register() {
 
     <>
       <div className="bg-[#e7e8e9] h-screen w-screen flex justify-center items-center">
-        <div className="bg-white w-150 h-auto rounded-2xl mx-4 shadow-xl">
-          <div className="flex justify-center items-center flex-col p-7 ">
+        <div className="bg-white w-110 h-auto rounded-2xl mx-4 shadow-xl">
+          <div className="flex justify-center items-center flex-col p-7">
             <div>
-              <h3 className="text-primary text-3xl sm:text-4xl font-bold">
+              <h3 className="text-primary text-2xl sm:text-3xl font-bold">
                 Registrarse
               </h3>
             </div>
 
-            <div className="mt-3 text-gray-600">
+            <div className="mt-1 text-gray-600 text-sm ">
               <p>Completa todos los campos para continuar</p>
             </div>
 
-            <div className="w-full  space-y-5 mt-8">
+            <div className="w-full  space-y-5 mt-5">
               {/* Etiqueta y porcentaje */}
-              <div className="flex justify-between mb-1 text-sm text-gray-500">
+              <div className="flex justify-between mb-1 text-xs text-gray-500">
                 <span>Progreso del registro</span>
                 <span>{progress}%</span>
               </div>
@@ -224,7 +224,7 @@ export default function Register() {
               </div>
             </div>
 
-            <form className="w-full space-y-3 mt-8" onSubmit={handleSubmit}>
+            <form className="w-full space-y-3 mt-5" onSubmit={handleSubmit}>
       
                 <div>
                   <InputAuth
@@ -345,10 +345,10 @@ export default function Register() {
                 </div>
         
 
-              <div className="mt-3 w-full">
+              <div className="mt-7 w-full">
                 <button
                   type="submit"
-                  className="bg-primary text-white w-full rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-primary text-white w-full rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none"
                   disabled={isSubmitting || progress < 100}
                 >
                   {isSubmitting ? (
@@ -363,7 +363,7 @@ export default function Register() {
               </div>
             </form>
 
-                   <div className="flex mt-10">
+                   <div className="flex mt-7">
                 <p className="text-gray-600">¿Ya tienes una cuenta?  </p>
                 <Link
                   href="/login"

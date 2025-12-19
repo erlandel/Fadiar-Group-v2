@@ -24,6 +24,9 @@ export default function Login() {
 
   const [showErrors, setShowErrors] = useState(false);
   const [errorBannerMessage, setErrorBannerMessage] = useState<string>("");
+  const [editedFields, setEditedFields] = useState<
+    Partial<Record<keyof LoginFormData, boolean>>
+  >({});
 
   const loginMutation = useMutation({
     mutationFn: async (payload: { email: string; password: string }) => {
@@ -67,6 +70,7 @@ export default function Login() {
   const handleLoginClick = async () => {
     setShowErrors(true);
     setErrors({});
+    setEditedFields({});
     const result = loginSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof LoginFormData, string>> = {};
@@ -91,6 +95,7 @@ export default function Login() {
     (field: keyof LoginFormData) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+      setEditedFields((prev) => ({ ...prev, [field]: true }));
     };
 
   const handleSubmitForm = (e: React.FormEvent) => {
@@ -106,18 +111,18 @@ export default function Login() {
     isEmailValid(formData.email);
 
   return (
-    <div className="bg-[#e7e8e9] h-screen w-screen flex justify-center items-center">
-      <div className="bg-white w-150 h-auto rounded-2xl mx-4 shadow-xl">
-        <div className="p-7 my-4">
+    <div className="bg-[#e7e8e9] min-h-dvh w-full flex items-center justify-center overflow-hidden">
+      <div className="bg-white w-130 h-auto rounded-2xl mx-4 shadow-xl">
+        <div className="px-7 py-5 ">
           <div className="flex justify-center items-center flex-col">
             <div>
-              <h3 className="text-primary text-3xl sm:text-4xl font-bold">
+              <h3 className="text-primary text-2xl sm:text-3xl font-bold">
                 Iniciar sesión
               </h3>
             </div>
 
             <form
-              className="w-full  space-y-5 mt-5"
+              className="w-full  space-y-4 mt-5"
               onSubmit={handleSubmitForm}
             >
               <div>
@@ -128,7 +133,7 @@ export default function Login() {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange("email")}
-                  hasError={showErrors ? !!errors.email : false}
+                  hasError={showErrors ? (!!errors.email && !editedFields.email) : false}
                   hideErrorMessage
                 />
               </div>
@@ -141,24 +146,24 @@ export default function Login() {
                   autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange("password")}
-                  hasError={showErrors ? !!errors.password : false}
+                  hasError={showErrors ? (!!errors.password && !editedFields.password) : false}
                   hideErrorMessage
                 />
               </div>
             </form>
 
-            <div className="w-full mt-5">
-              {showErrors && !!errorBannerMessage && (
+            {showErrors && !!errorBannerMessage && (
+              <div className="w-full mt-5">
                 <MessageErrorAuth message={errorBannerMessage} />
-              )}
-            </div>
+              </div>
+            )}
 
-            <div className="mt-3 w-full">
+            <div className="mt-5 w-full">
               <button
-                className="bg-primary text-white w-full  rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg
+                className="bg-primary text-white w-full  rounded-lg px-3 py-2 cursor-pointer hover:bg-[#034078] hover:shadow-lg
               "
                 onClick={handleLoginClick}
-                disabled={loginMutation.isPending || !isFormValid}
+                disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? (
                   <span className="inline-flex items-center justify-center gap-2">
@@ -171,12 +176,12 @@ export default function Login() {
               </button>
             </div>
 
-            <div className="mt-5 space-y-2 text-gray-600 text-center">
+            <div className="mt-6 space-y-2   text-primary text-center text-xs sm:text-sm">
               <div className="flex">
-                <p>¿No tienes una cuenta? </p>
+                <p className="text-gray-600">¿No tienes una cuenta? </p>
                 <Link
                   href="/register"
-                  className="text-md  no-underline  hover:underline transition-colors ml-1"
+                  className=" no-underline  hover:underline transition-colors ml-1"
                 >
                   Regístrate ahora
                 </Link>
@@ -185,7 +190,7 @@ export default function Login() {
               <div>
                 <Link
                   href="/verificationEmail"
-                  className="text-md  no-underline  hover:underline transition-colors"
+                  className="  no-underline  hover:underline transition-colors"
                 >
                   ¿Olvidaste tu contraseña?
                 </Link>
@@ -194,7 +199,7 @@ export default function Login() {
               <div>
                 <Link
                   href="/verificationEmail"
-                  className="text-md  no-underline  hover:underline transition-colors"
+                  className="  no-underline  hover:underline transition-colors"
                 >
                   ¿No has verificado tu cuenta?
                 </Link>

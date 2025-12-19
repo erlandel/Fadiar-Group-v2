@@ -4,6 +4,7 @@ import FloatingLabelInput from "@/component/authenticationComponent/FloatingLabe
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import InputAuthCode from "@/component/inputAuthCode/inputAuthCode";
 
 export default function VerificationCodeEmail() {
   const [email, setEmail] = useState("");
@@ -91,9 +92,7 @@ export default function VerificationCodeEmail() {
             email: email.trim(),
           }),
         }
-      );  
-
-   
+      );
     } catch (error) {
       console.error("Error al reenviar el código:", error);
       setError("Error al reenviar el código. Intenta nuevamente.");
@@ -101,87 +100,61 @@ export default function VerificationCodeEmail() {
   };
 
   return (
-    <div className="h-full md:min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat bg-[url('/images/authenticationBackground.png')] p-4">
-      {/* Container principal con animación circular */}
-      <div className="relative w-[400px] h-[500px] flex items-center justify-center rounded-full overflow-hidden">
-        {/* Spans animados en círculo - 270 grados (lado derecho y superior/inferior) */}
-        {[...Array(38)].map((_, i) => {
-          // Calcular ancho: más pequeño al inicio y final, más grande en el centro
-          const progress = i / 37; // 0 a 1
-          const widthScale = 0.3 + Math.sin(progress * Math.PI) * 0.7; // 0.3 a 1
-          const width = Math.round(32 * widthScale * 100) / 100; // Redondear a 2 decimales
-          const rotation = Math.round((-135 + i * (270 / 38)) * 100) / 100;
-          const delay = Math.round(i * (3 / 38) * 100) / 100;
-
-          return (
-            <span
-              key={i}
-              className="absolute left-0 h-1.5 bg-primary rounded-full animate-blink"
-              style={{
-                width: `${width}px`,
-                transformOrigin: "200px",
-                transform: `rotate(${rotation}deg)`,
-                animationDelay: `${delay}s`,
-              }}
-            />
-          );
-        })}
-
-        {/* Login Box */}
-        <div className="absolute left-12 w-4/5 max-w-[320px] z-10 p-5 rounded-3xl">
-          <form className="w-full px-2.5" onSubmit={handleSubmit}>
-            <h2 className="text-3xl text-[#f4f4f4] text-center mb-2.5 font-semibold">
-              Verifiar correo
-            </h2>
-
-            {/* Code Input */}
-            <FloatingLabelInput
-              type="text"
-              label="Código de verificación"
-              value={code}
-              onChange={(e) => {
-                setCode(e.target.value);
-                setError("");
-              }}
-              
-            />
-
-            {/* Error Message */}
-            {error && (
-              <div className="text-red-500 text-sm text-center mt-2">
-                {error}
+    <>
+      <div className="bg-[#e7e8e9] min-h-dvh w-full flex items-center justify-center overflow-hidden">
+        <div className="bg-white w-130 h-auto rounded-2xl mx-4 shadow-xl">
+          <div className="p-6  sm:p-7 ">
+            <div className="flex justify-center items-center flex-col text-center">
+              <div>
+                <h3 className="text-primary text-2xl sm:text-3xl font-bold">
+                  Verificar cuenta
+                </h3>
               </div>
-            )}
 
-            <div className="text-center my-4">
-              <button
-                type="button"
-                onClick={handleResendCode}
-                className="text-md font-bold no-underline text-gray cursor-pointer hover:underline transition-colors"
-              >
-                Reenviar código
-              </button>
+              <div className="text-gray-600 mt-1 sm:mt-3 ">
+                Hemos enviado un código de verificación de 6 dígitos a:
+              </div>
+              <div className="text-primary mt-2 sm:mt-3 font-bold sm:text-lg">
+                <p>{email}</p>
+              </div>
+
+                <div className="text-gray-500 mt-2 sm:mt-3 text-xs sm:text-sm">
+               Revisa tu bandeja de entrada y spam. El código expira en 10 minutos.
+              </div>
+
+              <div className="text-primary font-bold mt-3 sm:mt-5">
+                <p>Ingresa el código de verificación</p>
+              </div>
+
+              <form className="w-full   mt-3 sm:mt-4">
+                <InputAuthCode />
+              </form>
+          
+
+              <div className=" mt-4 sm:mt-6 w-full">
+                <button
+                  className="bg-primary text-white w-full  rounded-xl px-3 py-2 cursor-pointer hover:bg-[#034078] hover:shadow-lg 
+              "
+                >Verificar cuenta</button>
+              </div>
+
+              <div className="mt-5 space-y-2 text-gray-500 text-center text-sm ">
+                <div className="flex">
+                  <p>¿No recibiste el código?</p>
+                  <Link
+                    href="/register"
+                    className="text-primary font-bold   no-underline  hover:underline transition-colors ml-1"
+                  >
+                    Reenviar código
+                  </Link>
+                </div>
+
+               
+              </div>
             </div>
-
-            <button
-              type="submit"
-              className="w-full h-11 bg-accent border-none outline-none rounded-full cursor-pointer text-base text-white font-semibold hover:bg-accent/90 transition-all"
-            >
-              Confirmar
-            </button>
-
-            {/* Sign Up Link */}
-            <div className="mt-2.5 text-center">
-              <Link
-                href="/login"
-                className="text-base text-gray no-underline font-semibold hover:underline"
-              >
-                Login
-              </Link>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
