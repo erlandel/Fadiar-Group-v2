@@ -27,14 +27,16 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: async (payload: { email: string; password: string }) => {
-      const response = await fetch("https://app.fadiar.com:444/prueba/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
+      const response = await fetch(
+        "https://app.fadiar.com:444/prueba/api/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -56,10 +58,11 @@ export default function Login() {
     },
     onError: (error) => {
       setShowErrors(true);
-      setErrorBannerMessage("Usuario no encontrado. Verifica tu correo electrónico.");
+      setErrorBannerMessage(
+        "Usuario no encontrado. Verifica tu correo electrónico."
+      );
     },
   });
-
 
   const handleLoginClick = async () => {
     setShowErrors(true);
@@ -95,38 +98,68 @@ export default function Login() {
     handleLoginClick();
   };
 
+  const isEmailValid = (email: string) =>
+    loginSchema.shape.email.safeParse(email).success;
+  const isFormValid =
+    formData.email.trim().length > 0 &&
+    formData.password.trim().length > 0 &&
+    isEmailValid(formData.email);
+
   return (
-
-
     <div className="bg-[#e7e8e9] h-screen w-screen flex justify-center items-center">
-      <div className="bg-white w-150 h-auto rounded-2xl mx-4">
-        <div className="p-5">
+      <div className="bg-white w-150 h-auto rounded-2xl mx-4 shadow-xl">
+        <div className="p-7 my-4">
           <div className="flex justify-center items-center flex-col">
             <div>
-              <h3 className="text-primary text-4xl font-bold">
+              <h3 className="text-primary text-3xl sm:text-4xl font-bold">
                 Iniciar sesión
               </h3>
             </div>
 
-            <form className="w-full  space-y-5 mt-5" onSubmit={handleSubmitForm}>
+            <form
+              className="w-full  space-y-5 mt-5"
+              onSubmit={handleSubmitForm}
+            >
               <div>
-                <InputAuth placeholder="Correo electrónico" type="email" name="email" autoComplete="email" value={formData.email} onChange={handleChange("email")} hasError={showErrors ? !!errors.email : false} hideErrorMessage />
+                <InputAuth
+                  placeholder="Correo electrónico"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange("email")}
+                  hasError={showErrors ? !!errors.email : false}
+                  hideErrorMessage
+                />
               </div>
 
               <div>
-                <InputAuth placeholder="Contraseña" type="password" name="password" autoComplete="current-password" value={formData.password} onChange={handleChange("password")} hasError={showErrors ? !!errors.password : false} hideErrorMessage />
+                <InputAuth
+                  placeholder="Contraseña"
+                  type="password"
+                  name="password"
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={handleChange("password")}
+                  hasError={showErrors ? !!errors.password : false}
+                  hideErrorMessage
+                />
               </div>
             </form>
 
             <div className="w-full mt-5">
-            {showErrors && !!errorBannerMessage && (
-              <MessageErrorAuth message={errorBannerMessage} />
-            )}
+              {showErrors && !!errorBannerMessage && (
+                <MessageErrorAuth message={errorBannerMessage} />
+              )}
             </div>
 
             <div className="mt-3 w-full">
-              <button className="bg-primary text-white w-full  rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg
-              " onClick={handleLoginClick} disabled={loginMutation.isPending}>
+              <button
+                className="bg-primary text-white w-full  rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg
+              "
+                onClick={handleLoginClick}
+                disabled={loginMutation.isPending || !isFormValid}
+              >
                 {loginMutation.isPending ? (
                   <span className="inline-flex items-center justify-center gap-2">
                     <Loader className="h-5 w-5 animate-spin" />
@@ -138,14 +171,14 @@ export default function Login() {
               </button>
             </div>
 
-            <div className="mt-5 space-y-2 text-gray-600 ">
+            <div className="mt-5 space-y-2 text-gray-600 text-center">
               <div className="flex">
                 <p>¿No tienes una cuenta? </p>
                 <Link
-                  href="/verificationEmail"
+                  href="/register"
                   className="text-md  no-underline  hover:underline transition-colors ml-1"
                 >
-                   Regístrate ahora
+                  Regístrate ahora
                 </Link>
               </div>
 

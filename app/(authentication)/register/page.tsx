@@ -4,7 +4,12 @@ import FloatingLabelInput from "@/component/authenticationComponent/FloatingLabe
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerSchema, type RegisterFormData } from "@/validations/registerSchema";
+import {
+  registerSchema,
+  type RegisterFormData,
+} from "@/validations/registerSchema";
+import InputAuth from "@/component/inputAuth/inputAuth";
+import { User, Mail, Lock, Loader, Eye, EyeOff, Check, X } from "lucide-react";
 
 export default function Register() {
   const router = useRouter();
@@ -16,15 +21,115 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [fullName, setFullName] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  const handleChange = (field: keyof RegisterFormData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [field]: e.target.value });
-    if (errors[field]) {
-      setErrors({ ...errors, [field]: "" });
+  const handleChange =
+    (field: keyof RegisterFormData) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      const updated = { ...formData, [field]: value };
+      setFormData(updated);
+      const newErrors = { ...errors };
+      if (field === "email") {
+        const res = registerSchema.shape.email.safeParse(value);
+        newErrors.email =
+          value.trim().length > 0 && !res.success ? "Debe ser un correo válido" : "";
+      } else if (field === "password") {
+        newErrors.password =
+          value.trim().length > 0 && value.trim().length < 6
+            ? "La contraseña debe tener al menos 6 caracteres"
+            : "";
+        if (updated.confirmPassword.trim().length > 0) {
+          newErrors.confirmPassword =
+            updated.confirmPassword === value ? "" : "Las contraseñas no coinciden";
+        }
+      } else if (field === "confirmPassword") {
+        newErrors.confirmPassword =
+          value.trim().length > 0 && value !== updated.password
+            ? "Las contraseñas no coinciden"
+            : "";
+      } else {
+        newErrors[field] = "";
+      }
+      setErrors(newErrors);
+      const count =
+        (isFullNameValid(updated) ? 1 : 0) +
+        (isEmailValid(updated.email) ? 1 : 0) +
+        (isPasswordValid(updated.password) ? 1 : 0) +
+        (isConfirmValid(updated.password, updated.confirmPassword) ? 1 : 0);
+      setProgress(count * 25);
+    };
+
+  const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFullName(value);
+    const trimmed = value.trim().replace(/\s+/g, " ");
+    if (trimmed.length === 0) {
+      setFormData({
+        ...formData,
+        name: "",
+        lastname1: "",
+        lastname2: "",
+      });
+      setErrors({ ...errors, name: "", lastname1: "", lastname2: "" });
+      return;
     }
+    const parts = trimmed.split(" ");
+    const name = parts.shift() ?? "";
+    const lastname1 = parts.shift() ?? "";
+    const lastname2 = parts.join(" ");
+    const updated = {
+      ...formData,
+      name,
+      lastname1,
+      lastname2,
+    };
+    setFormData(updated);
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const newErrors = { ...errors };
+    newErrors.name = name.trim().length > 0 && !nameRegex.test(name) ? "Error de escritura" : "";
+    newErrors.lastname1 =
+      lastname1.trim().length === 0
+        ? "Ingresa el primer apellido"
+        : !nameRegex.test(lastname1)
+        ? "Error de escritura"
+        : "";
+    newErrors.lastname2 =
+      lastname2.trim().length === 0
+        ? "Ingresa el segundo apellido"
+        : !nameRegex.test(lastname2)
+        ? "Error de escritura"
+        : "";
+    setErrors(newErrors);
+    const count =
+      (isFullNameValid(updated) ? 1 : 0) +
+      (isEmailValid(updated.email) ? 1 : 0) +
+      (isPasswordValid(updated.password) ? 1 : 0) +
+      (isConfirmValid(updated.password, updated.confirmPassword) ? 1 : 0);
+    setProgress(count * 25);
   };
+
+  const isFullNameValid = (data: RegisterFormData) => {
+    const r = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    return (
+      data.name.trim().length > 0 &&
+      data.lastname1.trim().length > 0 &&
+      data.lastname2.trim().length > 0 &&
+      r.test(data.name) &&
+      r.test(data.lastname1) &&
+      r.test(data.lastname2)
+    );
+  };
+  const isEmailValid = (email: string) =>
+    registerSchema.shape.email.safeParse(email).success;
+  const isPasswordValid = (password: string) => password.trim().length >= 6;
+  const isConfirmValid = (password: string, confirm: string) =>
+    confirm.trim().length > 0 && confirm === password;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,29 +163,30 @@ export default function Register() {
     console.log("Datos a enviar:", dataToSend);
 
     try {
-      const response = await fetch("https://app.fadiar.com:444/prueba/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend),
-      });
+      const response = await fetch(
+        "https://app.fadiar.com:444/prueba/api/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
 
-      console.log(response)
+      console.log(response);
 
       if (response.ok) {
         const data = await response.json();
         console.log("Registro exitoso:", data);
-        
+
         // Guardar el correo en localStorage
         localStorage.setItem("verificationEmail", formData.email);
-        
+
         router.push("/verificationCodeEmail");
       } else {
         throw new Error("Error en el registro");
-      }      
-
-   
+      }
     } catch (error) {
       console.error("Error:", error);
       setErrors({ submit: "Error al registrar. Intenta nuevamente." });
@@ -90,148 +196,185 @@ export default function Register() {
   };
 
   return (
+
     <>
- <div className="h-full  md:min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat bg-[url('/images/authenticationBackground.png')] p-4">
-      {/* Container principal con animación circular */}
-      <div className="relative w-full md:w-[720px] md:h-[600px] flex items-center justify-center md:rounded-full md:overflow-hidden">
-        {/* Spans animados en círculo - 270 grados (lado derecho y superior/inferior) */}
-        {[...Array(45)].map((_, i) => {
-          // Calcular ancho: más pequeño al inicio y final, más grande en el centro
-          const progress = i / 44; // 0 a 1
-          const widthScale = 0.3 + Math.sin(progress * Math.PI) * 0.7; // 0.3 a 1
-          const width = Math.round(50 * widthScale * 100) / 100; // Redondear a 2 decimales
-          const rotation = Math.round((-135 + i * (270 / 45)) * 100) / 100;
-          const delay = Math.round(i * (3 / 45) * 100) / 100;
+      <div className="bg-[#e7e8e9] h-screen w-screen flex justify-center items-center">
+        <div className="bg-white w-150 h-auto rounded-2xl mx-4 shadow-xl">
+          <div className="flex justify-center items-center flex-col p-7 ">
+            <div>
+              <h3 className="text-primary text-3xl sm:text-4xl font-bold">
+                Registrarse
+              </h3>
+            </div>
 
-          return (
-            <span
-              key={i}
-              className="absolute left-10 h-1.5 hidden md:block bg-primary rounded-full animate-blink"
-              style={{
-                width: `${width}px`,
-                transformOrigin: "280px",
-                transform: `rotate(${rotation}deg)`,
-                animationDelay: `${delay}s`,
-              }}
-            />
-          );
-        })}
+            <div className="mt-3 text-gray-600">
+              <p>Completa todos los campos para continuar</p>
+            </div>
 
-        {/* Login Box */}
-        <div className="md:absolute  mx-4 md:mx-0 w-full md:w-[500px] z-10  md:p-5 md:rounded-3xl">
-          <form className="  md:w-full md:px-2.5" onSubmit={handleSubmit}>
-            <h2 className="text-3xl text-[#f4f4f4] text-center  md:mb-2.5 font-semibold">
-              Registro
-            </h2>
-
-            {/* Nombre y Primer Apellido */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-3">
-              <div>
-                <FloatingLabelInput 
-                  type="text" 
-                  label="Nombre" 
-     
-                  value={formData.name}
-                  onChange={handleChange("name")}
-                />
-                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            <div className="w-full  space-y-5 mt-8">
+              {/* Etiqueta y porcentaje */}
+              <div className="flex justify-between mb-1 text-sm text-gray-500">
+                <span>Progreso del registro</span>
+                <span>{progress}%</span>
               </div>
-              <div>
-                <FloatingLabelInput
-                  type="text"
-                  label="Primer Apellido"
-    
-                  value={formData.lastname1}
-                  onChange={handleChange("lastname1")}
-                />
-                {errors.lastname1 && <p className="text-red-500 text-xs mt-1">{errors.lastname1}</p>}
+
+              {/* Barra de progreso */}
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
               </div>
             </div>
 
-            {/* Segundo Apellido y Correo */}
-                <div className="grid grid-cols-1 md:grid-cols-2  md:gap-3">
-              <div>
-                <FloatingLabelInput
-                  type="text"
-                  label="Segundo Apellido"
-    
-                  value={formData.lastname2}
-                  onChange={handleChange("lastname2")}
-                />
-                {errors.lastname2 && <p className="text-red-500 text-xs mt-1">{errors.lastname2}</p>}
+            <form className="w-full space-y-3 mt-8" onSubmit={handleSubmit}>
+      
+                <div>
+                  <InputAuth
+                    icon={User}
+                    iconClassName="h-6 w-6"
+                    type="text"
+                    placeholder="Nombre y apellidos"
+                    value={fullName}
+                    onChange={handleFullNameChange}
+                    hasError={!!(errors.name || errors.lastname1 || errors.lastname2)}
+                    error={errors.name || errors.lastname1 || errors.lastname2}
+                    statusIcon={
+                      errors.name || errors.lastname1 || errors.lastname2
+                        ? X
+                        : fullName.trim().length > 0 && isFullNameValid(formData)
+                        ? Check
+                        : undefined
+                    }
+                    statusIconClassName={
+                      errors.name || errors.lastname1 || errors.lastname2
+                        ? "h-5 w-5 text-red-500"
+                        : fullName.trim().length > 0 && isFullNameValid(formData)
+                        ? "h-5 w-5 text-green-500"
+                        : ""
+                    }
+                  />
+                </div>
+
+               
+                <div>
+                  <InputAuth
+                    icon={Mail}
+                    iconClassName="h-6 w-6"
+                    type="text"
+                    placeholder="Correo electrónico"
+                    autoComplete="email"
+                    value={formData.email}
+                    onChange={handleChange("email")}
+                    hasError={!!errors.email}
+                    error={errors.email}
+                    statusIcon={
+                      formData.email.trim().length > 0
+                        ? isEmailValid(formData.email)
+                          ? Check
+                          : X
+                        : undefined
+                    }
+                    statusIconClassName={
+                      formData.email.trim().length > 0
+                        ? isEmailValid(formData.email)
+                          ? "h-5 w-5 text-green-500"
+                          : "h-5 w-5 text-red-500"
+                        : ""
+                    }
+                  />
+                </div>
+
+                <div>
+                  <InputAuth
+                    icon={Lock}
+                    iconClassName="h-6 w-6"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Contraseña"
+                    autoComplete="new-password"
+                    value={formData.password}
+                    onChange={handleChange("password")}
+                    hasError={!!errors.password}
+                    error={errors.password}
+                    endIcon={showPassword ? EyeOff : Eye}
+                    endIconClassName="h-5 w-5"
+                    onEndIconClick={() => setShowPassword((v) => !v)}
+                    statusIcon={
+                      formData.password.trim().length > 0
+                        ? isPasswordValid(formData.password)
+                          ? Check
+                          : X
+                        : undefined
+                    }
+                    statusIconClassName={
+                      formData.password.trim().length > 0
+                        ? isPasswordValid(formData.password)
+                          ? "h-5 w-5 text-green-500"
+                          : "h-5 w-5 text-red-500"
+                        : ""
+                    }
+                  />
+                </div>
+
+                <div>
+                  <InputAuth
+                    icon={Lock}
+                    iconClassName="h-6 w-6"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirmar contraseña"
+                    autoComplete="new-password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange("confirmPassword")}
+                    hasError={!!errors.confirmPassword}
+                    error={errors.confirmPassword}
+                    endIcon={showConfirmPassword ? EyeOff : Eye}
+                    endIconClassName="h-5 w-5"
+                    onEndIconClick={() => setShowConfirmPassword((v) => !v)}
+                    statusIcon={
+                      formData.confirmPassword.trim().length > 0
+                        ? isConfirmValid(formData.password, formData.confirmPassword)
+                          ? Check
+                          : X
+                        : undefined
+                    }
+                    statusIconClassName={
+                      formData.confirmPassword.trim().length > 0
+                        ? isConfirmValid(formData.password, formData.confirmPassword)
+                          ? "h-5 w-5 text-green-500"
+                          : "h-5 w-5 text-red-500"
+                        : ""
+                    }
+                  />
+                </div>
+        
+
+              <div className="mt-3 w-full">
+                <button
+                  type="submit"
+                  className="bg-primary text-white w-full rounded-lg p-3 cursor-pointer hover:bg-[#034078] hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting || progress < 100}
+                >
+                  {isSubmitting ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Loader className="h-5 w-5 animate-spin" />
+                      Registrando...
+                    </span>
+                  ) : (
+                    "Registrarse"
+                  )}
+                </button>
               </div>
-              <div>
-                <FloatingLabelInput 
-                  type="text" 
-                  label="Correo" 
-     
-                  value={formData.email}
-                  onChange={handleChange("email")}
-                />
-                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            </form>
+
+                   <div className="flex mt-10">
+                <p className="text-gray-600">¿Ya tienes una cuenta?  </p>
+                <Link
+                  href="/login"
+                  className="text-md text-primary font-bold no-underline  hover:underline transition-colors ml-1"
+                >
+                  Iniciar sesión
+                </Link>
               </div>
-            </div>
-
-            {/* Contraseñas */}
-                <div className="grid grid-cols-1 md:grid-cols-2  md:gap-3">
-              <div>
-                <FloatingLabelInput 
-                  type="password" 
-                  label="Contraseña" 
-     
-                  value={formData.password}
-                  onChange={handleChange("password")}
-                />
-                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-              </div>
-              <div>
-                <FloatingLabelInput
-                  type="password"
-                  label="Repetir contraseña"
-    
-                  value={formData.confirmPassword}
-                  onChange={handleChange("confirmPassword")}
-                />
-                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
-              </div>
-            </div>
-
-            {errors.submit && <p className="text-red-500 text-sm text-center mt-2">{errors.submit}</p>}
-
-            {/* Forgot Password */}
-            <div className="text-center  my-4">
-              <Link
-                href="/verificationEmail"
-                className="text-md font-bold no-underline text-gray  hover:underline transition-colors"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-
-            {/* Login Button */}
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-1/2 h-11 bg-accent border-none outline-none rounded-full cursor-pointer text-base text-white font-semibold hover:bg-accent/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Registrando..." : "Registrarse"}
-              </button>
-            </div>
-
-            {/* Sign Up Link */}
-            <div className="mt-2.5 text-center">
-              <Link
-                href="/login"
-                className="text-base text-gray no-underline  font-semibold hover:underline"
-              >
-                Login
-              </Link>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
 }
