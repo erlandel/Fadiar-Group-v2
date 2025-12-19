@@ -77,7 +77,7 @@ export default function Serchbar() {
   };
 
   const handleProductClick = (productId: number) => {
-    router.push(`/products/${productId}`);
+    router.push(`/products/id?id=${productId}`);
     setIsOpen(false);
     setQuery("");
   };
