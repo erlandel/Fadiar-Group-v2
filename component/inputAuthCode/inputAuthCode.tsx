@@ -6,6 +6,7 @@ interface InputAuthCodeProps {
   onChange?: (code: string) => void;
   disabled?: boolean;
   className?: string;
+  digitsOnly?: boolean;
 }
 
 export default function InputAuthCode({
@@ -14,6 +15,7 @@ export default function InputAuthCode({
   onChange,
   disabled = false,
   className = "",
+  digitsOnly = false,
 }: InputAuthCodeProps) {
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
   const [digits, setDigits] = useState<string[]>(
@@ -46,8 +48,8 @@ export default function InputAuthCode({
   };
 
   const setDigitAt = (idx: number, char: string) => {
-    const alnum = char.replace(/[^a-zA-Z0-9]/g, "");
-    const nextChar = alnum.slice(0, 1);
+    const cleaned = digitsOnly ? char.replace(/[^0-9]/g, "") : char.replace(/[^a-zA-Z0-9]/g, "");
+    const nextChar = cleaned.slice(0, 1);
     setDigits((prev) => {
       const next = [...prev];
       next[idx] = nextChar;
@@ -90,7 +92,8 @@ export default function InputAuthCode({
 
   const handlePaste = (idx: number) => (e: React.ClipboardEvent<HTMLInputElement>) => {
     if (disabled) return;
-    const text = e.clipboardData.getData("text").replace(/[^a-zA-Z0-9]/g, "");
+    const textRaw = e.clipboardData.getData("text");
+    const text = (digitsOnly ? textRaw.replace(/[^0-9]/g, "") : textRaw.replace(/[^a-zA-Z0-9]/g, ""));
     if (!text) return;
     e.preventDefault();
     const chars = text.slice(0, length - idx).split("");
@@ -115,14 +118,14 @@ export default function InputAuthCode({
             ref={(el) => {
               inputsRef.current[i] = el;
             }}
-            type="text"
+            type={digitsOnly ? "tel" : "text"}
             maxLength={1}
             value={digits[i]}
             onChange={handleChange(i)}
             onKeyDown={handleKeyDown(i)}
             onPaste={handlePaste(i)}
             disabled={disabled}
-            className="w-12 h-12 sm:w-13 sm:h-13  text-center text-2xl sm:text-3xl border-3 border-[#d1d5db] rounded-lg focus:outline-none focus:ring-[1.3px] focus:ring-[#bdbdbd] focus:shadow-[0_0_0_4px_rgba(0,0,0,0.15)] placeholder:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-10 h-10 sm:w-12 sm:h-12  text-center text-xl sm:text-2xl border-3 border-[#d1d5db] rounded-lg focus:outline-none focus:ring-[1.3px] focus:ring-[#bdbdbd] focus:shadow-[0_0_0_4px_rgba(0,0,0,0.15)] placeholder:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
             aria-label={`Dígito ${i + 1}`}
           />
         ))}

@@ -367,7 +367,7 @@ export default function Register() {
                 <p className="text-gray-600">¿Ya tienes una cuenta?  </p>
                 <Link
                   href="/login"
-                  className="text-md text-primary font-bold no-underline  hover:underline transition-colors ml-1"
+                  className="text-md text-primary  no-underline  hover:underline transition-colors ml-1"
                 >
                   Iniciar sesión
                 </Link>

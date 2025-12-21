@@ -112,7 +112,7 @@ export default function Login() {
 
   return (
     <div className="bg-[#e7e8e9] min-h-dvh w-full flex items-center justify-center overflow-hidden">
-      <div className="bg-white w-130 h-auto rounded-2xl mx-4 shadow-xl">
+      <div className="bg-white w-120 h-auto rounded-2xl mx-4 shadow-xl">
         <div className="px-7 py-5 ">
           <div className="flex justify-center items-center flex-col">
             <div>
@@ -189,7 +189,7 @@ export default function Login() {
 
               <div>
                 <Link
-                  href="/verificationEmail"
+                  href="/recoverPassword"
                   className="  no-underline  hover:underline transition-colors"
                 >
                   ¿Olvidaste tu contraseña?
@@ -198,7 +198,7 @@ export default function Login() {
 
               <div>
                 <Link
-                  href="/verificationEmail"
+                  href="/verificationCodeEmail"
                   className="  no-underline  hover:underline transition-colors"
                 >
                   ¿No has verificado tu cuenta?
