@@ -7,10 +7,10 @@ import Pagination from "@/component/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import Pot from "@/section/pot/pot";
-import { SectionMasRecientes } from "@/section/masRecientes";
 import CardSkeleton from "@/component/ui/skeletonCard";
-import Card2 from "@/component/ui/card2";
 import { Product } from "@/type/product";
+import { LatestProducts } from "@/section/latestProducts";
+import CardAllProducts from "@/component/ui/cardAllProducts";
 
 
 
@@ -411,7 +411,7 @@ useEffect(() => {
                       const uniqueKey = `${product.id}-${index}`;
                       
                       return (
-                        <Card2
+                        <CardAllProducts
                           key={uniqueKey}
                           productId={product.id}
                           category={product.categoria?.name}
@@ -448,7 +448,7 @@ useEffect(() => {
             <SectionAbout4 />
             </div>
 
-            <SectionMasRecientes products={allProducts} />
+            <LatestProducts products={allProducts} />
 
             {/* Modal de filtros para móvil */}
             {isFilterOpen && (

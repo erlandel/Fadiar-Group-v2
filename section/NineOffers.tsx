@@ -1,14 +1,59 @@
 "use client";
-import Card2 from "@/component/ui/card2";
+import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll";
+import CardNineOffers from "@/component/ui/cardNineOffers";
+import Card2 from "@/component/ui/cardNineOffers";
 import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/type/product";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 
 export default function NineOffers() {
   const [offers, setOffers] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const calculatePages = useCallback(() => {
+    if (!scrollRef.current) return;
+    const containerWidth = scrollRef.current.clientWidth;
+    const scrollWidth = scrollRef.current.scrollWidth;
+    const pages = Math.max(1, Math.ceil(scrollWidth / containerWidth));
+    setTotalPages(pages);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const scrollLeft = scrollRef.current.scrollLeft;
+    const containerWidth = scrollRef.current.clientWidth;
+    const scrollWidth = scrollRef.current.scrollWidth;
+    const maxScroll = Math.max(scrollWidth - containerWidth, 1);
+    const scrollPercentage = scrollLeft / maxScroll;
+    const index = Math.min(
+      Math.floor(scrollPercentage * totalPages),
+      totalPages - 1
+    );
+
+    setActiveIndex(Math.max(0, index));
+  }, [totalPages]);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const handleResize = () => calculatePages();
+
+    calculatePages();
+    scrollContainer.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      scrollContainer.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [calculatePages, handleScroll, offers.length]);
 
   const getProducts = async () => {
     try {
@@ -83,7 +128,7 @@ export default function NineOffers() {
     const offer = offers[index];
 
     return (
-      <Card2
+      <CardNineOffers
         key={offer.id}
         productId={offer.id}
         category={offer.categoria?.name}
@@ -107,27 +152,24 @@ export default function NineOffers() {
         <h2 className="text-[24px] font-bold text-accent">Nuestras Ofertas</h2>
       </div>
 
-      {/* sm to lg: 3 cards per row */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 lg:hidden">
-        {cardIndexes.map((cardIndex) => (
-          <div key={`mobile-offer-${cardIndex}`}>
-            {renderOfferCard(cardIndex, "vertical")}
-          </div>
-        ))}
-      </div>
-
-      {/* lg to xl: 4 cards per row */}
-      <div className="hidden gap-3 lg:grid lg:grid-cols-4 xl:hidden">
-        {[0, 1, 2, 3].map((cardIndex) => (
-          <div key={`lg-offer-${cardIndex}`} className="flex flex-col gap-3">
-            {renderOfferCard(cardIndex, "vertical")}
-          </div>
-        ))}
-        {[4, 5, 6, 7, 8].map((cardIndex) => (
-          <div key={`lg-offer-${cardIndex}`} className="flex flex-col gap-3">
-            {renderOfferCard(cardIndex, "vertical")}
-          </div>
-        ))}
+      {/* Screens smaller than xl: Horizontal Scroll with vertical cards */}
+      <div className="xl:hidden">
+        <div
+          ref={scrollRef}
+          className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {cardIndexes.map((cardIndex) => (
+            <div key={`mobile-offer-${cardIndex}`} className="shrink-0">
+              {renderOfferCard(cardIndex, "vertical")}
+            </div>
+          ))}
+        </div>
+        <HorizontalScroll
+          totalPages={totalPages}
+          activeIndex={activeIndex}
+          scrollRef={scrollRef}
+        />
       </div>
 
       {/* xl and up: mixed layout */}

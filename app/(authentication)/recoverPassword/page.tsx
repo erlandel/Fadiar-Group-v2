@@ -38,8 +38,7 @@ export default function RecoverPassword() {
           body: JSON.stringify(payload),
         }
       );
-
-      console.log(response);
+ 
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));

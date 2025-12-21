@@ -3,7 +3,8 @@ import { faqData } from "@/data/faqData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
-import { SectionMasRecientes } from "@/section/masRecientes";
+import { LatestProducts } from "@/section/latestProducts";
+
 
 export default function Faq() {
   return (
@@ -54,7 +55,7 @@ export default function Faq() {
           <SectionPromoHome2 />
         </div>
         <div className="mt-10">
-        <SectionMasRecientes />
+        <LatestProducts />
       </div>
       </div>
     </div>

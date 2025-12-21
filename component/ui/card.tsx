@@ -116,7 +116,7 @@ export default function Card({
       {position === "vertical" ? (
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white max-w-[184px] md:max-w-[250px] p-2 md:p-3 border border-gray-300 rounded-2xl shadow-sm h-[460px] flex flex-col justify-between ${
+          className={`bg-white w-55 max-w-[184px] md:max-w-[250px] p-2 md:p-3 border border-gray-300 rounded-2xl shadow-sm h-[460px] flex flex-col justify-between ${
             productId ? "cursor-pointer hover:shadow-md transition-shadow" : ""
           }`}
         >

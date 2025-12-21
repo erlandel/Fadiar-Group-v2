@@ -5,25 +5,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ShoppingCartIcon from "../icons";
+import { CardProps } from "@/type/cardProps";
 
-interface CardProps {
-  category?: string;
-  title: string;
-  brand: string;
-  warranty?: string;
-  price: string;
-  image: string;
-  position?: "horizontal" | "vertical";
-  maxWidthVertical?: string;
-  quantityProducts?: number;
-  temporal_price?: string;
-  productId?: string | number;
-  currency?: {
-    currency: string;
-  };
-}
 
-export default function Card2({
+export default function CardNineOffers({
   category,
   title,
   brand,
@@ -91,7 +76,7 @@ export default function Card2({
       {position === "vertical" ? (
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white w-full max-w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
+          className={`bg-white w-50 md:w-55 xl:w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           } sm:h-[calc(2*240px+0.75rem)]`}
         >
@@ -160,17 +145,17 @@ export default function Card2({
             >
               <div className="flex items-center rounded-xl border border-gray-200 bg-white cursor-default ">
                 <button
-                  className="px-2 py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
+                  className="px-3 py-2  text-accent hover:bg-gray-50 transition-colors"
                   aria-label="Restar"
                   onClick={adjustQuantity(-1)}
                 >
                   −
                 </button>
-                <span className=" xl:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 text-center">
+                <span className=" px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 text-center">
                   {quantity}
                 </span>
                 <button
-                  className="py-1.5 px-2 xl:py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
+                  className="px-3 py-2  2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
                   aria-label="Sumar"
                   onClick={adjustQuantity(1)}
                 >
@@ -179,7 +164,7 @@ export default function Card2({
               </div>
 
               <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-1.5  px-2.5 xl:py-2 xl:px-4 2xl:py-2.5 2xl:px-5"
+                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5"
                 onClick={handleAddToCart}
               >
                 <ShoppingCartIcon className="h-5 w-5" />
@@ -191,17 +176,16 @@ export default function Card2({
         // Card Horizontal
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white flex w-full  gap-2 rounded-2xl border border-gray-200 p-3 shadow-sm sm:flex-row  ${
+          className={`bg-white flex w-full max-w-115 gap-2 rounded-2xl border border-gray-200 p-3 shadow-sm sm:flex-row  ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
           style={{ height: "240px" }}
         >
           <div
-            className="relative  overflow-hidden rounded-2xl bg-gray-50 w-40 sm:shrink-0 lg:w-48"
-            style={{ minHeight: "160px" }}
+            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48 sm:min-w-[160px]"          
           >
             <Image
-              className="h-full w-48 2xl:w-full object-contain"
+              className="h-full w-35 sm:w-48 2xl:w-full object-contain"
               alt={title}
               width={500}
               height={500}
@@ -258,31 +242,31 @@ export default function Card2({
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center rounded-xl border border-gray-200 font-bold cursor-default">
-                  <button
-                    className="px-2 py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
-                    aria-label="Restar"
-                    onClick={adjustQuantity(-1)}
-                  >
-                    −
-                  </button>
-                  <span className="px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 text-center">
-                    {quantity}
-                  </span>
-                  <button
-                    className="px-2 py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
-                    aria-label="Sumar"
-                    onClick={adjustQuantity(1)}
-                  >
-                    +
-                  </button>
-                </div>
-
-                <button
-                  className="rounded-xl border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-6"
-                  onClick={handleAddToCart}
+               <button
+                  className="px-2 py-1.5 sm:px-3 sm:py-2  text-accent hover:bg-gray-50 transition-colors"
+                  aria-label="Restar"
+                  onClick={adjustQuantity(-1)}
                 >
-                  <ShoppingCartIcon className="h-5 w-5" />
+                  −
                 </button>
+                <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 text-center">
+                  {quantity}
+                </span>
+                <button
+                  className="px-2 py-1.5  sm:px-3 sm:py-2   text-accent hover:bg-gray-50 transition-colors"
+                  aria-label="Sumar"
+                  onClick={adjustQuantity(1)}
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5"
+                onClick={handleAddToCart}
+              >
+                <ShoppingCartIcon className="h-5 w-5" />
+              </button>
               </div>
             </div>
           </div>
