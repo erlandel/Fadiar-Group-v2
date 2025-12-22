@@ -2,15 +2,14 @@ import Accordion from "@/component/accordion/accordion";
 import { faqData } from "@/data/faqData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
 import { LatestProducts } from "@/section/latestProducts";
-
 
 export default function Faq() {
   return (
     <div>
       <div className="px-4 md:px-25 2xl:px-28">
-        
         <div className="mt-10">
           <p className="text-xs text-gray-400 mb-4">
             <span className="text-gray-400">Home - </span>
@@ -45,18 +44,17 @@ export default function Faq() {
       </div>
 
       <div className="mt-15">
-       
         <div className="block md:hidden">
           <SectionAbout4 />
         </div>
 
-       
-        <div className="hidden md:block">
-          <SectionPromoHome2 />
+        <div className="hidden xl:block mt-10">
+          <LatestProducts />
         </div>
-        <div className="mt-10">
-        <LatestProducts />
-      </div>
+
+        <div className="xl:hidden">
+          <BestSelling />
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import PaymentConfirmation from "@/component/paymentConfirmation/paymentConfirma
 import { CheckoutStepper } from "@/component/ui/stepper";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 
 export default function Cart4() {
   return (
@@ -32,11 +33,14 @@ export default function Cart4() {
         <div className="sm:py-20  mt-70 sm:mt-20">
           <SectionAbout3 />
         </div>
-
       </div>
 
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
+      </div>
+
+      <div className="xl:hidden">
+        <BestSelling />
       </div>
     </>
   );

@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import Avatar from "@/component/avatar/avatar";
 import PersonalData from "@/component/personalData/personalData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useAuthStore from "@/store/authStore";
 
 export default function MyProfile() {
@@ -37,6 +38,10 @@ export default function MyProfile() {
 
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
+      </div>
+
+      <div className="xl:hidden">
+        <BestSelling />
       </div>
     </>
   );

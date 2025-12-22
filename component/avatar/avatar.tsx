@@ -7,29 +7,44 @@ import useImgFileStore from "@/store/imgFileStore";
 
 export default function Avatar() {
   const { auth } = useAuthStore();
-  const { setPendingAvatar } = useImgFileStore();
-  const [avatarSrc, setAvatarSrc] = useState(" "); // Default image
+  const { pendingAvatar, setPendingAvatar } = useImgFileStore();
+  const [avatarSrc, setAvatarSrc] = useState<string>("/images/avatar.png");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sincronizar con el store de auth cuando cambie la imagen o se hidrate
+  useEffect(() => {
+    // Si hay un avatar pendiente (seleccionado localmente), no lo sobrescribimos
+    if (pendingAvatar) return;
+
+    if (auth?.user?.img) {
+      setAvatarSrc(`${server_url}/${auth.user.img}`);
+    } else {
+      setAvatarSrc("/images/avatar.png");
+    }
+  }, [auth?.user?.img, auth?.user?.id, pendingAvatar]);
 
   useEffect(() => {
     const fetchAvatar = async () => {
+      if (!auth?.user?.id || pendingAvatar) return;
       try {
         const res = await fetch(`${server_url}/getUserImageName`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_user: auth?.user.id }),
+          body: JSON.stringify({ id_user: auth.user.id }),
         });
 
         const data = await res.json();
-        if (data?.image_name) {
-          setAvatarSrc(`${server_url}/images/${data.image_name}`);
+        console.log("data:", data);
+        if (data?.img && !pendingAvatar) {
+          const newSrc = `${server_url}/${data.img}`;
+          setAvatarSrc(newSrc);
         }
       } catch (error) {
         console.error("Error fetching avatar:", error);
       }
     };
     fetchAvatar();
-  }, [auth?.user.id]);
+  }, [auth?.user?.id, pendingAvatar]);
 
   const handleClick = () => {
     fileInputRef.current?.click(); // Abrir selector de archivos

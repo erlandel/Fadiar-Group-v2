@@ -2,6 +2,7 @@ import PaymentMethods from "@/component/paymentMethods/paymentMethods";
 import { CheckoutStepper } from "@/component/ui/stepper";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 
 export default function Cart2() {
   return (
@@ -19,7 +20,7 @@ export default function Cart2() {
           </div>
 
           <div className="flex justify-center items-center ">
-             <div className=" w-160 ml-2  lg:ml-20">
+            <div className=" w-160 ml-2  lg:ml-20">
               <CheckoutStepper currentStep={1} />
             </div>
           </div>
@@ -35,6 +36,10 @@ export default function Cart2() {
       </div>
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
+      </div>
+
+      <div className="xl:hidden">
+        <BestSelling />
       </div>
     </div>
   );

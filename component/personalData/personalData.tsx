@@ -101,38 +101,52 @@ export default function PersonalData() {
     const lastname1 = nameParts[0] || "";
     const lastname2 = nameParts.slice(1).join(" ") || "";
 
-    const cambios = [
-      {
-        operation: "update",
+    const cambios = [];
+
+    if (formData.firstName !== auth.person.name) {
+      cambios.push({
+        operation: "UPDATE",
         table: "persons",
         attribute: "name",
         value: formData.firstName,
-      },
-      {
-        operation: "update",
+      });
+    }
+
+    if (lastname1 !== auth.person.lastname1) {
+      cambios.push({
+        operation: "UPDATE",
         table: "persons",
         attribute: "lastname1",
         value: lastname1,
-      },
-      {
-        operation: "update",
+      });
+    }
+
+    if (lastname2 !== (auth.person.lastname2 || "")) {
+      cambios.push({
+        operation: "UPDATE",
         table: "persons",
         attribute: "lastname2",
         value: lastname2,
-      },
-      {
-        operation: "update",
+      });
+    }
+
+    if (formData.email !== auth.user.email) {
+      cambios.push({
+        operation: "UPDATE",
         table: "users",
         attribute: "email",
         value: formData.email,
-      },
-      {
-        operation: "update",
+      });
+    }
+
+    if (formData.phone !== (auth.person.cellphone2 || "")) {
+      cambios.push({
+        operation: "UPDATE",
         table: "persons",
         attribute: "cellphone2",
         value: formData.phone,
-      },
-    ];
+      });
+    }
 
     // Si hay una imagen pendiente, añadirla al array de cambios
     if (pendingAvatar) {
@@ -144,10 +158,15 @@ export default function PersonalData() {
       });
     }
 
+    if (cambios.length === 0) {
+      alert("No se detectaron cambios para actualizar");
+      return;
+    }
+
     console.log("Formato de cambios que se envía al backend:", JSON.stringify(cambios, null, 2));
 
     const data = new FormData();
-    data.append("ci", auth.person.ci);
+    data.append("ci", auth.person.id.toString());
     data.append("id_user", auth.user.id.toString());
     data.append("current_password", formData.password || auth.user.password || "");
     data.append("changes", JSON.stringify(cambios));
@@ -223,19 +242,27 @@ export default function PersonalData() {
       return newErrors;
     });
 
+    const currentAddress = (formData.address || "").trim();
+    const originalAddress = (auth.person.address || "").trim();
+
+    if (currentAddress === originalAddress) {
+      alert("No se detectaron cambios en la dirección");
+      return;
+    }
+
     const currentAccessToken = await refreshToken(auth, setAuth);
 
     const cambios = [
       {
-        operation: "update",
+        operation: "UPDATE",
         table: "persons",
         attribute: "address",
-        value: formData.address,
+        value: currentAddress,
       },
     ];
 
     const data = new FormData();
-    data.append("ci", auth.person.ci);
+    data.append("ci", auth.person.id.toString());
     data.append("id_user", auth.user.id.toString());
     data.append("current_password", formData.password || auth.user.password || "");
     data.append("changes", JSON.stringify(cambios));
@@ -261,7 +288,7 @@ export default function PersonalData() {
           access_token: currentAccessToken || auth.access_token,
           person: {
             ...auth.person,
-            address: formData.address,
+            address: currentAddress,
           },
         });
       } else {
@@ -300,11 +327,16 @@ export default function PersonalData() {
       return newErrors;
     });
 
+    if (formData.confirmPassword === formData.password) {
+      alert("La nueva contraseña no puede ser igual a la actual");
+      return;
+    }
+
     const currentAccessToken = await refreshToken(auth, setAuth);
 
     const cambios = [
       {
-        operation: "update",
+        operation: "UPDATE",
         table: "users",
         attribute: "password",
         value: formData.confirmPassword,
@@ -312,7 +344,7 @@ export default function PersonalData() {
     ];
 
     const data = new FormData();
-    data.append("ci", auth.person.ci);
+    data.append("ci", auth.person.id.toString());
     data.append("id_user", auth.user.id.toString());
     data.append("current_password", formData.password || auth.user.password || "");
     data.append("changes", JSON.stringify(cambios));
@@ -358,7 +390,7 @@ export default function PersonalData() {
               onClick={handleSavePersonalData}
               className="text-[#D69F04] text-md font-bold cursor-pointer"
             >
-              Guradar
+              Guardar
             </button>
           </div>
         </div>
@@ -432,7 +464,7 @@ export default function PersonalData() {
               onClick={handleSaveAddress}
               className="text-[#D69F04] text-md font-bold cursor-pointer"
             >
-              Guradar
+              Guardar
             </button>
           </div>
           </div>

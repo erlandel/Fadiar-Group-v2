@@ -6,6 +6,7 @@ import { CheckoutStepper } from "@/component/ui/stepper";
 
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useCartStore from "@/store/cartStore";
 
 export default function Cart1() {
@@ -76,6 +77,10 @@ export default function Cart1() {
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
       </div>
+
+             <div className="xl:hidden">
+                <BestSelling />
+              </div>
     </div>
   );
 }

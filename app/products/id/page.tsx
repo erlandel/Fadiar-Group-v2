@@ -11,6 +11,7 @@ import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/component/productLoadingId/productLoadingId";
 import { ProductID } from "@/type/productId";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 
 function ProductContent({ id }: { id: string | null }) {
   const [qty, setQty] = useState(1);
@@ -313,8 +314,13 @@ function ProductContent({ id }: { id: string | null }) {
           <div className="mt-20">
             <SectionAbout4 />
           </div>
-          <div>
+
+            <div className="hidden xl:block">
             <LatestProducts />
+          </div>
+          
+          <div className="xl:hidden">
+            <BestSelling />
           </div>
         </main>
       )}

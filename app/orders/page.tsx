@@ -2,6 +2,7 @@ import MobileOrdes from "@/component/mobileOrdes/mobileOrdes";
 import OrdersTable from "@/component/ordersTable/ordersTable";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
 
 export default function Orders() {
   return (
@@ -12,21 +13,24 @@ export default function Orders() {
         </div>
 
         <div className="md:hidden">
-          <MobileOrdes/>
+          <MobileOrdes />
         </div>
 
         <div className="hidden md:block">
           <OrdersTable />
         </div>
-        
       </div>
 
-        <div className="sm:py-20  mt-60 sm:mt-10">
+      <div className="sm:py-20  mt-60 sm:mt-10">
         <SectionAbout3 />
       </div>
 
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
+      </div>
+
+      <div className="xl:hidden">
+        <BestSelling />
       </div>
     </>
   );
