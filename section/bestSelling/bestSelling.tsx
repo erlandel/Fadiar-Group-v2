@@ -1,6 +1,7 @@
 "use client";
 import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll";
 import CardLatestProducts from "@/component/ui/cardLatestProducts";
+import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/type/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -13,27 +14,25 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
-const getAllProducts = async () => {
-  const res = await fetch(`${server_url}/img_mas_vendido`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ count: 9 }),
-  });
+  const getAllProducts = async () => {
+    const res = await fetch(`${server_url}/img_mas_vendido`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ count: 9 }),
+    });
 
-  if (!res.ok) {
-    throw new Error("Error al obtener productos más vendidos");
-  }
+    if (!res.ok) {
+      throw new Error("Error al obtener productos más vendidos");
+    }
 
-  const data = await res.json();
-  console.log("data:", data);
+    const data = await res.json();
+    console.log("data:", data);
 
-  // 👇 backend devuelve un ARRAY DIRECTO
-  setProducts(Array.isArray(data) ? data : []);
-};
-
-
+    // 👇 backend devuelve un ARRAY DIRECTO
+    setProducts(Array.isArray(data) ? data : []);
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -111,26 +110,26 @@ const getAllProducts = async () => {
             className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {sortedProducts.length > 0 ? (
-              sortedProducts.map((product) => (
-                <div key={product.id} className="shrink-0">
-                  <CardLatestProducts
-                    category={product.categoria?.name}
-                    title={product.name}
-                    brand={product.brand}
-                    warranty={product.warranty}
-                    price={product.price}
-                    image={product.img}
-                    position="vertical"
-                    productId={product.id}
-                  />
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-gray-500 px-2">
-                Cargando productos...
-              </p>
-            )}
+            {sortedProducts.length > 0
+              ? sortedProducts.map((product) => (
+                  <div key={product.id} className="shrink-0">
+                    <CardLatestProducts
+                      category={product.categoria?.name}
+                      title={product.name}
+                      brand={product.brand}
+                      warranty={product.warranty}
+                      price={product.price}
+                      image={product.img}
+                      position="vertical"
+                      productId={product.id}
+                    />
+                  </div>
+                ))
+              : Array.from({ length: 9 }).map((_, index) => (
+                  <div key={index} className="shrink-0">
+                    <CardSkeleton position={"vertical"} />
+                  </div>
+                ))}
           </div>
           <div>
             <HorizontalScroll

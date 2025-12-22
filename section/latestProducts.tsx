@@ -1,6 +1,7 @@
 "use client";
 import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll";
 import CardLatestProducts from "@/component/ui/cardLatestProducts";
+import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/type/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -120,9 +121,11 @@ export const LatestProducts = ({
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500 px-2">
-                Cargando productos...
-              </p>
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="shrink-0">
+                  <CardSkeleton position={"vertical"} />
+                </div>
+              ))
             )}
           </div>
           <div>
