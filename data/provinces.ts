@@ -1,0 +1,1 @@
+export const provinces = ["La Habana", "Matanzas", "Santiago de Cuba"];

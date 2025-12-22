@@ -8,23 +8,9 @@ import { cart1Schema, Cart1FormData } from "../../validations/cart1Schema";
 import { useStore } from "zustand";
 import cartStore from "../../store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
-
-
-const provinces = ["La Habana", "Matanzas", "Santiago de Cuba"];
-const municipalitiesHavana = [
-  "Playa",
-  "Plaza de la Revolución",
-  "Centro Habana",
-  "Habana Vieja",
-  "Diez de Octubre",
-  "La Lisa",
-  "Boyeros",
-  "Cotorro",
-  "Guanabacoa",
-  "Regla",
-  "Marianao",
-  "San Miguel del Padrón",
-];
+import useAuthStore from "@/store/authStore";
+import { provinces } from "@/data/provinces";
+import { municipalitiesHavana } from "@/data/municipalitiesHavana";
 
 export default function Amount() {
    const router = useRouter();
@@ -35,6 +21,11 @@ export default function Amount() {
   const [selectedMunicipalitiesHavana, setSelectedMunicipalitiesHavana] =
     useState("");
   const [isClient, setIsClient] = useState(false);
+  const { auth } = useAuthStore();
+  const userName = auth?.person.name || "";
+  const userLastname1 = auth?.person.lastname1 || "";
+  const userLastname2 = auth?.person.lastname2 || "";
+  const fullName = `${userName} ${userLastname1} ${userLastname2}`.trim();
   
   const getTotalPrice = useStore(cartStore, (state) => state.getTotalPrice);
   const getTotalItems = useStore(cartStore, (state) => state.getTotalItems);
@@ -145,11 +136,6 @@ export default function Amount() {
   };
 
 
-
-
-
-
-
   return (
     <div className="max-h-full   bg-white font-sans text-[#022954]">
       {/* Importe Section */}
@@ -166,7 +152,7 @@ export default function Amount() {
       {/* Personal Info Section */}
       <div className="mb-8">
         <h3 className="text-xl font-bold text-[#022954] mb-6">
-          Leydis Jadiar López
+          {fullName}
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md ">

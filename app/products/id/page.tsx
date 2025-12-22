@@ -12,8 +12,6 @@ import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/component/productLoadingId/productLoadingId";
 import { ProductID } from "@/type/productId";
 
-
-
 function ProductContent({ id }: { id: string | null }) {
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState<ProductID | null>(null);
@@ -61,6 +59,7 @@ function ProductContent({ id }: { id: string | null }) {
         );
 
         if (foundProduct) {
+          console.log("foundProduct ", foundProduct);
           setProduct(foundProduct);
           setSelectedImage(foundProduct.img);
         }
@@ -180,6 +179,7 @@ function ProductContent({ id }: { id: string | null }) {
                     alt={product.name}
                     width={613}
                     height={682}
+                    unoptimized
                     className="w-full h-full rounded-xl object-contain"
                   />
                 </div>
@@ -201,6 +201,7 @@ function ProductContent({ id }: { id: string | null }) {
                         alt={`thumb ${i + 1}`}
                         width={80}
                         height={80}
+                        unoptimized
                         className="w-full h-full object-contain"
                       />
                     </div>
@@ -286,14 +287,16 @@ function ProductContent({ id }: { id: string | null }) {
                     <h3 className="font-semibold text-[#1A2B49] mb-3">
                       Propiedades
                     </h3>
-                    <table className="w-full text-sm text-gray-600">
+                    <table className="w-full text-sm text-gray-600 table-fixed">
                       <tbody>
                         {product.specs.map((p, i) => (
                           <tr key={i} className="border-b border-gray">
-                            <td className="py-2 font-medium text-[#1E1E1E]">
+                            <td className="py-2 sm:font-medium text-[#1E1E1E] text-sm sm:text-base wrap-break-word max-w-[50%]">
                               {p.name}
                             </td>
-                            <td className="py-2 text-right">{p.description}</td>
+                            <td className="py-2 text-right text-sm sm:text-base wrap-break-word max-w-[50%] whitespace-normal">
+                              {p.description}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -321,8 +324,7 @@ function ProductContent({ id }: { id: string | null }) {
 
 export default function Product() {
   return (
-    <Suspense
-    >
+    <Suspense>
       <SearchParamsProvider>
         {(id) => <ProductContent id={id} />}
       </SearchParamsProvider>

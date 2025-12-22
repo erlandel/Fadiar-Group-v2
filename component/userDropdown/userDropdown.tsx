@@ -9,12 +9,13 @@ import {
   UilExit,
 } from "@/icons/icons";
 import useAuthStore from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { access_token, clearAuth } = useAuthStore();
-
+  const { auth, clearAuth } = useAuthStore();
+  const router = useRouter();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -41,7 +42,7 @@ export default function UserDropdown() {
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-58 bg-white rounded-2xl shadow-lg border border-gray-200 p-4 z-50  space-x-2  ">
-          {access_token ? (
+          {auth?.access_token ? (
             <>
               <Link
                 href="/myProfile"
@@ -81,6 +82,7 @@ export default function UserDropdown() {
                   if (typeof window !== "undefined") {
                     try {
                       localStorage.removeItem("auth-storage");
+                        router.push('/')
                     } catch {}
                   }
                 }}

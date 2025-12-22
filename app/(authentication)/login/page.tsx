@@ -40,25 +40,37 @@ export default function Login() {
           body: JSON.stringify(payload),
         }
       );
+   
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || "Error al iniciar sesión");
       }
       const data = await response.json();
+    
       return data;
     },
-    onSuccess: (data) => {
-      const userInfo = data?.user_info ?? data?.data?.user_info ?? null;
-      const access = userInfo?.access_token ?? null;
-      const refresh = userInfo?.refresh_token ?? null;
-      setAuth({
-        email: formData.email,
-        access_token: access,
-        refresh_token: refresh,
-      });
-      router.push("/");
-    },
+ onSuccess: (data) => {
+  const userInfo =
+    data?.user_info ??
+    data?.data?.user_info ??
+    null;
+
+    
+
+  if (!userInfo) return;
+
+  setAuth({
+    person: userInfo.person,
+    user: userInfo.user,
+    type: userInfo.type,
+    access_token: userInfo.access_token,
+    refresh_token: userInfo.refresh_token,
+  });
+
+
+  router.push("/");
+},
     onError: (error) => {
       setShowErrors(true);
       setErrorBannerMessage(

@@ -1,9 +1,13 @@
+"use client"
 import Avatar from "@/component/avatar/avatar";
 import PersonalData from "@/component/personalData/personalData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import useAuthStore from "@/store/authStore";
 
 export default function MyProfile() {
+  const { auth } = useAuthStore();
+  const userName = auth?.person.name || "";
   return (
     <>
       <div className="mx-4 lg:mx-40 xl:mx-85">
@@ -11,7 +15,7 @@ export default function MyProfile() {
           <div>
             <h1 className="text-3xl text-primary font-bold ">Mi Perfil</h1>
             <p className="text-[#777777] font-semibold">
-              Hola Leydis, aquí puedes gestionar y configurar tu cuenta
+              Hola {userName}, aquí puedes gestionar y configurar tu cuenta
             </p>
           </div>
 

@@ -243,17 +243,17 @@ export default function CardNineOffers({
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center rounded-xl border border-gray-200 font-bold cursor-default">
                <button
-                  className="px-2 py-1.5 sm:px-3 sm:py-2  text-accent hover:bg-gray-50 transition-colors"
+                  className="px-2 py-1.5 sm:px-3 sm:py-2  xl:px-2 xl:py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
                   aria-label="Restar"
                   onClick={adjustQuantity(-1)}
                 >
                   −
                 </button>
-                <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 text-center">
+                <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-10 xl:min-w-8 2xl:min-w-10 text-center ">
                   {quantity}
                 </span>
                 <button
-                  className="px-2 py-1.5  sm:px-3 sm:py-2   text-accent hover:bg-gray-50 transition-colors"
+                  className="px-2 py-1.5 sm:px-3 sm:py-2  xl:px-2 xl:py-1.5 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
                   aria-label="Sumar"
                   onClick={adjustQuantity(1)}
                 >
@@ -262,7 +262,7 @@ export default function CardNineOffers({
               </div>
 
               <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5"
+                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 xl:px-2.5 2xl:py-2.5 2xl:px-5"
                 onClick={handleAddToCart}
               >
                 <ShoppingCartIcon className="h-5 w-5" />

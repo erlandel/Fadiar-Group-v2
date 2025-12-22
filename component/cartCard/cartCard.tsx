@@ -1,5 +1,6 @@
 "use client";
 import { server_url } from "@/lib/apiClient";
+import cartStore from "@/store/cartStore";
 import { ShoppingCart, Trash2 } from "lucide-react";
 
 interface CardCart4Props {
@@ -10,7 +11,7 @@ interface CardCart4Props {
   actionIcon?: "cart" | "delete" | "none";
   quantityProducts?: number;
   width?: string;
-  padding?:string;
+  padding?: string;
   bgColor?: string;
   hideQuantitySelector?: boolean;
   productId?: number | string;
@@ -25,18 +26,20 @@ export default function CartCard({
   actionIcon = "cart",
   quantityProducts,
   width = "w-88",
-  padding="p-2",
+  padding = "p-2",
   bgColor = "bg-white",
   hideQuantitySelector = false,
   productId,
-  onDelete
+  onDelete,
 }: CardCart4Props) {
+  const { updateQuantity, getItemQuantity } = cartStore();
+  const currentQuantity = productId ? getItemQuantity(productId) : 0;
   return (
     <>
       <div
-        className={`${bgColor} ${width} ${padding} border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
+        className={`${bgColor} ${width} ${padding} max-w-120 border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
       >
-        <div className="w-32 h-[124px] overflow-hidden rounded-2xl" >
+        <div className="w-32 h-[124px] overflow-hidden rounded-2xl">
           <img
             className="w-full h-full object-contain"
             src={`${server_url}/${image}`}
@@ -54,34 +57,37 @@ export default function CartCard({
 
           <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
             ${price}{" "}
-            <span className="text-primary font-normal text-lg sm:text-2xl">USD</span>
+            <span className="text-primary font-normal text-lg sm:text-2xl">
+              USD
+            </span>
           </p>
-
+          {/* quantityProducts */}
           <div className="mt-auto  flex items-center justify-between gap-2">
-            {quantityProducts && quantityProducts > 0 ? (
+            {actionIcon === "none" ? (
               <p className="text-[#777777] text-md">
                 Cantidad: {quantityProducts}
               </p>
-            ) : !hideQuantitySelector ? (
-              <div
-                className={`flex items-center  rounded-xl font-bold border ${
+            ) : (
+              <div className={`flex items-center  rounded-xl font-bold border ${
                   actionIcon === "delete" ? "border-primary" : "border-gray"
                 }`}
               >
-                <button className="px-3 py-2 text-accent cursor-pointer">
+                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => productId && updateQuantity(productId, currentQuantity - 1)}>
                   −
                 </button>
-                <span className="px-4 my-1 border-x border-gray-300 ">1</span>
-                <button className="px-3 py-2 text-accent cursor-pointer">
+                <span className="px-4 my-1 border-x border-primary ">
+                  {currentQuantity}
+                </span>
+                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => productId && updateQuantity(productId, currentQuantity + 1)}>
                   +
                 </button>
               </div>
-            ) : null}
+            )}
 
             <div>
               {actionIcon === "delete" ? (
-                <Trash2 
-                  className="w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors" 
+                <Trash2
+                  className="w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors"
                   onClick={() => productId && onDelete?.(productId)}
                 />
               ) : actionIcon === "cart" ? (

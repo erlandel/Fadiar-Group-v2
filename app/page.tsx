@@ -4,6 +4,8 @@ import SectionMoreproducts from "@/section/home/sectionMoreproducts";
 import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
 import NineOffers from "@/section/NineOffers";
 import { LatestProducts } from "@/section/latestProducts";
+import { BestSelling } from "@/section/bestSelling/bestSelling";
+
 
 
 
@@ -32,6 +34,9 @@ export default function Home() {
           <LatestProducts/>
         </div>
      
+     <div>
+      <BestSelling/>
+     </div>
 
       </div>
     </>
