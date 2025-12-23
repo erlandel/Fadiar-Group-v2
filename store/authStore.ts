@@ -47,6 +47,7 @@ export type AuthPayload = {
 export type AuthState = {
   auth: AuthPayload | null;
   setAuth: (payload: AuthPayload) => void;
+  updatePerson: (person: Partial<Person>) => void;
   clearAuth: () => void;
 };
 
@@ -59,6 +60,20 @@ export const useAuthStore = create<AuthState>()(
         set(() => ({
           auth: payload,
         })),
+
+      updatePerson: (personUpdates) =>
+        set((state) => {
+          if (!state.auth) return state;
+          return {
+            auth: {
+              ...state.auth,
+              person: {
+                ...state.auth.person,
+                ...personUpdates,
+              },
+            },
+          };
+        }),
 
       clearAuth: () =>
         set(() => ({

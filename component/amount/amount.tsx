@@ -129,6 +129,7 @@ export default function Amount() {
     // Guardar datos del formulario en el store
     MatterCart1Store.getState().setFormData(formData);
     
+    
     console.log(formData);
 
     // Si la validación es exitosa, navegar a cart2

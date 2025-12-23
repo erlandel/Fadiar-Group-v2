@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import "@fontsource/just-me-again-down-here";
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
 import SectionMoreproducts from "@/section/home/sectionMoreproducts";
@@ -5,9 +7,6 @@ import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
 import NineOffers from "@/section/NineOffers";
 import { LatestProducts } from "@/section/latestProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
-
-
-
 
 export default function Home() {
   return (

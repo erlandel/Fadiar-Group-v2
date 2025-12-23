@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import ShoppingCartIcon from "../icons";
-import { CardProps } from "@/type/cardProps";
+import { CardProps } from "@/types/cardProps";
 
 
 export default function CardAllProducts({

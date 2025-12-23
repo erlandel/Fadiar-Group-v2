@@ -2,19 +2,21 @@
 import Menu from "@/component/menu/menu";
 import Serchbar from "@/component/searchBar/searchBar";
 import UserDropdown from "@/component/userDropdown/userDropdown";
-import { TablerShoppingCart } from "@/icons/icons";
+import { AkarIconsLocation, TablerShoppingCart } from "@/icons/icons";
 import Image from "next/image";
 import "@fontsource/just-me-again-down-here";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import useCartStore from '@/store/cartStore';
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Header() {
   const pathname = usePathname();
   const isCart4 = pathname === "/cart4";
   const [mounted, setMounted] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const { setIsOpen } = useProductsByLocationStore();
 
   useEffect(() => {
     setMounted(true);
@@ -59,6 +61,12 @@ export default function Header() {
             </Link>
 
           <UserDropdown />
+
+          <AkarIconsLocation 
+            className="cursor-pointer" 
+            onClick={() => setIsOpen(true)}
+          />
+          
         </div>
       </div>
 

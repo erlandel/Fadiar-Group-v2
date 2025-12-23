@@ -3,7 +3,7 @@ import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll"
 import CardNineOffers from "@/component/ui/cardNineOffers";
 import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
-import { Product } from "@/type/product";
+import { Product } from "@/types/product";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 

@@ -3,7 +3,7 @@ import { IcSharpSearch } from "@/icons/icons";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { server_url } from "@/lib/apiClient";
-import { Product } from "@/type/product";
+import { Product } from "@/types/product";
 
 
 

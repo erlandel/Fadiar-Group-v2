@@ -12,6 +12,8 @@
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",
     "animate.css": "^4.1.1",
+    "country-flags-dial-code": "^1.2.0",
+    "i18n-iso-countries": "^7.14.0",
     "lucide-react": "^0.554.0",
     "next": "^16.0.10",
     "react": "^19.2.3",

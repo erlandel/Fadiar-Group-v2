@@ -10,7 +10,7 @@ import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/component/productLoadingId/productLoadingId";
-import { ProductID } from "@/type/productId";
+import { ProductID } from "@/types/productId";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 
 function ProductContent({ id }: { id: string | null }) {

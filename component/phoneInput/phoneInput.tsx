@@ -1,7 +1,14 @@
 "use client";
+
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { IcSharpSearch } from "@/icons/icons";
+
+import { getCountryListMap } from "country-flags-dial-code";
+import countries from "i18n-iso-countries";
+import es from "i18n-iso-countries/langs/es.json";
+
+countries.registerLocale(es);
 
 interface Country {
   name: string;
@@ -25,62 +32,56 @@ export default function PhoneInput({
   placeholder = "Teléfono",
   defaultCountry = { name: "Cuba", code: "CU", phoneCode: "+53" },
 }: PhoneInputProps) {
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [inputPhoneValue, setInputPhoneValue] = useState(phoneValue);
   const [searchQuery, setSearchQuery] = useState("");
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Cargar países
+  /* ===== CARGA DE PAÍSES (LOCAL, ESTABLE) ===== */
   useEffect(() => {
-    async function loadFlags() {
-      try {
-        const res = await fetch(
-          "https://restcountries.com/v3.1/all?fields=name,cca2,flags,idd"
-        );
-        if (!res.ok) throw new Error("Error al cargar países");
+    const map = getCountryListMap();
 
-        const data = await res.json();
-       
-        if (!Array.isArray(data)) throw new Error("Datos inválidos recibidos");
+    const mapped: Country[] = Object.values(map)
+      .map((c: any) => {
+        const nameEs =
+          countries.getName(c.code, "es") ?? c.country;
 
-        const mapped = data.map((c: any) => ({
-          name: c.name.common,
-          code: c.cca2,
-          flag: c.flags.png,
-          phoneCode: c.idd?.root ? c.idd.root + (c.idd.suffixes?.[0] || "") : "",
-        }));
+        return {
+          name: nameEs,
+          code: c.code,
+          phoneCode: c.dialCode,
+          flag: `data:image/svg+xml;utf8,${encodeURIComponent(c.flag)}`,
+        };
+      })
+      .filter((c) => c.phoneCode); // evita países sin código telefónico
 
-        setCountries(mapped);
-        setFilteredCountries(mapped);
-      } catch (err) {
-        console.error("ERROR:", err);
-      }
-    }
-
-    loadFlags();
+    setCountriesList(mapped);
+    setFilteredCountries(mapped);
   }, []);
 
-  // Filtrar países según búsqueda
+  /* ===== FILTRO ===== */
   useEffect(() => {
     if (!searchQuery.trim()) {
-      setFilteredCountries(countries);
+      setFilteredCountries(countriesList);
     } else {
-      const filtered = countries.filter((country) =>
-        country.name.toLowerCase().includes(searchQuery.toLowerCase())
+      setFilteredCountries(
+        countriesList.filter((c) =>
+          c.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       );
-      setFilteredCountries(filtered);
     }
-  }, [searchQuery, countries]);
+  }, [searchQuery, countriesList]);
 
-  // Cerrar dropdown al hacer clic fuera
+  /* ===== CLICK FUERA ===== */
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(e: MouseEvent) {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(e.target as Node)
       ) {
         setIsDropdownOpen(false);
       }
@@ -95,112 +96,104 @@ export default function PhoneInput({
     };
   }, [isDropdownOpen]);
 
-  // Sincronizar inputPhoneValue cuando el phoneValue prop cambia
+  /* ===== SYNC PROPS ===== */
   useEffect(() => {
     setInputPhoneValue(phoneValue);
   }, [phoneValue]);
 
-  // Sincronizar selectedCountry cuando el countryCode prop cambia
   useEffect(() => {
-    if (countries.length > 0) {
-      const country = countries.find(c => c.phoneCode === countryCode);
-      if (country) {
-        setSelectedCountry(country);
-      }
+    if (countriesList.length > 0) {
+      const country = countriesList.find(
+        (c) => c.phoneCode === countryCode
+      );
+      if (country) setSelectedCountry(country);
     }
-  }, [countryCode, countries]);
+  }, [countryCode, countriesList]);
 
+  /* ===== HANDLERS ===== */
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputPhoneValue(newValue);
-    if (onChange) {
-      onChange(newValue, selectedCountry.phoneCode);
-    }
+    const value = e.target.value;
+    setInputPhoneValue(value);
+    onChange?.(value, selectedCountry.phoneCode);
   };
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
     setIsDropdownOpen(false);
-    setSearchQuery(""); // Limpiar búsqueda al seleccionar
-    if (onChange) {
-      onChange(inputPhoneValue, country.phoneCode);
-    }
+    setSearchQuery("");
+    onChange?.(inputPhoneValue, country.phoneCode);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
+  /* ===== RENDER ===== */
   return (
     <div ref={dropdownRef} className="relative w-full">
-      <div className="w-full flex items-center gap-2 rounded-2xl px-4 py-3 bg-[#F5F7FA] text-gray-700 focus-within:ring-2 focus-within:ring-accent overflow-hidden">
+      <div className="w-full flex items-center gap-2 rounded-2xl px-4 py-3 bg-[#F5F7FA] focus-within:ring-2 focus-within:ring-accent">
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center cursor-pointer gap-1 hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-80"
         >
           <img
-            src={`https://flagcdn.com/32x24/${selectedCountry.code.toLowerCase()}.png`}
-            alt={`B`}
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+              getCountryListMap()[selectedCountry.code]?.flag ?? ""
+            )}`}
+            alt={selectedCountry.name}
             className="w-6 h-auto"
           />
           {isDropdownOpen ? (
-            <ChevronUp className="h-3 w-3 min-w-5 min-h-4" />
+            <ChevronUp className="h-3 w-3" />
           ) : (
-            <ChevronDown className="h-3 w-3 min-w-5 min-h-4" />
+            <ChevronDown className="h-3 w-3" />
           )}
         </button>
+
         <span className="text-gray-600 ml-4">|</span>
+
         <input
           type="text"
           placeholder={placeholder}
           value={inputPhoneValue}
           onChange={handlePhoneChange}
-          className="flex-1 min-w-0 bg-transparent outline-none text-gray-700 placeholder:text-gray-500"
+          className="flex-1 bg-transparent outline-none"
         />
       </div>
 
-      {/* Dropdown de países */}
       {isDropdownOpen && (
-        <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto bg-white rounded-2xl shadow-lg border border-gray-200">
-          {/* Buscador fijo */}
-          <div className="sticky top-0 bg-white border-b border-gray-200 p-3">
+        <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto bg-white rounded-2xl shadow-lg border">
+          <div className="sticky top-0 bg-white border-b p-3">
             <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2">
               <IcSharpSearch className="w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Buscar país..."
                 value={searchQuery}
-                onChange={handleSearchChange}
-                className="flex-1 bg-transparent outline-none text-gray-700 placeholder:text-gray-400 text-sm"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 bg-transparent outline-none text-sm"
               />
             </div>
           </div>
-          
-          {/* Lista de países filtrados */}
-          <div>
-            {filteredCountries.length > 0 ? (
-              filteredCountries.map((country) => (
-                <button
-                  key={country.code}
-                  type="button"
-                  onClick={() => handleCountrySelect(country)}
-                  className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 transition-colors text-left"
-                >
-                  <img
-                    src={country.flag}
-                    alt={`Bandera de ${country.name}`}
-                    className="w-6 h-auto"
-                  />
-                  <span className="text-gray-700">{country.name}</span>
-                </button>
-              ))
-            ) : (
-              <div className="px-4 py-8 text-center text-gray-500">
-                No se encontraron países
-              </div>
-            )}
-          </div>
+
+          {filteredCountries.length > 0 ? (
+            filteredCountries.map((country) => (
+              <button
+                key={country.code}
+                type="button"
+                onClick={() => handleCountrySelect(country)}
+                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 text-left"
+              >
+                <img
+                  src={country.flag}
+                  alt={country.name}
+                  className="w-6 h-auto"
+                />
+                <span>{country.name}</span>
+              </button>
+            ))
+          ) : (
+            <div className="px-4 py-8 text-center text-gray-500">
+              No se encontraron países
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -7,7 +7,7 @@ import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import Pot from "@/section/pot/pot";
 import CardSkeleton from "@/component/ui/skeletonCard";
-import { Product } from "@/type/product";
+import { Product } from "@/types/product";
 import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/component/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
