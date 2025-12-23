@@ -28,7 +28,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
     }
 
     const data = await res.json();
-    console.log("data:", data);
+ 
 
     // 👇 backend devuelve un ARRAY DIRECTO
     setProducts(Array.isArray(data) ? data : []);
