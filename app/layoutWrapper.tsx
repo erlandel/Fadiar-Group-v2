@@ -1,13 +1,35 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 import ModalProductsByLocation from "@/component/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+
+function ScrollToTop() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    };
+
+    scrollToTop();
+    // Ejecutar de nuevo tras un breve delay para asegurar que el contenido renderizado no desplace el scroll
+    const timeoutId = setTimeout(scrollToTop, 10);
+    return () => clearTimeout(timeoutId);
+  }, [pathname, searchParams]);
+
+  return null;
+}
+
+
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -64,6 +86,9 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
         </div>
       )}
       {!isAuthRoute && <Header />}
+      <Suspense fallback={null}>
+        <ScrollToTop />
+      </Suspense>
       {children}
       {!isAuthRoute && <Footer />}
       <ReactQueryDevtools initialIsOpen={false} />
