@@ -3,8 +3,6 @@
 export default function ProductLoadingId() {
     return( 
     <>
-     <main>
-        <div className="px-4 md:px-20 2xl:px-36 mt-10">
           <div >
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-4  animate-shimmer"></div>
             <div className="h-10 bg-gray-200 rounded w-1/2 mb-10 animate-shimmer"></div>
@@ -17,9 +15,6 @@ export default function ProductLoadingId() {
               </div>
             </div>
           </div>
-        </div>
-      </main>
-    
     </>
     );
        

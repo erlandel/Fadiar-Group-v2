@@ -44,6 +44,7 @@ function ProductContent({ id }: { id: string | null }) {
   useEffect(() => {
     const fetchProduct = async () => {
       setIsLoading(true);
+
       try {
         const token =
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo4NDAsImV4cCI6MTc2Mzg3NDg0NX0.-W2-13mCQ6L7x8MQ5KQCzuhK59ZpeqAOe6Vfo7TsThk";
@@ -76,41 +77,7 @@ function ProductContent({ id }: { id: string | null }) {
     }
   }, [id]);
 
-  // Interceptor local para animaciones de scroll
-  useEffect(() => {
-    if (isLoading || !product) return;
 
-    const setupAnimations = () => {
-      const elements = document.querySelectorAll<HTMLElement>(
-        ".animate-on-scroll:not(.animate__animated)"
-      );
-      if (elements.length === 0) return;
-
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const el = entry.target as HTMLElement;
-              const anim = el.dataset.animate || "animate__fadeInUp";
-              el.classList.add("aos-animate", "animate__animated", anim);
-              io.unobserve(el);
-            }
-          });
-        },
-        {
-          threshold: 0.1,
-          rootMargin: "0px 0px -50px 0px",
-        }
-      );
-
-      elements.forEach((el) => io.observe(el));
-      return () => io.disconnect();
-    };
-
-    // Pequeño delay para asegurar que los componentes estén montados
-    const timeout = setTimeout(setupAnimations, 50);
-    return () => clearTimeout(timeout);
-  }, [isLoading, product]);
 
   const warrantyNumber = product ? Number(product.warranty ?? 0) : 0;
   const warrantyMonths = warrantyNumber > 0 ? warrantyNumber / 30 : 0;
@@ -138,26 +105,26 @@ function ProductContent({ id }: { id: string | null }) {
   const images = product ? [product.img, product.img, product.img] : [];
 
   return (
-    <>
-      {isLoading ? (
-        <ProductLoadingId />
-      ) : !product ? (
-        <main className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-primary mb-4">
-              Producto no encontrado
-            </h1>
-            <button
-              onClick={() => window.history.back()}
-              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-all"
-            >
-              Volver atrás
-            </button>
+    <main>
+      <div className="px-4 md:px-20 2xl:px-36 mt-10">
+        {isLoading ? (
+          <ProductLoadingId />
+        ) : !product ? (
+          <div className="min-h-[400px] flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-primary mb-4">
+                Producto no encontrado
+              </h1>
+              <button
+                onClick={() => window.history.back()}
+                className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-all"
+              >
+                Volver atrás
+              </button>
+            </div>
           </div>
-        </main>
-      ) : (
-        <main>
-          <div className="px-4 md:px-20 2xl:px-36 mt-10">
+        ) : (
+          <>
             <div id={"list"} className="mt-10">
               <p className="text-xs text-gray-400 mb-4">
                 <span className="text-gray-400">Home - </span>
@@ -306,25 +273,26 @@ function ProductContent({ id }: { id: string | null }) {
                 )}
               </div>
             </div>
-          </div>
-          <div className="mt-20">
-            <RelatedProds products={relatedProducts} />
-          </div>
+          </>
+        )}
+      </div>
 
-          <div className="mt-20">
-            <SectionAbout4 />
-          </div>
+      <div className="mt-20">
+        <RelatedProds products={relatedProducts} />
+      </div>
 
-            <div className="hidden xl:block">
-            <LatestProducts />
-          </div>
-          
-          <div className="xl:hidden">
-            <BestSelling />
-          </div>
-        </main>
-      )}
-    </>
+      <div className="mt-20">
+        <SectionAbout4 />
+      </div>
+
+      <div className="hidden xl:block">
+        <LatestProducts />
+      </div>
+
+      <div className="xl:hidden">
+        <BestSelling />
+      </div>
+    </main>
   );
 }
 

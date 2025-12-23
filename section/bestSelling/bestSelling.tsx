@@ -94,7 +94,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
 
   return (
     <>
-      <div id="Mas recientes" className="w-full h-auto mt-20 my-30">
+      <div id="best-selling" className="w-full h-auto mt-20 my-30">
         <div className="flex flex-col items-start mb-5 ml-7 sm:ml-20">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Lo que le gusta a la gente!!!
