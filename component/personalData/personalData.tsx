@@ -22,7 +22,6 @@ export default function PersonalData() {
     lastName: "",
     email: "",
     phone: "",
-    phoneCountry: "",
     address: "",
     password: "",
     confirmPassword: "",
@@ -36,7 +35,6 @@ export default function PersonalData() {
         lastName: `${auth.person.lastname1} ${auth.person.lastname2}`.trim(),
         email: auth.user.email,
         phone: auth.person.cellphone2 || "",
-        phoneCountry: "",
         address: auth.person.address,
         password: "",
       }));
@@ -62,11 +60,10 @@ export default function PersonalData() {
     }
   };
 
-  const handlePhoneChange = (value: string, countryCode: string) => {
+  const handlePhoneChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
       phone: value,
-      phoneCountry: countryCode,
     }));
 
     if (errors.phone) {
@@ -427,8 +424,7 @@ export default function PersonalData() {
             <div className="flex flex-col gap-2">
               <label htmlFor="phone">Teléfono</label>
               <PhoneInput
-                phoneValue={formData.phone}
-                countryCode={formData.phoneCountry}
+                value={formData.phone}
                 onChange={handlePhoneChange}
                 placeholder="Teléfono"
               />

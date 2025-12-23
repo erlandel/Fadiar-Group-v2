@@ -92,11 +92,11 @@ export default function Amount() {
   };
 
   // Función para manejar cambios en el teléfono
-  const handlePhoneChange = (phoneValue: string, countryCode: string) => {
-    updateFormData({ phoneValue, countryCode });
+  const handlePhoneChange = (value: string) => {
+    updateFormData({ phone: value });
     // Limpiar error del teléfono cuando se escribe
-    if (errors.phoneValue) {
-      setErrors((prev) => ({ ...prev, phoneValue: undefined }));
+    if (errors.phone) {
+      setErrors((prev) => ({ ...prev, phone: undefined }));
     }
   };
 
@@ -162,13 +162,12 @@ export default function Amount() {
             <div className="relative">
               {/* Teléfono con bandera */}
               <PhoneInput
-                phoneValue={formData.phoneValue}
-                countryCode={formData.countryCode}
+                value={formData.phone}
                 onChange={handlePhoneChange}
                 placeholder="Teléfono"
               />
-              {errors.phoneValue && (
-                <p className="text-red-500 text-xs mt-1">{errors.phoneValue}</p>
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
               )}
             </div>
           </div>

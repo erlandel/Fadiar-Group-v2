@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export type FormData = {
-  phoneValue: string;
-  countryCode: string;
+  phone: string;
   identityCard: string;
   province: string;
   municipality: string;
@@ -20,8 +19,7 @@ export type FormState = {
 };
 
 const defaultFormData: FormData = {
-  phoneValue: "",
-  countryCode: "+53",
+  phone: "+53 ",
   identityCard: "",
   province: "",
   municipality: "",

@@ -44,7 +44,7 @@ export default function PayerPaymentDetails() {
 
         <div className="ml-4">
           <p className="text-[gray] ">
-            Teléfono: <span className="text-primary wrap-break-word">{buyerDetails.phoneCountry} {buyerDetails.phoneValue}</span>
+            Teléfono: <span className="text-primary wrap-break-word">{buyerDetails.phone}</span>
           </p>
         </div>
 

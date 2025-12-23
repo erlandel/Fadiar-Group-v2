@@ -78,13 +78,12 @@ export default function BuyerDetails() {
             {/* Phone with flag */}
             <div>
               <PhoneInput
-                phoneValue={formData.phoneValue}
-                countryCode={formData.phoneCountry}
+                value={formData.phone}
                 onChange={handlePhoneChange}
                 placeholder="Teléfono"
               />
-              {errors.phoneValue && (
-                <p className="text-red-500 text-xs mt-1">{errors.phoneValue}</p>
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
               )}
             </div>
           </div>

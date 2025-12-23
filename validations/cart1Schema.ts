@@ -1,17 +1,19 @@
 import { z } from "zod";
 
 export const cart1Schema = z.object({
-  phoneValue: z.string().min(1, "El teléfono es requerido"),
-  countryCode: z.string().min(1, "El código de país es requerido"),
+  phone: z.string().min(1, "El teléfono es requerido"),
   identityCard: z.string().min(1, "El carnet de identidad es requerido"),
   province: z.string().min(1, "La provincia es requerida"),
   municipality: z.string().min(1, "El municipio es requerido"),
 }).refine((data) => {
-  // Validar que phoneValue solo contenga números
-  return data.phoneValue === "" || /^\d+$/.test(data.phoneValue);
+  // Validar formato "+XX YYYYYYYY" o similar (código país, espacio, número)
+  const phoneParts = data.phone.trim().split(" ");
+  if (phoneParts.length < 2) return false;
+  const [code, number] = phoneParts;
+  return number === "" || /^\d+$/.test(number);
 }, {
-  message: "Solo números",
-  path: ["phoneValue"],
+  message: "Número de teléfono inválido (debe contener solo números después del código de país)",
+  path: ["phone"],
 }).refine((data) => data.identityCard === "" || /^\d+$/.test(data.identityCard), {
   message: "Solo números",
   path: ["identityCard"],

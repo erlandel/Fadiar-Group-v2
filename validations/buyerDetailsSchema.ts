@@ -4,8 +4,7 @@ export const buyerDetailsSchema = z.object({
   firstName: z.string().min(1, "El nombre es requerido"),
   lastName: z.string().min(1, "El apellido es requerido"),
   email: z.string().min(1, "El correo electrónico es requerido").email("Correo electrónico inválido"),
-  phoneValue: z.string().min(1, "El teléfono es requerido"),
-  phoneCountry: z.string().min(1, "El código de país es requerido"),
+  phone: z.string().min(1, "El teléfono es requerido"),
   address: z.string().min(1, "La dirección es requerida"),
   note: z.string().optional(),
 }).refine((data) => {
@@ -21,11 +20,14 @@ export const buyerDetailsSchema = z.object({
   message: "El apellido solo puede contener letras",
   path: ["lastName"],
 }).refine((data) => {
-  // Validar que phoneValue solo contenga números
-  return data.phoneValue === "" || /^\d+$/.test(data.phoneValue);
+  // Validar formato "+XX YYYYYYYY"
+  const parts = data.phone.trim().split(" ");
+  if (parts.length < 2) return false;
+  const number = parts.slice(1).join("");
+  return number === "" || /^\d+$/.test(number);
 }, {
-  message: "Solo números",
-  path: ["phoneValue"],
+  message: "Solo números después del código de país",
+  path: ["phone"],
 });
 
 export type BuyerDetailsFormData = z.infer<typeof buyerDetailsSchema>;

@@ -4,8 +4,7 @@ export const beneficiaryDetailsSchema = z.object({
   firstName: z.string().min(1, "El nombre es requerido"),
   lastName: z.string().min(1, "El apellido es requerido"),
   email: z.string().min(1, "El correo electrónico es requerido").email("Correo electrónico inválido"),
-  phoneValue: z.string().min(1, "El teléfono es requerido"),
-  phoneCountry: z.string().min(1, "El código de país es requerido"),
+  phone: z.string().min(1, "El teléfono es requerido"),
   identityCard: z.string().min(1, "El carnet de identidad es requerido"),
 }).refine((data) => {
   // Validar que firstName solo contenga letras
@@ -20,11 +19,14 @@ export const beneficiaryDetailsSchema = z.object({
   message: "El apellido solo puede contener letras",
   path: ["lastName"],
 }).refine((data) => {
-  // Validar que phoneValue solo contenga números
-  return data.phoneValue === "" || /^\d+$/.test(data.phoneValue);
+  // Validar formato "+XX YYYYYYYY"
+  const parts = data.phone.trim().split(" ");
+  if (parts.length < 2) return false;
+  const number = parts.slice(1).join("");
+  return number === "" || /^\d+$/.test(number);
 }, {
-  message: "El teléfono solo puede tener números",
-  path: ["phoneValue"],
+  message: "El teléfono solo puede tener números después del código de país",
+  path: ["phone"],
 }).refine((data) => {
   // Validar que identityCard solo contenga números
   return data.identityCard === "" || /^\d+$/.test(data.identityCard);

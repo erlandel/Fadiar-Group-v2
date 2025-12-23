@@ -18,16 +18,14 @@ interface Country {
 }
 
 interface PhoneInputProps {
-  phoneValue?: string;
-  countryCode?: string;
-  onChange?: (phoneValue: string, countryCode: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
   placeholder?: string;
   defaultCountry?: { name: string; code: string; phoneCode: string };
 }
 
 export default function PhoneInput({
-  phoneValue = "",
-  countryCode = "+53",
+  value = "+53 ",
   onChange,
   placeholder = "Teléfono",
   defaultCountry = { name: "Cuba", code: "CU", phoneCode: "+53" },
@@ -36,7 +34,7 @@ export default function PhoneInput({
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [inputPhoneValue, setInputPhoneValue] = useState(phoneValue);
+  const [inputPhoneValue, setInputPhoneValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -98,30 +96,32 @@ export default function PhoneInput({
 
   /* ===== SYNC PROPS ===== */
   useEffect(() => {
-    setInputPhoneValue(phoneValue);
-  }, [phoneValue]);
+    if (value) {
+      const parts = value.split(" ");
+      const countryCode = parts[0];
+      const phoneNum = parts.slice(1).join(" ");
+      
+      setInputPhoneValue(phoneNum);
 
-  useEffect(() => {
-    if (countriesList.length > 0) {
-      const country = countriesList.find(
-        (c) => c.phoneCode === countryCode
-      );
-      if (country) setSelectedCountry(country);
+      if (countriesList.length > 0) {
+        const country = countriesList.find((c) => c.phoneCode === countryCode);
+        if (country) setSelectedCountry(country);
+      }
     }
-  }, [countryCode, countriesList]);
+  }, [value, countriesList]);
 
   /* ===== HANDLERS ===== */
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputPhoneValue(value);
-    onChange?.(value, selectedCountry.phoneCode);
+    const newVal = e.target.value;
+    setInputPhoneValue(newVal);
+    onChange?.(`${selectedCountry.phoneCode} ${newVal}`);
   };
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
     setIsDropdownOpen(false);
     setSearchQuery("");
-    onChange?.(inputPhoneValue, country.phoneCode);
+    onChange?.(`${country.phoneCode} ${inputPhoneValue}`);
   };
 
   /* ===== RENDER ===== */

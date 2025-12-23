@@ -21,7 +21,14 @@ export const personalDataSchema = z.object({
   phone: z
     .string()
     .min(1, "El teléfono es requerido")
-    .regex(/^[0-9]+$/, "El teléfono solo puede contener números"),
+    .refine((val) => {
+      const parts = val.trim().split(" ");
+      if (parts.length < 2) return false;
+      const number = parts.slice(1).join("");
+      return number === "" || /^\d+$/.test(number);
+    }, {
+      message: "El teléfono debe tener un código de país seguido de un espacio y números",
+    }),
 });
 
 export type PersonalDataFormData = z.infer<typeof personalDataSchema>;

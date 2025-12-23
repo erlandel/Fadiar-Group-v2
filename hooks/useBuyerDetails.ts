@@ -6,8 +6,7 @@ const defaultFormData = {
   firstName: "",
   lastName: "",
   email: "",
-  phoneValue: "",
-  phoneCountry: "+53",
+  phone: "+53 ",
   address: "",
   note: "",
 };
@@ -33,15 +32,14 @@ export function useBuyerDetails() {
   };
 
   // Function to handle phone changes
-  const handlePhoneChange = (phoneValue: string, countryCode: string) => {
+  const handlePhoneChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
-      phoneValue,
-      phoneCountry: countryCode,
+      phone: value,
     }));
     // Clear phone error when user types
-    if (errors.phoneValue) {
-      setErrors((prev) => ({ ...prev, phoneValue: undefined }));
+    if (errors.phone) {
+      setErrors((prev) => ({ ...prev, phone: undefined }));
     }
   };
 

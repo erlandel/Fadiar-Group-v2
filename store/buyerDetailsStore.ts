@@ -5,8 +5,7 @@ export type BuyerDetailsData = {
   firstName: string;
   lastName: string;
   email: string;
-  phoneValue: string;
-  phoneCountry: string;
+  phone: string;
   address: string;
   note: string;
   paymentMethod: string;
@@ -23,8 +22,7 @@ const defaultBuyerDetails: BuyerDetailsData = {
   firstName: "",
   lastName: "",
   email: "",
-  phoneValue: "",
-  phoneCountry: "+53",
+  phone: "+53 ",
   address: "",
   note: "",
   paymentMethod: "Tarjetas de crédito o débito", // Por defecto

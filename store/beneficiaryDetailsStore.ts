@@ -5,8 +5,7 @@ export type BeneficiaryDetailsData = {
   firstName: string;
   lastName: string;
   email: string;
-  phoneValue: string;
-  phoneCountry: string;
+  phone: string;
   identityCard: string;
   address: string;
   note: string;
@@ -22,8 +21,7 @@ const defaultBeneficiaryDetails: BeneficiaryDetailsData = {
   firstName: "",
   lastName: "",
   email: "",
-  phoneValue: "",
-  phoneCountry: "+53",
+  phone: "+53 ",
   identityCard: "",
   address: "",
   note: "",

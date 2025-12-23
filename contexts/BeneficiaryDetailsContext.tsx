@@ -8,8 +8,7 @@ export type BeneficiaryDetailsFormData = {
   firstName: string;
   lastName: string;
   email: string;
-  phoneValue: string;
-  phoneCountry: string;
+  phone: string;
   identityCard: string;
   address: string;
   note: string;
@@ -23,7 +22,7 @@ interface BeneficiaryDetailsContextType {
   formData: BeneficiaryDetailsFormData;
   errors: BeneficiaryDetailsErrors;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  handlePhoneChange: (phoneValue: string, phoneCountry: string) => void;
+  handlePhoneChange: (value: string) => void;
   validateAllForms: () => boolean;
   clearErrors: () => void;
   setFormData: (data: BeneficiaryDetailsFormData) => void;
@@ -48,8 +47,7 @@ export const BeneficiaryDetailsProvider: React.FC<BeneficiaryDetailsProviderProp
     firstName: "",
     lastName: "",
     email: "",
-    phoneValue: "",
-    phoneCountry: "+53",
+    phone: "+53 ",
     identityCard: "",
     address: "",
     note: "",
@@ -73,18 +71,17 @@ export const BeneficiaryDetailsProvider: React.FC<BeneficiaryDetailsProviderProp
     }
   };
 
-  const handlePhoneChange = (phoneValue: string, phoneCountry: string) => {
+  const handlePhoneChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
-      phoneValue,
-      phoneCountry,
+      phone: value,
     }));
     
     // Limpiar error del teléfono cuando el usuario empieza a escribir
-    if (errors.phoneValue) {
+    if (errors.phone) {
       setErrors((prev) => ({
         ...prev,
-        phoneValue: "",
+        phone: "",
       }));
     }
   };

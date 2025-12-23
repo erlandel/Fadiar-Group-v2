@@ -67,12 +67,11 @@ export default function BeneficiaryDetails() {
 
           {/* Teléfono con bandera */}
           <PhoneInput
-            phoneValue={formData.phoneValue}
-            countryCode={formData.phoneCountry}
+            value={formData.phone}
             onChange={handlePhoneChange}
             placeholder="Teléfono"
           />
-          {errors.phoneValue && <p className="text-red-500 text-xs mt-1">{errors.phoneValue}</p>}
+          {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
 
           <InputField
             type="text"
