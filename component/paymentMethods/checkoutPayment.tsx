@@ -53,7 +53,7 @@ export default function CheckoutPayment() {
   return (
     <>
       {/* FORMA DE PAGO*/}
-      <div className="w-full xl:w-65  2xl:w-90 ">
+      <div className="w-full sm:w-100 md:w-150 lg:w-100 xl:w-65  2xl:w-90 ">
         <div>
           <h5 className="text-primary font-bold text-xl">FORMA DE PAGO</h5>
           <div className="w-full  border-b-2 border-gray"></div>
@@ -79,7 +79,7 @@ export default function CheckoutPayment() {
              
 
             <div>
-              <div className="flex justify-between items-center px-6 py-4 text-[#022954]">
+              <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-4 text-[#022954]">
                 <span className="text-md">Comisión por forma de pago:</span>
                 <span className="font-medium whitespace-nowrap text-xl">$ 5 USD</span>
               </div>
