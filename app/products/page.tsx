@@ -1,7 +1,9 @@
 "use client";
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
-import { FilterSection } from "@/component/ui/filterModal";
+import FiltersDesktop from "@/component/filtersDesktop/filtersDesktop";
+import FiltersMobile from "@/component/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo } from "react";
+import { Filter } from "lucide-react";
 import Pagination from "@/component/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
@@ -31,7 +33,13 @@ export default function Products() {
   const availableCategories = useMemo(() => {
     const categoryMap = new Map<string, string>(); // Key: normalized, Value: original (el primero que encuentre)
     allProducts.forEach((product) => {
-      const categoryName = product.categoria?.name || product.category?.name;
+      // Intentar obtener el nombre de la categoría de varias formas para mayor robustez
+      const categoryName = 
+        (typeof product.categoria === 'object' && product.categoria?.name) || 
+        (typeof product.category === 'object' && product.category?.name) ||
+        (typeof product.categoria === 'string' ? product.categoria : null) ||
+        (typeof product.category === 'string' ? product.category : null);
+
       if (categoryName) {
         const normalized = categoryName.toLowerCase().trim();
         // Usar el valor normalizado como clave para evitar duplicados como "Desmatt" vs "desmatt"
@@ -53,11 +61,17 @@ export default function Products() {
   const availableBrands = useMemo(() => {
     const brandMap = new Map<string, string>(); // Key: normalized, Value: original (el primero que encuentre)
     allProducts.forEach((product) => {
-      if (product.brand) {
-        const normalized = product.brand.toLowerCase().trim();
+      // Intentar obtener la marca de varias formas para mayor robustez
+      const brandName = 
+        (typeof product.brand === 'string' ? product.brand : null) ||
+        (typeof (product as any).marca === 'string' ? (product as any).marca : null) ||
+        (typeof (product as any).marca === 'object' && (product as any).marca?.name ? (product as any).marca.name : null);
+
+      if (brandName) {
+        const normalized = brandName.toLowerCase().trim();
         // Usar el valor normalizado como clave para evitar duplicados como "Ecko" vs "ecko"
         if (!brandMap.has(normalized)) {
-          brandMap.set(normalized, product.brand.trim()); // Guardar el primer nombre original que encontremos
+          brandMap.set(normalized, brandName.trim()); // Guardar el primer nombre original que encontremos
         }
       }
     });
@@ -110,8 +124,10 @@ export default function Products() {
     if (category.length > 0) {
       filtered = filtered.filter((product) => {
         const categoryName = (
-          product.categoria?.name ||
-          product.category?.name ||
+          (typeof product.categoria === 'object' && product.categoria?.name) || 
+          (typeof product.category === 'object' && product.category?.name) ||
+          (typeof product.categoria === 'string' ? product.categoria : null) ||
+          (typeof product.category === 'string' ? product.category : null) ||
           ""
         ).toLowerCase();
         return category.some((cat) => categoryName === cat.toLowerCase());
@@ -121,7 +137,12 @@ export default function Products() {
     // Filtro por marcas
     if (brands.length > 0) {
       filtered = filtered.filter((product) => {
-        const productBrand = (product.brand || "").toLowerCase();
+        const productBrand = (
+          (typeof product.brand === 'string' ? product.brand : null) ||
+          (typeof (product as any).marca === 'string' ? (product as any).marca : null) ||
+          (typeof (product as any).marca === 'object' && (product as any).marca?.name ? (product as any).marca.name : null) ||
+          ""
+        ).toLowerCase();
         return brands.some((brand) => productBrand === brand.toLowerCase());
       });
     }
@@ -248,51 +269,21 @@ export default function Products() {
   return (
     <main className="flex w-full h-auto flex-col">
       <div id="main" className="flex flex-row">
-        {/* Sidebar Desktop */}
-        <div id="Sidebar" className="w-1/5 mx-4 hidden xl:flex flex-col gap-3">
-          {/* Categorías */}
-          <FilterSection
-            title="Categorías"
-            type="checkbox"
-            selected={category}
-            onChange={setCategory}
-            options={availableCategories}
-          />
-
-          {/* Precio */}
-          <FilterSection
-            title="Precio"
-            type="range"
-            min={priceRange.min}
-            max={priceRange.max}
-            valueMin={tempPrice[0]}
-            valueMax={tempPrice[1]}
-            onChange={setTempPrice}
-            onApply={applyPriceFilter}
-          />
-
-          {/* Marcas */}
-          <FilterSection
-            title="Marcas"
-            type="checkbox"
-            selected={brands}
-            onChange={setBrands}
-            options={availableBrands}
-          />
-
-          {/* Relevantes */}
-          <FilterSection
-            title="Relevantes"
-            type="radio"
-            selected={relevant}
-            onChange={(value) => setRelevant(value as string[])}
-            options={[
-              { label: "Ofertas", value: "ofertas" },
-              { label: "Más vendidos", value: "masVendidos" },
-              { label: "Próximamente", value: "proximamente" },
-            ]}
-          />
-        </div>
+        {/* filters Desktop */}
+        <FiltersDesktop
+          category={category}
+          setCategory={setCategory}
+          availableCategories={availableCategories}
+          priceRange={priceRange}
+          tempPrice={tempPrice}
+          setTempPrice={setTempPrice}
+          applyPriceFilter={applyPriceFilter}
+          brands={brands}
+          setBrands={setBrands}
+          availableBrands={availableBrands}
+          relevant={relevant}
+          setRelevant={setRelevant}
+        />
 
         <div id="content" className="w-full mb-20  xl:w-4/5 overflow-hidden">
           <div id="content-ollas" className="xl:hidden">
@@ -317,21 +308,9 @@ export default function Products() {
 
               <button
                 onClick={() => setIsFilterOpen(true)}
-                className="xl:hidden flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary"
+                className="xl:hidden z-100 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                  />
-                </svg>
+                <Filter className="w-5 h-5" />
               </button>
             </div>
 
@@ -485,26 +464,20 @@ export default function Products() {
                 <CardSkeleton key={`skeleton-${index}`} position="vertical" />
               ))
             ) : paginatedProducts && paginatedProducts.length > 0 ? (
-              paginatedProducts.map((product, index) => {
-                // Crear una clave única combinando el ID del producto con su índice
-                // Esto asegura que cada producto tenga una clave única incluso si los IDs están duplicados
-                const uniqueKey = `${product.id}-${index}`;
-
-                return (
-                  <CardAllProducts
-                    key={uniqueKey}
-                    productId={product.id}
-                    category={product.categoria?.name}
-                    title={product.name}
-                    brand={product.brand}
-                    warranty={product.warranty}
-                    price={product.price}
-                    image={product.img}
-                    temporal_price={product?.temporal_price}
-                    position="vertical"
-                  />
-                );
-              })
+              paginatedProducts.map((product, index) => (
+                <CardAllProducts
+                  key={`${product.id}-${index}`}
+                  productId={product.id}
+                  category={product.categoria?.name}
+                  title={product.name}
+                  brand={product.brand}
+                  warranty={product.warranty}
+                  price={product.price}
+                  image={product.img}
+                  temporal_price={product?.temporal_price}
+                  position="vertical"
+                />
+              ))
             ) : (
               <p className="col-span-full text-center text-gray-500">
                 No se encontraron productos
@@ -538,107 +511,23 @@ export default function Products() {
            </div>
 
       {/* Modal de filtros para móvil */}
-      {isFilterOpen && (
-        <div className="fixed inset-0 z-50 xl:hidden">
-          {/* Overlay */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsFilterOpen(false)}
-          />
+      <FiltersMobile
+        isFilterOpen={isFilterOpen}
+        setIsFilterOpen={setIsFilterOpen}
+        category={category}
+        setCategory={setCategory}
+        availableCategories={availableCategories}
+        priceRange={priceRange}
+        price={price}
+        setPrice={setPrice}
+        brands={brands}
+        setBrands={setBrands}
+        availableBrands={availableBrands}
+        relevant={relevant}
+        setRelevant={setRelevant}
+      />
 
-          {/* Modal content */}
-          <div className="absolute right-0 top-0 h-full w-full sm:w-96 bg-white shadow-xl overflow-y-auto animate-in slide-in-from-right duration-300">
-            {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between z-10">
-              <h2 className="text-lg font-semibold text-[#1A2B49]">Filtros</h2>
-              <button
-                onClick={() => setIsFilterOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
 
-            {/* Filters */}
-            <div className="p-4 pb-20">
-              {/* Categorías */}
-              <FilterSection
-                title="Categorías"
-                type="checkbox"
-                selected={category}
-                onChange={setCategory}
-                options={availableCategories}
-              />
-
-              {/* Precio */}
-              <FilterSection
-                title="Precio"
-                type="range"
-                min={priceRange.min}
-                max={priceRange.max}
-                valueMin={price[0]}
-                valueMax={price[1]}
-                onChange={setPrice}
-              />
-
-              {/* Marcas */}
-              <FilterSection
-                title="Marcas"
-                type="checkbox"
-                selected={brands}
-                onChange={setBrands}
-                options={availableBrands}
-              />
-
-              {/* Relevantes */}
-              <FilterSection
-                title="Relevantes"
-                type="radio"
-                selected={relevant}
-                onChange={(value) => setRelevant(value as string[])}
-                options={[
-                  { label: "Ofertas", value: "ofertas" },
-                  { label: "Más vendidos", value: "masVendidos" },
-                  { label: "Próximamente", value: "proximamente" },
-                ]}
-              />
-            </div>
-
-            {/* Footer con botones de acción */}
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex gap-3 z-60">
-              <button
-                onClick={() => {
-                  setCategory([]);
-                  setBrands([]);
-                  setRelevant([]);
-                  setPrice([priceRange.min, priceRange.max]);
-                }}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Limpiar
-              </button>
-              <button
-                onClick={() => setIsFilterOpen(false)}
-                className="flex-1 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                Aplicar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }

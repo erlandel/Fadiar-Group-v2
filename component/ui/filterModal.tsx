@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useId } from "react";
+import { ChevronDown } from "lucide-react";
 
 export type FilterOption = {
   label: string;
@@ -45,6 +46,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   const [isDraggingMin, setIsDraggingMin] = useState(false);
   const [isDraggingMax, setIsDraggingMax] = useState(false);
   const [isOpen, setIsOpen] = useState(true); // Por defecto abierto
+  const radioGroupId = useId();
 
   const getPercentage = (value: number) => {
     if (max === min) return 0;
@@ -152,55 +154,73 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
         className="w-full font-semibold text-[#1A2B49] text-base mb-4 flex items-center justify-between hover:text-[#17243b] transition-colors"
       >
         {title}
-        <span className={`text-[#1A2B49]/60 text-lg transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
-          ⌄
+        <span className={`text-[#1A2B49]/60 cursor-pointer transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+          <ChevronDown className="w-5 h-5" />
         </span>
       </button>
 
       {/* Content - Collapsible */}
-      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+      <div className={`transition-all duration-300 ease-in-out custom-scrollbar ${
+        isOpen 
+          ? 'max-h-[450px] opacity-100 overflow-y-auto pr-2' 
+          : 'max-h-0 opacity-0 overflow-hidden'
+      }`}>
         {/* CHECKBOX */}
         {type === "checkbox" &&
-          options.map((opt, index) => (
-            <label
-              key={(opt as any).key || opt.value || index}
-              className="flex items-center gap-2.5 text-sm text-[#6B7280] mb-3 cursor-pointer hover:text-[#17243b] transition-colors"
-            >
-              <input
-                type="checkbox"
-                checked={selected.includes(opt.value)}
-                onChange={() => {
-                  const exists = selected.includes(opt.value);
-                  const newValues = exists
-                    ? selected.filter((v) => v !== opt.value)
-                    : [...selected, opt.value];
+          options.map((opt, index) => {
+            const isSelected = selected.includes(opt.value);
+            return (
+              <label
+                key={(opt as any).key || opt.value || index}
+                className={`flex items-center gap-2.5 text-sm mb-3 cursor-pointer transition-colors whitespace-nowrap
+  ${
+                  isSelected 
+                    ? 'text-[#1A2B49] font-semibold' 
+                    : 'text-[#6B7280] hover:text-[#1A2B49]'
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => {
+                    const exists = selected.includes(opt.value);
+                    const newValues = exists
+                      ? selected.filter((v) => v !== opt.value)
+                      : [...selected, opt.value];
 
-                  onChange?.(newValues);
-                }}
-                className="h-4 w-4 rounded border-gray-300 cursor-pointer accent-[#17243b]"
-              />
-              {opt.label}
-            </label>
-          ))}
+                    onChange?.(newValues);
+                  }}
+                  className="min-h-4 min-w-4 rounded border-gray-300 cursor-pointer accent-[#17243b]"
+                />
+                {opt.label}
+              </label>
+            );
+          })}
 
         {/* RADIO */}
         {type === "radio" &&
-          options.map((opt, index) => (
-            <label
-              key={(opt as any).key || opt.value || index}
-              className="flex items-center gap-2.5 text-sm text-[#3A4B66] mb-3 cursor-pointer hover:text-[#1A2B49] transition-colors "
-            >
-              <input
-                type="radio"
-                name={title}
-                checked={selected.includes(opt.value)}
-                onChange={() => onChange?.([opt.value])}
-                className="h-4 w-4 border-gray-300 cursor-pointer accent-[#17243b]"
-              />
-              {opt.label}
-            </label>
-          )
-          )}
+          options.map((opt, index) => {
+            const isSelected = selected.includes(opt.value);
+            return (
+              <label
+                key={(opt as any).key || opt.value || index}
+                className={`flex items-center gap-2.5 text-sm mb-3 cursor-pointer transition-colors ${
+                  isSelected 
+                    ? 'text-[#1A2B49] font-semibold' 
+                    : 'text-[#6B7280] hover:text-[#1A2B49]'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={radioGroupId}
+                  checked={isSelected}
+                  onChange={() => onChange?.([opt.value])}
+                  className="h-4 w-4 border-gray-300 cursor-pointer accent-[#17243b]"
+                />
+                {opt.label}
+              </label>
+            );
+          })}
 
           {/* RANGE */}
           {type === "range" && (
