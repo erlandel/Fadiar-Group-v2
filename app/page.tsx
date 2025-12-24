@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+
 import "@fontsource/just-me-again-down-here";
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
 import SectionMoreproducts from "@/section/home/sectionMoreproducts";

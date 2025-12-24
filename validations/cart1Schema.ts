@@ -12,7 +12,7 @@ export const cart1Schema = z.object({
   const [code, number] = phoneParts;
   return number === "" || /^\d+$/.test(number);
 }, {
-  message: "Número de teléfono inválido (debe contener solo números después del código de país)",
+  message: "Número de teléfono inválido",
   path: ["phone"],
 }).refine((data) => data.identityCard === "" || /^\d+$/.test(data.identityCard), {
   message: "Solo números",

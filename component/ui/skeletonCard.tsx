@@ -22,7 +22,7 @@ interface CardSkeletonProps {
               <div className="h-4 bg-gray-200 rounded w-20 mb-2" />
               
               <div className="mb-10 space-y-2">
-                <div className="h-5 bg-gray-200 rounded w-45 animate-shimmer" />
+                <div className="h-5 bg-gray-200 rounded w-40 animate-shimmer" />
                 <div className="h-5 bg-gray-200 rounded w-35 animate-shimmer" />
                 <div className="h-5 bg-gray-200 rounded w-20 animate-shimmer" />
               </div>
@@ -30,7 +30,7 @@ interface CardSkeletonProps {
   
             {/* Precio y acciones skeleton */}
             <div className="space-y-2 mt-4">
-              <div className="h-5 bg-gray-200 rounded w-40 mb-3 animate-shimmer" />
+              <div className="h-5 bg-gray-200 rounded w-35 mb-3 animate-shimmer" />
               <div className="h-8 bg-gray-200 rounded w-30 mb-4 animate-shimmer" />
             </div>
 

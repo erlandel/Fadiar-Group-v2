@@ -95,7 +95,7 @@ const ModalProductsByLocation = () => {
 
   return (
     <div className="bg-white sm:w-150 py-6 rounded-lg shadow-xl ">
-      <h2 className="text-lg font-semibold mb-3 px-6">Lugar de entrega</h2>
+      <h2 className="text-lg font-semibold mb-3 px-6">Lugar de entrega o recogida</h2>
 
       <div className="bg-gray-200 w-full h-px mb-4"></div>
 
@@ -104,7 +104,8 @@ const ModalProductsByLocation = () => {
       </p>
 
       {loading ? (
-        <p className="px-6">Cargando provincias...</p>
+       <p className="px-6 mb-2 loading-dots text-lg "> Cargando</p>
+
       ) : (
         <div className="grid sm:grid-cols-2 gap-4 mb-4 px-6">
           {/* Provincia */}

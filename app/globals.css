@@ -87,3 +87,27 @@ body {
   background-size: 400% 100%;
   animation: shimmer 3.5s ease-in-out infinite;
 }
+
+
+@keyframes dots {
+  0% {
+    content: "";
+  }
+  33% {
+    content: "●";
+  }
+  66% {
+    content: "●●";
+  }
+  80% {
+    content: "●●●";
+  }
+}
+
+.loading-dots::after {
+  content: "";
+  animation: dots 1.5s infinite steps(1);
+  font-size: var(--dots-size, 1.0rem);
+  margin-left: 0.25rem;
+  color: #d69f04;
+}

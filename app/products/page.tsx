@@ -190,11 +190,11 @@ export default function Products() {
   const getAllProducts = async () => {
     setIsLoading(true);
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo4NDAsImV4cCI6MTc2Mzg3NDg0NX0.-W2-13mCQ6L7x8MQ5KQCzuhK59ZpeqAOe6Vfo7TsThk"; // tu token guardado
+      // const token =process.env.INVENTORY_TOKEN;       
       const res = await fetch(`${server_url}/inventory_manager`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         next: {
           revalidate: 300, // Cachea la respuesta por 5 minutos (300 segundos)

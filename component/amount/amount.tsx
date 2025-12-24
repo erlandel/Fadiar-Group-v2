@@ -1,6 +1,6 @@
 "use client";
-import { ChevronDown, Check } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { Check } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
@@ -9,17 +9,11 @@ import { useStore } from "zustand";
 import cartStore from "../../store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 import useAuthStore from "@/store/authStore";
-import { provinces } from "@/data/provinces";
-import { municipalitiesHavana } from "@/data/municipalitiesHavana";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Amount() {
    const router = useRouter();
-  const [openProvinces, setOpenProvinces] = useState(false);
-  const [selectedProvinces, setSelectedProvinces] = useState("");
-  const [openMunicipalitiesHavana, setOpenmunicipalitiesHavana] =
-    useState(false);
-  const [selectedMunicipalitiesHavana, setSelectedMunicipalitiesHavana] =
-    useState("");
+  const { province: storeProvince, municipality: storeMunicipality } = useProductsByLocationStore();
   const [isClient, setIsClient] = useState(false);
   const { auth } = useAuthStore();
   const userName = auth?.person.name || "";
@@ -37,46 +31,19 @@ export default function Amount() {
 
   const [errors, setErrors] = useState<Partial<Record<keyof Cart1FormData, string>>>({});
 
-  const provincesRef = useRef<HTMLDivElement>(null);
-  const municipalitiesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        provincesRef.current &&
-        !provincesRef.current.contains(event.target as Node)
-      ) {
-        setOpenProvinces(false);
-      }
-      if (
-        municipalitiesRef.current &&
-        !municipalitiesRef.current.contains(event.target as Node)
-      ) {
-        setOpenmunicipalitiesHavana(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   useEffect(() => {
     setIsClient(true);
-    // Sync local state with form data from store
-    setSelectedProvinces(formData.province);
-    setSelectedMunicipalitiesHavana(formData.municipality);
-  }, [formData.province, formData.municipality]);
+  }, []);
 
-  // Efecto para asegurar que los datos del store se carguen al montar
+  // Sync store values with form data
   useEffect(() => {
-    if (isClient && formData) {
-      // Forzar actualización si los datos del store están disponibles
-      setSelectedProvinces(formData.province);
-      setSelectedMunicipalitiesHavana(formData.municipality);
+    if (isClient) {
+      updateFormData({ 
+        province: storeProvince, 
+        municipality: storeMunicipality 
+      });
     }
-  }, [isClient, formData]);
+  }, [isClient, storeProvince, storeMunicipality, updateFormData]);
 
   // Función para manejar cambios en los inputs
   const handleInputChange = (
@@ -167,7 +134,7 @@ export default function Amount() {
                 placeholder="Teléfono"
               />
               {errors.phone && (
-                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                <p className="text-red-500 text-xs mt-1 ml-2">{errors.phone}</p>
               )}
             </div>
           </div>
@@ -184,111 +151,37 @@ export default function Amount() {
                 onChange={handleInputChange}
               />
               {errors.identityCard && (
-                <p className="text-red-500 text-xs mt-1">{errors.identityCard}</p>
+                <p className="text-red-500 text-xs mt-1 ml-2">{errors.identityCard}</p>
               )}
             </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md">
-          <div className="w-full relative" ref={provincesRef}>
+          <div>
             <label className=" font-medium text-gray-600">Provincia</label>
-            <div
-              tabIndex={0}
-              className="flex h-12 items-center justify-between rounded-xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent"
-              onClick={() => setOpenProvinces(!openProvinces)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setOpenProvinces(!openProvinces);
-                }
-              }}
-            >
-              <span
-                className={
-                  selectedProvinces ? "text-gray-800" : "text-gray-500"
-                }
-              >
-                {selectedProvinces || "Seleccione provincia"}
-              </span>
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            </div>
+            <InputField
+              type="text"
+              name="province"
+              value={storeProvince}
+              readOnly
+              placeholder="Provincia"
+            />
             {errors.province && (
-              <p className="text-red-500 text-xs mt-1">{errors.province}</p>
-            )}
-
-            {openProvinces && (
-              <ul className="absolute w-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-lg z-10 max-h-60 overflow-auto">
-                {provinces.map((prov) => (
-                  <li
-                    key={prov}
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
-                    onClick={() => {
-                      setSelectedProvinces(prov);
-                      updateFormData({ province: prov });
-                      setOpenProvinces(false);
-                      // Limpiar error cuando se selecciona
-                      if (errors.province) {
-                        setErrors((prev) => ({ ...prev, province: undefined }));
-                      }
-                    }}
-                  >
-                    {prov}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-red-500 text-xs mt-1 ml-2">{errors.province}</p>
             )}
           </div>
 
-          <div className="w-full relative" ref={municipalitiesRef}>
+          <div>
             <label className=" font-medium text-gray-600">Municipio</label>
-            <div
-              tabIndex={0}
-              className="flex h-12 items-center justify-between rounded-2xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent"
-              onClick={() =>
-                setOpenmunicipalitiesHavana(!openMunicipalitiesHavana)
-              }
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setOpenmunicipalitiesHavana(!openMunicipalitiesHavana);
-                }
-              }}
-            >
-              <span
-                className={
-                  selectedMunicipalitiesHavana
-                    ? "text-gray-800"
-                    : "text-gray-500"
-                }
-              >
-                {selectedMunicipalitiesHavana || "Seleccione municipio"}
-              </span>
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            </div>
+            <InputField
+              type="text"
+              name="municipality"
+              value={storeMunicipality}
+              readOnly
+              placeholder="Municipio"
+            />
             {errors.municipality && (
-              <p className="text-red-500 text-xs mt-1">{errors.municipality}</p>
-            )}
-
-            {openMunicipalitiesHavana && (
-              <ul className="absolute w-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-lg z-10 max-h-60 overflow-auto">
-                {municipalitiesHavana.map((muni) => (
-                  <li
-                    key={muni}
-                    className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
-                    onClick={() => {
-                      setSelectedMunicipalitiesHavana(muni);
-                      updateFormData({ municipality: muni });
-                      setOpenmunicipalitiesHavana(false);
-                      // Limpiar error cuando se selecciona
-                      if (errors.municipality) {
-                        setErrors((prev) => ({ ...prev, municipality: undefined }));
-                      }
-                    }}
-                  >
-                    {muni}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-red-500 text-xs mt-1 ml-2">{errors.municipality}</p>
             )}
           </div>
         </div>
@@ -310,10 +203,8 @@ export default function Amount() {
               htmlFor="delivery"
               className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-500"
             >
-              ¿Necesitas entrega a domicilio?{" "}
-              <span className="text-accent text-xs font-normal">
-                (Disponible solo en La Habana)
-              </span>
+              ¿Necesitas entrega a domicilio?
+
             </label>
           </div>
         </div>
