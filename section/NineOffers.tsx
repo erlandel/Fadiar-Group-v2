@@ -55,16 +55,15 @@ export default function NineOffers() {
 
   const getProducts = async () => {
     try {
-      setIsLoading(true);
-      // const token =process.env.INVENTORY_TOKEN;
+      setIsLoading(true);     
       
-      const res = await fetch(`${server_url}/inventory_manager`, {
-        headers: {
-          // Authorization: `Bearer ${token}`,
+      const res = await fetch(`${server_url}/mas_vendidos`, {
+        headers: {  
          
           "Content-Type": "application/json",
         },
-        cache: "no-store",
+        body: JSON.stringify({ count: 9 }),
+       
       });
       const responseText = await res.text();
 

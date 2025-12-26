@@ -13,8 +13,10 @@ import { Product } from "@/types/product";
 import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/component/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Products() {
+  const { municipalityId } = useProductsByLocationStore();
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
   const [tempPrice, setTempPrice] = useState<[number, number]>([0, 200]);
@@ -211,20 +213,28 @@ export default function Products() {
   const getAllProducts = async () => {
     setIsLoading(true);
     try {
-      // const token =process.env.INVENTORY_TOKEN;       
-      const res = await fetch(`${server_url}/inventory_manager`, {
+      const queryParams = new URLSearchParams();
+      queryParams.append("productos", "true");
+      if (municipalityId) {
+        queryParams.append("municipio", municipalityId.toString());
+      }
+
+      const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
         headers: {
-          // Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         next: {
-          revalidate: 300, // Cachea la respuesta por 5 minutos (300 segundos)
+          revalidate: 300,
         },
-        cache: "force-cache", // Fuerza el uso de caché cuando esté disponible
+        cache: "force-cache",
       });
 
       const data = await res.json();
-      setAllProducts(data.products);
+      
+      // Según el backend, la respuesta tiene 'tiendas' y 'currencys'
+      // Aplanamos los productos de todas las tiendas para mostrarlos en la página
+      const products = data.tiendas?.flatMap((tienda: any) => tienda.productos || []) || [];
+      setAllProducts(products);
     } catch (error) {
       console.error("Error loading products:", error);
     } finally {
@@ -235,7 +245,7 @@ export default function Products() {
   useEffect(() => {
     setIsMounted(true);
     getAllProducts();
-  }, []);
+  }, [municipalityId]);
 
   // Resetear página cuando cambian los filtros o si la página actual es mayor que el total de páginas
   useEffect(() => {
@@ -503,7 +513,7 @@ export default function Products() {
       </div>
 
       <div className="hidden xl:block">
-        <LatestProducts products={allProducts} />
+        <LatestProducts />
       </div>
 
         <div className="xl:hidden">

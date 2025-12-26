@@ -4,10 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
-
-
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Serchbar() {
+  const { municipalityId } = useProductsByLocationStore();
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -16,15 +16,20 @@ export default function Serchbar() {
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all products on component mount
+  // Fetch all products on component mount or when municipality changes
   useEffect(() => {
     const getAllProducts = async () => {
       setIsLoading(true);
       try {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjo4NDAsImV4cCI6MTc2Mzg3NDg0NX0.-W2-13mCQ6L7x8MQ5KQCzuhK59ZpeqAOe6Vfo7TsThk';
-        const res = await fetch(`${server_url}/inventory_manager`, {
+        const queryParams = new URLSearchParams();
+        queryParams.append("productos", "true");
+        if (municipalityId) {
+          queryParams.append("municipio", municipalityId.toString());
+        }
+
+        const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
           next: { 
             revalidate: 300
@@ -33,7 +38,8 @@ export default function Serchbar() {
         });
 
         const data = await res.json();
-        setAllProducts(data.products);
+        const products = data.tiendas?.flatMap((tienda: any) => tienda.productos || []) || [];
+        setAllProducts(products);
       } catch (error) {
         console.error('Error loading products:', error);
       } finally {
@@ -42,7 +48,7 @@ export default function Serchbar() {
     };
 
     getAllProducts();
-  }, []);
+  }, [municipalityId]);
 
   // Handle click outside to close dropdown
   useEffect(() => {

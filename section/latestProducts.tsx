@@ -3,6 +3,7 @@ import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll"
 import CardLatestProducts from "@/component/ui/cardLatestProducts";
 import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -14,34 +15,45 @@ type SectionMasRecientesProps = {
 export const LatestProducts = ({
   products: productsProp,
 }: SectionMasRecientesProps) => {
+  const { municipalityId } = useProductsByLocationStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
-  const getAllProducts = async () => {
-    // const token =process.env.INVENTORY_TOKEN;
-     
-    const res = await fetch(`${server_url}/inventory_manager`, {
-      headers: {
-        // Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+  const getNewerProducts = async () => {
+    try {
+      const res = await fetch(`${server_url}/getNewerProducts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          count: 6,
+          municipio: municipalityId
+        }),
+      });
 
-    const data = await res.json();
-    setProducts(data.products);
+      if (!res.ok) {
+        throw new Error("Error al obtener los productos más recientes");
+      }
+
+      const data = await res.json();
+      setProducts(data.products || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   useEffect(() => {
     setIsMounted(true);
-    getAllProducts();
-  }, []);
+    getNewerProducts();
+  }, [municipalityId]);
 
   // Usar productos del estado interno si no vienen como prop
   const productsToUse =
     productsProp && productsProp.length > 0 ? productsProp : products;
 
   const lastSixProducts = useMemo(
-    () => [...productsToUse].sort((a, b) => b.id - a.id).slice(0, 6),
+    () => [...productsToUse],
     [productsToUse]
   );
 

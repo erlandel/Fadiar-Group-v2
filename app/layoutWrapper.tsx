@@ -4,6 +4,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 import ModalProductsByLocation from "@/component/modalProductsByLocation/modalProductsByLocation";
@@ -91,6 +93,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       </Suspense>
       {children}
       {!isAuthRoute && <Footer />}
+      <ToastContainer />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

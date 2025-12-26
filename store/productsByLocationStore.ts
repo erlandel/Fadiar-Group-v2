@@ -4,8 +4,9 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface ProductsByLocationState {
   province: string;
   municipality: string;
+  municipalityId: number | null;
   isOpen: boolean;
-  setLocation: (province: string, municipality: string) => void;
+  setLocation: (province: string, municipality: string, municipalityId: number) => void;
   clearLocation: () => void;
   setIsOpen: (isOpen: boolean) => void;
 }
@@ -15,18 +16,21 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
     (set) => ({
       province: "",
       municipality: "",
+      municipalityId: null,
       isOpen: false,
 
-      setLocation: (province, municipality) =>
+      setLocation: (province, municipality, municipalityId) =>
         set(() => ({
           province,
           municipality,
+          municipalityId,
         })),
 
       clearLocation: () =>
         set(() => ({
           province: "",
           municipality: "",
+          municipalityId: null,
         })),
 
       setIsOpen: (isOpen) => set({ isOpen }),
@@ -41,6 +45,7 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
       partialize: (state) => ({
         province: state.province,
         municipality: state.municipality,
+        municipalityId: state.municipalityId,
       }),
     }
   )

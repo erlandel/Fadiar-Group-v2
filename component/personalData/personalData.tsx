@@ -9,6 +9,9 @@ import { refreshToken } from "../../utils/refreshToken";
 import { personalDataSchema } from "../../validations/personalDataSchema";
 import { addressSchema } from "../../validations/addressSchema";
 import { updatePasswordSchema } from "../../validations/updatePassword";
+import SuccesMessage from "@/messages/succesMessage";
+import ErrorMessage from "@/messages/errorMessage";
+import WarningMenssage from "@/messages/warningMenssage";
 
 export default function PersonalData() {
   const { auth, setAuth } = useAuthStore();
@@ -156,7 +159,7 @@ export default function PersonalData() {
     }
 
     if (cambios.length === 0) {
-      alert("No se detectaron cambios para actualizar");
+      WarningMenssage("No se detectaron cambios para actualizar");
       return;
     }
 
@@ -186,7 +189,7 @@ export default function PersonalData() {
       });
 
       if (response.ok) {
-        alert("Datos personales actualizados correctamente");
+        SuccesMessage("Datos personales actualizados correctamente");
         
         // Si se subió una imagen, limpiar el store
         if (pendingAvatar) {
@@ -210,11 +213,11 @@ export default function PersonalData() {
         });
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error || "No se pudo actualizar los datos"}`);
+        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar los datos"}`);
       }
     } catch (error) {
       console.error("Error al guardar:", error);
-      alert("Hubo un problema al conectar con el servidor");
+      ErrorMessage("Hubo un problema al conectar con el servidor");
     }
   };
 
@@ -243,7 +246,7 @@ export default function PersonalData() {
     const originalAddress = (auth.person.address || "").trim();
 
     if (currentAddress === originalAddress) {
-      alert("No se detectaron cambios en la dirección");
+      WarningMenssage("No se detectaron cambios en la dirección");
       return;
     }
 
@@ -279,7 +282,7 @@ export default function PersonalData() {
 
       console.log("response:", response);
       if (response.ok) {
-        alert("Dirección actualizada correctamente");
+        SuccesMessage("Dirección actualizada correctamente");
         setAuth({
           ...auth,
           access_token: currentAccessToken || auth.access_token,
@@ -290,11 +293,11 @@ export default function PersonalData() {
         });
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error || "No se pudo actualizar la dirección"}`);
+        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar la dirección"}`);
       }
     } catch (error) {
       console.error("Error al guardar dirección:", error);
-      alert("Hubo un problema al conectar con el servidor");
+      ErrorMessage("Hubo un problema al conectar con el servidor");
     }
   };
 
@@ -325,7 +328,7 @@ export default function PersonalData() {
     });
 
     if (formData.confirmPassword === formData.password) {
-      alert("La nueva contraseña no puede ser igual a la actual");
+      ErrorMessage("La nueva contraseña no puede ser igual a la actual");
       return;
     }
 
@@ -358,7 +361,7 @@ export default function PersonalData() {
 
       console.log("response:", response);
       if (response.ok) {
-        alert("Contraseña actualizada correctamente");
+        SuccesMessage("Contraseña actualizada correctamente");
         setFormData((prev) => ({
           ...prev,
           password: "",
@@ -366,11 +369,11 @@ export default function PersonalData() {
         }));
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error || "No se pudo actualizar la contraseña"}`);
+        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar la contraseña"}`);
       }
     } catch (error) {
       console.error("Error al actualizar contraseña:", error);
-      alert("Hubo un problema al conectar con el servidor");
+      ErrorMessage("Hubo un problema al conectar con el servidor");
     }
   };
 

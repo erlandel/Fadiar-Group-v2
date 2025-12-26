@@ -4,16 +4,18 @@ import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
-import RelatedProds from "@/section/relatedProds";
 import ShoppingCartIcon from "@/component/icons";
 import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/component/productLoadingId/productLoadingId";
 import { ProductID } from "@/types/productId";
+import RelatedProds from "@/section/relatedProds";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 function ProductContent({ id }: { id: string | null }) {
+  const { municipalityId } = useProductsByLocationStore();
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState<ProductID | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,18 +48,22 @@ function ProductContent({ id }: { id: string | null }) {
       setIsLoading(true);
 
       try {
-        // const token =process.env.INVENTORY_TOKEN;
-         
-        const res = await fetch(`${server_url}/inventory_manager`, {
+        const queryParams = new URLSearchParams();
+        queryParams.append("productos", "true");
+        if (municipalityId) {
+          queryParams.append("municipio", municipalityId.toString());
+        }
+
+        const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
           headers: {
-            // Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
 
         const data = await res.json();
-        setAllProducts(data.products);
-        const foundProduct = data.products.find(
+        const products = data.tiendas?.flatMap((tienda: any) => tienda.productos || []) || [];
+        setAllProducts(products);
+        const foundProduct = products.find(
           (p: ProductID) => p.id === parseInt(id as string)
         );
 
@@ -76,7 +82,7 @@ function ProductContent({ id }: { id: string | null }) {
     if (id) {
       fetchProduct();
     }
-  }, [id]);
+  }, [id, municipalityId]);
 
 
 

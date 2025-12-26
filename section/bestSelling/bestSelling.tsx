@@ -3,6 +3,7 @@ import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll"
 import CardLatestProducts from "@/component/ui/cardLatestProducts";
 import CardSkeleton from "@/component/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -11,6 +12,7 @@ type BestSellingProps = {
 };
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
+  const { municipalityId } = useProductsByLocationStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -20,7 +22,10 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ count: 9 }),
+      body: JSON.stringify({ 
+        count: 9,
+        municipio: municipalityId
+      }),
     });
 
     if (!res.ok) {
@@ -37,7 +42,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
   useEffect(() => {
     setIsMounted(true);
     getAllProducts();
-  }, []);
+  }, [municipalityId]);
 
   // Usar productos del estado interno si no vienen como prop
   const productsToUse: Product[] = Array.isArray(productsProp)

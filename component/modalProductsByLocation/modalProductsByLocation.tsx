@@ -18,10 +18,11 @@ interface ProvinceData {
 }
 
 const ModalProductsByLocation = () => {
-  const { province, municipality, setLocation, setIsOpen } = useProductsByLocationStore();
+  const { province, municipality, municipalityId, setLocation, setIsOpen } = useProductsByLocationStore();
   const [data, setData] = useState<ProvinceData[]>([]);
   const [selectedProvince, setSelectedProvince] = useState(province || "");
   const [selectedMunicipality, setSelectedMunicipality] = useState(municipality || "");
+  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<number | null>(municipalityId || null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [openProvinces, setOpenProvinces] = useState(false);
@@ -34,7 +35,8 @@ const ModalProductsByLocation = () => {
   useEffect(() => {
     setSelectedProvince(province || "");
     setSelectedMunicipality(municipality || "");
-  }, [province, municipality]);
+    setSelectedMunicipalityId(municipalityId || null);
+  }, [province, municipality, municipalityId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,18 +79,19 @@ const ModalProductsByLocation = () => {
 
   const handleAccept = () => {
     setSubmitAttempted(true);
-    if (!selectedProvince || !selectedMunicipality) {
+    if (!selectedProvince || !selectedMunicipality || selectedMunicipalityId === null) {
       setError(true);
       return;
     }
     setError(false);
     
     // Guardar en el store
-    setLocation(selectedProvince, selectedMunicipality);
+    setLocation(selectedProvince, selectedMunicipality, selectedMunicipalityId);
     setIsOpen(false);
     
     console.log("Provincia:", selectedProvince);
     console.log("Municipio:", selectedMunicipality);
+    console.log("Municipio ID:", selectedMunicipalityId);
   };
 
   const municipalities = data.find((p) => p.provincia === selectedProvince)?.municipios || [];
@@ -203,6 +206,7 @@ const ModalProductsByLocation = () => {
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
                     onClick={() => {
                       setSelectedMunicipality(mun.municipio);
+                      setSelectedMunicipalityId(mun.id);
                       setOpenMunicipalities(false);
                       setError(false);
                       setSubmitAttempted(false);
