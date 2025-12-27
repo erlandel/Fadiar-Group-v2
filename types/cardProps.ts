@@ -10,6 +10,7 @@ export type CardProps = {
   quantityProducts?: number;
   temporal_price?: string;
   productId?: string | number;
+  tiendaId?: string | number;
   currency?: {
     currency: string;
   };

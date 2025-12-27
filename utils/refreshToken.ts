@@ -18,6 +18,7 @@ export const refreshToken = async (
       }),
     });
 
+    console.log("refreshResponse:", refreshResponse);
     if (refreshResponse.ok) {
       const refreshData = await refreshResponse.json();
       if (refreshData.access_token) {

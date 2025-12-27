@@ -20,6 +20,7 @@ interface CardProps {
   quantityProducts?: number;
   temporal_price?: string;
   productId?: string | number;
+  tiendaId?: string | number;
   currency?: {
     currency: string;
   };
@@ -38,6 +39,7 @@ export default function Card({
   quantityProducts,
   temporal_price,
   productId,
+  tiendaId,
   currency,
 }: CardProps) {
   const router = useRouter();
@@ -91,6 +93,7 @@ export default function Card({
       temporal_price,
       image,
       quantity,
+      tiendaId,
     };
     
     addOrUpdateItem(itemToAdd);

@@ -1,5 +1,9 @@
 import { create } from "zustand";
 import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
+import useAuthStore from "./authStore";
+import { server_url } from "@/lib/apiClient";
+import { refreshToken } from "../utils/refreshToken";
+import ErrorMessage from "@/messages/errorMessage";
 
 export type CartItem = {
   productId: number | string;
@@ -11,11 +15,12 @@ export type CartItem = {
   temporal_price?: string;
   image: string;
   quantity: number;
+  tiendaId?: string | number;
 };
 
 export type CartState = {
   items: CartItem[];
-  addOrUpdateItem: (item: CartItem) => void;
+  addOrUpdateItem: (item: CartItem) => Promise<void>;
   updateQuantity: (productId: number | string, quantity: number) => void;
   removeItem: (productId: number | string) => void;
   clearCart: () => void;
@@ -31,28 +36,73 @@ const cartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       
-      addOrUpdateItem: (item) => {
+      addOrUpdateItem: async (item) => {
         const quantity = Math.max(1, item.quantity);
-        set((state) => {
-          const existingIndex = state.items.findIndex(
-            (existing) => existing.productId === item.productId
-          );
+        
+        // Función interna para actualizar el estado local
+        const updateLocalState = () => {
+          set((state) => {
+            const existingIndex = state.items.findIndex(
+              (existing) => existing.productId === item.productId
+            );
 
-          if (existingIndex === -1) {
-            // Agregar nuevo item
-            return {
-              items: [...state.items, { ...item, quantity }],
+            if (existingIndex === -1) {
+              return {
+                items: [...state.items, { ...item, quantity }],
+              };
+            }
+
+            const updatedItems = [...state.items];
+            updatedItems[existingIndex] = {
+              ...updatedItems[existingIndex],
+              quantity: updatedItems[existingIndex].quantity + quantity,
             };
-          }
+            return { items: updatedItems };
+          });
+        };
 
-          // Actualizar item existente (incrementar cantidad)
-          const updatedItems = [...state.items];
-          updatedItems[existingIndex] = {
-            ...updatedItems[existingIndex],
-            quantity: updatedItems[existingIndex].quantity + quantity,
-          };
-          return { items: updatedItems };
-        });
+        // Sincronizar con el backend si el usuario está autenticado
+        const { auth, setAuth } = useAuthStore.getState();
+        if (auth?.access_token) {
+          try {
+            // Actualizar el token antes de la petición
+            const token = await refreshToken(auth, setAuth);
+   
+            const response = await fetch(`${server_url}/agregar_producto_carrito`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                id_product: item.productId,
+                id_tienda: item.tiendaId,
+                count: quantity,
+                emisor: "web",
+              }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              console.log("Respuesta del backend (agregar al carrito):", data);
+              // SOLO si la respuesta es exitosa (200 OK), actualizamos el carrito local
+              updateLocalState();
+            } else {
+              const errorData = await response.json().catch(() => ({}));
+              console.error("El backend rechazó la petición:", errorData);
+              
+              // Mostrar el mensaje de error del backend al usuario
+              const msg = errorData.error || errorData.message || "No se pudo agregar el producto al carrito";
+              ErrorMessage(msg);
+            }
+          } catch (error) {
+            console.error("Error al sincronizar con el backend:", error);
+            ErrorMessage("Error de conexión con el servidor");
+          }
+        } else {
+          // Si no hay usuario autenticado, lo agregamos solo localmente
+          updateLocalState();
+        }
       },
 
       updateQuantity: (productId, quantity) => {

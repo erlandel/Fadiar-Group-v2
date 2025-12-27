@@ -127,6 +127,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
                       image={product.img}
                       position="vertical"
                       productId={product.id}
+                      tiendaId={product.tiendaId}
                     />
                   </div>
                 ))

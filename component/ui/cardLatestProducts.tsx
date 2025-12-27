@@ -18,6 +18,7 @@ export default function CardLatestProducts({
   quantityProducts,
   temporal_price,
   productId,
+  tiendaId,
   currency,
 }: CardProps) {
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function CardLatestProducts({
       temporal_price,
       image,
       quantity,
+      tiendaId,
     });
 
     // Opcional: mostrar feedback visual o toast

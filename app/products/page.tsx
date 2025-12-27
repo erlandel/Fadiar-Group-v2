@@ -691,6 +691,7 @@ export default function Products() {
                   price={product.price}
                   image={product.img}
                   temporal_price={product?.temporal_price}
+                  tiendaId={product.tiendaId}
                   position="vertical"
                 />
               ))

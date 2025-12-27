@@ -19,6 +19,7 @@ export default function CardNineOffers({
   quantityProducts,
   temporal_price,
   productId,
+  tiendaId,
   currency,
 }: CardProps) {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function CardNineOffers({
       temporal_price,
       image,
       quantity,
+      tiendaId,
     });
 
     // Opcional: mostrar feedback visual o toast

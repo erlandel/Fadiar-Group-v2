@@ -130,6 +130,7 @@ export const LatestProducts = ({
                     image={product.img}
                     position="vertical"
                     productId={product.id}
+                    tiendaId={product.tiendaId}
                   />
                 </div>
               ))

@@ -61,7 +61,9 @@ function ProductContent({ id }: { id: string | null }) {
         });
 
         const data = await res.json();
-        const products = data.tiendas?.flatMap((tienda: any) => tienda.productos || []) || [];
+        const products = data.tiendas?.flatMap((tienda: any) => 
+          (tienda.productos || []).map((p: any) => ({ ...p, tiendaId: tienda.id }))
+        ) || [];
         setAllProducts(products);
         const foundProduct = products.find(
           (p: ProductID) => p.id === parseInt(id as string)
@@ -102,6 +104,7 @@ function ProductContent({ id }: { id: string | null }) {
       temporal_price: product.temporal_price,
       image: product.img,
       quantity: qty,
+      tiendaId: product.tiendaId,
     };
 
     addOrUpdateItem(itemToAdd);
