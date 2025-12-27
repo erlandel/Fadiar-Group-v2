@@ -10,6 +10,7 @@ import {
 } from "@/icons/icons";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import { server_url } from "@/lib/apiClient";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,14 +77,40 @@ export default function UserDropdown() {
 
               <button
                 className="group flex items-center  hover:bg-[#F5F7FA]  transition-colors w-full p-2 cursor-pointer"
-                onClick={() => {
+                onClick={async () => {
                   setIsOpen(false);
-                  clearAuth();
-                  if (typeof window !== "undefined") {
+
+                  if (auth?.access_token && auth?.refresh_token) {
                     try {
+                      const response = await fetch(`${server_url}/logout`, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${auth.access_token}`,
+                        },
+                        body: JSON.stringify({
+                          refresh_token: auth.refresh_token,
+                        }),
+                      });
+                      console.log("response", response);
+                      if (response.ok) {
+                        clearAuth();
+                        if (typeof window !== "undefined") {
+                          localStorage.removeItem("auth-storage");
+                          router.push("/");
+                        }
+                      } else {
+                        console.error("Error al cerrar sesión en el servidor");
+                      }
+                    } catch (error) {
+                      console.error("Error de red al cerrar sesión:", error);
+                    }
+                  } else {
+                    clearAuth();
+                    if (typeof window !== "undefined") {
                       localStorage.removeItem("auth-storage");
-                        router.push('/')
-                    } catch {}
+                      router.push("/");
+                    }
                   }
                 }}
               >
