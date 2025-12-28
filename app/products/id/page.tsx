@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import ShoppingCartIcon from "@/component/icons";
-import useCartStore from "@/store/cartStore";
+import { useAddToCart } from "@/hooks/useAddToCart";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/component/productLoadingId/productLoadingId";
@@ -21,7 +21,7 @@ function ProductContent({ id }: { id: string | null }) {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [allProducts, setAllProducts] = useState<ProductID[]>([]);
-  const addOrUpdateItem = useCartStore((state) => state.addOrUpdateItem);
+  const { addToCart, loading } = useAddToCart();
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -107,7 +107,7 @@ function ProductContent({ id }: { id: string | null }) {
       tiendaId: product.tiendaId,
     };
 
-    addOrUpdateItem(itemToAdd);
+    addToCart(itemToAdd);
     console.log(`Added ${qty} x ${product.name} to cart`);
   };
 

@@ -172,7 +172,7 @@ export default function Login() {
 
             <div className="mt-5 w-full">
               <button
-                className="bg-primary text-white w-full  rounded-lg px-3 py-2 cursor-pointer hover:bg-[#034078] hover:shadow-lg
+                className="bg-primary text-white w-full  rounded-lg px-3 py-2 cursor-pointer hover:bg-[#034078] hover:shadow-lg  disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none
               "
                 onClick={handleLoginClick}
                 disabled={loginMutation.isPending}

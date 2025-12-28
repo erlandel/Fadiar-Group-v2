@@ -257,6 +257,7 @@ export default function Products() {
       );
 
       console.log("res", res);
+     
       if (!res.ok) throw new Error("Error fetching products");
       return res.json();
     },
@@ -269,6 +270,7 @@ export default function Products() {
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
       const baseProducts = realTiendas.flatMap((t: any) => t.productos || []);
 
+      // console.log("baseProducts: ",baseProducts)
       // Creamos 10 tiendas: las reales + inventadas hasta llegar a 10
       const dummyStoreNames = [
         "Tienda Principal",
@@ -439,7 +441,7 @@ export default function Products() {
             {/* Header con título y botón de filtros */}
             <div className="flex w-full justify-between items-start mb-4">
               <div className="flex-1">
-                <h2 className="text-lg md:text-2xl text-accent font-bold">
+                <h2 className="text-2xl text-accent font-bold">
                   Productos
                 </h2>
 
@@ -600,7 +602,7 @@ export default function Products() {
           <div className="flex items-center justify-center w-full">
             {tiendas.length > 0 && (
               <div className="flex flex-wrap items-center gap-y-3 mt-4 pb-4 w-full">
-                <div className="flex items-center justify-center gap-2 w-full md:hidden">
+                <div className="flex items-center justify-start gap-2 w-full md:hidden mx-4">
                   {/* Selector Personalizado */}
                   <div className="relative" ref={storesRef}>
                     <div className="flex items-center gap-2">
@@ -609,10 +611,10 @@ export default function Products() {
                         onClick={() => setOpenStores(!openStores)}
                       >
                         <span className="text-sm sm:text-md font-bold text-primary">
-                          Tiendas Disponibles
+                          Tiendas 
                         </span>
                         <ChevronDown
-                          className={`h-4 w-4 ml-1 text-gray-500 transition-transform duration-200 ${
+                          className={`h-4 w-4 ml-1 text-primary transition-transform duration-200 ${
                             openStores ? "rotate-180" : ""
                           }`}
                         />
@@ -625,7 +627,7 @@ export default function Products() {
                     </div>
 
                     {openStores && (
-                      <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full min-w-[200px]">
+                      <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full">
                         {tiendas.map((tienda: any) => (
                           <li
                             key={tienda.id}
@@ -690,6 +692,7 @@ export default function Products() {
                   warranty={product.warranty}
                   price={product.price}
                   image={product.img}
+                  count={product.count}
                   temporal_price={product?.temporal_price}
                   tiendaId={product.tiendaId}
                   position="vertical"

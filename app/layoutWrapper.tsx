@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
@@ -10,6 +10,8 @@ import Header from "@/component/header/header";
 import Footer from "@/component/footer/footer";
 import ModalProductsByLocation from "@/component/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+import { useSyncCart } from "@/hooks/useSyncCart";
+import useAuthStore from "@/store/authStore";
 
 function ScrollToTop() {
   const pathname = usePathname();
@@ -36,7 +38,10 @@ function ScrollToTop() {
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { province, municipality, isOpen, setIsOpen } = useProductsByLocationStore();
+  const { syncCart } = useSyncCart();
+  const auth = useAuthStore((state) => state.auth);
   const [isHydrated, setIsHydrated] = useState(false);
+  const hasSynced = useRef(false);
 
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/changePassword') || pathname.startsWith('/recoverPassword')|| pathname.startsWith('/verificationCodeEmail');
   
@@ -45,6 +50,15 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (isHydrated && auth?.access_token && !hasSynced.current) {
+      syncCart();
+      hasSynced.current = true;
+    } else if (!auth?.access_token) {
+      hasSynced.current = false;
+    }
+  }, [isHydrated, auth?.access_token, syncCart]);
 
   useEffect(() => {
     if (isHydrated && (!province || !municipality) && !isAuthRoute) {

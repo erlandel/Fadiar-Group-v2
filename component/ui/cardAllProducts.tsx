@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { server_url } from "@/lib/apiClient";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import useCartStore from "@/store/cartStore";
+import { useAddToCart } from "@/hooks/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
-
 
 export default function CardAllProducts({
   category,
@@ -14,15 +13,16 @@ export default function CardAllProducts({
   brand,
   warranty,
   price,
-  image, 
+  image,
   quantityProducts,
   temporal_price,
   productId,
   tiendaId,
   currency,
+  count,
 }: CardProps) {
   const router = useRouter();
-  const addOrUpdateItem = useCartStore((state) => state.addOrUpdateItem);
+  const { addToCart, loading } = useAddToCart();
   const [quantity, setQuantity] = useState(Math.max(1, quantityProducts ?? 1));
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function CardAllProducts({
 
   const handleCardClick = () => {
     if (productId) {
-           router.push(`/products/id?id=${productId}`);
+      router.push(`/products/id?id=${productId}`);
     }
   };
 
@@ -53,7 +53,7 @@ export default function CardAllProducts({
       return;
     }
 
-    addOrUpdateItem({
+    addToCart({
       productId: productId,
       title,
       brand,
@@ -72,107 +72,117 @@ export default function CardAllProducts({
 
   const warrantyNumber = +(warranty ?? "0");
 
-  return (    <>
-
+  return (
+    <>
+      <div
+        onClick={productId ? handleCardClick : undefined}
+        className={`bg-white w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
+          productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
+        } sm:h-[calc(2*240px+0.75rem)]`}
+      >
+        {/* Imagen */}
         <div
-          onClick={productId ? handleCardClick : undefined}
-          className={`bg-white w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
-            productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
-          } sm:h-[calc(2*240px+0.75rem)]`}
+          className="relative  w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
+          style={{ height: "190px" }}
         >
-          {/* Imagen */}
-          <div
-            className="relative  w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
-            style={{ height: "190px" }}
-          >
-            <Image
-              className="h-full w-full object-contain"
-              alt={title}
-              width={500}
-              height={500}
-              src={`${server_url}/${image}`}
-            />
+          {count === 0 && (
+            <div className="absolute top-2 right-[-35px] z-10 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+              Agotado
+            </div>
+          )}
+
+          <Image
+            className="h-full w-full object-contain"
+            alt={title}
+            width={500}
+            height={500}
+            src={`${server_url}/${image}`}
+          />
+        </div>
+
+        {/* Info del producto */}
+        <div className="flex flex-col gap-2 shrink-0">
+          <div>
+            <p className="text-sm text-[#777777] line-clamp-1">{category}</p>
           </div>
 
-          {/* Info del producto */}
-          <div className="flex flex-col gap-2 shrink-0">
-            <div>
-              <p className="text-sm text-[#777777] line-clamp-1">{category}</p>
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-lg font-semibold text-[#022954] truncate">
-                {title}
-              </h3>
-              <p className="text-md text-[#022954] line-clamp-1">{brand}</p>
-            </div>
-          </div>
-
-          {/* Precio y acciones */}
-          <div className="flex flex-1 flex-col justify-end gap-3 min-h-0">
-            {warrantyNumber > 0 ? (
-              <p className="text-sm font-medium text-[#D69F04]">
-                Garantía de {warrantyNumber / 30} meses
-              </p>
-            ) : (
-              <span className="h-6" />
-            )}
-
-            {temporal_price !== null && temporal_price !== undefined ? (
-              <div className="flex flex-wrap items-baseline justify-between xl:gap-x-1 xl:gap-y-1 2xl:gap-x-3 2xl:gap-y-1">
-                <p className="flex flex-wrap items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954]">
-                  ${temporal_price}
-                  <span className="ml-1 text-base font-normal text-[#022954]">
-                    USD
-                  </span>
-                </p>
-                <p className="xl:text-md 2xl:text-lg text-[#777777] line-through">
-                  ${price} USD
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-wrap items-baseline gap-2 text-[#022954]">
-                <p className="xl:text-2xl 2xl:text-3xl font-bold">${price}</p>
-                <span className="text-base font-normal">
-                  {currency?.currency ?? "USD"}
-                </span>
-              </div>
-            )}
-
-            <div
-              className="mt-auto flex flex-wrap items-center justify-between xl:gap-3 pt-2 font-bold"
-              onClick={handleButtonClick}
-            >
-              <div className="flex items-center rounded-xl border border-gray-200 bg-white cursor-default ">
-                <button
-                  className="px-2 py-2 sm:px-3 sm:py-2  text-accent hover:bg-gray-50 transition-colors"
-                  aria-label="Restar"
-                  onClick={adjustQuantity(-1)}
-                >
-                  −
-                </button>
-                <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-8 sm:min-w-10 text-center">
-                  {quantity}
-                </span>
-                <button
-                  className="px-2 py-2 sm:px-3 sm:py-2 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
-                  aria-label="Sumar"
-                  onClick={adjustQuantity(1)}
-                >
-                  +
-                </button>
-              </div>
-
-              <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors px-3.5 py-2 sm:px-4 2xl:py-2.5 2xl:px-5"
-                onClick={handleAddToCart}
-              >
-                <ShoppingCartIcon className="h-5 w-5" />
-              </button>
-            </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-semibold text-[#022954] truncate">
+              {title}
+            </h3>
+            <p className="text-md text-[#022954] line-clamp-1">{brand}</p>
           </div>
         </div>
-      
+
+        {/* Precio y acciones */}
+        <div className="flex flex-1 flex-col justify-end gap-3 min-h-0">
+          {warrantyNumber > 0 ? (
+            <p className="text-sm font-medium text-[#D69F04]">
+              Garantía de {warrantyNumber / 30} meses
+            </p>
+          ) : (
+            <span className="h-6" />
+          )}
+
+          {temporal_price !== null && temporal_price !== undefined ? (
+            <div className="flex flex-wrap items-baseline justify-between xl:gap-x-1 xl:gap-y-1 2xl:gap-x-3 2xl:gap-y-1">
+              <p className="flex flex-wrap items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954]">
+                ${temporal_price}
+                <span className="ml-1 text-base font-normal text-[#022954]">
+                  USD
+                </span>
+              </p>
+              <p className="xl:text-md 2xl:text-lg text-[#777777] line-through">
+                ${price} USD
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-baseline gap-2 text-[#022954]">
+              <p className="xl:text-2xl 2xl:text-3xl font-bold">${price}</p>
+              <span className="text-base font-normal">
+                {currency?.currency ?? "USD"}
+              </span>
+            </div>
+          )}
+
+          <div
+            className="mt-auto flex flex-wrap items-center justify-between xl:gap-3 pt-2 font-bold"
+            onClick={handleButtonClick}
+          >
+            <div className="flex items-center rounded-xl border border-gray-200 bg-white cursor-default ">
+              <button
+                className="px-2 py-2 sm:px-3 sm:py-2  text-accent hover:bg-gray-50 transition-colors"
+                aria-label="Restar"
+                onClick={adjustQuantity(-1)}
+              >
+                −
+              </button>
+              <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-8 sm:min-w-10 text-center">
+                {quantity}
+              </span>
+              <button
+                className="px-2 py-2 sm:px-3 sm:py-2 2xl:px-3 2xl:py-2  text-accent hover:bg-gray-50 transition-colors"
+                aria-label="Sumar"
+                onClick={adjustQuantity(1)}
+              >
+                +
+              </button>
+            </div>
+
+            <button
+              className={`rounded-xl border border-primary transition-colors px-3.5 py-2 sm:px-4 2xl:py-2.5 2xl:px-5 ${
+                count === 0
+                  ? "opacity-50  bg-gray-100 text-gray-400 border-gray-300"
+                  : "hover:bg-primary hover:text-white"
+              }`}
+              onClick={count === 0 ? undefined : handleAddToCart}
+              disabled={count === 0}
+            >
+              <ShoppingCartIcon className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { server_url } from "@/lib/apiClient";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
+import { useAddToCart } from "@/hooks/useAddToCart";
 import ShoppingCartIcon from "../icons";
 
 interface CardProps {
@@ -43,7 +44,7 @@ export default function Card({
   currency,
 }: CardProps) {
   const router = useRouter();
-  const addOrUpdateItem = useCartStore((state) => state.addOrUpdateItem);
+  const { addToCart, loading } = useAddToCart();
   const removeItem = useCartStore((state) => state.removeItem);
 
   const isCartAction = actionIcon === "cart";
@@ -96,7 +97,7 @@ export default function Card({
       tiendaId,
     };
     
-    addOrUpdateItem(itemToAdd);
+    addToCart(itemToAdd);
 
   
   };

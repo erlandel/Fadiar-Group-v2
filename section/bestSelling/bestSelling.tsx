@@ -28,11 +28,13 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
       }),
     });
 
+
     if (!res.ok) {
       throw new Error("Error al obtener productos más vendidos");
     }
 
     const data = await res.json();
+
  
 
     // 👇 backend devuelve un ARRAY DIRECTO

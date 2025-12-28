@@ -1,6 +1,8 @@
 "use client";
 import { server_url } from "@/lib/apiClient";
 import cartStore from "@/store/cartStore";
+import { useDeleteFromCart } from "@/hooks/useDeleteFromCart";
+import { useUpdateCart } from "@/hooks/useUpdateCart";
 import { ShoppingCart, Trash2 } from "lucide-react";
 
 interface CardCart4Props {
@@ -15,6 +17,8 @@ interface CardCart4Props {
   bgColor?: string;
   hideQuantitySelector?: boolean;
   productId?: number | string;
+  cartId?: number;
+  tiendaId?: number | string;
   onDelete?: (productId: number | string) => void;
 }
 
@@ -30,10 +34,28 @@ export default function CartCard({
   bgColor = "bg-white",
   hideQuantitySelector = false,
   productId,
+  cartId,
+  tiendaId,
   onDelete,
 }: CardCart4Props) {
-  const { updateQuantity, getItemQuantity } = cartStore();
+  const { getItemQuantity } = cartStore();
   const currentQuantity = productId ? getItemQuantity(productId) : 0;
+  const { deleteFromCart, loading: deleting } = useDeleteFromCart();
+  const { updateQuantity, loading: updating } = useUpdateCart();
+
+  const handleDelete = async () => {
+    if (!productId) return;
+    
+    if (cartId) {
+      // Si tenemos cartId, usamos la lógica de backend
+      await deleteFromCart(cartId, productId);
+    } 
+  };
+
+  const handleUpdateQuantity = async (newQuantity: number) => {
+    if (!productId || newQuantity < 1) return;
+    await updateQuantity(productId, tiendaId, newQuantity);
+  };
   return (
     <>
       <div
@@ -70,15 +92,15 @@ export default function CartCard({
             ) : (
               <div className={`flex items-center  rounded-xl font-bold border ${
                   actionIcon === "delete" ? "border-primary" : "border-gray"
-                }`}
+                } ${updating ? "opacity-50 pointer-events-none" : ""}`}
               >
-                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => productId && updateQuantity(productId, currentQuantity - 1)}>
+                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => handleUpdateQuantity(currentQuantity - 1)}>
                   −
                 </button>
                 <span className="px-4 my-1 border-x border-primary ">
                   {currentQuantity}
                 </span>
-                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => productId && updateQuantity(productId, currentQuantity + 1)}>
+                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => handleUpdateQuantity(currentQuantity + 1)}>
                   +
                 </button>
               </div>
@@ -87,8 +109,8 @@ export default function CartCard({
             <div>
               {actionIcon === "delete" ? (
                 <Trash2
-                  className="w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors"
-                  onClick={() => productId && onDelete?.(productId)}
+                  className={`w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors ${deleting ? "opacity-50" : ""}`}
+                  onClick={handleDelete}
                 />
               ) : actionIcon === "cart" ? (
                 <button className="p-2.5 px-8 border border-primary rounded-xl cursor-pointer">

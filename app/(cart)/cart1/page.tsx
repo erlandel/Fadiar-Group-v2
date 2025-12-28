@@ -13,7 +13,7 @@ export default function Cart1() {
   const items = useCartStore((state) => state.items); 
   const removeItem = useCartStore((state) => state.removeItem); 
 
-  console.log(items);
+
 
   return (
     <div>
@@ -56,6 +56,8 @@ export default function Cart1() {
                       padding="p-3 sm:p-4"
                       actionIcon="delete"
                       productId={item.productId}
+                      cartId={item.cartId}
+                      tiendaId={item.tiendaId}
                       onDelete={removeItem}
                     />
                   ))

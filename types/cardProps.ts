@@ -5,6 +5,7 @@ export type CardProps = {
   warranty?: string;
   price: string;
   image: string;
+  count?: number;
   position?: "horizontal" | "vertical";
   maxWidthVertical?: string;
   quantityProducts?: number;

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { server_url } from "@/lib/apiClient";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import useCartStore from "@/store/cartStore";
+import { useAddToCart } from "@/hooks/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
 
@@ -23,7 +23,7 @@ export default function CardNineOffers({
   currency,
 }: CardProps) {
   const router = useRouter();
-  const addOrUpdateItem = useCartStore((state) => state.addOrUpdateItem);
+  const { addToCart, loading } = useAddToCart();
   const [quantity, setQuantity] = useState(Math.max(1, quantityProducts ?? 1));
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function CardNineOffers({
       return;
     }
 
-    addOrUpdateItem({
+    addToCart({
       productId: productId,
       title,
       brand,

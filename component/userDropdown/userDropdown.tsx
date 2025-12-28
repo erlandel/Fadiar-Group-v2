@@ -9,14 +9,70 @@ import {
   UilExit,
 } from "@/icons/icons";
 import useAuthStore from "@/store/authStore";
+import useCartStore from "@/store/cartStore";
 import { useRouter } from "next/navigation";
 import { server_url } from "@/lib/apiClient";
+import { refreshToken } from "@/utils/refreshToken";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { auth, clearAuth } = useAuthStore();
+  const { auth, clearAuth, setAuth } = useAuthStore();
+  const { clearCart } = useCartStore();
   const router = useRouter();
+
+  const handleLogout = async () => {
+    setIsOpen(false);
+    console.log("se ejecuta el cirre de ceccion ")
+
+    if (auth?.access_token && auth?.refresh_token) {
+      try {
+        // Refrescar el token antes de cerrar sesión
+        const currentToken = await refreshToken(auth, setAuth);
+
+        const response = await fetch(`${server_url}/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentToken}`,
+          },
+          body: JSON.stringify({
+            refresh_token: auth.refresh_token,
+          }),
+        });
+
+        if (response.ok) {
+          clearAuth();
+          clearCart();
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("auth-storage");
+            router.push("/");
+          }
+        } else {
+          console.error("Error al cerrar sesión en el servidor");
+          // Incluso si falla en el servidor, limpiamos localmente por seguridad
+          clearAuth();
+          clearCart();
+          localStorage.removeItem("auth-storage");
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error de red al cerrar sesión:", error);
+        // En caso de error de red, también limpiamos localmente
+        clearAuth();
+        clearCart();
+        localStorage.removeItem("auth-storage");
+        router.push("/");
+      }
+    } else {
+      clearAuth();
+      clearCart();
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth-storage");
+        router.push("/");
+      }
+    }
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -77,42 +133,7 @@ export default function UserDropdown() {
 
               <button
                 className="group flex items-center  hover:bg-[#F5F7FA]  transition-colors w-full p-2 cursor-pointer"
-                onClick={async () => {
-                  setIsOpen(false);
-
-                  if (auth?.access_token && auth?.refresh_token) {
-                    try {
-                      const response = await fetch(`${server_url}/logout`, {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          Authorization: `Bearer ${auth.access_token}`,
-                        },
-                        body: JSON.stringify({
-                          refresh_token: auth.refresh_token,
-                        }),
-                      });
-                      console.log("response", response);
-                      if (response.ok) {
-                        clearAuth();
-                        if (typeof window !== "undefined") {
-                          localStorage.removeItem("auth-storage");
-                          router.push("/");
-                        }
-                      } else {
-                        console.error("Error al cerrar sesión en el servidor");
-                      }
-                    } catch (error) {
-                      console.error("Error de red al cerrar sesión:", error);
-                    }
-                  } else {
-                    clearAuth();
-                    if (typeof window !== "undefined") {
-                      localStorage.removeItem("auth-storage");
-                      router.push("/");
-                    }
-                  }
-                }}
+                onClick={handleLogout}
               >
                 <UilExit
                   className="text-[#EB0C0C] group-hover:text-[#EB0C0C] transition-colors"
