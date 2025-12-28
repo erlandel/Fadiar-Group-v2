@@ -13,5 +13,6 @@ export type ProductID = {
   };
   description?: string;
   tiendaId?: string | number;
+  count?: number;
   specs?: Array<{ name: string; description: string }>;
 }

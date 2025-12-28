@@ -105,6 +105,7 @@ function ProductContent({ id }: { id: string | null }) {
       image: product.img,
       quantity: qty,
       tiendaId: product.tiendaId,
+      count: product.count, 
     };
 
     addToCart(itemToAdd);
@@ -151,7 +152,13 @@ function ProductContent({ id }: { id: string | null }) {
             <div className="flex flex-col md:flex-row gap-16 mt-10">
               <div className="md:w-1/3">
                 {/* Imagen Principal */}
-                <div className="w-full h-[400px] rounded-xl object-cover overflow-hidden">
+                <div className="relative w-full h-[400px] rounded-xl object-cover overflow-hidden">
+                  {product.count === 0 && (
+                    <div className="absolute top-5 right-[-30px] z-10 bg-red-600 text-white text-md font-bold px-10 py-1 rotate-45 shadow-md">
+                      Agotado
+                    </div>
+                  )}
+
                   <Image
                     src={`${server_url}/${selectedImage || product.img}`}
                     alt={product.name}
@@ -233,9 +240,9 @@ function ProductContent({ id }: { id: string | null }) {
 
                 {/* Cantidad */}
                 <div className="mt-auto pt-4 flex items-center justify-between">
-                  <div className="flex items-center rounded-xl border border-primary font-bold">
+                  <div className={`flex items-center rounded-xl border border-primary font-bold `}>
                     <button
-                      onClick={() => setQty(Math.max(1, qty - 1))}
+                      onClick={() => setQty(Math.max(1, qty - 1))}                    
                       className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-l-xl"
                     >
                       −
@@ -244,7 +251,7 @@ function ProductContent({ id }: { id: string | null }) {
                       {qty}
                     </span>
                     <button
-                      onClick={() => setQty(qty + 1)}
+                      onClick={() => setQty(qty + 1)}              
                       className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-r-xl"
                     >
                       +
@@ -252,8 +259,13 @@ function ProductContent({ id }: { id: string | null }) {
                   </div>
 
                   <button
-                    className="rounded-xl border border-primary hover:bg-primary hover:text-white transition-colors px-10 py-3"
-                    onClick={handleAddToCart}
+                    className={`rounded-xl border border-primary transition-colors px-10 py-3 ${
+                      product.count === 0 
+                        ? "bg-gray-200 border-gray-300 text-gray-400" 
+                        : "hover:bg-primary hover:text-white"
+                    }`}
+                    onClick={product.count === 0 ? undefined : handleAddToCart}
+                    disabled={product.count === 0}
                   >
                     <ShoppingCartIcon className="h-6 w-6" />
                   </button>
