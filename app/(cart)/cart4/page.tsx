@@ -1,5 +1,5 @@
-import PaymentConfirmation from "@/component/paymentConfirmation/paymentConfirmation";
-import { CheckoutStepper } from "@/component/ui/stepper";
+import PaymentConfirmation from "@/components/paymentConfirmation/paymentConfirmation";
+import { CheckoutStepper } from "@/components/ui/stepper";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";

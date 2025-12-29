@@ -1,4 +1,4 @@
-import ButtonPromoHome1 from "@/component/button/buttonPromoHome1";
+import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowDownToLine } from "lucide-react";
 
 

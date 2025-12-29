@@ -1,6 +1,6 @@
 "use client";
-import Avatar from "@/component/avatar/avatar";
-import PersonalData from "@/component/personalData/personalData";
+import Avatar from "@/components/avatar/avatar";
+import PersonalData from "@/components/personalData/personalData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";

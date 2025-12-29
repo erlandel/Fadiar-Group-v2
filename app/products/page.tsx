@@ -1,22 +1,22 @@
 "use client";
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
-import FiltersDesktop from "@/component/filtersDesktop/filtersDesktop";
-import FiltersMobile from "@/component/filtersMobile/filtersMobile";
-import { useEffect, useState, useMemo, useRef } from "react";
+import FiltersDesktop from "@/components/filtersDesktop/filtersDesktop";
+import FiltersMobile from "@/components/filtersMobile/filtersMobile";
+import { useEffect, useState, useMemo } from "react";
 import { Filter } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import Pagination from "@/component/ui/pagination";
+import Pagination from "@/components/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import Pot from "@/section/pot/pot";
-import CardSkeleton from "@/component/ui/skeletonCard";
+import CardSkeleton from "@/components/ui/skeletonCard";
 import { Product } from "@/types/product";
 import { LatestProducts } from "@/section/latestProducts";
-import CardAllProducts from "@/component/ui/cardAllProducts";
+import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
-import ActiveFilters from "@/component/activeFilters/activeFilters";
-import StoreSelector from "@/component/storeSelector/storeSelector";
+import ActiveFilters from "@/components/activeFilters/activeFilters";
+import StoreSelector from "@/components/storeSelector/storeSelector";
 
 export default function Products() {
   const { municipalityId } = useProductsByLocationStore();

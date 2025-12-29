@@ -1,6 +1,6 @@
 "use client";
-import InputAuth from "@/component/inputAuth/inputAuth";
-import MessageErrorAuth from "@/component/messageErrorAuth/messageErrorAuth";
+import InputAuth from "@/components/inputAuth/inputAuth";
+import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { RecoverPasswordSchemaFormData, recoverPasswordSchema } from "@/validations/recoverPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";

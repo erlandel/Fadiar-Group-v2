@@ -1,8 +1,8 @@
 "use client";
 
-import Amount from "@/component/amount/amount";
-import CartCard from "@/component/cartCard/cartCard";
-import { CheckoutStepper } from "@/component/ui/stepper";
+import Amount from "@/components/amount/amount";
+import CartCard from "@/components/cartCard/cartCard";
+import { CheckoutStepper } from "@/components/ui/stepper";
 
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";

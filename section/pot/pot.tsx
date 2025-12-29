@@ -1,6 +1,6 @@
 import Image from "next/image";
 import "@fontsource/just-me-again-down-here";
-import BottomShadow from "@/component/ui/bottomShadow";
+import BottomShadow from "@/components/ui/bottomShadow";
 
 export default function Pot() {
   return (

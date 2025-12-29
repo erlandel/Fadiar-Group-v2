@@ -1,5 +1,5 @@
-import BeneficiaryPaymentDetails from "@/component/beneficiaryPaymentDetails/beneficiaryPaymentDetails";
-import { CheckoutStepper } from "@/component/ui/stepper";
+import BeneficiaryPaymentDetails from "@/components/beneficiaryPaymentDetails/beneficiaryPaymentDetails";
+import { CheckoutStepper } from "@/components/ui/stepper";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";

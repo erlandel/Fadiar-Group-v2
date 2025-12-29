@@ -1,6 +1,7 @@
 "use client";
 
-import ButtonPromoHome1 from "@/component/button/buttonPromoHome1";
+
+import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 

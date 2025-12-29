@@ -1,4 +1,4 @@
-import { FilterSection } from "@/component/ui/filterModal";
+import { FilterSection } from "@/components/ui/filterModal";
 
 interface FiltersDesktopProps {
   category: string[];

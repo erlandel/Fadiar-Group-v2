@@ -1,6 +1,6 @@
 import Image from "next/image";
 import "@fontsource/just-me-again-down-here";
-import Countdown from "@/component/countdown/countdown";
+import Countdown from "@/components/countdown/countdown";
 
 export default function SectionPromoHome2() {
   return (

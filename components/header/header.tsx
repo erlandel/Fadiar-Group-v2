@@ -1,7 +1,7 @@
 "use client";
-import Menu from "@/component/menu/menu";
-import Serchbar from "@/component/searchBar/searchBar";
-import UserDropdown from "@/component/userDropdown/userDropdown";
+import Menu from "@/components/menu/menu";
+import Serchbar from "@/components/searchBar/searchBar";
+import UserDropdown from "@/components/userDropdown/userDropdown";
 import { AkarIconsLocation, TablerShoppingCart } from "@/icons/icons";
 import Image from "next/image";
 import "@fontsource/just-me-again-down-here";

@@ -1,13 +1,13 @@
 "use client";
 
-import FloatingLabelInput from "@/component/authenticationComponent/FloatingLabelInput";
+import FloatingLabelInput from "@/components/authenticationComponent/FloatingLabelInput";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import InputAuthCode from "@/component/inputAuthCode/inputAuthCode";
+import InputAuthCode from "@/components/inputAuthCode/inputAuthCode";
 import { Loader, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import MessageErrorAuth from "@/component/messageErrorAuth/messageErrorAuth";
+import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 
 
 export default function VerificationCodeEmail() {

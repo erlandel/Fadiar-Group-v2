@@ -1,5 +1,5 @@
-import CardNineOffers from "@/component/ui/cardNineOffers";
-import CardSkeleton from "@/component/ui/skeletonCard";
+import CardNineOffers from "@/components/ui/cardNineOffers";
+import CardSkeleton from "@/components/ui/skeletonCard";
 import { useMemo } from "react";
 
 interface Product {

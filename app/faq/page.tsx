@@ -1,4 +1,4 @@
-import Accordion from "@/component/accordion/accordion";
+import Accordion from "@/components/accordion/accordion";
 import { faqData } from "@/data/faqData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";

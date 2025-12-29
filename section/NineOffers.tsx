@@ -1,7 +1,7 @@
 "use client";
-import { HorizontalScroll } from "@/component/horizontalScroll/horizontalScroll";
-import CardNineOffers from "@/component/ui/cardNineOffers";
-import CardSkeleton from "@/component/ui/skeletonCard";
+import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
+import CardNineOffers from "@/components/ui/cardNineOffers";
+import CardSkeleton from "@/components/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
 import { useCallback, useEffect, useRef, useState } from "react";

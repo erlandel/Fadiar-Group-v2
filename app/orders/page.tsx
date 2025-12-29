@@ -1,5 +1,5 @@
-import MobileOrdes from "@/component/mobileOrdes/mobileOrdes";
-import OrdersTable from "@/component/ordersTable/ordersTable";
+import MobileOrdes from "@/components/mobileOrdes/mobileOrdes";
+import OrdersTable from "@/components/ordersTable/ordersTable";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";

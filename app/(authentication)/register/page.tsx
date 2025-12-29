@@ -1,6 +1,6 @@
 "use client";
 
-import FloatingLabelInput from "@/component/authenticationComponent/FloatingLabelInput";
+import FloatingLabelInput from "@/components/authenticationComponent/FloatingLabelInput";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import {
   registerSchema,
   type RegisterFormData,
 } from "@/validations/registerSchema";
-import InputAuth from "@/component/inputAuth/inputAuth";
+import InputAuth from "@/components/inputAuth/inputAuth";
 import { User, Mail, Lock, Loader, Eye, EyeOff, Check, X } from "lucide-react";
 
 export default function Register() {

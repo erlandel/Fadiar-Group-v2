@@ -5,8 +5,8 @@ import { useState } from "react";
 import { loginSchema, type LoginFormData } from "@/validations/loginSchema";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/authStore";
-import InputAuth from "@/component/inputAuth/inputAuth";
-import MessageErrorAuth from "@/component/messageErrorAuth/messageErrorAuth";
+import InputAuth from "@/components/inputAuth/inputAuth";
+import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 
