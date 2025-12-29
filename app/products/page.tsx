@@ -3,7 +3,7 @@ import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
 import FiltersDesktop from "@/component/filtersDesktop/filtersDesktop";
 import FiltersMobile from "@/component/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { Filter, ChevronDown } from "lucide-react";
+import { Filter } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import Pagination from "@/component/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
@@ -16,6 +16,7 @@ import CardAllProducts from "@/component/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import ActiveFilters from "@/component/activeFilters/activeFilters";
+import StoreSelector from "@/component/storeSelector/storeSelector";
 
 export default function Products() {
   const { municipalityId } = useProductsByLocationStore();
@@ -28,8 +29,6 @@ export default function Products() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [openStores, setOpenStores] = useState(false);
-  const storesRef = useRef<HTMLDivElement>(null);
 
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [globalProducts, setGlobalProducts] = useState<Product[]>([]);
@@ -379,19 +378,6 @@ export default function Products() {
     }
   }, [totalPages, currentPage]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        storesRef.current &&
-        !storesRef.current.contains(event.target as Node)
-      ) {
-        setOpenStores(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const removeFilter = (
     type: "category" | "brand" | "relevant",
     value: string
@@ -469,74 +455,11 @@ export default function Products() {
           </div>
 
           {/* Selector y visualización de tiendas */}
-          <div className="flex items-center justify-center w-full">
-            {tiendas.length > 0 && (
-              <div className="flex flex-wrap items-center gap-y-3 mt-4 pb-4 w-full">
-                <div className="flex items-center justify-start gap-2 w-full md:hidden mx-4">
-                  {/* Selector Personalizado */}
-                  <div className="relative" ref={storesRef}>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="flex items-center justify-between bg-gray-50 rounded-sm p-2 cursor-pointer hover:border-primary transition-colors "
-                        onClick={() => setOpenStores(!openStores)}
-                      >
-                        <span className=" font-bold text-primary sm:text-lg">
-                          Tiendas
-                        </span>
-                        <ChevronDown
-                          className={`h-4 w-4 ml-1 text-primary transition-transform duration-200 ${
-                            openStores ? "rotate-180" : ""
-                          }`}
-                        />
-                      </div>
-                      <span className="text-primary  text-xl font-bold">:</span>
-                      <span className=" font-bold text-accent whitespace-nowrap truncate sm:text-lg">
-                        {tiendas.find((t) => t.id === selectedStoreId)?.name ||
-                          "Seleccione tienda"}
-                      </span>
-                    </div>
-
-                    {openStores && (
-                      <ul className="absolute  left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full">
-                        {tiendas.map((tienda: any) => (
-                          <li
-                            key={tienda.id}
-                            className={`px-4 py-2 cursor-pointer hover:bg-gray-50 text-sm transition-colors ${
-                              selectedStoreId === tienda.id
-                                ? "bg-primary/5 text-primary font-bold"
-                                : "text-gray-700"
-                            }`}
-                            onClick={() => {
-                              setSelectedStoreId(tienda.id);
-                              setOpenStores(false);
-                            }}
-                          >
-                            {tienda.name}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                <div className="hidden md:flex flex-wrap items-center gap-x-6 gap-y-2 mx-4 xl:mx-0">
-                  {tiendas.map((tienda: any) => (
-                    <button
-                      key={tienda.id}
-                      onClick={() => setSelectedStoreId(tienda.id)}
-                      className={`text-sm md:text-base transition-all duration-200 whitespace-nowrap cursor-pointer ${
-                        selectedStoreId === tienda.id
-                          ? "text-primary font-bold border-b-2 border-primary pb-1"
-                          : "text-gray-400 hover:text-primary"
-                      }`}
-                    >
-                      {tienda.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <StoreSelector
+            tiendas={tiendas}
+            selectedStoreId={selectedStoreId}
+            setSelectedStoreId={setSelectedStoreId}
+          />
 
           <div
             id="products"
