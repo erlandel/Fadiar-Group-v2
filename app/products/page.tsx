@@ -1,7 +1,7 @@
 "use client";
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
-import FiltersDesktop from "@/components/filtersDesktop/filtersDesktop";
-import FiltersMobile from "@/components/filtersMobile/filtersMobile";
+import FiltersDesktop from "@/components/pageProducts/filtersDesktop/filtersDesktop";
+import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo } from "react";
 import { Filter } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
@@ -15,8 +15,8 @@ import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
-import ActiveFilters from "@/components/activeFilters/activeFilters";
-import StoreSelector from "@/components/storeSelector/storeSelector";
+import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters";
+import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 
 export default function Products() {
   const { municipalityId } = useProductsByLocationStore();

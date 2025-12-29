@@ -1,4 +1,3 @@
-import { RefObject } from "react";
 
 interface PaginationDotsProps {
   totalPages: number;
