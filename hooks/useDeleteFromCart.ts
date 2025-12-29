@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
-import { deleteCartApi } from "@/api/cartApi/deleteCartApi";
 import { refreshToken } from "@/utils/refreshToken";
+import { server_url } from "@/lib/apiClient";
 import ErrorMessage from "@/messages/errorMessage";
 import SuccesMessage from "@/messages/succesMessage";
 import { useSyncCart } from "./useSyncCart";
@@ -30,7 +30,21 @@ export const useDeleteFromCart = () => {
         return;
       }
 
-      const response = await deleteCartApi(cartId, token);
+      const response = await fetch(
+        `${server_url}/eliminar_producto_carrito`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            id_carrito: cartId,
+            emisor: "web",
+          }),
+        }
+      );
+
       console.log("response ", response);
       if (response.ok) {
         // removeItemLocal(productId);

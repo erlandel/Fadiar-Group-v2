@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import useCartStore, { CartItem } from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
-import { addCartApi } from "@/api/cartApi/addCartApi";
+import { server_url } from "@/lib/apiClient";
 import ErrorMessage from "@/messages/errorMessage";
 import { useSyncCart } from "./useSyncCart";
 
@@ -32,7 +32,21 @@ export const useAddToCart = () => {
         return;
       }
 
-      const response = await addCartApi(item.productId, item.tiendaId, item.quantity, token);
+      const requestBody = {
+        id_product: item.productId,
+        id_tienda: item.tiendaId,
+        count: item.quantity,
+        emisor: "web",
+      };
+
+      const response = await fetch(`${server_url}/agregar_producto_carrito`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
 
       if (response.ok) {
         const data = await response.json();

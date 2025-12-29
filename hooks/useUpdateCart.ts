@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
-import { updateCartApi } from "@/api/cartApi/upadateCartApi";
+import { server_url } from "@/lib/apiClient";
 import { useSyncCart } from "./useSyncCart";
 import ErrorMessage from "@/messages/errorMessage";
 
@@ -30,13 +30,22 @@ export const useUpdateCart = () => {
         return;
       }
 
-      const response = await updateCartApi(
-        auth.user.id,
-        productId,
-        tiendaId,
-        newCount,
-        token
-      );
+      const response = await fetch(`${server_url}/modificar_cantidad_producto_carrito`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id_user: auth.user.id,
+          id_product: productId,
+          id_tienda: tiendaId,
+          newCount: newCount,
+          emisor: "web",
+        }),
+      });
+
+      console.log("modificar_cantidad_producto_carrito:", response);
 
       if (response.ok) {
         await syncCart();

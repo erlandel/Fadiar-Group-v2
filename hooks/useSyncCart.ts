@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import useCartStore, { CartItem } from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
-import { getCartApi } from "@/api/cartApi/getCartApi";
+import { server_url } from "@/lib/apiClient";
 
 export const useSyncCart = () => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,17 @@ export const useSyncCart = () => {
         return;
       }
 
-      const response = await getCartApi(auth.user.id, token);
+      const response = await fetch(`${server_url}/obtener_productos_carrito`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id_user: auth.user.id,
+          comisiones: true,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
