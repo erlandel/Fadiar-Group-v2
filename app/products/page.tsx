@@ -15,6 +15,7 @@ import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/component/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+import ActiveFilters from "@/component/activeFilters/activeFilters";
 
 export default function Products() {
   const { municipalityId } = useProductsByLocationStore();
@@ -257,7 +258,7 @@ export default function Products() {
       );
 
       console.log("res", res);
-     
+
       if (!res.ok) throw new Error("Error fetching products");
       return res.json();
     },
@@ -441,152 +442,21 @@ export default function Products() {
             {/* Header con título y botón de filtros */}
             <div className="flex w-full justify-between items-start mb-4">
               <div className="flex-1">
-                <h2 className="text-2xl text-accent font-bold">
-                  Productos
-                </h2>
+                <h2 className="text-2xl text-accent font-bold">Productos</h2>
 
-                <div className="flex flex-col gap-2 mb-2 mt-2">
-                  {/* Filtros aplicados */}
-                  {(category.length > 0 ||
-                    brands.length > 0 ||
-                    relevant.length > 0 ||
-                    price[0] !== priceRange.min ||
-                    price[1] !== priceRange.max) && (
-                    <div className="flex flex-wrap gap-2 ">
-                      {category.map((cat) => (
-                        <div
-                          key={cat}
-                          className="inline-flex items-center gap-2 px-3 py-2 bg-[#f6f8fb] text-[#0b2a4a] rounded-lg text-sm font-medium"
-                        >
-                          <div className="w-3 h-3 border border-[#0b2a4a] flex items-center justify-center rounded-sm">
-                            <svg
-                              className="w-2 h-2 text-[#0b2a4a]"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <span>
-                            {availableCategories.find(
-                              (c) => c.value === cat.toLowerCase()
-                            )?.label || cat}
-                          </span>
-                          <button
-                            onClick={() => removeFilter("category", cat)}
-                            className="ml-1 text-gray-400 hover:text-gray-600 font-bold text-lg leading-none"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-
-                      {brands.map((brand) => (
-                        <div
-                          key={brand}
-                          className="inline-flex items-center gap-2 px-3 py-2 bg-[#f6f8fb] text-[#0b2a4a] rounded-lg text-sm font-medium"
-                        >
-                          <div className="w-3 h-3 border border-[#0b2a4a] flex items-center justify-center rounded-sm">
-                            <svg
-                              className="w-2 h-2 text-[#0b2a4a]"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <span>
-                            {availableBrands.find(
-                              (b) => b.value === brand.toLowerCase()
-                            )?.label ||
-                              brand.charAt(0).toUpperCase() + brand.slice(1)}
-                          </span>
-                          <button
-                            onClick={() => removeFilter("brand", brand)}
-                            className="ml-1 text-gray-400 hover:text-gray-600 font-bold text-lg leading-none"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-
-                      {relevant.map((rel) => (
-                        <div
-                          key={rel}
-                          className="inline-flex items-center gap-2 px-3 py-2 bg-[#f6f8fb] text-[#0b2a4a] rounded-lg text-sm font-medium"
-                        >
-                          <div className="w-3 h-3 border border-[#0b2a4a] flex items-center justify-center rounded-sm">
-                            <svg
-                              className="w-2 h-2 text-[#0b2a4a]"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <span>
-                            {rel === "ofertas"
-                              ? "Ofertas"
-                              : rel === "masVendidos"
-                              ? "Más vendidos"
-                              : "Próximamente"}
-                          </span>
-                          <button
-                            onClick={() => removeFilter("relevant", rel)}
-                            className="ml-1 text-gray-400 hover:text-gray-600 font-bold text-lg leading-none"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-
-                      {(price[0] !== priceRange.min ||
-                        price[1] !== priceRange.max) && (
-                        <div className="inline-flex items-center gap-2 px-3 py-2 bg-[#f6f8fb] text-[#0b2a4a] rounded-lg text-sm font-medium">
-                          <div className="w-3 h-3 border border-[#0b2a4a] flex items-center justify-center rounded-sm">
-                            <svg
-                              className="w-2 h-2 text-[#0b2a4a]"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <span>
-                            ${price[0].toLocaleString()} - $
-                            {price[1].toLocaleString()}
-                          </span>
-                          <button
-                            onClick={resetPrice}
-                            className="ml-1 text-gray-400 hover:text-gray-600 font-bold text-lg leading-none"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <span className="text-sm text-[#777777]">
-                    {filteredProducts?.length ?? 0} Productos
-                  </span>
-                </div>
+                {/* Filtros aplicados */}
+                <ActiveFilters
+                  category={category}
+                  brands={brands}
+                  relevant={relevant}
+                  price={price}
+                  priceRange={priceRange}
+                  availableCategories={availableCategories}
+                  availableBrands={availableBrands}
+                  removeFilter={removeFilter}
+                  resetPrice={resetPrice}
+                  totalProducts={filteredProducts?.length ?? 0}
+                />
               </div>
 
               <button
@@ -598,7 +468,7 @@ export default function Products() {
             </div>
           </div>
 
-            {/* Selector y visualización de tiendas */}
+          {/* Selector y visualización de tiendas */}
           <div className="flex items-center justify-center w-full">
             {tiendas.length > 0 && (
               <div className="flex flex-wrap items-center gap-y-3 mt-4 pb-4 w-full">
@@ -610,8 +480,8 @@ export default function Products() {
                         className="flex items-center justify-between bg-gray-50 rounded-sm p-2 cursor-pointer hover:border-primary transition-colors "
                         onClick={() => setOpenStores(!openStores)}
                       >
-                        <span className="text-sm sm:text-md font-bold text-primary">
-                          Tiendas 
+                        <span className=" font-bold text-primary sm:text-lg">
+                          Tiendas
                         </span>
                         <ChevronDown
                           className={`h-4 w-4 ml-1 text-primary transition-transform duration-200 ${
@@ -619,15 +489,15 @@ export default function Products() {
                           }`}
                         />
                       </div>
-                      <span className="text-primary  text-md sm:text-xl font-bold">:</span>
-                      <span className="text-sm md:text-md font-bold text-accent whitespace-nowrap truncate">
+                      <span className="text-primary  text-xl font-bold">:</span>
+                      <span className=" font-bold text-accent whitespace-nowrap truncate sm:text-lg">
                         {tiendas.find((t) => t.id === selectedStoreId)?.name ||
                           "Seleccione tienda"}
                       </span>
                     </div>
 
                     {openStores && (
-                      <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full">
+                      <ul className="absolute  left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full">
                         {tiendas.map((tienda: any) => (
                           <li
                             key={tienda.id}
@@ -668,10 +538,6 @@ export default function Products() {
             )}
           </div>
 
-
-          
-          {/* Filtros aplicados */}
-
           <div
             id="products"
             className=" mx-4 xl:mx-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-0 xl:grid-cols-4 2xl:grid-cols-5 gap-4 xl:mr-15 auto-rows-fr"
@@ -699,7 +565,7 @@ export default function Products() {
                 />
               ))
             ) : (
-              <p className="col-span-full text-center text-gray-500">
+              <p className="col-span-full text-center text-gray-500 h-80 text-xl sm:text-2xl  ">
                 No se encontraron productos
               </p>
             )}
