@@ -152,9 +152,9 @@ function ProductContent({ id }: { id: string | null }) {
             <div className="flex flex-col md:flex-row gap-16 mt-10">
               <div className="md:w-1/3">
                 {/* Imagen Principal */}
-                <div className="relative w-full h-[400px] rounded-xl object-cover overflow-hidden">
+                <div className="relative w-fit mx-auto h-[400px] rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
                   {product.count === 0 && (
-                    <div className="absolute top-5 right-[-30px] z-10 bg-red-600 text-white text-md font-bold px-10 py-1 rotate-45 shadow-md">
+                    <div className="absolute top-7 right-[-35px] z-10 bg-red-600 text-white text-md font-bold w-[170px] py-1 rotate-45 shadow-md text-center">
                       Agotado
                     </div>
                   )}
@@ -165,7 +165,7 @@ function ProductContent({ id }: { id: string | null }) {
                     width={613}
                     height={682}
                     unoptimized
-                    className="w-full h-full rounded-xl object-contain"
+                    className="w-auto h-full rounded-xl object-contain"
                   />
                 </div>
 
