@@ -58,7 +58,7 @@ export const SectionAbout1 = () => {
 
           <div className="lg:w-1/2 flex items-center">
             <img
-              src="/images/dealer.png"
+              src="/images/dealer.webp"
               alt="dealer"
               className="w-full h-full object-cover"
             />

@@ -14,33 +14,33 @@ export const SectionAbout4 = () => {
 
         <div> 
           <img
-            src="/images/Rectangle.png"
+            src="/images/Rectangle.webp"
             alt="Background"
             className="absolute bottom-0 left-30 "
           />
 
           <img
-            src="/images/Vector15.png"
+            src="/images/Vector15.webp"
             alt="Background"
             className="absolute bottom-0 ml-70"
           />
 
           <img
-            src="/images/Vector16.png"
+            src="/images/Vector16.webp"
             alt="Background"
             className="absolute bottom-0 left-0  w-325"
           />
 
           <img
            data-animate="animate__rotateInDownRight"
-            src="/images/mony.svg"
+            src="/images/mony.webp"
             alt="Background"
             className="absolute hidden xl:block  bottom-0 h-full right-0  w-210 animate-on-scroll [animation-delay:0.5s]"
           />
 
          <img
           data-animate="animate__rotateInDownRight"
-            src="/images/monyMobile.svg"
+            src="/images/monyMobile.webp"
             alt="Background"
             className="absolute  xl:hidden  bottom-0 right-0 w-130 sm:w-140 md:w-100 lg:w-140   lg:h-full lg:object-cover animate-on-scroll [animation-delay:0.5s]" 
           />

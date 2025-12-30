@@ -5,14 +5,14 @@ export const SectionAbout2 = () => {
     <>
       <div className="relative w-full md:h-72">
         <Image
-          src="/images/group-mobile.png"
+          src="/images/group-mobile.webp"
           alt="Background"
           fill
           className="object-cover object-center md:hidden"
           priority
         />
         <Image
-          src="/images/group.png"
+          src="/images/group.webp"
           alt="Background"
           fill
           className="object-cover object-center hidden md:block"

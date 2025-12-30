@@ -8,7 +8,7 @@ import useImgFileStore from "@/store/imgFileStore";
 export default function Avatar() {
   const { auth } = useAuthStore();
   const { pendingAvatar, setPendingAvatar } = useImgFileStore();
-  const [avatarSrc, setAvatarSrc] = useState<string>("/images/avatar.png");
+  const [avatarSrc, setAvatarSrc] = useState<string>("/images/avatar.webp");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sincronizar con el store de auth cuando cambie la imagen o se hidrate

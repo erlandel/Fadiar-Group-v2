@@ -60,9 +60,9 @@ export default function CheckoutPayment() {
         </div>
         <div className="relative h-20 w-full ">
           <img
-            src="/images/mastercard.svg"
+            src="/images/mastercard.webp"
             alt="Mastercard"
-            className="absolute top-2 right-2 h-12 w-10"
+            className="absolute top-5 right-2 h-8 w-12"
           />
         </div>
         <div>

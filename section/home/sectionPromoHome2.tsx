@@ -22,26 +22,26 @@ export default function SectionPromoHome2() {
 
         <div>
           <img
-            src="/images/Rectangle.png"
+            src="/images/Rectangle.webp"
             alt="Background"
             className="absolute bottom-0 md:left-70 2xl:left-80 "
           />
 
           <img
-            src="/images/Vector15.png"
+            src="/images/Vector15.webp"
             alt="Background"
             className="absolute bottom-0 ml-12 md:ml-120 2xl:ml-135"
           />
 
           <img           
-            src="/images/Vector16.png"
+            src="/images/Vector16.webp"
             alt="Background"
             className="absolute bottom-0 left-4 md:left-95 2xl:left-110  w-330"
           />
 
           <img
            data-animate="animate__fadeInRight"
-            src="/images/motorbike.svg"
+            src="/images/productos.webp"
             alt="Background"
             className="absolute right-2 left-1 sm:left-auto w-90 bottom-[-10]  md:bottom-[-30]  lg:right-5 2xl:right-30 md:w-100 lg:w-160  xl:w-187  animate-on-scroll [animation-delay:1.3s]"
           />

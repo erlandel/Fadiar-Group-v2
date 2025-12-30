@@ -58,7 +58,7 @@ export default function CreditCards() {
 
             <div>
               <img
-                src="/images/creditCards.svg"
+                src="/images/creditCards.webp"
                 alt="Visa"
                 className="h-18 mr-4 "
               />

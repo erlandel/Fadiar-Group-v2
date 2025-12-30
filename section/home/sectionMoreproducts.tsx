@@ -44,7 +44,7 @@ export default function SectionMoreproducts() {
           </div>
           <div>
             <img
-              src="/images/vent.png"
+              src="/images/vent.webp"
               alt="vent"
               className="w-70 h-55 ml-25 mt-4 sm:w-90 sm:h-70 sm:ml-50  md:h-90 md:w-120   xl:ml-82 2xl:ml-90 xl:w-90  2xl:w-1/2 xl:h-1/2 object-cover "
             />
@@ -75,7 +75,7 @@ export default function SectionMoreproducts() {
 
           <div className="mt-5">
             <img
-              src="/images/Fridge.png"
+              src="/images/Fridge.webp"
               alt="vent"
               className="ml-8 sm:ml-10    xl:h-70   object-contain xl:ml-30"
             />

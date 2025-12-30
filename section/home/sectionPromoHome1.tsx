@@ -27,7 +27,7 @@ export default function SectionPromoHome1() {
           </h1>
 
           <img
-            src="/images/pot.svg"
+            src="/images/pot.webp"
             alt="Background"
             fetchPriority="high"
             className="absolute bottom-[-80] lg:bottom-[-170] right-0 md:right-[-70] xl:right-0 w-100 md:w-150 md:bottom-[-120] lg:w-200 xl:w-220   h-auto object-cover "
