@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { server_url } from "@/lib/apiClient";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import ShoppingCartIcon from "../icons";
@@ -85,7 +84,7 @@ export default function CardLatestProducts({
             className="relative  w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
             style={{ height: "190px" }}
           >
-            <Image
+            <img
               className="h-full w-full object-contain"
               alt={title}
               width={500}

@@ -1,24 +1,18 @@
-import Image from 'next/image';
-
 export const SectionAbout2 = () => {
   return (
     <>
       <div className="relative w-full md:h-72">
-        <Image
+        <img
           src="/images/group-mobile.webp"
           alt="Background"
-          fill
-          className="object-cover object-center md:hidden"
-          priority
+          className="absolute inset-0 w-full h-full object-cover object-center md:hidden"
         />
-        <Image
+        <img
           src="/images/group.webp"
           alt="Background"
-          fill
-          className="object-cover object-center hidden md:block"
-          priority
+          className="absolute inset-0 w-full h-full object-cover object-center hidden md:block"
         />
-        <div className="w-full h-full flex items-center text-white px-4 md:px-20">
+        <div className="relative z-10 w-full h-full flex items-center text-white px-4 md:px-20">
 
             <div
             

@@ -19,7 +19,17 @@ import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 
 export default function Products() {
-  const { municipalityId } = useProductsByLocationStore();
+  const { 
+    municipalityId, 
+    products: allProducts, 
+    tiendas, 
+    currencys, 
+    globalProducts,
+    lastFetchedMunicipalityId,
+    setProductsData,
+    setGlobalProducts 
+  } = useProductsByLocationStore();
+  
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
@@ -29,11 +39,6 @@ export default function Products() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [globalProducts, setGlobalProducts] = useState<Product[]>([]);
-  const [tiendas, setTiendas] = useState<any[]>([]);
-  const [currencys, setCurrencys] = useState<any>(null);
 
   const itemsPerPage = 15;
 
@@ -264,9 +269,6 @@ export default function Products() {
     onSuccess: (data) => {
       console.log("data", data);
 
-      // Guardamos la información de tiendas y monedas si están presentes
-      if (data.currencys) setCurrencys(data.currencys);
-
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
       const baseProducts = realTiendas.flatMap((t: any) => t.productos || []);
 
@@ -323,11 +325,16 @@ export default function Products() {
         };
       });
 
-      setTiendas(finalTiendas);
-
       // Aplanamos todos los productos de todas las tiendas generadas
       const allGeneratedProducts = finalTiendas.flatMap((t) => t.productos);
-      setAllProducts(allGeneratedProducts);
+
+      // Guardamos todo en el store
+      setProductsData({
+        products: allGeneratedProducts,
+        tiendas: finalTiendas,
+        currencys: data.currencys || null,
+        municipalityId: municipalityId || 0,
+      });
 
       // Seleccionamos la primera tienda por defecto si no hay una seleccionada
       if (finalTiendas.length > 0) {
@@ -343,7 +350,8 @@ export default function Products() {
     setIsMounted(true);
     // Cargar todos los productos globalmente para los filtros una sola vez
     const fetchGlobalProducts = async () => {
-      if (globalProducts.length > 0) return;
+      // Si ya tenemos productos globales en el store, no volvemos a pedir
+      if (globalProducts && globalProducts.length > 0) return;
       try {
         const queryParams = new URLSearchParams();
         queryParams.append("productos", "true");
@@ -361,11 +369,14 @@ export default function Products() {
       }
     };
     fetchGlobalProducts();
-  }, []);
+  }, [globalProducts, setGlobalProducts]);
 
   useEffect(() => {
-    if (municipalityId != null) fetchProducts(municipalityId);
-  }, [municipalityId]);
+    // Solo pedimos si el municipio cambió (lastFetchedMunicipalityId será null la primera vez)
+    if (municipalityId != null && municipalityId !== lastFetchedMunicipalityId) {
+      fetchProducts(municipalityId);
+    }
+  }, [municipalityId, lastFetchedMunicipalityId, fetchProducts]);
 
   // Resetear página cuando cambian los filtros o si la página actual es mayor que el total de páginas
   useEffect(() => {

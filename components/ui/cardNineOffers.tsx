@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { server_url } from "@/lib/apiClient";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import ShoppingCartIcon from "../icons";
@@ -87,7 +86,7 @@ export default function CardNineOffers({
             className="relative  w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
             style={{ height: "190px" }}
           >
-            <Image
+            <img
               className="h-full w-full object-contain"
               alt={title}
               width={500}
@@ -186,7 +185,7 @@ export default function CardNineOffers({
           <div
             className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48 sm:min-w-[160px]"          
           >
-            <Image
+            <img
               className="h-full w-35 sm:w-48 2xl:w-full object-contain"
               alt={title}
               width={500}
