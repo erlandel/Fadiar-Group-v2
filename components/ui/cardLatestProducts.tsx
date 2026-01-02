@@ -32,7 +32,7 @@ export default function CardLatestProducts({
 
   const handleCardClick = () => {
     if (productId) {
-           router.push(`/products/id?id=${productId}`);
+      router.push(`/productID?id=${productId}`);
     }
   };
 

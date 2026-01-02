@@ -18,6 +18,12 @@ export default function Menu() {
     { href: "/contacto", label: "Contacto" },
   ];
 
+  const checkActive = (href: string) => {
+    const normalizedPath = pathname.endsWith("/") ? pathname : `${pathname}/`;
+    const normalizedHref = href.endsWith("/") ? href : `${href}/`;
+    return normalizedPath === normalizedHref;
+  };
+
   return (
     <>
       {/* Botón hamburguesa - Solo visible en móvil */}
@@ -61,14 +67,14 @@ export default function Menu() {
           {/* Links del menú móvil */}
           <nav className="flex flex-col gap-8">
             {links.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = checkActive(link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`text-md text-gray-700 hover:text-[#002b5c] transition ${
-                    isActive ? "text-[#002b5c] font-semibold" : ""
+                  className={`text-md transition hover:text-primary ${
+                    isActive ? "text-primary font-semibold" : "text-gray-700"
                   }`}
                 >
                   {link.label}
@@ -81,15 +87,15 @@ export default function Menu() {
 
       {/* Menú desktop - Solo visible en md y superiores */}
       <div className="hidden md:block w-full bg-white ml-5">
-        <nav className="flex justify-center gap-10 text-sm text-gray-700 p-1">
+        <nav className="flex justify-center gap-10 text-sm p-1">
           {links.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = checkActive(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`hover:text-[#002b5c] transition ${
-                  isActive ? "text-primary font-semibold" : ""
+                className={`transition hover:text-primary ${
+                  isActive ? "text-primary font-semibold" : "text-gray-700"
                 }`}
               >
                 {link.label}

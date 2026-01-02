@@ -62,7 +62,7 @@ export default function Card({
 
   const handleCardClick = () => {
     if (productId) {
-      router.push(`/products/id?id=${productId}`);
+      router.push(`/productID?id=${productId}`);
     }
   };
 
