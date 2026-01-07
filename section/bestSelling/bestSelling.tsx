@@ -12,39 +12,43 @@ type BestSellingProps = {
 };
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
-  const { municipalityId } = useProductsByLocationStore();
+  const { provinceId, municipalityId } = useProductsByLocationStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   const getAllProducts = async () => {
-    const res = await fetch(`${server_url}/img_mas_vendido`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-        count: 9,
-        municipio: municipalityId
-      }),
-    });
+    try {
+      const res = await fetch(`${server_url}/img_mas_vendido`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          count: 9,
+          provincia: provinceId,
+          emisor: "web"
+        }),
+      });
 
+      if (!res.ok) {
+        throw new Error("Error al obtener productos más vendidos");
+      }
 
-    if (!res.ok) {
-      throw new Error("Error al obtener productos más vendidos");
+      const data = await res.json();
+      setProducts(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error fetching best selling products:", error);
     }
-
-    const data = await res.json();
-
- 
-
-    // 👇 backend devuelve un ARRAY DIRECTO
-    setProducts(Array.isArray(data) ? data : []);
   };
 
   useEffect(() => {
     setIsMounted(true);
-    getAllProducts();
-  }, [municipalityId]);
+    // Disparamos la carga cuando cambie la provincia o el municipio
+    // (municipalityId se usa como trigger para asegurar que el modal se cerró)
+    if (provinceId || municipalityId) {
+      getAllProducts();
+    }
+  }, [provinceId, municipalityId]);
 
   // Usar productos del estado interno si no vienen como prop
   const productsToUse: Product[] = Array.isArray(productsProp)

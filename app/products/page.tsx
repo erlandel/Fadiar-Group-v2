@@ -404,7 +404,7 @@ export default function Products() {
 
               <button
                 onClick={() => setIsFilterOpen(true)}
-                className="xl:hidden z-100 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
+                className="xl:hidden z-50 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
               >
                 <Filter className="w-5 h-5" />
               </button>
