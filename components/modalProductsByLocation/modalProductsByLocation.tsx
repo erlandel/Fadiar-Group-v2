@@ -18,9 +18,10 @@ interface ProvinceData {
 }
 
 const ModalProductsByLocation = () => {
-  const { province, municipality, municipalityId, setLocation, setIsOpen } = useProductsByLocationStore();
+  const { province, provinceId, municipality, municipalityId, setLocation, setIsOpen } = useProductsByLocationStore();
   const [data, setData] = useState<ProvinceData[]>([]);
   const [selectedProvince, setSelectedProvince] = useState(province || "");
+  const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(provinceId || null);
   const [selectedMunicipality, setSelectedMunicipality] = useState(municipality || "");
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<number | null>(municipalityId || null);
   const [error, setError] = useState(false);
@@ -34,9 +35,10 @@ const ModalProductsByLocation = () => {
 
   useEffect(() => {
     setSelectedProvince(province || "");
+    setSelectedProvinceId(provinceId || null);
     setSelectedMunicipality(municipality || "");
     setSelectedMunicipalityId(municipalityId || null);
-  }, [province, municipality, municipalityId]);
+  }, [province, provinceId, municipality, municipalityId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -79,19 +81,31 @@ const ModalProductsByLocation = () => {
 
   const handleAccept = () => {
     setSubmitAttempted(true);
+    // Validación básica: necesitamos provincia y municipio
     if (!selectedProvince || !selectedMunicipality || selectedMunicipalityId === null) {
       setError(true);
       return;
     }
+    
+    // Si no tenemos el ID de la provincia, intentamos buscarlo en la data cargada
+    let finalProvinceId = selectedProvinceId;
+    if (!finalProvinceId && selectedProvince) {
+      const foundProv = data.find(p => p.provincia === selectedProvince);
+      if (foundProv) finalProvinceId = foundProv.id;
+    }
+
     setError(false);
     
     // Guardar en el store
-    setLocation(selectedProvince, selectedMunicipality, selectedMunicipalityId);
+    setLocation(selectedProvince, finalProvinceId, selectedMunicipality, selectedMunicipalityId);
     setIsOpen(false);
     
-    console.log("Provincia:", selectedProvince);
-    console.log("Municipio:", selectedMunicipality);
-    console.log("Municipio ID:", selectedMunicipalityId);
+    console.log("Ubicación guardada:", {
+      provincia: selectedProvince,
+      provinciaId: finalProvinceId,
+      municipio: selectedMunicipality,
+      municipioId: selectedMunicipalityId
+    });
   };
 
   const municipalities = data.find((p) => p.provincia === selectedProvince)?.municipios || [];
@@ -147,7 +161,9 @@ const ModalProductsByLocation = () => {
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
                     onClick={() => {
                       setSelectedProvince(prov.provincia);
+                      setSelectedProvinceId(prov.id);
                       setSelectedMunicipality("");
+                      setSelectedMunicipalityId(null);
                       setOpenProvinces(false);
                       setError(false);
                       setSubmitAttempted(false);

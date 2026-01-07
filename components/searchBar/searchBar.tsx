@@ -7,7 +7,7 @@ import { Product } from "@/types/product";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Serchbar() {
-  const { municipalityId } = useProductsByLocationStore();
+  const { provinceId, municipalityId } = useProductsByLocationStore();
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -16,15 +16,16 @@ export default function Serchbar() {
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all products on component mount or when municipality changes
+  // Fetch all products on component mount or when municipality/province changes
   useEffect(() => {
     const getAllProducts = async () => {
       setIsLoading(true);
       try {
         const queryParams = new URLSearchParams();
-        queryParams.append("productos", "true");
-        if (municipalityId) {
-          queryParams.append("municipio", municipalityId.toString());
+        queryParams.append("emisor", "web");
+        
+        if (provinceId) {
+          queryParams.append("provincia", provinceId.toString());
         }
 
         const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
@@ -48,7 +49,7 @@ export default function Serchbar() {
     };
 
     getAllProducts();
-  }, [municipalityId]);
+  }, [provinceId, municipalityId]);
 
   // Handle click outside to close dropdown
   useEffect(() => {

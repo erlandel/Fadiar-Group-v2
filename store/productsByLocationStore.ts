@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 interface ProductsByLocationState {
   province: string;
+  provinceId: number | null;
   municipality: string;
   municipalityId: number | null;
   isOpen: boolean;
@@ -11,10 +12,10 @@ interface ProductsByLocationState {
   currencys: any;
   globalProducts: any[];
   lastFetchedMunicipalityId: number | null;
-  setLocation: (province: string, municipality: string, municipalityId: number) => void;
+  setLocation: (province: string, provinceId: number | null, municipality: string, municipalityId: number | null) => void;
   clearLocation: () => void;
   setIsOpen: (isOpen: boolean) => void;
-  setProductsData: (data: { products: any[]; tiendas: any[]; currencys: any; municipalityId: number }) => void;
+  setProductsData: (data: { products: any[]; tiendas: any[]; currencys: any; municipalityId: number | null }) => void;
   setGlobalProducts: (products: any[]) => void;
 }
 
@@ -22,6 +23,7 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
   persist(
     (set) => ({
       province: "",
+      provinceId: null,
       municipality: "",
       municipalityId: null,
       isOpen: false,
@@ -31,9 +33,10 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
       globalProducts: [],
       lastFetchedMunicipalityId: null,
 
-      setLocation: (province, municipality, municipalityId) =>
+      setLocation: (province, provinceId, municipality, municipalityId) =>
         set(() => ({
           province,
+          provinceId,
           municipality,
           municipalityId,
         })),
@@ -41,6 +44,7 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
       clearLocation: () =>
         set(() => ({
           province: "",
+          provinceId: null,
           municipality: "",
           municipalityId: null,
           products: [],
@@ -71,6 +75,7 @@ export const useProductsByLocationStore = create<ProductsByLocationState>()(
       ),
       partialize: (state) => ({
         province: state.province,
+        provinceId: state.provinceId,
         municipality: state.municipality,
         municipalityId: state.municipalityId,
       }),

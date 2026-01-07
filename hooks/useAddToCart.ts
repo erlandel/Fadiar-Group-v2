@@ -48,9 +48,10 @@ export const useAddToCart = () => {
         body: JSON.stringify(requestBody),
       });
 
+      console.log("Respuesta del backend (agregar al carrito):", response);
       if (response.ok) {
         const data = await response.json();
-        console.log("Respuesta del backend (agregar al carrito):", data);
+        // console.log("Respuesta del backend (agregar al carrito):", data);
         
         // 2. SOLO si la respuesta es exitosa (200 OK), actualizamos el carrito local
         // addOrUpdateItemLocal(item);

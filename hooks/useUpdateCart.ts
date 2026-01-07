@@ -10,8 +10,7 @@ export const useUpdateCart = () => {
   const { syncCart } = useSyncCart();
 
   const updateQuantity = async (
-    productId: string | number,
-    tiendaId: string | number | undefined,
+    cartId: string | number,
     newCount: number
   ) => {
     if (newCount < 1) return;
@@ -37,9 +36,7 @@ export const useUpdateCart = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          id_user: auth.user.id,
-          id_product: productId,
-          id_tienda: tiendaId,
+          id_carrito: cartId,
           newCount: newCount,
           emisor: "web",
         }),

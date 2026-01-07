@@ -53,8 +53,8 @@ export default function CartCard({
   };
 
   const handleUpdateQuantity = async (newQuantity: number) => {
-    if (!productId || newQuantity < 1) return;
-    await updateQuantity(productId, tiendaId, newQuantity);
+    if (!cartId || newQuantity < 1) return;
+    await updateQuantity(cartId, newQuantity);
   };
   return (
     <>

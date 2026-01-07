@@ -10,7 +10,6 @@ import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import Pot from "@/section/pot/pot";
 import CardSkeleton from "@/components/ui/skeletonCard";
-import { Product } from "@/types/product";
 import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
@@ -20,6 +19,7 @@ import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector
 
 export default function Products() {
   const { 
+    provinceId,
     municipalityId, 
     products: allProducts, 
     tiendas, 
@@ -242,18 +242,13 @@ export default function Products() {
   }, [filteredProducts, currentPage, itemsPerPage]);
 
   const { mutate: fetchProducts, isPending: isLoading } = useMutation({
-    mutationFn: async (mId?: number | null) => {
-      console.log("se ejecuta la peticion");
+    mutationFn: async ({ pId }: { pId: number | null }) => {
       const queryParams = new URLSearchParams();
-      queryParams.append("productos", "true");
-      if (mId) {
-        queryParams.append("municipio", mId.toString());
-      }
-      console.log("mid", mId);
+      queryParams.append("emisor", "web");
+      if (pId) queryParams.append("provincia", pId.toString());
 
       const res = await fetch(
         `${server_url}/inventory_manager?${queryParams.toString()}`,
-
         {
           headers: {
             "Content-Type": "application/json",
@@ -261,84 +256,32 @@ export default function Products() {
         }
       );
 
-      console.log("res", res);
-
       if (!res.ok) throw new Error("Error fetching products");
       return res.json();
     },
     onSuccess: (data) => {
-      console.log("data", data);
-
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
-      const baseProducts = realTiendas.flatMap((t: any) => t.productos || []);
+      
+      // Procesar tiendas y productos
+      const processedTiendas = realTiendas.map((t: any) => ({
+        ...t,
+        productos: (t.productos || []).map((p: any) => ({
+          ...p,
+          tiendaId: t.id
+        }))
+      }));
 
-      // console.log("baseProducts: ",baseProducts)
-      // Creamos 10 tiendas: las reales + inventadas hasta llegar a 10
-      const dummyStoreNames = [
-        "Tienda Principal",
-        "Fadiar Gourmet",
-        "Mercado Express",
-        "Almacén Central",
-        "Bazar del Hogar",
-        "Tienda de Ofertas",
-        "Fadiar Premium",
-        "Suministros Rápidos",
-        "Rincón del Chef",
-        "Variedades Fadiar",
-      ];
+      const allProductsFromTiendas = processedTiendas.flatMap((t: any) => t.productos);
 
-      const finalTiendas = Array.from({ length: 10 }).map((_, index) => {
-        const id =
-          index === 0 && realTiendas[0]
-            ? realTiendas[0].id
-            : `store-dummy-${index}`;
-        const name =
-          index === 0 && realTiendas[0]
-            ? realTiendas[0].name
-            : dummyStoreNames[index];
-
-        let storeProducts: any[] = [];
-
-        if (index === 0) {
-          // La primera tienda tiene todos los productos de la petición intactos
-          storeProducts = [...baseProducts];
-        } else {
-          // Las otras tiendas tienen una mezcla clonada de los productos base
-          const start = (index * 3) % (baseProducts.length || 1);
-          storeProducts =
-            baseProducts.length > 0
-              ? [
-                  ...baseProducts.slice(start, start + 10),
-                  ...baseProducts.slice(
-                    0,
-                    Math.max(0, 10 - (baseProducts.length - start))
-                  ),
-                ]
-              : [];
-        }
-
-        return {
-          id,
-          name,
-          active: true,
-          productos: storeProducts.map((p) => ({ ...p, tiendaId: id })),
-        };
-      });
-
-      // Aplanamos todos los productos de todas las tiendas generadas
-      const allGeneratedProducts = finalTiendas.flatMap((t) => t.productos);
-
-      // Guardamos todo en el store
       setProductsData({
-        products: allGeneratedProducts,
-        tiendas: finalTiendas,
+        products: allProductsFromTiendas,
+        tiendas: processedTiendas,
         currencys: data.currencys || null,
-        municipalityId: municipalityId || 0,
+        municipalityId: municipalityId,
       });
 
-      // Seleccionamos la primera tienda por defecto si no hay una seleccionada
-      if (finalTiendas.length > 0) {
-        setSelectedStoreId(finalTiendas[0].id);
+      if (processedTiendas.length > 0) {
+        setSelectedStoreId(processedTiendas[0].id);
       }
     },
     onError: (error) => {
@@ -350,11 +293,10 @@ export default function Products() {
     setIsMounted(true);
     // Cargar todos los productos globalmente para los filtros una sola vez
     const fetchGlobalProducts = async () => {
-      // Si ya tenemos productos globales en el store, no volvemos a pedir
       if (globalProducts && globalProducts.length > 0) return;
       try {
         const queryParams = new URLSearchParams();
-        queryParams.append("productos", "true");
+        queryParams.append("emisor", "web"); // Mantener consistencia con el emisor
         const res = await fetch(
           `${server_url}/inventory_manager?${queryParams.toString()}`
         );
@@ -372,11 +314,15 @@ export default function Products() {
   }, [globalProducts, setGlobalProducts]);
 
   useEffect(() => {
-    // Solo pedimos si el municipio cambió (lastFetchedMunicipalityId será null la primera vez)
-    if (municipalityId != null && municipalityId !== lastFetchedMunicipalityId) {
-      fetchProducts(municipalityId);
+    // Pedir productos cuando cambie la provincia o el municipio
+    // Aunque ya no pasamos el municipio a la API, seguimos usando el cambio de municipio
+    // como trigger para asegurar que la selección del usuario en el modal se haya completado.
+    if (provinceId != null || municipalityId != null) {
+      if (municipalityId !== lastFetchedMunicipalityId) {
+        fetchProducts({ pId: provinceId });
+      }
     }
-  }, [municipalityId, lastFetchedMunicipalityId, fetchProducts]);
+  }, [provinceId, municipalityId, lastFetchedMunicipalityId, fetchProducts]);
 
   // Resetear página cuando cambian los filtros o si la página actual es mayor que el total de páginas
   useEffect(() => {

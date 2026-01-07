@@ -15,7 +15,7 @@ import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 function ProductContent({ id }: { id: string | null }) {
-  const { municipalityId } = useProductsByLocationStore();
+  const { provinceId, municipalityId } = useProductsByLocationStore();
   const [qty, setQty] = useState(1);
   const [product, setProduct] = useState<ProductID | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,9 +49,9 @@ function ProductContent({ id }: { id: string | null }) {
 
       try {
         const queryParams = new URLSearchParams();
-        queryParams.append("productos", "true");
-        if (municipalityId) {
-          queryParams.append("municipio", municipalityId.toString());
+        queryParams.append("emisor", "web");
+        if (provinceId) {
+          queryParams.append("provincia", provinceId.toString());
         }
 
         const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
