@@ -5,8 +5,8 @@ import CardSkeleton from "@/components/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
+import { useLatestProducts } from "@/hooks/productRequests/useLatestProducts";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-
 
 type SectionMasRecientesProps = {
   products?: Product[];
@@ -16,41 +16,13 @@ export const LatestProducts = ({
   products: productsProp,
 }: SectionMasRecientesProps) => {
   const { municipalityId } = useProductsByLocationStore();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
+  
+  // Usar el hook de caché
+  const { data: latestProductsData = [], isLoading } = useLatestProducts(6);
 
-  const getNewerProducts = async () => {
-    try {
-      const res = await fetch(`${server_url}/getNewerProducts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          count: 6,
-          municipio: municipalityId
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Error al obtener los productos más recientes");
-      }
-
-      const data = await res.json();
-      setProducts(data.products || []);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  useEffect(() => {
-    setIsMounted(true);
-    getNewerProducts();
-  }, [municipalityId]);
-
-  // Usar productos del estado interno si no vienen como prop
+  // Usar productos del estado de caché si no vienen como prop
   const productsToUse =
-    productsProp && productsProp.length > 0 ? productsProp : products;
+    productsProp && productsProp.length > 0 ? productsProp : latestProductsData;
 
   const lastSixProducts = useMemo(
     () => [...productsToUse],

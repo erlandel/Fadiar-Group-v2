@@ -11,7 +11,7 @@ import Footer from "@/components/footer/footer";
 import ButtonBackTop from "@/components/buttonBackTop/buttonBackTop";
 import ModalProductsByLocation from "@/components/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
-import { useSyncCart } from "@/hooks/useSyncCart";
+import { useSyncCart } from "@/hooks/cartRequests/useSyncCart";
 import useAuthStore from "@/store/authStore";
 
 function ScrollToTop() {
@@ -46,7 +46,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/changePassword') || pathname.startsWith('/recoverPassword')|| pathname.startsWith('/verificationCodeEmail');
   
-  const queryClient = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient());
 
   useEffect(() => {
     setIsHydrated(true);

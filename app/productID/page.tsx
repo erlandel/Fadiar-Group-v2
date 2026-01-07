@@ -5,23 +5,35 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import ShoppingCartIcon from "@/components/icons";
-import { useAddToCart } from "@/hooks/useAddToCart";
+import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/components/productLoadingId/productLoadingId";
 import { ProductID } from "@/types/productId";
 import RelatedProds from "@/section/relatedProds";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
-import useProductsByLocationStore from "@/store/productsByLocationStore";
+import { useInventory } from "@/hooks/productRequests/useInventory";
 
 function ProductContent({ id }: { id: string | null }) {
-  const { provinceId, municipalityId } = useProductsByLocationStore();
   const [qty, setQty] = useState(1);
-  const [product, setProduct] = useState<ProductID | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string>("");
-  const [allProducts, setAllProducts] = useState<ProductID[]>([]);
   const { addToCart, loading } = useAddToCart();
+  
+  const { data: inventoryData, isLoading } = useInventory();
+  const allProducts = (inventoryData?.products || []) as unknown as ProductID[];
+
+  // Encontrar el producto actual
+  const product = useMemo(() => {
+    if (!allProducts.length || !id) return null;
+    return allProducts.find((p) => p.id === parseInt(id)) || null;
+  }, [allProducts, id]);
+
+  // Sincronizar imagen seleccionada cuando cambia el producto (navegación)
+  useEffect(() => {
+    if (product?.img) {
+      setSelectedImage(product.img);
+    }
+  }, [product?.id]); // Se dispara solo cuando cambia el ID del producto
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -42,51 +54,6 @@ function ProductContent({ id }: { id: string | null }) {
     );
     return [...sameCategory, ...remaining].slice(0, 6);
   }, [allProducts, product]);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      setIsLoading(true);
-
-      try {
-        const queryParams = new URLSearchParams();
-        queryParams.append("emisor", "web");
-        if (provinceId) {
-          queryParams.append("provincia", provinceId.toString());
-        }
-
-        const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await res.json();
-        const products = data.tiendas?.flatMap((tienda: any) => 
-          (tienda.productos || []).map((p: any) => ({ ...p, tiendaId: tienda.id }))
-        ) || [];
-        setAllProducts(products);
-        const foundProduct = products.find(
-          (p: ProductID) => p.id === parseInt(id as string)
-        );
-
-        if (foundProduct) {
-          console.log("foundProduct ", foundProduct);
-          setProduct(foundProduct);
-          setSelectedImage(foundProduct.img);
-        }
-      } catch (error) {
-        console.error("Error loading product:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (id) {
-      fetchProduct();
-    }
-  }, [id, municipalityId]);
-
-
 
   const warrantyNumber = product ? Number(product.warranty ?? 0) : 0;
   const warrantyMonths = warrantyNumber > 0 ? warrantyNumber / 30 : 0;

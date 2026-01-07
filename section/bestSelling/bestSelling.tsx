@@ -5,6 +5,7 @@ import CardSkeleton from "@/components/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
+import { useBestSelling } from "@/hooks/productRequests/useBestSelling";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type BestSellingProps = {
@@ -12,48 +13,15 @@ type BestSellingProps = {
 };
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
-  const { provinceId, municipalityId } = useProductsByLocationStore();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
+  const { provinceId } = useProductsByLocationStore();
+  
+  // Usar el hook de caché
+  const { data: bestSellingProducts = [], isLoading } = useBestSelling(9);
 
-  const getAllProducts = async () => {
-    try {
-      const res = await fetch(`${server_url}/img_mas_vendido`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          count: 9,
-          provincia: provinceId,
-          emisor: "web"
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Error al obtener productos más vendidos");
-      }
-
-      const data = await res.json();
-      setProducts(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error fetching best selling products:", error);
-    }
-  };
-
-  useEffect(() => {
-    setIsMounted(true);
-    // Disparamos la carga cuando cambie la provincia o el municipio
-    // (municipalityId se usa como trigger para asegurar que el modal se cerró)
-    if (provinceId || municipalityId) {
-      getAllProducts();
-    }
-  }, [provinceId, municipalityId]);
-
-  // Usar productos del estado interno si no vienen como prop
+  // Usar productos del estado de caché si no vienen como prop
   const productsToUse: Product[] = Array.isArray(productsProp)
     ? productsProp
-    : products;
+    : bestSellingProducts;
 
   const sortedProducts = useMemo(
     () => [...productsToUse].sort((a, b) => b.id - a.id),

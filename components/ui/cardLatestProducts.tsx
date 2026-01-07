@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { server_url } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
-import { useAddToCart } from "@/hooks/useAddToCart";
+import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
 

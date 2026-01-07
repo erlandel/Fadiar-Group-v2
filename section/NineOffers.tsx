@@ -4,12 +4,12 @@ import CardNineOffers from "@/components/ui/cardNineOffers";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
+import { useNineOffers } from "@/hooks/productRequests/useNineOffers";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 
 export default function NineOffers() {
-  const [offers, setOffers] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: offers = [], isLoading } = useNineOffers(9);
   const [activeIndex, setActiveIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,68 +52,6 @@ export default function NineOffers() {
       window.removeEventListener("resize", handleResize);
     };
   }, [calculatePages, handleScroll, offers.length]);
-
-  const getProducts = async () => {
-    try {
-      setIsLoading(true);     
-      
-      const res = await fetch(`${server_url}/mas_vendidos`, {
-        headers: {  
-         
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ count: 9 }),
-       
-      });
-      const responseText = await res.text();
-
-      if (!res.ok) {
-        throw new Error(
-          `Error HTTP ${res.status}: ${responseText.slice(0, 120)}`
-        );
-      }
-
-      let data: { products?: Product[] } | null = null;
-      try {
-        data = responseText ? JSON.parse(responseText) : null;
-      } catch (parseError) {
-        throw new Error(
-          `Respuesta no válida del servidor, se esperaba JSON. Fragmento: ${responseText
-            .slice(0, 120)
-            .trim()}`
-        );
-      }
-
-      const hasValidOffer = (item: Product) => {
-        if (!item.temporal_price) return false;
-        const regular = parseFloat(item.price);
-        const temporal = parseFloat(item.temporal_price);
-        return !Number.isNaN(regular) && !Number.isNaN(temporal) && temporal > 0 && temporal < regular;
-      };
-
-      const prioritizedOffers = [...(data?.products ?? [])]
-        .sort((a, b) => {
-          const aOffer = hasValidOffer(a);
-          const bOffer = hasValidOffer(b);
-          if (aOffer !== bOffer) {
-            return aOffer ? -1 : 1;
-          }
-          return (a.id ?? 0) - (b.id ?? 0);
-        })
-        .slice(0, 9);
-
-      setOffers(prioritizedOffers);
-    } catch (error) {
-      console.error("Error al obtener las ofertas", error);
-      setOffers([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getProducts();
-  }, []);
 
   const renderOfferCard = (
     index: number,

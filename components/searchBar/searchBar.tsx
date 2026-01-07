@@ -4,52 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
-import useProductsByLocationStore from "@/store/productsByLocationStore";
+import { useInventory } from "@/hooks/productRequests/useInventory";
 
 export default function Serchbar() {
-  const { provinceId, municipalityId } = useProductsByLocationStore();
+  const { data, isLoading } = useInventory();
+  const allProducts = data?.products || [];
+  
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
-
-  // Fetch all products on component mount or when municipality/province changes
-  useEffect(() => {
-    const getAllProducts = async () => {
-      setIsLoading(true);
-      try {
-        const queryParams = new URLSearchParams();
-        queryParams.append("emisor", "web");
-        
-        if (provinceId) {
-          queryParams.append("provincia", provinceId.toString());
-        }
-
-        const res = await fetch(`${server_url}/inventory_manager?${queryParams.toString()}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          next: { 
-            revalidate: 300
-          },
-          cache: 'force-cache'
-        });
-
-        const data = await res.json();
-        const products = data.tiendas?.flatMap((tienda: any) => tienda.productos || []) || [];
-        setAllProducts(products);
-      } catch (error) {
-        console.error('Error loading products:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    getAllProducts();
-  }, [provinceId, municipalityId]);
 
   // Handle click outside to close dropdown
   useEffect(() => {

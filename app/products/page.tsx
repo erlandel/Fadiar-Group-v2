@@ -4,7 +4,8 @@ import FiltersDesktop from "@/components/pageProducts/filtersDesktop/filtersDesk
 import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo } from "react";
 import { Filter } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
@@ -20,16 +21,15 @@ import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector
 export default function Products() {
   const { 
     provinceId,
-    municipalityId, 
-    products: allProducts, 
-    tiendas, 
-    currencys, 
-    globalProducts,
-    lastFetchedMunicipalityId,
-    setProductsData,
-    setGlobalProducts 
   } = useProductsByLocationStore();
+
+  const { data: inventoryData, isLoading } = useInventory();
   
+  const allProducts = inventoryData?.products || [];
+  const tiendas = inventoryData?.tiendas || [];
+  const currencys = inventoryData?.currencys || null;
+  const globalProducts = allProducts; // En este contexto, allProducts ya son los productos disponibles
+
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
@@ -37,7 +37,6 @@ export default function Products() {
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 15;
@@ -241,90 +240,13 @@ export default function Products() {
     return filteredProducts.slice(startIndex, endIndex);
   }, [filteredProducts, currentPage, itemsPerPage]);
 
-  const { mutate: fetchProducts, isPending: isLoading } = useMutation({
-    mutationFn: async ({ pId }: { pId: number | null }) => {
-      const queryParams = new URLSearchParams();
-      queryParams.append("emisor", "web");
-      if (pId) queryParams.append("provincia", pId.toString());
-
-      const res = await fetch(
-        `${server_url}/inventory_manager?${queryParams.toString()}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!res.ok) throw new Error("Error fetching products");
-      return res.json();
-    },
-    onSuccess: (data) => {
-      const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
-      
-      // Procesar tiendas y productos
-      const processedTiendas = realTiendas.map((t: any) => ({
-        ...t,
-        productos: (t.productos || []).map((p: any) => ({
-          ...p,
-          tiendaId: t.id
-        }))
-      }));
-
-      const allProductsFromTiendas = processedTiendas.flatMap((t: any) => t.productos);
-
-      setProductsData({
-        products: allProductsFromTiendas,
-        tiendas: processedTiendas,
-        currencys: data.currencys || null,
-        municipalityId: municipalityId,
-      });
-
-      if (processedTiendas.length > 0) {
-        setSelectedStoreId(processedTiendas[0].id);
-      }
-    },
-    onError: (error) => {
-      console.error("Error loading products:", error);
-    },
-  });
-
   useEffect(() => {
-    setIsMounted(true);
-    // Cargar todos los productos globalmente para los filtros una sola vez
-    const fetchGlobalProducts = async () => {
-      if (globalProducts && globalProducts.length > 0) return;
-      try {
-        const queryParams = new URLSearchParams();
-        queryParams.append("emisor", "web"); // Mantener consistencia con el emisor
-        const res = await fetch(
-          `${server_url}/inventory_manager?${queryParams.toString()}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const allP =
-            data.tiendas?.flatMap((t: any) => t.productos || []) || [];
-          setGlobalProducts(allP);
-        }
-      } catch (error) {
-        console.error("Error fetching global products:", error);
-      }
-    };
-    fetchGlobalProducts();
-  }, [globalProducts, setGlobalProducts]);
-
-  useEffect(() => {
-    // Pedir productos cuando cambie la provincia o el municipio
-    // Aunque ya no pasamos el municipio a la API, seguimos usando el cambio de municipio
-    // como trigger para asegurar que la selección del usuario en el modal se haya completado.
-    if (provinceId != null || municipalityId != null) {
-      if (municipalityId !== lastFetchedMunicipalityId) {
-        fetchProducts({ pId: provinceId });
-      }
+    if (tiendas.length > 0 && !selectedStoreId) {
+      setSelectedStoreId(tiendas[0].id);
     }
-  }, [provinceId, municipalityId, lastFetchedMunicipalityId, fetchProducts]);
+  }, [tiendas, selectedStoreId]);
 
-  // Resetear página cuando cambian los filtros o si la página actual es mayor que el total de páginas
+  // Resetear página cuando cambian los filtros
   useEffect(() => {
     setCurrentPage(1);
   }, [category, brands, price, relevant, selectedStoreId]);
