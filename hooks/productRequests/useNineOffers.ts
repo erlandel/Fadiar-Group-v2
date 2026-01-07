@@ -4,10 +4,10 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 
 export const useNineOffers = (count: number = 9) => {
-  const { provinceId } = useProductsByLocationStore();
+  const { municipalityId } = useProductsByLocationStore();
 
   return useQuery<Product[]>({
-    queryKey: ["nine-offers", provinceId, count],
+    queryKey: ["nine-offers", municipalityId, count],
     queryFn: async () => {
       const res = await fetch(`${server_url}/img_mas_vendido`, {
         method: "POST",
@@ -16,8 +16,8 @@ export const useNineOffers = (count: number = 9) => {
         },
         body: JSON.stringify({ 
           count,
-          provincia: provinceId,
-          emisor: "web"
+          municipio: municipalityId,
+          
         }),
       });
 
@@ -49,6 +49,6 @@ export const useNineOffers = (count: number = 9) => {
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,
-    enabled: !!provinceId,
+    enabled: !!municipalityId,
   });
 };
