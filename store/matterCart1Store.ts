@@ -8,6 +8,10 @@ export type FormData = {
   municipality: string;
   delivery: boolean;
   customerName?: string;
+  firstName: string;
+  lastName1: string;
+  lastName2: string;
+  address: string;
 };
 
 export type FormState = {
@@ -25,6 +29,10 @@ const defaultFormData: FormData = {
   municipality: "",
   delivery: false,
   customerName: "",
+  firstName: "",
+  lastName1: "",
+  lastName2: "",
+  address: "",
 };
 
 type FormStore = FormState;

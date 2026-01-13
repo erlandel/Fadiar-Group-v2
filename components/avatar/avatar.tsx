@@ -31,6 +31,7 @@ export default function Avatar() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id_user: auth.user.id }),
+          
         });
 
         const data = await res.json();
@@ -40,6 +41,7 @@ export default function Avatar() {
           setAvatarSrc(newSrc);
         }
       } catch (error) {
+       
         console.error("Error fetching avatar:", error);
       }
     };

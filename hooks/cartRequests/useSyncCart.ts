@@ -34,6 +34,7 @@ export const useSyncCart = () => {
         }),
       });
 
+    
       if (response.ok) {
         const data = await response.json();
         console.log("Carrito obtenido del backend:", data);

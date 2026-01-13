@@ -78,7 +78,8 @@ export default function PersonalData() {
     }
   };
 
-  const handleSavePersonalData = async () => {
+  const handleSavePersonalData = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!auth) return;
 
     const result = personalDataSchema.safeParse(formData);
@@ -221,7 +222,8 @@ export default function PersonalData() {
     }
   };
 
-  const handleSaveAddress = async () => {
+  const handleSaveAddress = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!auth) return;
 
     const result = addressSchema.safeParse({ address: formData.address });
@@ -301,7 +303,8 @@ export default function PersonalData() {
     }
   };
 
-  const handleUpdatePassword = async () => {
+  const handleUpdatePassword = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!auth) return;
 
     const result = updatePasswordSchema.safeParse({
@@ -380,92 +383,97 @@ export default function PersonalData() {
   return (
     <>
       <div className="w-full">
-        <div className="flex justify-between items-center w-full">
-          <div>
-            <h5 className="text-primary font-bold text-xl">Datos personales</h5>
-          </div>
-
-          <div>
-            <button
-              onClick={handleSavePersonalData}
-              className="text-[#D69F04] text-md font-bold cursor-pointer"
-            >
-              Guardar
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="firstName">Nombre</label>
-              <InputField
-                type="text"
-                placeholder="Nombre"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleInputChange}
-              />
-              {errors.firstName && (
-                <span className="text-red-500 text-sm">{errors.firstName}</span>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="lastName">Apellidos</label>
-              <InputField
-                type="text"
-                placeholder="Apellidos"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-              />
-              {errors.lastName && (
-                <span className="text-red-500 text-sm">{errors.lastName}</span>
-              )}
+        <form onSubmit={handleSavePersonalData}>
+          <div className="flex justify-between items-center w-full">
+            <div>
+              <h5 className="text-primary font-bold text-xl">Datos personales</h5>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="phone">Teléfono</label>
-              <PhoneInput
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                placeholder="Teléfono"
-              />
-              {errors.phone && (
-                <span className="text-red-500 text-sm">{errors.phone}</span>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email">Correo Electrónico</label>
-              <InputField
-                type="email"
-                placeholder="Correo"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-              {errors.email && (
-                <span className="text-red-500 text-sm">{errors.email}</span>
-              )}
+            <div>
+              <button
+                type="submit"
+                className="text-[#D69F04] text-md font-bold cursor-pointer"
+              >
+                Guardar
+              </button>
             </div>
           </div>
-        </div>
 
-        <div className="mt-10">
+          <div className="mt-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="firstName">Nombre</label>
+                <InputField
+                  type="text"
+                  placeholder="Nombre"
+                  name="firstName"
+                  autoComplete="given-name"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
+                {errors.firstName && (
+                  <span className="text-red-500 text-sm">{errors.firstName}</span>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="lastName">Apellidos</label>
+                <InputField
+                  type="text"
+                  placeholder="Apellidos"
+                  name="lastName"
+                  autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                />
+                {errors.lastName && (
+                  <span className="text-red-500 text-sm">{errors.lastName}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="phone">Teléfono</label>
+                <PhoneInput
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  placeholder="Teléfono"
+                />
+                {errors.phone && (
+                  <span className="text-red-500 text-sm">{errors.phone}</span>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email">Correo Electrónico</label>
+                <InputField
+                  type="email"
+                  placeholder="Correo"
+                  name="email"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+                {errors.email && (
+                  <span className="text-red-500 text-sm">{errors.email}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form onSubmit={handleSaveAddress} className="mt-10">
           <div className="flex justify-between items-center w-full">
             <div>
               <h5 className="text-primary font-bold text-xl">Dirección</h5>
             </div>
 
-          <div>
-            <button
-              onClick={handleSaveAddress}
-              className="text-[#D69F04] text-md font-bold cursor-pointer"
-            >
-              Guardar
-            </button>
-          </div>
+            <div>
+              <button
+                type="submit"
+                className="text-[#D69F04] text-md font-bold cursor-pointer"
+              >
+                Guardar
+              </button>
+            </div>
           </div>
 
           <div className="mt-3">
@@ -482,22 +490,22 @@ export default function PersonalData() {
               <span className="text-red-500 text-sm">{errors.address}</span>
             )}
           </div>
-        </div>
+        </form>
 
-        <div className="mt-10">
+        <form onSubmit={handleUpdatePassword} className="mt-10">
           <div className="flex justify-between items-center w-full">
             <div>
               <h5 className="text-primary font-bold text-xl">Contraseña</h5>
             </div>
 
-          <div>
-            <button
-              onClick={handleUpdatePassword}
-              className="text-[#D69F04] text-md font-bold cursor-pointer"
-            >
-              Actualizar
-            </button>
-          </div>
+            <div>
+              <button
+                type="submit"
+                className="text-[#D69F04] text-md font-bold cursor-pointer"
+              >
+                Actualizar
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
@@ -507,6 +515,7 @@ export default function PersonalData() {
                 type="password"
                 placeholder="Contraseña"
                 name="password"
+                autoComplete="current-password"
                 value={formData.password}
                 onChange={handleInputChange}
               />
@@ -521,6 +530,7 @@ export default function PersonalData() {
                 type="password"
                 placeholder="Nueva contraseña"
                 name="confirmPassword"
+                autoComplete="new-password"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
               />
@@ -529,7 +539,7 @@ export default function PersonalData() {
               )}
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

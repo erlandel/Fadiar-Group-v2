@@ -15,9 +15,9 @@ function AccordionItem({ question, answer, isOpen, onToggle }: AccordionItemProp
     <div className="mb-4">
       <button
         onClick={onToggle}
-        className={`w-full flex items-center justify-between py-6 px-8 text-left transition-colors rounded-t-lg ${
+        className={`w-full flex items-center justify-between py-6 px-8 text-left transition-colors rounded-xl ${
           isOpen 
-            ? 'bg-[#022954] text-white' 
+            ? 'bg-[#022954] text-white rounded-t-xl rounded-b-none' 
             : 'bg-[#F5F7FA] text-[#022954] hover:bg-gray-200'
         }`}
       >
@@ -39,11 +39,11 @@ function AccordionItem({ question, answer, isOpen, onToggle }: AccordionItemProp
         </div>
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="px-8 py-8 bg-[#F5F7FA] text-gray-600 leading-relaxed rounded-b-xl">
+          className={`transition-all duration-300 ease-in-out custom-scrollbar ${
+            isOpen ? 'max-h-[500px] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+        <div className="px-8 py-8 bg-[#F5F7FA] text-gray-600 leading-relaxed rounded-b-xl whitespace-pre-wrap">
           {answer}
         </div>
       </div>

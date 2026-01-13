@@ -1,6 +1,5 @@
 "use client";
 
-
 import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,21 +17,20 @@ export default function SectionMoreproducts() {
         </span>
       </div>
 
-      <div className="flex flex-col mx-3 xl:flex-row justify-center items-center  ">
+      <div className="flex  flex-col mx-4 mt-5 sm:mt-0 xl:flex-row justify-center items-center gap-5">
         <div
           id="card1"
           data-animate="animate__backInLeft"
-          className=" xl:w-6/12  sm:mx-15 xl:mx-0  relative overflow-hidden rounded-xl animate-on-scroll "
+          className=" flex justify-center items-center w-auto sm:w-140 2xl:w-160 xl:mt-7 xl:ml-20  overflow-hidden rounded-xl animate-on-scroll "
         >
-          <div className="absolute inset-0 z-10 flex flex-col justify-center sm:p-2 xl:ml-32 w-55 sm:w-70 lg:w-80 xl:w-70  2xl:w-82">
-            <div            
-            className="text-black  ">
+          <div className="z-10 w-1/3  xl:mb-10">
+            <div className="text-black  ">
               <h4 className="font-bold text-xl">Ventilador</h4>
-              <p className="text-xs w-42 sm:text-base sm:w-full">
+              <p className="text-xs w-42 sm:text-base sm:w-64 2xl:w-72">
                 Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
                 scelerisque.
               </p>
-              <div className="mt-5 ">
+              <div className="mt-5 w-30 sm:w-auto">
                 <ButtonPromoHome1
                   name="Ver más"
                   color="#022954"
@@ -42,11 +40,12 @@ export default function SectionMoreproducts() {
               </div>
             </div>
           </div>
+
           <div>
             <img
               src="/images/vent.webp"
               alt="vent"
-              className="w-70 h-55 ml-25 mt-4 sm:w-90 sm:h-70 sm:ml-50  md:h-90 md:w-120   xl:ml-82 2xl:ml-90 xl:w-90  2xl:w-1/2 xl:h-1/2 object-cover "
+              className=" object-cover "
             />
           </div>
         </div>
@@ -54,16 +53,16 @@ export default function SectionMoreproducts() {
         <div
           id="card2"
           data-animate="animate__backInRight"
-          className=" xl:w-6/12 flex sm:mx-15 xl:mx-0  justify-center items-center relative  animate-on-scroll"
+          className=" flex w-auto  sm:w-140 2xl:w-160  justify-center items-center   animate-on-scroll"
         >
-          <div className="absolute left-[-10]  xl:left-auto xl:mr-60 2xl:mr-60  z-50 w-50 sm:w-70 md:w-80 p-4 text-black">
-            <h4 className="font-bold text-xl">Refrigeradores y Neveras</h4>
-            <p className="text-xs sm:text-base ">
+          <div className="w-1/9   text-black z-10 xl:mb-5">
+            <h4 className="font-bold text-xl w-50">Refrigeradores y Neveras</h4>
+            <p className="text-xs sm:text-base w-40 sm:w-64 xl:w-72  ">
               Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
               scelerisque, blandit duis sapien.
             </p>
 
-            <div className="mt-1 md:mt-5">
+            <div className="mt-1 md:mt-5 w-40">
               <ButtonPromoHome1
                 name="Ver más"
                 color="#022954"
@@ -77,7 +76,7 @@ export default function SectionMoreproducts() {
             <img
               src="/images/Fridge.webp"
               alt="vent"
-              className="ml-8 sm:ml-10    xl:h-70   object-contain xl:ml-30"
+              className="object-cover  sm:mt-5  ml-4 xl:mt-0"
             />
           </div>
         </div>
