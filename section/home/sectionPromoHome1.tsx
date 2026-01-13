@@ -4,50 +4,50 @@ import BottomShadow from "@/components/ui/bottomShadow";
 export default function SectionPromoHome1() {
   return (
     <>
-      <div className="bg-primary w-full h-[380px] xl:h-[400px] relative">
+      <div className="grid h-[400px] sm:h-[360px] lg:h-[300px]  xl:h-[400px]  ">
+        <div className="bg-primary w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[340px]  2xl:h-[410px] row-start-1 col-start-1"></div>
 
-         <div id="lorem" className="absolute text-white top-5 left-5 md:mt-10 xl:top-20  xl:left-10 2xl:left-40 "            >
-              <h1 className="text-[28px] sm:text-4xl  xl:text-5xl font-bold  animate__animated  animate__lightSpeedInLeft">
-                <samp className="text-[#D69F04] block">
-                  Variedad de productos
-                </samp>
-                <span>Electrodomésticos</span>
-              </h1>
-              <p className=" mt-4 w-85 xl:w-120 text-sm sm:text-base xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
-                scelerisque, blandit duis sapien phasellus turpis sem convallis
-                imperdiet tempus.
-              </p>
-            </div>
+        <div className="z-10 mt-8 row-start-1 col-start-1 flex flex-col md:flex-row md:justify-around items-center xl:justify-center  mx-4 xl:ml-10 2xl:mx-20">
+          <div
+            id="lorem"
+            className=" text-white md:mb-30 md:w-4/9  "
+          >
+            <h1 className="text-[28px]  lg:text-4xl xl:text-5xl font-bold  animate__animated  animate__lightSpeedInLeft">
+              <samp className="text-[#D69F04] block">
+                Variedad de productos
+              </samp>
+              <span>Electrodomésticos</span>
+            </h1>
+            <p className=" mt-4  xl:w-120 text-sm md:text-base xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
+              Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
+              scelerisque, blandit duis sapien phasellus turpis sem convallis
+              imperdiet tempus.
+            </p>
+          </div>
 
+          <div className="grid relative xl:place-items-start ">
+            <h1 className="row-start-1 col-start-1 z-20 font-['Just_Me_Again_Down_Here'] text-3xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white animate__animated animate__backInDown [animation-delay:1s] mt-4 xl:-mt-4  md:ml-20 xl:ml-20 ">
+              Échale Sazón a la Olla
+            </h1>
 
-        <div >
-          <h1 className="font-['Just_Me_Again_Down_Here'] absolute text-3xl md:text-4xl lg:text-5xl  2xl:text-6xl text-white left-4 sm:left-auto top-55 sm:top-auto sm:bottom-30 sm:right-45 md:bottom-50 md:right-45 lg:bottom-60 right-30 lg:right-70 xl:right-90 xl:bottom-80 animate__animated animate__backInDown  [animation-delay:1s] ">
-            Échale Sazón a la Olla
-          </h1>
+            <img
+              src="/images/pot.webp"
+              alt="Background"
+              fetchPriority="high"
+              className="row-start-1 col-start-1 z-10 h-60 md:h-70 lg:h-80 xl:h-110 2xl:h-130 object-cover xl:-mt-14"
+            />
 
-          <img
-            src="/images/pot.webp"
-            alt="Background"
-            fetchPriority="high"
-            className="absolute bottom-[-80] lg:bottom-[-170] right-0 md:right-[-70] xl:right-0 w-100 md:w-150 md:bottom-[-120] lg:w-200 xl:w-220   h-auto object-cover "
-          />          
-         
+            <BottomShadow
+              opacity={0.9}
+              className="w-[60%]  h-9  bottom-[-2] right-35  md:w-[70%] xl:right-60 xl:w-[70%] xl:bottom-6"
+            />
 
-             <BottomShadow
-                    opacity={0.9}
-                    className="w-[55%]  h-9 z-10 bottom-[-40] right-35 sm:right-23 md:bottom-[-53]
-                     lg:right-45 lg:bottom-[-72]  lg:w-[50%] xl:bottom-[-55] xl:w-[35%] xl:right-80 2xl:right-70" 
-                  />
+            <BottomShadow
+              opacity={0.9}
+              className="w-[60%]  h-9  bottom-[10]   right-[-5] md:w-[70%] xl:left-70 xl:w-[70%] xl:bottom-10 "
+            />
+          </div>
 
-                  
-                  <BottomShadow
-                    opacity={0.9}
-                    className="w-[60%] h-10  z-10 bottom-[-35]   right-0 sm:right-[-60] md:right-[-100]  md:bottom-[-40] 
-                    lg:right-[-70] lg:bottom-[-55]  lg:w-[50%] xl:right-14 xl:bottom-[-40] xl:w-[35%] 2xl:right-10 "
-                  />
-          
-               
         </div>
       </div>
     </>

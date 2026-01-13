@@ -23,7 +23,7 @@ export default function Pot() {
 
 
         <div >
-          <h1 className="font-['Just_Me_Again_Down_Here'] absolute text-3xl md:text-4xl lg:text-5xl  2xl:text-6xl text-white left-4 sm:left-auto top-55 sm:top-auto sm:bottom-30 sm:right-45 md:bottom-50 md:right-45 lg:bottom-60 right-30 lg:right-70 xl:right-60 xl:bottom-80 animate__animated animate__backInDown  [animation-delay:1s] ">
+          <h1 className="font-['Just_Me_Again_Down_Here'] absolute text-3xl md:text-4xl lg:text-5xl  2xl:text-6xl text-white left-4 sm:left-auto top-55 sm:top-auto sm:bottom-30 sm:right-45 md:bottom-50 md:right-45 lg:bottom-60 right-30 lg:right-70 xl:right-65 xl:bottom-75 animate__animated animate__backInDown  [animation-delay:1s] ">
             Échale Sazón a la Olla
           </h1>
 
@@ -31,7 +31,7 @@ export default function Pot() {
             src="/images/pot.webp"
             alt="Background"
             fetchPriority="high"
-            className="absolute bottom-[-80] lg:bottom-[-170] right-0 md:right-[-70] xl:right-[-100] w-100 md:w-150 md:bottom-[-120] lg:w-200 xl:w-220   h-auto object-cover  "
+            className="absolute bottom-[-80] lg:bottom-[-170] right-0 md:right-[-70] xl:right-[-100] w-100 md:w-150 md:bottom-[-120]  xl:w-190 xl:mr-15 xl:mb-22   h-auto object-cover  "
           />          
          
 
@@ -45,7 +45,7 @@ export default function Pot() {
                   <BottomShadow
                     opacity={0.9}
                     className="w-[60%] h-10  z-10 bottom-[-35]   right-0 sm:right-[-60] md:right-[-100]  md:bottom-[-40] 
-                    lg:right-[-70] lg:bottom-[-55]  lg:w-[50%]  xl:bottom-[-40] xl:w-[35%] xl:right-0 "
+                    lg:right-[-70] lg:bottom-[-55]  lg:w-[50%]  xl:bottom-[-45] xl:w-[35%] xl:right-[-20] "
                   />
           
                
