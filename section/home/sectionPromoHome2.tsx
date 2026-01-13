@@ -5,6 +5,7 @@ export default function SectionPromoHome2() {
   return (
     <>
       <div className="grid h-[480px] sm:h-135 md:h-auto  items-center">
+
         <div className="bg-primary w-full h-[440px] sm:h-[480px]  md:h-[330px] relative row-start-1 col-start-1">
           <div>
             <img
@@ -54,6 +55,7 @@ export default function SectionPromoHome2() {
 
           
         </div>
+        
       </div>
     </>
   );
