@@ -29,10 +29,10 @@ export default function Faq() {
               </h1>
 
               <div className="w-86 ">
-                <p className="mt-2 ">
+                {/* <p className="mt-2 ">
                   Lorem ipsum Sit amet consectetur. At tristique est adipiscing
                   pellentesque vel sit id at
-                </p>
+                </p> */}
               </div>
             </div>
 
