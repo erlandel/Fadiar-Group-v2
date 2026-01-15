@@ -2,13 +2,11 @@
 import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
 import FiltersDesktop from "@/components/pageProducts/filtersDesktop/filtersDesktop";
 import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Filter } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { server_url } from "@/lib/apiClient";
 import Pot from "@/section/pot/pot";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import { LatestProducts } from "@/section/latestProducts";
@@ -38,6 +36,8 @@ export default function Products() {
   const [relevant, setRelevant] = useState<string[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const storeSelectorRef = useRef<HTMLDivElement>(null);
 
   const itemsPerPage = 15;
 
@@ -257,6 +257,12 @@ export default function Products() {
     }
   }, [totalPages, currentPage]);
 
+  useEffect(() => {
+    if (storeSelectorRef.current) {
+      storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentPage]);
+
   const removeFilter = (
     type: "category" | "brand" | "relevant",
     value: string
@@ -338,7 +344,9 @@ export default function Products() {
             tiendas={tiendas}
             selectedStoreId={selectedStoreId}
             setSelectedStoreId={setSelectedStoreId}
+            ref={storeSelectorRef}
           />
+
 
           <div
             id="products"
