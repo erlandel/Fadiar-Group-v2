@@ -81,8 +81,8 @@ export default function Serchbar() {
   return (
     <>
       <div>
-        <div className="flex justify-center w-full  xl:w-160  ">
-          <div ref={searchRef} className="relative w-full  md:min-w-120  lg:max-w-160">
+        <div className="flex justify-center w-full  xl:w-185 xl:ml-4 ">
+          <div ref={searchRef} className="relative w-full  md:min-w-120  xl:max-w-185">
             <input
               type="text"
               placeholder="Buscar producto"

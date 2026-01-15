@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { UserCircle } from "lucide-react";
 import Link from "next/link";
 import {
+  HugeiconsUserAi,
   MdiRegister,
   NextUilExit,
   TablerUserCircle,
@@ -13,6 +14,7 @@ import useCartStore from "@/store/cartStore";
 import { useRouter } from "next/navigation";
 import { server_url } from "@/lib/apiClient";
 import { refreshToken } from "@/utils/refreshToken";
+import SuccesMessage from "@/messages/succesMessage";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +44,7 @@ export default function UserDropdown() {
         });
 
         if (response.ok) {
+          SuccesMessage("Sesión cerrada con éxito");
           clearAuth();
           clearCart();
           if (typeof window !== "undefined") {
@@ -94,7 +97,11 @@ export default function UserDropdown() {
         className="cursor-pointer focus:outline-none"
         aria-label="User menu"
       >
-        <TablerUserCircle className="mt-1 " />
+        {auth?.access_token ? (
+          <HugeiconsUserAi className="mt-1 " />
+        ) : (
+          <TablerUserCircle className="mt-1 " />
+        )}
       </button>
 
       {isOpen && (

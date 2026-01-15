@@ -4,10 +4,10 @@ export const SectionAbout1 = () => {
       <div className="px-4 md:px-25 2xl:px-28">
         <div className=" mt-10">
           <p className="text-xs text-gray-400 mb-4">
-            <span className="text-gray-400">Home - </span>
-            <span className="text-primary font-semibold">About Us</span>
+            <span className="text-gray-400">Inicio - </span>
+            <span className="text-primary font-semibold">Sobre Nosotros</span>
           </p>
-          <h1 className="text-3xl text-primary font-bold">About Us</h1>
+          <h1 className="text-3xl text-primary font-bold">Sobre Nosotros</h1>
         </div>
 
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 sm:gap-20 2xl:gap-25 my-5 text-sm sm:text-lg">

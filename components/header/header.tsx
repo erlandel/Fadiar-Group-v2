@@ -24,9 +24,9 @@ export default function Header() {
 
   return (
     <div className="relative w-full bg-white z-50">
-      <div className={`pt-4 flex justify-between px-4 md:justify-between lg:px-25 items-start ${isCart4 ? "2xl:px-20" : "2xl:px-28"}`}>
+      <div className={`pt-4 flex justify-between px-4 xl:justify-between xl:px-25 items-start ${isCart4 ? "2xl:px-20" : "2xl:px-28"}`}>
         <Link href="/">
-          <div className="hidden md:block cursor-pointer">
+          <div className="hidden xl:block cursor-pointer">
             <Image
               src="/images/logo.svg"
               alt="Logo"
@@ -37,11 +37,11 @@ export default function Header() {
           </div>
         </Link>
 
-        <div className="hidden md:block">
+        <div className="hidden xl:block">
           <Serchbar />
         </div>
 
-        <div className="md:hidden mr-auto">
+        <div className="xl:hidden mr-auto">
           <Menu />
         </div>
 
@@ -69,11 +69,11 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden xl:block">
         <Menu />
       </div>
 
-      <div className="md:hidden px-4 mt-4 pb-4">
+      <div className="xl:hidden px-4 mt-4 pb-4">
         <Serchbar />
       </div>
     </div>

@@ -125,6 +125,7 @@ export default function InputAuthCode({
             onKeyDown={handleKeyDown(i)}
             onPaste={handlePaste(i)}
             disabled={disabled}
+            autoCapitalize="off"
             className="w-10 h-10 sm:w-12 sm:h-12  text-center text-xl sm:text-2xl border-3 border-[#d1d5db] rounded-lg focus:outline-none focus:ring-[1.3px] focus:ring-[#bdbdbd] focus:shadow-[0_0_0_4px_rgba(0,0,0,0.15)] placeholder:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
             aria-label={`Dígito ${i + 1}`}
           />

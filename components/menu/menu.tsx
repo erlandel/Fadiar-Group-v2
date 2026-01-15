@@ -13,9 +13,11 @@ export default function Menu() {
   const links = [
     { href: "/", label: "Inicio" },
     { href: "/products", label: "Productos" },
-    { href: "/about", label: "About Us" },
-    { href: "/faq", label: "FAQ" },
-    { href: "/contacto", label: "Contacto" },
+    { href: "/about", label: "Sobre Nosotros" },
+    { href: "/faq", label: "Preguntas Frecuentes" },
+    { href: "/warranty", label: "Garantia" },
+     { href: "/shipping", label: "Envios" },
+      { href: "/contacto", label: "Contacto" },
   ];
 
   const checkActive = (href: string) => {
@@ -29,7 +31,7 @@ export default function Menu() {
       {/* Botón hamburguesa - Solo visible en móvil */}
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden  top-4 left-4 z-50 p-2"
+        className="xl:hidden  top-4 left-4 z-50 p-2"
         aria-label="Abrir menú"
       >
      <MaterialSymbolsMenu className="w-6 h-6" />
@@ -38,14 +40,14 @@ export default function Menu() {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0   bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0   bg-opacity-50 z-40 xl:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Menú móvil - Drawer */}
       <div
-        className={`fixed top-0  left-0  p-2 h-9/12 rounded-2xl  w-75 bg-white z-50 transform transition-transform duration-300 md:hidden ${
+        className={`fixed top-0  left-0  p-2 h-9/12 rounded-2xl  w-75 bg-white z-50 transform transition-transform duration-300 xl:hidden ${
           isOpen ? "translate-x-2" : "-translate-x-full"
         }`}
       >
@@ -85,8 +87,14 @@ export default function Menu() {
         </div>
       </div>
 
+
+
+
+
+
+
       {/* Menú desktop - Solo visible en md y superiores */}
-      <div className="hidden md:block w-full bg-white ml-5">
+      <div className="hidden xl:block w-full bg-white ml-5">
         <nav className="flex justify-center gap-10 text-sm p-1">
           {links.map((link) => {
             const isActive = checkActive(link.href);
