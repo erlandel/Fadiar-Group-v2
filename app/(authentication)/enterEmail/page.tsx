@@ -2,13 +2,12 @@
 import InputAuth from "@/components/inputAuth/inputAuth";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { RecoverPasswordSchemaFormData, recoverPasswordSchema } from "@/validations/recoverPasswordSchema";
-import { useMutation } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
+import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function RecoverPassword() {
+export default function EnterEmail() {
   const router = useRouter();
   
   const [formData, setFormData] = useState<RecoverPasswordSchemaFormData>({
@@ -25,63 +24,8 @@ export default function RecoverPassword() {
     Partial<Record<keyof RecoverPasswordSchemaFormData, boolean>>
   >({});
 
-  const loginMutation = useMutation({    
-    mutationFn: async (payload: { email: string }) => {
-      console.log("email: "+payload.email);
-      const response = await fetch(
-        "https://app.fadiar.com:444/prueba/api/recuperar_credenciales_por_correo",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
- 
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error en la solicitud");
-      }
-      const data = await response.json();
-      return data;
-    },
-    onSuccess: () => {
-      router.push("/login");
-    },
-
-    onError: () => {
-      setShowErrors(true);
-      setErrorBannerMessage(
-        "Usuario no encontrado. Verifica tu correo electrónico."
-      );
-    },
-  });
 
 
-  const handleLoginClick = async () => {
-    setShowErrors(true);
-    setErrors({});
-    setEditedFields({});
-    const result = recoverPasswordSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: Partial<Record<keyof RecoverPasswordSchemaFormData, string>> = {};
-      result.error.issues.forEach((issue) => {
-        if (issue.path[0]) {
-          fieldErrors[issue.path[0] as keyof RecoverPasswordSchemaFormData] = issue.message;
-        }
-      });
-      setErrors(fieldErrors);
-      const firstMessage = result.error.issues[0]?.message ?? "";
-      setErrorBannerMessage(firstMessage);
-      return;
-    }
-    setErrorBannerMessage("");
-    loginMutation.mutate({
-      email: formData.email,     
-    });
-  };
 
   const handleChange =
     (field: keyof RecoverPasswordSchemaFormData) =>
@@ -92,7 +36,24 @@ export default function RecoverPassword() {
 
   const handleSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    handleLoginClick();
+    try {
+      recoverPasswordSchema.parse(formData);
+      setErrors({});
+      setShowErrors(false);
+      setErrorBannerMessage("");
+      localStorage.setItem("verificationEmail", formData.email);
+      router.push("/verificationCodeEmail");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Partial<Record<keyof RecoverPasswordSchemaFormData, string>> = {};
+        for (const issue of error.issues) {
+          newErrors[issue.path[0] as keyof RecoverPasswordSchemaFormData] = issue.message;
+        }
+        setErrors(newErrors);
+        setShowErrors(true);
+        setErrorBannerMessage("Por favor corrige los errores en el formulario.");
+      }
+    }
   };
 
   const isEmailValid = (email: string) =>
@@ -108,7 +69,7 @@ export default function RecoverPassword() {
           <div className="flex justify-center items-center flex-col">
             <div>
               <h3 className="text-primary text-2xl sm:text-3xl font-bold">
-                Recuperar contraseña
+                 Verificar cuenta
               </h3>
             </div>
 
@@ -124,11 +85,12 @@ export default function RecoverPassword() {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange("email")}
-                  hasError={
-                    showErrors ? !!errors.email && !editedFields.email : false
-                  }
-                  hideErrorMessage
+                  hasError={showErrors && !!errors.email}
+                  hideErrorMessage={false}
                 />
+                {showErrors && errors.email && (
+                  <MessageErrorAuth message={errors.email} />
+                )}
               </div>
             </form>
 
@@ -142,23 +104,15 @@ export default function RecoverPassword() {
               <button
                 className="bg-primary text-white w-full  rounded-lg px-3 py-2 cursor-pointer hover:bg-[#034078] hover:shadow-lg  disabled:opacity-40 disabled:cursor-default disabled:pointer-events-none
               "
-                onClick={handleLoginClick}
-                disabled={loginMutation.isPending}
+                onClick={handleSubmitForm}
+                disabled={!isFormValid}
               >
-                {loginMutation.isPending ? (
-                  <span className="inline-flex items-center justify-center gap-2">
-                    <Loader className="h-5 w-5 animate-spin" />
-                    Recuperar contraseña
-                  </span>
-                ) : (
-                  "Recuperar contraseña"
-                )}
+                Verificar cuenta
               </button>
             </div>
 
             <div className="mt-6 space-y-2   text-primary text-center text-xs sm:text-sm">
-              <div className="flex">
-                <p className="text-gray-600">¿Recuerdas tu contraseña? </p>
+              <div className="flex">      
                 <Link
                   href="/login"
                   className=" no-underline  hover:underline transition-colors ml-1"

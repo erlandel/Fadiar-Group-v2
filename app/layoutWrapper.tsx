@@ -44,7 +44,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const [isHydrated, setIsHydrated] = useState(false);
   const hasSynced = useRef(false);
 
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/changePassword') || pathname.startsWith('/recoverPassword')|| pathname.startsWith('/verificationCodeEmail');
+  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register') || pathname.startsWith('/verificationEmail')|| pathname.startsWith('/changePassword') || pathname.startsWith('/recoverPassword')|| pathname.startsWith('/verificationCodeEmail')|| pathname.startsWith('/enterEmail');
   
   const [queryClient] = useState(() => new QueryClient());
 
