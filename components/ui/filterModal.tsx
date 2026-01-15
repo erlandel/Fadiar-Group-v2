@@ -214,7 +214,11 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
                   type="radio"
                   name={radioGroupId}
                   checked={isSelected}
-                  onChange={() => onChange?.([opt.value])}
+                  onClick={() => {
+                    const newSelected = isSelected ? [] : [opt.value];
+                    onChange?.(newSelected);
+                  }}
+                  onChange={() => {}}
                   className="h-4 w-4 border-gray-300 cursor-pointer accent-[#17243b]"
                 />
                 {opt.label}

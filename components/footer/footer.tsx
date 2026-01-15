@@ -104,10 +104,10 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <EmailIcon width={24} height={24} className="text-accent" />
             <a
-              href="mailto:comercial@fadiar.com"
+              href="mailto:atencionalcliente@grupofadiar.com"
               className="text-gray-300 hover:text-accent transition-colors"
             >
-              comercial@fadiar.com
+              atencionalcliente@grupofadiar.com
             </a>
           </div>
          
