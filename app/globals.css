@@ -38,19 +38,7 @@ body {
   scrollbar-width: none;
 }
 
-/* Animación para login page */
-@keyframes blink {
-  0% {
-    background: #ffffff;
-  }
-  25% {
-    background: #ffffff;
-  }
-}
 
-.animate-blink {
-  animation: blink 3s linear infinite;
-}
 
 /* Scroll-triggered animations base */
 .animate-on-scroll {
@@ -135,5 +123,6 @@ body {
   margin-left: 0.25rem;
   color: #d69f04;
 }
+
 
 

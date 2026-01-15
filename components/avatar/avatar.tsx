@@ -1,12 +1,13 @@
 "use client";
 import { MaterialIconThemeDependenciesUpdate } from "@/icons/icons";
 import { server_url } from "@/lib/apiClient";
+import { refreshToken } from "@/utils/refreshToken";
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/store/authStore";
 import useImgFileStore from "@/store/imgFileStore";
 
 export default function Avatar() {
-  const { auth } = useAuthStore();
+  const { auth, setAuth } = useAuthStore();
   const { pendingAvatar, setPendingAvatar } = useImgFileStore();
   const [avatarSrc, setAvatarSrc] = useState<string>("/images/avatar.webp");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -25,12 +26,25 @@ export default function Avatar() {
 
   useEffect(() => {
     const fetchAvatar = async () => {
-      if (!auth?.user?.id || pendingAvatar) return;
-      try {
-        const res = await fetch(`${server_url}/getUserImageName`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_user: auth.user.id }),
+          if (!auth?.user?.id || pendingAvatar) return;
+          let currentAccessToken = auth.access_token;
+          if (!currentAccessToken) {
+            const newAccessToken = await refreshToken(auth, setAuth);
+            if (newAccessToken) {
+              currentAccessToken = newAccessToken;
+            } else {
+              console.error("Failed to refresh token, cannot fetch avatar.");
+              return;
+            }
+          }
+          try {
+            const res = await fetch(`${server_url}/getUserImageName`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${currentAccessToken}`,
+              },
+              body: JSON.stringify({ id_user: auth.user.id }),
           
         });
 

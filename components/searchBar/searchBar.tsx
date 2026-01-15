@@ -6,6 +6,21 @@ import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 
+function levenshtein(a: string, b: string) {
+  const m = a.length;
+  const n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1].toLowerCase() === b[j - 1].toLowerCase() ? 0 : 1;
+      dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+    }
+  }
+  return dp[m][n];
+}
+
 export default function Serchbar() {
   const { data, isLoading } = useInventory();
   const allProducts = data?.products || [];
@@ -38,12 +53,21 @@ export default function Serchbar() {
       setSearchResults([]);
       setIsOpen(false);
     } else {
-      const filtered = allProducts.filter(
-        (product) =>
-          product.name.toLowerCase().includes(value.toLowerCase()) ||
-          product.brand.toLowerCase().includes(value.toLowerCase())
-      );
-      setSearchResults(filtered);
+      const q = value.trim().toLowerCase();
+      const threshold = Math.max(2, Math.floor(q.length * 0.4));
+      const ranked = allProducts
+        .map((product) => {
+          const name = product.name.toLowerCase();
+          const brand = product.brand.toLowerCase();
+          const includes = name.includes(q) || brand.includes(q);
+          const dist = Math.min(levenshtein(name, q), levenshtein(brand, q));
+          const score = includes ? 0 : dist;
+          return { product, score };
+        })
+        .filter((item) => item.score <= threshold)
+        .sort((a, b) => a.score - b.score)
+        .map((item) => item.product);
+      setSearchResults(ranked);
       setIsOpen(true);
     }
   };

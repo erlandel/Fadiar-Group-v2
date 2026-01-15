@@ -6,6 +6,7 @@ import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { server_url } from "@/lib/apiClient";
 import ShoppingCartIcon from "@/components/icons";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
+import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
 import ProductLoadingId from "@/components/productLoadingId/productLoadingId";
@@ -13,12 +14,15 @@ import { ProductID } from "@/types/productId";
 import RelatedProds from "@/section/relatedProds";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
+import { Loader } from "lucide-react";
 
 function ProductContent({ id }: { id: string | null }) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const { addToCart, loading } = useAddToCart();
-  
+  const cartItems = useCartStore((state) => state.items);
+  const [isInCart, setIsInCart] = useState(false);
+
   const { data: inventoryData, isLoading } = useInventory();
   const allProducts = (inventoryData?.products || []) as unknown as ProductID[];
 
@@ -27,6 +31,12 @@ function ProductContent({ id }: { id: string | null }) {
     if (!allProducts.length || !id) return null;
     return allProducts.find((p) => p.id === parseInt(id)) || null;
   }, [allProducts, id]);
+
+  useEffect(() => {
+    if (product?.id !== undefined && product?.id !== null) {
+      setIsInCart(cartItems.some((item) => item.productId === product.id));
+    }
+  }, [product?.id, cartItems, product]);
 
   // Sincronizar imagen seleccionada cuando cambia el producto (navegación)
   useEffect(() => {
@@ -72,7 +82,7 @@ function ProductContent({ id }: { id: string | null }) {
       image: product.img,
       quantity: qty,
       tiendaId: product.tiendaId,
-      count: product.count, 
+      count: product.count,
     };
 
     addToCart(itemToAdd);
@@ -207,9 +217,11 @@ function ProductContent({ id }: { id: string | null }) {
 
                 {/* Cantidad */}
                 <div className="mt-auto pt-4 flex items-center justify-between">
-                  <div className={`flex items-center rounded-xl border border-primary font-bold `}>
+                  <div
+                    className={`flex items-center rounded-xl border border-primary font-bold `}
+                  >
                     <button
-                      onClick={() => setQty(Math.max(1, qty - 1))}                    
+                      onClick={() => setQty(Math.max(1, qty - 1))}
                       className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-l-xl"
                     >
                       −
@@ -218,7 +230,7 @@ function ProductContent({ id }: { id: string | null }) {
                       {qty}
                     </span>
                     <button
-                      onClick={() => setQty(qty + 1)}              
+                      onClick={() => setQty(qty + 1)}
                       className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-r-xl"
                     >
                       +
@@ -227,14 +239,22 @@ function ProductContent({ id }: { id: string | null }) {
 
                   <button
                     className={`rounded-xl border border-primary transition-colors px-10 py-3 ${
-                      product.count === 0 
-                        ? "bg-gray-200 border-gray-300 text-gray-400" 
-                        : "hover:bg-primary hover:text-white"
+                      loading
+                        ? "bg-primary text-white "
+                        : isInCart
+                          ? "bg-primary text-white"
+                          : "hover:bg-primary hover:text-white"
                     }`}
-                    onClick={product.count === 0 ? undefined : handleAddToCart}
-                    disabled={product.count === 0}
+                    onClick={loading ? undefined : handleAddToCart}
+                    disabled={loading}
                   >
-                    <ShoppingCartIcon className="h-6 w-6" />
+                    {loading ? (
+                      <div className="flex h-6 w-6 items-center justify-center">
+                        <Loader className="h-6 w-6 animate-spin" strokeWidth={3} />
+                      </div>
+                    ) : (
+                      <ShoppingCartIcon className="h-6 w-6" />
+                    )}
                   </button>
                 </div>
 

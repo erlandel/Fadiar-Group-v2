@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
+import useCartStore from "@/store/cartStore";
+import { Loader } from "lucide-react";
 
 
 export default function CardLatestProducts({
@@ -23,6 +25,14 @@ export default function CardLatestProducts({
   const router = useRouter();
   const { addToCart, loading } = useAddToCart();
   const [quantity, setQuantity] = useState(Math.max(1, quantityProducts ?? 1));
+  const cartItems = useCartStore((state) => state.items);
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    if (productId !== undefined && productId !== null) {
+      setIsInCart(cartItems.some((item) => item.productId === productId));
+    }
+  }, [productId, cartItems]);
 
   useEffect(() => {
     if (quantityProducts && quantityProducts > 0) {
@@ -163,10 +173,23 @@ export default function CardLatestProducts({
               </div>
 
               <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5"
-                onClick={handleAddToCart}
+                className={`rounded-xl  border border-primary transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5 ${
+                  loading
+                    ? "bg-primary text-white "
+                    : isInCart
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary hover:text-white"
+                }`}
+                onClick={loading ? undefined : handleAddToCart}
+                disabled={loading}
               >
-                <ShoppingCartIcon className="h-5 w-5" />
+                {loading ? (
+                  <div className="flex h-5 w-5 items-center justify-center">
+                    <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                  </div>
+                ) : (
+                  <ShoppingCartIcon className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
+import { Loader } from "lucide-react";
 
 interface CardProps {
   category?: string;
@@ -46,6 +47,14 @@ export default function Card({
   const router = useRouter();
   const { addToCart, loading } = useAddToCart();
   const removeItem = useCartStore((state) => state.removeItem);
+  const cartItems = useCartStore((state) => state.items);
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    if (productId !== undefined && productId !== null) {
+      setIsInCart(cartItems.some((item) => item.productId === productId));
+    }
+  }, [productId, cartItems]);
 
   const isCartAction = actionIcon === "cart";
   const isDeleteAction = actionIcon === "delete";
@@ -208,10 +217,23 @@ export default function Card({
                   </div>
 
                   <button
-                    className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-1.5  px-2.5 xl:py-2 xl:px-4 2xl:py-2.5 2xl:px-5"
-                    onClick={handleAddToCart}
+                    className={`rounded-xl  border border-primary transition-colors py-1.5  px-2.5 xl:py-2 xl:px-4 2xl:py-2.5 2xl:px-5 ${
+                      loading
+                        ? "bg-primary text-white "
+                        : isInCart
+                          ? "bg-primary text-white"
+                          : "hover:bg-primary hover:text-white"
+                    }`}
+                    onClick={loading ? undefined : handleAddToCart}
+                    disabled={loading}
                   >
-                    <ShoppingCartIcon className="h-5 w-5" />
+                    {loading ? (
+                      <div className="flex h-5 w-5 items-center justify-center">
+                        <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                      </div>
+                    ) : (
+                      <ShoppingCartIcon className="h-5 w-5" />
+                    )}
                   </button>
                 </>
               ) : isDeleteAction ? (
@@ -317,10 +339,23 @@ export default function Card({
                   </div>
 
                   <button
-                    className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-1.5  px-2 xl:py-2 xl:px-4 2xl:py-2.5 2xl:px-5"
-                    onClick={handleAddToCart}
+                    className={`rounded-xl  border border-primary transition-colors py-1.5  px-2 xl:py-2 xl:px-4 2xl:py-2.5 2xl:px-5 ${
+                      loading
+                        ? "bg-primary text-white "
+                        : isInCart
+                          ? "bg-primary text-white"
+                          : "hover:bg-primary hover:text-white"
+                    }`}
+                    onClick={loading ? undefined : handleAddToCart}
+                    disabled={loading}
                   >
-                    <ShoppingCartIcon className="h-5 w-5" />
+                    {loading ? (
+                      <div className="flex h-5 w-5 items-center justify-center">
+                        <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                      </div>
+                    ) : (
+                      <ShoppingCartIcon className="h-5 w-5" />
+                    )}
                   </button>
                 </>
               ) : isDeleteAction ? (

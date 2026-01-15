@@ -5,6 +5,7 @@ import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
 import { server_url } from "@/lib/apiClient";
 import ErrorMessage from "@/messages/errorMessage";
+import SuccesMessage from "@/messages/succesMessage";
 import { useSyncCart } from "./useSyncCart";
 
 export const useAddToCart = () => {
@@ -57,6 +58,7 @@ export const useAddToCart = () => {
         // addOrUpdateItemLocal(item);
         // Sincronizamos el carrito completo para asegurar consistencia
         await syncCart();
+        SuccesMessage("Producto agregado al carrito");
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error("El backend rechazó la petición:", errorData);

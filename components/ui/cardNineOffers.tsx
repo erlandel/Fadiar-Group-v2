@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
+import useCartStore from "@/store/cartStore";
+import { Loader } from "lucide-react";
 
 
 export default function CardNineOffers({
@@ -24,6 +26,14 @@ export default function CardNineOffers({
   const router = useRouter();
   const { addToCart, loading } = useAddToCart();
   const [quantity, setQuantity] = useState(Math.max(1, quantityProducts ?? 1));
+  const cartItems = useCartStore((state) => state.items);
+  const [isInCart, setIsInCart] = useState(false);
+
+  useEffect(() => {
+    if (productId !== undefined && productId !== null) {
+      setIsInCart(cartItems.some((item) => item.productId === productId));
+    }
+  }, [productId, cartItems]);
 
   useEffect(() => {
     if (quantityProducts && quantityProducts > 0) {
@@ -165,10 +175,23 @@ export default function CardNineOffers({
               </div>
 
               <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5"
-                onClick={handleAddToCart}
+                className={`rounded-xl  border border-primary transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5 ${
+                  loading
+                    ? "bg-primary text-white "
+                    : isInCart
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary hover:text-white"
+                }`}
+                onClick={loading ? undefined : handleAddToCart}
+                disabled={loading}
               >
-                <ShoppingCartIcon className="h-5 w-5" />
+                {loading ? (
+                  <div className="flex h-5 w-5 items-center justify-center">
+                    <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                  </div>
+                ) : (
+                  <ShoppingCartIcon className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>
@@ -194,7 +217,7 @@ export default function CardNineOffers({
             />
           </div>
 
-          <div className="flex flex-1 flex-col overflow-hidden min-w-0">
+          <div className="flex flex-1 flex-col min-w-0">
             <div>
               <p className="text-sm text-[#777777] line-clamp-1">{category}</p>
             </div>
@@ -238,7 +261,7 @@ export default function CardNineOffers({
             )}
 
             <div
-              className="mt-auto flex flex-wrap items-center justify-between gap-3 font-bold"
+              className="mt-auto flex flex-wrap items-center justify-between gap-3 font-bold px-2"
               onClick={handleButtonClick}
             >
               <div className="flex items-center justify-between w-full">
@@ -263,10 +286,23 @@ export default function CardNineOffers({
               </div>
 
               <button
-                className="rounded-xl  border border-primary hover:bg-primary hover:text-white transition-colors py-2 px-4 xl:px-2.5 2xl:py-2.5 2xl:px-5"
-                onClick={handleAddToCart}
+                className={`rounded-xl  border border-primary transition-colors py-2 px-4 xl:px-2.5 2xl:py-2.5 2xl:px-5 ${
+                  loading
+                    ? "bg-primary text-white"
+                    : isInCart
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary hover:text-white"
+                }`}
+                onClick={loading ? undefined : handleAddToCart}
+                disabled={loading}
               >
-                <ShoppingCartIcon className="h-5 w-5" />
+                {loading ? (
+                  <div className="flex h-5 w-5 items-center justify-center">
+                    <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                  </div>
+                ) : (
+                  <ShoppingCartIcon className="h-5 w-5" />
+                )}
               </button>
               </div>
             </div>
