@@ -11,7 +11,7 @@ export default function MyProfile() {
   const userName = auth?.person.name || "";
   return (
     <>
-      <div className="mx-4 lg:mx-40 xl:mx-85">
+      <div className="mx-4  xl:mx-85">
         <div className="mt-10 ">
           <div>
             <h1 className="text-3xl text-primary font-bold ">Mi Perfil</h1>
@@ -20,7 +20,7 @@ export default function MyProfile() {
             </p>
           </div>
 
-          <div className="mt-10 flex flex-col md:flex-row w-full space-x-10">
+          <div className="mt-10 flex flex-col lg:flex-row w-full space-x-10">
             <div className="w-auto py-6 md:py-0 ">
               <Avatar />
             </div>

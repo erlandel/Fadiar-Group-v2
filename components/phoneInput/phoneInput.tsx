@@ -59,6 +59,10 @@ export default function PhoneInput({
 
     setCountriesList(mapped);
     setFilteredCountries(mapped);
+
+    // Sincronizar el país seleccionado inicial con la lista completa para tener la bandera
+    const initial = mapped.find((c) => c.code === selectedCountry.code);
+    if (initial) setSelectedCountry(initial);
   }, []);
 
   /* ===== FILTRO ===== */
@@ -66,10 +70,19 @@ export default function PhoneInput({
     if (!searchQuery.trim()) {
       setFilteredCountries(countriesList);
     } else {
+      const normalizedQuery = searchQuery
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
       setFilteredCountries(
-        countriesList.filter((c) =>
-          c.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        countriesList.filter((c) => {
+          const normalizedName = c.name
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+          return normalizedName.includes(normalizedQuery);
+        })
       );
     }
   }, [searchQuery, countriesList]);
@@ -104,6 +117,10 @@ export default function PhoneInput({
       setInputPhoneValue(phoneNum);
 
       if (countriesList.length > 0) {
+        // Si el país seleccionado actualmente ya tiene el mismo código, no lo cambiamos
+        // para evitar que salte al primer país de la lista con ese código (ej. +1 USA/Canada)
+        if (selectedCountry.phoneCode === countryCode) return;
+
         const country = countriesList.find((c) => c.phoneCode === countryCode);
         if (country) setSelectedCountry(country);
       }
@@ -134,20 +151,18 @@ export default function PhoneInput({
           className="flex items-center gap-2 hover:opacity-80"
         >
           <img
-            src={`data:image/svg+xml;utf8,${encodeURIComponent(
-              getCountryListMap()[selectedCountry.code]?.flag ?? ""
-            )}`}
+            src={(selectedCountry as Country).flag || `data:image/svg+xml;utf8,${encodeURIComponent(getCountryListMap()[selectedCountry.code]?.flag ?? "")}`}
             alt={selectedCountry.name}
             className="w-6 h-auto"
           />
           {isDropdownOpen ? (
-            <ChevronUp className="h-3 w-3" />
+            <ChevronUp className="h-4 w-4" strokeWidth={2} />
           ) : (
-            <ChevronDown className="h-3 w-3" />
+            <ChevronDown className="h-4 w-4"  strokeWidth={2}/>
           )}
         </button>
 
-        <span className="text-gray-600 ml-4">|</span>
+        <span className="text-gray-600 ">|</span>
 
         <input
           type="text"
