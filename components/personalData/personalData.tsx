@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
 import useAuthStore from "../../store/authStore";
@@ -12,6 +13,7 @@ import { updatePasswordSchema } from "../../validations/updatePassword";
 import SuccesMessage from "@/messages/succesMessage";
 import ErrorMessage from "@/messages/errorMessage";
 import WarningMenssage from "@/messages/warningMenssage";
+import { Loader } from "lucide-react";
 
 export default function PersonalData() {
   const { auth, setAuth } = useAuthStore();
@@ -43,6 +45,232 @@ export default function PersonalData() {
       }));
     }
   }, [auth]);
+
+  const personalDataMutation = useMutation({
+    mutationFn: async (payload: {
+      cambios: {
+        operation: string;
+        table: string;
+        attribute: string;
+        value: string;
+      }[];
+      currentPassword: string;
+      file: File | null;
+      firstName: string;
+      lastname1: string;
+      lastname2: string;
+      phone: string;
+    }) => {
+      if (!auth) {
+        throw new Error("No hay sesión activa");
+      }
+
+      const currentAccessToken = await refreshToken(auth, setAuth);
+
+      const data = new FormData();
+      data.append("ci", auth.person.id.toString());
+      data.append("id_user", auth.user.id.toString());
+      data.append("current_password", payload.currentPassword);
+      data.append("changes", JSON.stringify(payload.cambios));
+
+      if (payload.file) {
+        data.append("file", payload.file);
+      }
+
+      console.log(
+        "Contenido de FormData (Personal Data):",
+        Object.fromEntries(data.entries())
+      );
+
+      const response = await fetch(`${server_url}/editUser`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${currentAccessToken}`,
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || "No se pudo actualizar los datos"
+        );
+      }
+
+      return {
+        currentAccessToken,
+      };
+    },
+    onSuccess: (result, variables) => {
+      if (!auth) {
+        return;
+      }
+
+      SuccesMessage("Datos personales actualizados correctamente");
+
+      if (variables.file) {
+        clearPendingAvatar();
+      }
+
+      setAuth({
+        ...auth,
+        access_token: result.currentAccessToken || auth.access_token,
+        person: {
+          ...auth.person,
+          name: variables.firstName,
+          lastname1: variables.lastname1,
+          lastname2: variables.lastname2,
+          cellphone2: variables.phone,
+        },
+        user: {
+          ...auth.user,
+        },
+      });
+    },
+    onError: (error: any) => {
+      const message = error?.message || "No se pudo actualizar los datos";
+      ErrorMessage(`Error: ${message}`);
+    },
+  });
+
+  const addressMutation = useMutation({
+    mutationFn: async (payload: {
+      address: string;
+      currentPassword: string;
+    }) => {
+      if (!auth) {
+        throw new Error("No hay sesión activa");
+      }
+
+      const currentAccessToken = await refreshToken(auth, setAuth);
+
+      const cambios = [
+        {
+          operation: "UPDATE",
+          table: "persons",
+          attribute: "address",
+          value: payload.address,
+        },
+      ];
+
+      const data = new FormData();
+      data.append("ci", auth.person.id.toString());
+      data.append("id_user", auth.user.id.toString());
+      data.append("current_password", payload.currentPassword);
+      data.append("changes", JSON.stringify(cambios));
+
+      console.log(
+        "Contenido de FormData (Address):",
+        Object.fromEntries(data.entries())
+      );
+
+      const response = await fetch(`${server_url}/editUser`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${currentAccessToken}`,
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || "No se pudo actualizar la dirección"
+        );
+      }
+
+      return {
+        currentAccessToken,
+        address: payload.address,
+      };
+    },
+    onSuccess: (result) => {
+      if (!auth) {
+        return;
+      }
+
+      SuccesMessage("Dirección actualizada correctamente");
+
+      setAuth({
+        ...auth,
+        access_token: result.currentAccessToken || auth.access_token,
+        person: {
+          ...auth.person,
+          address: result.address,
+        },
+      });
+    },
+    onError: (error: any) => {
+      const message =
+        error?.message || "No se pudo actualizar la dirección";
+      ErrorMessage(`Error: ${message}`);
+    },
+  });
+
+  const passwordMutation = useMutation({
+    mutationFn: async (payload: {
+      currentPassword: string;
+      newPassword: string;
+    }) => {
+      if (!auth) {
+        throw new Error("No hay sesión activa");
+      }
+
+      const currentAccessToken = await refreshToken(auth, setAuth);
+
+      const cambios = [
+        {
+          operation: "UPDATE",
+          table: "users",
+          attribute: "password",
+          value: payload.newPassword,
+        },
+      ];
+
+      const data = new FormData();
+      data.append("ci", auth.person.id.toString());
+      data.append("id_user", auth.user.id.toString());
+      data.append("current_password", payload.currentPassword);
+      data.append("changes", JSON.stringify(cambios));
+
+      console.log(
+        "Contenido de FormData (Password):",
+        Object.fromEntries(data.entries())
+      );
+
+      const response = await fetch(`${server_url}/editUser`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${currentAccessToken}`,
+        },
+        body: data,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || "No se pudo actualizar la contraseña"
+        );
+      }
+
+      return {
+        currentAccessToken,
+      };
+    },
+    onSuccess: () => {
+      SuccesMessage("Contraseña actualizada correctamente");
+      setFormData((prev) => ({
+        ...prev,
+        password: "",
+        confirmPassword: "",
+      }));
+    },
+    onError: (error: any) => {
+      const message =
+        error?.message || "No se pudo actualizar la contraseña";
+      ErrorMessage(`Error: ${message}`);
+    },
+  });
 
   // Function to handle input changes
   const handleInputChange = (
@@ -95,7 +323,6 @@ export default function PersonalData() {
     }
 
     setErrors({});
-    const currentAccessToken = await refreshToken(auth, setAuth);
 
     // Split lastName into lastname1 and lastname2
     const nameParts = formData.lastName.trim().split(/\s+/);
@@ -131,14 +358,7 @@ export default function PersonalData() {
       });
     }
 
-    if (formData.email !== auth.user.email) {
-      cambios.push({
-        operation: "UPDATE",
-        table: "users",
-        attribute: "email",
-        value: formData.email,
-      });
-    }
+
 
     if (formData.phone !== (auth.person.cellphone2 || "")) {
       cambios.push({
@@ -164,62 +384,15 @@ export default function PersonalData() {
       return;
     }
 
-    console.log("Formato de cambios que se envía al backend:", JSON.stringify(cambios, null, 2));
-
-    const data = new FormData();
-    data.append("ci", auth.person.id.toString());
-    data.append("id_user", auth.user.id.toString());
-    data.append("current_password", formData.password || auth.user.password || "");
-    data.append("changes", JSON.stringify(cambios));
-
-    // Solo mandar la imagen si cambió (si hay un archivo en el store)
-    if (pendingAvatar) {
-      data.append("file", pendingAvatar);
-    }
-
-    // Para visualizar el contenido de FormData en la consola
-    console.log("Contenido de FormData (Personal Data):", Object.fromEntries(data.entries()));
-
-    try {
-      const response = await fetch(`${server_url}/editUser`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
-      });
-
-      if (response.ok) {
-        SuccesMessage("Datos personales actualizados correctamente");
-        
-        // Si se subió una imagen, limpiar el store
-        if (pendingAvatar) {
-          clearPendingAvatar();
-        }
-
-        setAuth({
-          ...auth,
-          access_token: currentAccessToken || auth.access_token,
-          person: {
-            ...auth.person,
-            name: formData.firstName,
-            lastname1: lastname1,
-            lastname2: lastname2,
-            cellphone2: formData.phone,
-          },
-          user: {
-            ...auth.user,
-            email: formData.email,
-          },
-        });
-      } else {
-        const errorData = await response.json();
-        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar los datos"}`);
-      }
-    } catch (error) {
-      console.error("Error al guardar:", error);
-      ErrorMessage("Hubo un problema al conectar con el servidor");
-    }
+    personalDataMutation.mutate({
+      cambios,
+      currentPassword: formData.password || auth.user.password || "",
+      file: pendingAvatar || null,
+      firstName: formData.firstName,
+      lastname1,
+      lastname2,
+      phone: formData.phone,
+    });
   };
 
   const handleSaveAddress = async (e?: React.FormEvent) => {
@@ -252,55 +425,10 @@ export default function PersonalData() {
       return;
     }
 
-    const currentAccessToken = await refreshToken(auth, setAuth);
-
-    const cambios = [
-      {
-        operation: "UPDATE",
-        table: "persons",
-        attribute: "address",
-        value: currentAddress,
-      },
-    ];
-
-    const data = new FormData();
-    data.append("ci", auth.person.id.toString());
-    data.append("id_user", auth.user.id.toString());
-    data.append("current_password", formData.password || auth.user.password || "");
-    data.append("changes", JSON.stringify(cambios));
-
-    try {
-      // Para visualizar el contenido de FormData en la consola
-      console.log("Contenido de FormData (Address):", Object.fromEntries(data.entries()));
-
-      
-      const response = await fetch(`${server_url}/editUser`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
-      });
-
-      console.log("response:", response);
-      if (response.ok) {
-        SuccesMessage("Dirección actualizada correctamente");
-        setAuth({
-          ...auth,
-          access_token: currentAccessToken || auth.access_token,
-          person: {
-            ...auth.person,
-            address: currentAddress,
-          },
-        });
-      } else {
-        const errorData = await response.json();
-        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar la dirección"}`);
-      }
-    } catch (error) {
-      console.error("Error al guardar dirección:", error);
-      ErrorMessage("Hubo un problema al conectar con el servidor");
-    }
+    addressMutation.mutate({
+      address: currentAddress,
+      currentPassword: formData.password || auth.user.password || "",
+    });
   };
 
   const handleUpdatePassword = async (e?: React.FormEvent) => {
@@ -335,49 +463,10 @@ export default function PersonalData() {
       return;
     }
 
-    const currentAccessToken = await refreshToken(auth, setAuth);
-
-    const cambios = [
-      {
-        operation: "UPDATE",
-        table: "users",
-        attribute: "password",
-        value: formData.confirmPassword,
-      },
-    ];
-
-    const data = new FormData();
-    data.append("ci", auth.person.id.toString());
-    data.append("id_user", auth.user.id.toString());
-    data.append("current_password", formData.password || auth.user.password || "");
-    data.append("changes", JSON.stringify(cambios));
-
-    try {
-        console.log("Contenido de FormData:", Object.fromEntries(data.entries()));
-      const response = await fetch(`${server_url}/editUser`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
-      });
-
-      console.log("response:", response);
-      if (response.ok) {
-        SuccesMessage("Contraseña actualizada correctamente");
-        setFormData((prev) => ({
-          ...prev,
-          password: "",
-          confirmPassword: "",
-        }));
-      } else {
-        const errorData = await response.json();
-        ErrorMessage(`Error: ${errorData.error || "No se pudo actualizar la contraseña"}`);
-      }
-    } catch (error) {
-      console.error("Error al actualizar contraseña:", error);
-      ErrorMessage("Hubo un problema al conectar con el servidor");
-    }
+    passwordMutation.mutate({
+      currentPassword: formData.password || auth.user.password || "",
+      newPassword: formData.confirmPassword,
+    });
   };
 
   return (
@@ -392,9 +481,17 @@ export default function PersonalData() {
             <div>
               <button
                 type="submit"
-                className="text-[#D69F04] text-md font-bold cursor-pointer"
+                className="text-[#D69F04] text-md font-bold cursor-pointer disabled:opacity-100 disabled:cursor-pointer"
+                disabled={personalDataMutation.isPending}
               >
-                Guardar
+                {personalDataMutation.isPending ? (
+                  <span className="inline-flex items-center justify-center ">
+                    <Loader className="h-5 w-5 animate-spin " strokeWidth={3}/>
+                    Guardar
+                  </span>
+                ) : (
+                  "Guardar"
+                )}
               </button>
             </div>
           </div>
@@ -451,6 +548,7 @@ export default function PersonalData() {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  readOnly
                 />
                 {errors.email && (
                   <span className="text-red-500 text-sm">{errors.email}</span>
@@ -469,9 +567,17 @@ export default function PersonalData() {
             <div>
               <button
                 type="submit"
-                className="text-[#D69F04] text-md font-bold cursor-pointer"
+                className="text-[#D69F04] text-md font-bold cursor-pointer disabled:opacity-100 disabled:cursor-pointer"
+                disabled={addressMutation.isPending}
               >
-                Guardar
+                {addressMutation.isPending ? (
+                  <span className="inline-flex items-center justify-center ">
+                    <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                    Guardar
+                  </span>
+                ) : (
+                  "Guardar"
+                )}
               </button>
             </div>
           </div>
@@ -501,9 +607,17 @@ export default function PersonalData() {
             <div>
               <button
                 type="submit"
-                className="text-[#D69F04] text-md font-bold cursor-pointer"
+                className="text-[#D69F04] text-md font-bold cursor-pointer disabled:opacity-100 disabled:cursor-pointer"
+                disabled={passwordMutation.isPending}
               >
-                Actualizar
+                {passwordMutation.isPending ? (
+                  <span className="inline-flex items-center justify-center ">
+                    <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                    Actualizar
+                  </span>
+                ) : (
+                  "Actualizar"
+                )}
               </button>
             </div>
           </div>

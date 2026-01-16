@@ -4,8 +4,6 @@ import PersonalData from "@/components/personalData/personalData";
 import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
-import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
-import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
 import useAuthStore from "@/store/authStore";
 
 export default function MyProfile() {
@@ -37,11 +35,7 @@ export default function MyProfile() {
       <div className="sm:py-20  mt-60 sm:mt-10">
         <SectionAbout3 />
       </div>
-
       
-      <div className="hidden sm:block mt-60">
-        <SectionPromoHome2 />
-      </div>
 
       <div className="sm:hidden mt-60">
         <SectionAbout4 />
