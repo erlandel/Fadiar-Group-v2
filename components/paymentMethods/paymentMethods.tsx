@@ -6,16 +6,16 @@ import { BuyerDetailsProvider } from "../../contexts/BuyerDetailsContext";
 export default function PaymentMethods() {
   return (
     <BuyerDetailsProvider>
-     <div className="grid grid-cols-1 lg:grid-cols-2 place-items-center xl:flex xl:gap-3 mx-4 space-y-10 lg:space-y-0">
-  <div className="order-1 lg:col-span-2 xl:col-span-1">
+     <div className="flex flex-col lg:grid lg:grid-cols-2 xl:flex xl:flex-row xl:justify-center items-start gap-10 lg:gap-6 xl:gap-4 mx-4">
+  <div className="w-full lg:col-span-2 xl:col-span-1 xl:w-auto">
     <CreditCards />
   </div>
 
-  <div className="order-2 lg:col-span-1 lg:mt-10 xl:mt-0">
+  <div className="w-full lg:col-span-1 xl:w-auto">
     <BuyerDetails />
   </div>
 
-  <div className="order-3 lg:col-span-1  lg:mt-10 lg:ml-2 xl:ml-0 xl:mt-0">
+  <div className="w-full lg:col-span-1 xl:w-auto">
     <CheckoutPayment />
   </div>
 </div>

@@ -120,7 +120,6 @@ body {
   content: "";
   animation: dots 1.5s infinite steps(1);
   font-size: var(--dots-size, 1.0rem);
-  margin-left: 0.25rem;
   color: #d69f04;
 }
 

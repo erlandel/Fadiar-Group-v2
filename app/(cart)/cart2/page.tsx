@@ -7,7 +7,7 @@ import { BestSelling } from "@/section/bestSelling/bestSelling";
 export default function Cart2() {
   return (
     <div>
-      <div className=" md:px-25 ">
+      <div className=" xl:px-20 ">
         <div className="mx-4">
           <div className="mt-10 ">
             <p className="text-xs text-gray-400 mb-4">

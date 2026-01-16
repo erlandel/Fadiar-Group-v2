@@ -1,6 +1,6 @@
 "use client";
-import { Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Check, ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
@@ -12,47 +12,139 @@ import MatterCart1Store, {
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
+import { server_url } from "@/lib/apiClient";
+
+interface MunicipalityData {
+  id: number;
+  municipio: string;
+}
+
+interface ProvinceData {
+  id: number;
+  provincia: string;
+  code: string;
+  municipios: MunicipalityData[];
+}
 
 export default function Amount() {
   const router = useRouter();
   const { auth } = useAuthStore();
-  const { province: storeProvince, municipality: storeMunicipality } =
-    useProductsByLocationStore();
+  const {
+    province: storeProvince,
+    provinceId: storeProvinceId,
+    municipality: storeMunicipality,
+    municipalityId: storeMunicipalityId,
+    setLocation,
+  } = useProductsByLocationStore();
 
   const fullName = auth?.person
     ? `${auth.person.name} ${auth.person.lastname1} ${auth.person.lastname2}`
     : "";
   const [isClient, setIsClient] = useState(false);
+  const [data, setData] = useState<ProvinceData[]>([]);
+  const [openMunicipalities, setOpenMunicipalities] = useState(false);
+  const municipalitiesRef = useRef<HTMLDivElement>(null);
 
-  
-
-  const getTotalPrice = useStore(cartStore, (state) => state.getTotalPrice);
-  const getTotalItems = useStore(cartStore, (state) => state.getTotalItems);
-  const totalPrice = getTotalPrice();
-  const totalItems = getTotalItems();
+  const items = useStore(cartStore, (state) => state.items);
+  const rawCart = useStore(cartStore, (state) => (state as any).rawCart);
 
   const [formData, setFormData] = useState<MatterFormData>(
     MatterCart1Store.getState().formData
+  );
+
+  // Filtrar items si se solicita domicilio
+  const filteredItems = items.filter((item) => {
+    if (!formData.delivery || !storeMunicipalityId) return true;
+    const tienda = rawCart?.find((t: any) => t.id === item.tiendaId);
+    return tienda?.domicilios?.some(
+      (d: any) => d.id_municipio === storeMunicipalityId
+    );
+  });
+
+  const totalPrice = filteredItems.reduce((total, item) => {
+    const price = parseFloat(String(item.price).replace(/[^0-9.]/g, ""));
+    return total + price * item.quantity;
+  }, 0);
+
+  const totalItems = filteredItems.reduce(
+    (total, item) => total + item.quantity,
+    0
   );
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof MatterFormData, string>>
   >({});
 
+  const [deliveryPrice, setDeliveryPrice] = useState(0);
+
+  useEffect(() => {
+    if (
+      formData.delivery &&
+      storeMunicipalityId &&
+      rawCart &&
+      Array.isArray(rawCart)
+    ) {
+      let totalDelivery = 0;
+      rawCart.forEach((tienda: any) => {
+        const domicilio = tienda.domicilios?.find(
+          (d: any) => d.id_municipio === storeMunicipalityId
+        );
+        if (domicilio) {
+          totalDelivery += Number(domicilio.price) || 0;
+        }
+      });
+      setDeliveryPrice(totalDelivery);
+    } else {
+      setDeliveryPrice(0);
+    }
+  }, [formData.delivery, storeMunicipalityId, rawCart]);
+
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const res = await fetch(`${server_url}/obtener-provincias-municipios`);
+        const json = await res.json();
+        if (Array.isArray(json)) {
+          setData(json);
+        } else {
+          console.error("Provinces data is not an array:", json);
+          setData([]);
+        }
+      } catch (err) {
+        console.error("Error fetching provinces:", err);
+      }
+    };
+
+    fetchProvinces();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        municipalitiesRef.current &&
+        !municipalitiesRef.current.contains(event.target as Node)
+      ) {
+        setOpenMunicipalities(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   // Sync store values with local form data initially or when store changes
   useEffect(() => {
     if (isClient) {
-      const savedData = MatterCart1Store.getState().formData;
       setFormData((prev) => ({
         ...prev,
-        ...savedData,
-        province: storeProvince || savedData.province || prev.province,
-        municipality:
-          storeMunicipality || savedData.municipality || prev.municipality,
+        province: storeProvince || prev.province,
+        municipality: storeMunicipality || prev.municipality,
       }));
     }
   }, [isClient, storeProvince, storeMunicipality]);
@@ -133,6 +225,13 @@ export default function Amount() {
     router.push("/cart2");
   };
 
+  const currentProvinceData = Array.isArray(data)
+    ? data.find((p) => p.provincia === storeProvince)
+    : undefined;
+  const municipalities = currentProvinceData
+    ? currentProvinceData.municipios
+    : [];
+
   return (
     <div className="max-h-full   bg-white font-sans text-[#022954]">
       {/* Importe Section */}
@@ -148,7 +247,9 @@ export default function Amount() {
 
       {/* Personal Info Section */}
       <div className="mb-8">
-        <h3 className="text-xl font-bold text-[#022954] mb-6">{fullName}</h3>
+        <h3 className="text-xl font-bold text-[#022954] mb-6">
+          {isClient ? fullName : ""}
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md ">
           <div>
             <label className="ml-2 font-medium text-gray-600">Nombre</label>
@@ -220,41 +321,115 @@ export default function Amount() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md">
-          <div>
-            <label className="ml-2 font-medium text-gray-600">Provincia</label>
-            <InputField
-              type="text"
-              name="province"
-              value={storeProvince}
-              readOnly
-              placeholder="Provincia"
-            />
-            {errors.province && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.province}
-              </p>
-            )}
-          </div>
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-6">
+              <div>
+                <label className="ml-2 font-medium text-gray-600">
+                  Provincia
+                </label>
+                <InputField
+                  type="text"
+                  name="province"
+                  value={storeProvince}
+                  readOnly
+                  placeholder="Provincia"
+                />
+                {errors.province && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.province}
+                  </p>
+                )}
+              </div>
 
-          <div>
-            <label className="ml-2 font-medium text-gray-600">Municipio</label>
-            <InputField
-              type="text"
-              name="municipality"
-              value={storeMunicipality}
-              readOnly
-              placeholder="Municipio"
-            />
-            {errors.municipality && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.municipality}
-              </p>
-            )}
-          </div>
+              <div className="flex flex-col relative" ref={municipalitiesRef}>
+                <label className="ml-2 font-medium text-gray-600">
+                  Municipio
+                </label>
+                <div
+                  tabIndex={0}
+                  className="flex h-12 items-center justify-between rounded-2xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                  onClick={() => {
+                    if (storeProvince) {
+                      setOpenMunicipalities(!openMunicipalities);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      if (storeProvince) {
+                        setOpenMunicipalities(!openMunicipalities);
+                      }
+                    }
+                  }}
+                >
+                  <span
+                    className={
+                      formData.municipality ? "text-gray-800" : "text-gray-500"
+                    }
+                  >
+                    {formData.municipality || "Seleccione un municipio"}
+                  </span>
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                </div>
+
+                {errors.municipality && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.municipality}
+                  </p>
+                )}
+
+                {openMunicipalities && (
+                  <ul className="absolute w-full mt-20 bg-white border border-gray-200 rounded-2xl shadow-lg z-20 max-h-60 overflow-auto">
+                    {municipalities.map((mun) => (
+                      <li
+                        key={mun.id}
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
+                        onClick={() => {
+                          setFormData((prev) => ({
+                            ...prev,
+                            municipality: mun.municipio,
+                          }));
+                          MatterCart1Store.getState().updateFormData({
+                            municipality: mun.municipio,
+                          });
+                          setLocation(
+                            storeProvince,
+                            storeProvinceId,
+                            mun.municipio,
+                            mun.id
+                          );
+                          setOpenMunicipalities(false);
+                          if (errors.municipality) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              municipality: undefined,
+                            }));
+                          }
+                        }}
+                      >
+                        {mun.municipio}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+
+
+        <div className="mt-5">
+            <label className="ml-2  font-medium text-gray-600">
+              Nota
+            </label>
+          <textarea
+            placeholder="Escribe aquí información adicional relevante (horarios de disponibilidad del domicilio, teléfonos secundarios, observaciones, etc.)."
+            rows={5}
+            name="note"
+            // value={formData.note}
+            onChange={handleInputChange}
+            className="w-full  rounded-2xl px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+          />
         </div>
 
-        <div className="flex items-start space-x-2">
+        <div className="flex items-start space-x-2 mt-6">
           <div className="relative flex items-center ">
             <input
               type="checkbox"
@@ -264,6 +439,9 @@ export default function Amount() {
               onChange={(e) => {
                 const isChecked = e.target.checked;
                 setFormData((prev) => ({ ...prev, delivery: isChecked }));
+                MatterCart1Store.getState().updateFormData({
+                  delivery: isChecked,
+                });
                 if (!isChecked && errors.address) {
                   setErrors((prev) => ({ ...prev, address: undefined }));
                 }
@@ -282,8 +460,9 @@ export default function Amount() {
           </div>
         </div>
 
-        {formData.delivery && (
+        {isClient && formData.delivery && (
           <div>
+     
             <div className="mt-6">
               <label className="ml-2 font-medium text-gray-600">
                 Dirección
@@ -311,18 +490,31 @@ export default function Amount() {
           RESUMEN DEL PEDIDO
         </h3>
         <div className="bg-[#F5F7FA] rounded-xl overflow-hidden">
-          <div className="flex justify-between items-center p-4 text-[#022954]">
+         
+
+          {isClient && formData.delivery && (
+            <div>
+               <div className="flex justify-between items-center p-4 text-[#022954]">
             <span className="sm:text-xl">Subtotal</span>
             <span className="sm:text-xl">
               $ {isClient ? totalPrice.toFixed(2) : "0.00"} USD
             </span>
           </div>
+
+            <div className="flex justify-between items-center p-4 text-[#022954]">
+              <span className="sm:text-xl">Domicilio</span>
+              <span className="sm:text-xl">
+                $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} USD
+              </span>
+            </div>
+            </div>
+          )}
           <div className="flex justify-between items-center p-4 bg-[#E2E6EA]">
             <span className="font-bold text-[#022954] text-xl sm:text-2xl">
               Total a pagar
             </span>
             <span className="text-xl sm:text-3xl font-bold text-[#022954]">
-              $ {isClient ? totalPrice.toFixed(2) : "0.00"}{" "}
+              $ {isClient ? (totalPrice + deliveryPrice).toFixed(2) : "0.00"}{" "}
               <span className="text-xl sm:text-3xl">USD</span>
             </span>
           </div>
@@ -333,7 +525,7 @@ export default function Amount() {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-[#022954] text-white py-4 px-20 text-base font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
+            className="bg-[#022954] text-white py-4 px-20 text-base font-semibold rounded-xl hover:bg-[#034078] hover:shadow-lg  hover:scale-103 transition cursor-pointer"
           >
             Confirmar Orden
           </button>

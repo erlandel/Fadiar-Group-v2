@@ -16,8 +16,7 @@ export const useBestSelling = (count: number = 9) => {
         },
         body: JSON.stringify({
           count,
-          municipio: municipalityId,
-        
+          municipio: municipalityId,        
         }),
       });
 

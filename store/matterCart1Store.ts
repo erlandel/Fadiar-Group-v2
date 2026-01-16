@@ -12,6 +12,7 @@ export type FormData = {
   lastName1: string;
   lastName2: string;
   address: string;
+  note?: string;
 };
 
 export type FormState = {
@@ -33,6 +34,7 @@ const defaultFormData: FormData = {
   lastName1: "",
   lastName2: "",
   address: "",
+  note: "",
 };
 
 type FormStore = FormState;

@@ -109,23 +109,29 @@ export default function PhoneInput({
 
   /* ===== SYNC PROPS ===== */
   useEffect(() => {
-    if (value) {
-      const parts = value.split(" ");
-      const countryCode = parts[0];
-      const phoneNum = parts.slice(1).join(" ");
-      
-      setInputPhoneValue(phoneNum);
+    if (!value) return;
 
-      if (countriesList.length > 0) {
-        // Si el país seleccionado actualmente ya tiene el mismo código, no lo cambiamos
-        // para evitar que salte al primer país de la lista con ese código (ej. +1 USA/Canada)
-        if (selectedCountry.phoneCode === countryCode) return;
+    const parts = value.split(" ");
+    const dialCode = parts[0];
+    const phoneNum = parts.slice(1).join(" ");
 
-        const country = countriesList.find((c) => c.phoneCode === countryCode);
-        if (country) setSelectedCountry(country);
-      }
+    setInputPhoneValue(phoneNum);
+
+    if (countriesList.length === 0) return;
+    if (selectedCountry.phoneCode === dialCode) return;
+
+    let country: Country | undefined;
+
+    if (dialCode === "+1") {
+      country =
+        countriesList.find((c) => c.code === "US") ??
+        countriesList.find((c) => c.phoneCode === dialCode);
+    } else {
+      country = countriesList.find((c) => c.phoneCode === dialCode);
     }
-  }, [value, countriesList]);
+
+    if (country) setSelectedCountry(country);
+  }, [value, countriesList, selectedCountry.phoneCode]);
 
   /* ===== HANDLERS ===== */
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {

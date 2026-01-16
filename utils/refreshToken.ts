@@ -30,6 +30,8 @@ export const refreshToken = async (
           access_token: newAccessToken,
           refresh_token: newRefreshToken,
         });
+
+        console.log("newAccessToken:", newAccessToken);
         
         return newAccessToken;
       }

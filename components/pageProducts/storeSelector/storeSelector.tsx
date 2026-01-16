@@ -32,9 +32,12 @@ const StoreSelector = forwardRef<HTMLDivElement, StoreSelectorProps>(
     if (tiendas.length === 0) return null;
 
     return (
+      
       <div className="flex items-center justify-center w-full" ref={ref}>
+        
         <div className="flex flex-wrap items-center gap-y-3 mt-4 pb-4 w-full">
           {/* Vista Móvil (Selector Desplegable) */}
+
           <div className="flex items-center justify-start gap-2 w-full md:hidden mx-4">
             <div className="relative" ref={storesRef}>
               <div className="flex items-center gap-2">

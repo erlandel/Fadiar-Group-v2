@@ -13,14 +13,18 @@ export type CartItem = {
   image: string;
   quantity: number;
   tiendaId?: string | number;
+  tiendaName?: string;
+  tiendaDireccion?: string;
 };
 
 export type CartState = {
   items: CartItem[];
+  rawCart: any[];
   addOrUpdateItem: (item: CartItem) => void;
   updateQuantity: (productId: number | string, quantity: number) => void;
   removeItem: (productId: number | string) => void;
   setItems: (items: CartItem[]) => void;
+  setRawCart: (cart: any[]) => void;
   clearCart: () => void;
   getItemQuantity: (productId: number | string) => number;
   getTotalItems: () => number;
@@ -33,6 +37,7 @@ const cartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      rawCart: [],
       
       addOrUpdateItem: (item) => {
         const quantity = Math.max(1, item.quantity);
@@ -78,7 +83,9 @@ const cartStore = create<CartStore>()(
 
       setItems: (items) => set({ items }),
 
-      clearCart: () => set({ items: [] }),
+      setRawCart: (rawCart) => set({ rawCart }),
+
+      clearCart: () => set({ items: [], rawCart: [] }),
 
       getItemQuantity: (productId) => {
         const item = get().items.find((item) => item.productId === productId);

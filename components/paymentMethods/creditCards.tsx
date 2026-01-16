@@ -1,9 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
+import { CreditCard, Banknote, Store, ArrowRightLeft } from "lucide-react";
 import BuyerDetailsStore from "../../store/buyerDetailsStore";
+import MatterCart1Store from "../../store/matterCart1Store";
+import { EmojioneDepartmentStore, EmojioneMoneyBag, StreamlineUltimateColorDataTransferCircle, TwemojiCreditCard } from "@/icons/icons";
 
 export default function CreditCards() {
-  const [selectedMethod, setSelectedMethod] = useState("Tarjetas de crédito o débito");
+  const [selectedMethod, setSelectedMethod] = useState("Tarjeta de Crédito/Débito");
+  const delivery = MatterCart1Store((state) => state.formData.delivery);
 
   // Cargar método de pago del store al montar
   useEffect(() => {
@@ -22,74 +26,89 @@ export default function CreditCards() {
     BuyerDetailsStore.getState().setPaymentMethod(selectedMethod);
   }, [selectedMethod]);
 
+  // Ajustar el método seleccionado si el filtro cambia
+  useEffect(() => {
+    if (delivery) {
+      if (selectedMethod === "Recogida en Tienda") {
+        setSelectedMethod("Tarjeta de Crédito/Débito");
+      }
+    } else {
+      setSelectedMethod("Recogida en Tienda");
+    }
+  }, [delivery]);
+
   return (
     <>
-      <div >
-        <h5 className="text-primary font-bold text-xl">01 - Forma de pago</h5>
+      <div>
+        <h5 className="text-primary font-bold text-xl">01 - Formas de Pago</h5>
+    
 
-        <div className="w-full lg:w-90 xl:w-80 2xl:w-100 h-36 bg-snow mt-5 border border-gray rounded-xl p-4 shadow-sm font-bold flex">
-          <div>
-            <div>
-              <label className="flex items-center gap-3 cursor-pointer relative">
+        <div className="mt-6 flex flex-col gap-4">
+          {[
+            { 
+              id: "visa",
+              title: "Tarjeta de Crédito/Débito", 
+              description: "Pago con VISA o MasterCard", 
+              icon: <TwemojiCreditCard className="w-7 h-7 " /> 
+            },
+            { 
+              id: "efectivo",
+              title: "Efectivo", 
+              description: "Pago al momento de la entrega", 
+              icon: <EmojioneMoneyBag className="w-10 h-10 " /> 
+            },
+            { 
+              id: "tienda",
+              title: "Recogida en Tienda", 
+              description: "Pago directo en el local", 
+              icon: <EmojioneDepartmentStore className="w-8 h-8 text-[#022954]" /> 
+            },
+            { 
+              id: "zelle",
+              title: "Transferencia Zelle", 
+              description: "Pago mediante transferencia bancaria", 
+              icon: <StreamlineUltimateColorDataTransferCircle className="w-9 h-9 " /> 
+            }
+          ]
+          .filter((method) => {
+            if (delivery) {
+              return method.id !== "tienda";
+            } else {
+              return method.id === "tienda";
+            }
+          })
+          .map((method) => (
+            <label 
+              key={method.id} 
+              className={`max-w-100 flex items-center justify-between gap-4 cursor-pointer p-4 border rounded-2xl h-24 transition-all focus-within:ring-0 focus-within:outline-none ${
+                selectedMethod === method.title 
+                  ? "border-gray-300 " 
+                  : "border-gray-200 hover:border-gray-300"
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                  {method.icon}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[#022954] text-lg font-bold">{method.title}</span>
+                  <span className="text-gray-500 text-sm">{method.description}</span>
+                </div>
+              </div>
+
+              <div className="relative flex items-center justify-center">
                 <input
                   type="radio"
-                  name="metodo"
-                  value="Tarjetas de crédito o débito"
-                  checked={selectedMethod === "Tarjetas de crédito o débito"}
+                  name="paymentMethod"
+                  value={method.title}
+                  checked={selectedMethod === method.title}
                   onChange={(e) => setSelectedMethod(e.target.value)}
-                  className="peer absolute opacity-0"
+                  className="peer absolute opacity-0 w-6 h-6 cursor-pointer"
                 />
-
-                {/* Círculo - ahora es hermano directo del input */}
-                <span className="w-6 h-6 rounded-full border-3 border-[#022954] flex items-center justify-center peer-checked:after:w-3 peer-checked:after:h-3 peer-checked:after:rounded-full peer-checked:after:bg-[#022954] peer-checked:after:block after:hidden transition" />
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <div className="ml-4">
-              <p className="text-[#1E1E1E] text-lg">
-                Tarjetas de crédito o débito{" "}
-              </p>
-              <p className="text-[gray] text-[13px]">
-                Comisión por forma de pago: 4%
-              </p>
-            </div>
-
-            <div>
-              <img
-                src="/images/creditCards.webp"
-                alt="Visa"
-                className="h-18 mr-4 "
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full lg:w-90 xl:w-80 2xl:w-100 h-36 bg-snow mt-5 border border-gray rounded-xl p-6 shadow-sm font-bold flex">
-          <div>
-            <div>
-              <label className="flex items-center gap-3 cursor-pointer relative">
-                <input
-                  type="radio"
-                  name="metodo"
-                  value="Saldo TropiPay"
-                  checked={selectedMethod === "Saldo TropiPay"}
-                  onChange={(e) => setSelectedMethod(e.target.value)}
-                  className="peer absolute opacity-0"
-                />
-
-                {/* Círculo - ahora es hermano directo del input */}
-                <span className="w-6 h-6 rounded-full border-3 border-[#022954] flex items-center justify-center peer-checked:after:w-3 peer-checked:after:h-3 peer-checked:after:rounded-full peer-checked:after:bg-[#022954] peer-checked:after:block after:hidden transition" />
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <div className="ml-4">
-              <p className="text-[#1E1E1E] text-lg">Saldo TropiPay</p>
-            </div>
-          </div>
+                <span className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:border-[#022954] peer-checked:after:w-3 peer-checked:after:h-3 peer-checked:after:rounded-full peer-checked:after:bg-[#022954] peer-checked:after:block after:hidden transition-all" />
+              </div>
+            </label>
+          ))}
         </div>
       </div>
     </>

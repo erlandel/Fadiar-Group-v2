@@ -121,7 +121,7 @@ const ModalProductsByLocation = () => {
       </p>
 
       {loading ? (
-       <p className="px-6 mb-2 loading-dots text-lg "> Cargando</p>
+       <p className="px-6 mb-2 loading-dots text-lg "> Cargando </p>
 
       ) : (
         <div className="grid sm:grid-cols-2 gap-4 mb-4 px-6">

@@ -30,7 +30,7 @@ export default function CheckoutPayment() {
       // Guardar datos completos en el store (incluyendo método de pago)
       const completeData = {
         ...formData,
-        paymentMethod: paymentMethod || "Tarjetas de crédito o débito", // Valor por defecto si no existe
+        paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito", // Valor por defecto si no existe
       };
       
       BuyerDetailsStore.getState().setBuyerDetails(completeData);

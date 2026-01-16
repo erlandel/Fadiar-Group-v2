@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { server_url } from "@/lib/apiClient";
 import cartStore from "@/store/cartStore";
 import { useDeleteFromCart } from "@/hooks/cartRequests/useDeleteFromCart";
@@ -42,6 +43,7 @@ export default function CartCard({
   const currentQuantity = productId ? getItemQuantity(productId) : 0;
   const { deleteFromCart, loading: deleting } = useDeleteFromCart();
   const { updateQuantity, loading: updating } = useUpdateCart();
+  const [loadingType, setLoadingType] = useState<"increment" | "decrement" | null>(null);
 
   const handleDelete = async () => {
     if (!productId) return;
@@ -52,16 +54,21 @@ export default function CartCard({
     } 
   };
 
-  const handleUpdateQuantity = async (newQuantity: number) => {
+  const handleUpdateQuantity = async (newQuantity: number, type: "increment" | "decrement") => {
     if (!cartId || newQuantity < 1) return;
-    await updateQuantity(cartId, newQuantity);
+    setLoadingType(type);
+    try {
+      await updateQuantity(cartId, newQuantity);
+    } finally {
+      setLoadingType(null);
+    }
   };
   return (
     <>
       <div
-        className={`${bgColor} ${width} ${padding} max-w-120 border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
+        className={`${bgColor} ${width} ${padding} w-full max-w-200 border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
       >
-        <div className="w-32 h-[124px] overflow-hidden rounded-2xl">
+        <div className="w-32 h-[124px] overflow-hidden rounded-2xl shrink-0">
           <img
             className="w-full h-full object-contain"
             src={`${server_url}/${image}`}
@@ -69,9 +76,9 @@ export default function CartCard({
           />
         </div>
 
-        <div className="flex-1 flex flex-col ml-4">
+        <div className="flex-1 flex flex-col ml-4 min-w-0">
           <div className="mb-3">
-            <h3 className="text-primary font-bold  text-md sm:text-xl line-clamp-2">
+            <h3 className="text-primary font-bold text-md sm:text-xl truncate">
               {title}
             </h3>
             <p className="text-primary text-md sm:text-xl">{brand}</p>
@@ -90,28 +97,57 @@ export default function CartCard({
                 Cantidad: {quantityProducts}
               </p>
             ) : (
-              <div className={`flex items-center  rounded-xl font-bold border ${
+              <div
+                className={`relative flex items-center rounded-xl font-bold border transition-all duration-300 ${
                   actionIcon === "delete" ? "border-primary" : "border-gray"
-                } ${updating ? "opacity-50 pointer-events-none" : ""}`}
+                }`}
               >
-                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => handleUpdateQuantity(currentQuantity - 1)}>
-                  −
-                </button>
-                <span className="px-4 my-1 border-x border-primary ">
-                  {currentQuantity}
-                </span>
-                <button className="px-3 sm:px-4 py-2 text-accent " onClick={() => handleUpdateQuantity(currentQuantity + 1)}>
-                  +
-                </button>
+                {updating && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <span className="loading-dots scale-125"></span>
+                  </div>
+                )}
+                <div className={`flex items-center transition-opacity duration-300 ${updating ? "opacity-40" : "opacity-100"}`}>
+                  <button
+                    className="px-3 sm:px-4 py-2 text-accent disabled:cursor-not-allowed"
+                    onClick={() =>
+                      handleUpdateQuantity(currentQuantity - 1, "decrement")
+                    }
+                    disabled={updating}
+                  >
+                    −
+                  </button>
+                  <span className="px-4 my-1 border-x border-primary ">
+                    {currentQuantity}
+                  </span>
+                  <button
+                    className="px-3 sm:px-4 py-2 text-accent disabled:cursor-not-allowed"
+                    onClick={() =>
+                      handleUpdateQuantity(currentQuantity + 1, "increment")
+                    }
+                    disabled={updating}
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             )}
 
             <div>
               {actionIcon === "delete" ? (
-                <Trash2
-                  className={`w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors ${deleting ? "opacity-50" : ""}`}
-                  onClick={handleDelete}
-                />
+                deleting ? (
+                  <Trash2
+                    className="w-6 h-6 cursor-pointer text-red-500 transition-colors
+                    animate__animated  animate__flash animate__infinite 
+                    "
+                    
+                  />
+                ) : (
+                  <Trash2
+                    className="w-6 h-6 text-[#1E1E1E] cursor-pointer hover:text-red-500 transition-colors"
+                    onClick={handleDelete}
+                  />
+                )
               ) : actionIcon === "cart" ? (
                 <button className="p-2.5 px-8 border border-primary rounded-xl cursor-pointer">
                   <ShoppingCart className="w-5 h-5 text-primary" />

@@ -85,7 +85,7 @@ export default function CardAllProducts({
     <>
       <div
         onClick={productId ? handleCardClick : undefined}
-        className={`bg-white w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
+        className={`bg-white w-full max-w-55  p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
           productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
         } sm:h-[calc(2*240px+0.75rem)]`}
       >

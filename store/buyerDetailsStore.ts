@@ -25,7 +25,7 @@ const defaultBuyerDetails: BuyerDetailsData = {
   phone: "+53 ",
   address: "",
   note: "",
-  paymentMethod: "Tarjetas de crédito o débito", // Por defecto
+  paymentMethod: "Tarjeta de Crédito/Débito", // Por defecto
 };
 
 const BuyerDetailsStore = create<BuyerDetailsState>()(
