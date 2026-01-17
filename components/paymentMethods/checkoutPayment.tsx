@@ -27,28 +27,22 @@ export default function CheckoutPayment() {
   const handleContinue = () => {
     if (validateForm()) {
       console.log("Form data is valid:", formData);
-      
-      // Obtener datos del MatterCart1Store
-      const matterData = MatterCart1Store.getState().formData;
-      
-      // Obtener método de pago del store
+
       const paymentMethod = BuyerDetailsStore.getState().buyerDetails.paymentMethod;
-      
-      // Guardar datos completos en el store (incluyendo método de pago y datos de matterCart1Store)
+
       const completeData = {
-        firstName: matterData.firstName || formData.firstName,
-        lastName: `${matterData.lastName1 || formData.lastName1} ${matterData.lastName2 || formData.lastName2}`.trim(),
+        firstName: formData.firstName,
+        lastName: `${formData.lastName1 || ""} ${formData.lastName2 || ""}`.trim(),
         email: formData.email,
-        phone: matterData.phone || formData.phone,
-        address: matterData.address || formData.address,
-        note: matterData.note || formData.note,
+        phone: formData.phone,
+        address: formData.address,
+        note: formData.note,
         paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito",
       };
-      
+
       BuyerDetailsStore.getState().setBuyerDetails(completeData);
-      
-      // Navigate to next step or payment
-      router.push('/cart3');
+
+      router.push("/cart4");
       console.log("Datos guardados en el store:", completeData);
       console.log("Método de pago:", paymentMethod);
     } else {

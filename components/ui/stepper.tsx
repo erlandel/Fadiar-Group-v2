@@ -18,13 +18,9 @@ export function CheckoutStepper({ currentStep = 0 }: CheckoutStepperProps) {
       label: "Datos de pago",
       icon: DollarSign,
     },
+ 
     {
       id: 2,
-      label: "Datos de entrega",
-      icon: Truck,
-    },
-    {
-      id: 3,
       label: "Completar",
       icon: Check,
     },

@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CreditCard, Banknote, Store, ArrowRightLeft } from "lucide-react";
 import BuyerDetailsStore from "../../store/buyerDetailsStore";
 import MatterCart1Store from "../../store/matterCart1Store";
 import { EmojioneDepartmentStore, EmojioneMoneyBag, StreamlineUltimateColorDataTransferCircle, TwemojiCreditCard } from "@/icons/icons";
