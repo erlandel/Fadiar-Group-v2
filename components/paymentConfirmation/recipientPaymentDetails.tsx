@@ -1,13 +1,11 @@
 "use client";
 
-import BeneficiaryDetailsStore from "@/store/beneficiaryDetailsStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 import { useRouter } from "next/navigation";
 
 export default function RecipientPaymentDetails() {
     const router = useRouter();
-    const beneficiaryDetails = BeneficiaryDetailsStore((state) => state.beneficiaryDetails);
-    const delivery = MatterCart1Store((state) => state.formData.delivery);
+    const { formData } = MatterCart1Store();
 
     return(
            <div className="  2xl:w-80" style={{ wordWrap: 'break-word' }}>
@@ -23,7 +21,7 @@ export default function RecipientPaymentDetails() {
         <div className="ml-4">
           <p className="text-[gray] ">
             Método de entrega:{" "}
-            <span className="text-primary wrap-break-word">{delivery ? "Domicilio" : "Recogida en tienda"}</span>
+            <span className="text-primary wrap-break-word">{formData.delivery ? "Domicilio" : "Recogida en tienda"}</span>
           </p>
         </div>
 
@@ -34,47 +32,72 @@ export default function RecipientPaymentDetails() {
         <div className="ml-4">
           <p className="text-[gray] ">
             Nombre:{" "}
-            <span className="text-primary wrap-break-word">{beneficiaryDetails.firstName}</span>
+            <span className="text-primary wrap-break-word">{formData.firstName}</span>
           </p>
         </div>
 
-           <div className="ml-4">
+        <div className="ml-4">
           <p className="text-[gray] ">
             Apellidos:{" "}
-            <span className="text-primary wrap-break-word">{beneficiaryDetails.lastName}</span>
+            <span className="text-primary wrap-break-word">{`${formData.lastName1} ${formData.lastName2}`.trim()}</span>
+          </p>
+        </div>
+
+        <div className="ml-4">
+          <p className="text-[gray] ">
+            Carnet de Identidad:{" "}
+            <span className="text-primary wrap-break-word">{formData.identityCard}</span>
           </p>
         </div>
         
-           <div className="ml-4">
+        <div className="ml-4">
           <p className="text-[gray] ">
             Teléfono:{" "}
-            <span className="text-primary wrap-break-word">{beneficiaryDetails.phone}</span>
+            <span className="text-primary wrap-break-word">{formData.phone}</span>
           </p>
         </div>
 
-           <div className="ml-4">
-          <p className="text-[gray] ">
-            Correo electrónico: {" "}
-            <span className="text-primary wrap-break-word">{beneficiaryDetails.email}</span>
-          </p>
-
-        </div>
-          <div className="w-full bg-[#F5F7FA] ">
+        <div className="w-full bg-[#F5F7FA] ">
           <p className="ml-4 text-primary">Dirección de entrega</p>
         </div>
 
-           <div className="ml-4">
+        <div className="ml-4">
           <p className="text-[gray] ">
-            Dirección: {" "}
-            <span className="text-primary wrap-break-word">{beneficiaryDetails.address}</span>
+            Provincia: {" "}
+            <span className="text-primary wrap-break-word">{formData.province}</span>
           </p>
-        </div> 
+        </div>
 
-            <div className="w-full  border-b-2 border-gray"></div>
-           
-            <div className="ml-4">
-            <p className="text-accent cursor-pointer" onClick={() => router.push('/cart3')}>Editar datos de entrega</p>
-            </div>
+        <div className="ml-4">
+          <p className="text-[gray] ">
+            Municipio: {" "}
+            <span className="text-primary wrap-break-word">{formData.municipality}</span>
+          </p>
+        </div>
+
+        {formData.delivery && (
+          <div className="ml-4">
+            <p className="text-[gray] ">
+              Dirección: {" "}
+              <span className="text-primary wrap-break-word">{formData.address}</span>
+            </p>
+          </div>
+        )}
+
+        {formData.note && (
+          <div className="ml-4">
+            <p className="text-[gray] ">
+              Nota: {" "}
+              <span className="text-primary wrap-break-word">{formData.note}</span>
+            </p>
+          </div>
+        )}
+
+        <div className="w-full  border-b-2 border-gray"></div>
+       
+        <div className="ml-4">
+        <p className="text-accent cursor-pointer" onClick={() => router.push('/cart1')}>Editar datos de entrega</p>
+        </div>
 
       </div>
         </div>

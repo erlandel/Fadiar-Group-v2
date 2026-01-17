@@ -21,7 +21,7 @@ export default function Cart4() {
 
           <div className="flex justify-center items-center ">
             <div className=" w-160 ml-2  lg:ml-20">
-              <CheckoutStepper currentStep={3} />
+              <CheckoutStepper currentStep={2} />
             </div>
           </div>
         </div>
