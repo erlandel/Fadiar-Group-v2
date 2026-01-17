@@ -49,7 +49,9 @@ export default function Cart1() {
   const filteredByDeliveryItems = items.filter((item) => {
     if (!delivery || !municipalityId) return true;
     const tienda = rawCart.find((t: any) => t.id === item.tiendaId);
-    return tienda?.domicilios?.some((d: any) => d.id_municipio === municipalityId);
+    return tienda?.domicilios?.some(
+      (d: any) => d.id_municipio === municipalityId
+    );
   });
 
   // Extraer tiendas únicas del carrito filtrado
@@ -66,7 +68,10 @@ export default function Cart1() {
 
   // Resetear la tienda seleccionada si ya no está disponible
   useEffect(() => {
-    if (selectedStoreId !== "all" && !stores.find((s) => s.id === selectedStoreId)) {
+    if (
+      selectedStoreId !== "all" &&
+      !stores.find((s) => s.id === selectedStoreId)
+    ) {
       setSelectedStoreId("all");
     }
   }, [stores, selectedStoreId]);
@@ -100,7 +105,7 @@ export default function Cart1() {
         <div className="mx-4">
           <div className="mt-10">
             <p className="text-xs text-gray-400 mb-4">
-              <span className="text-gray-400">Home - </span>
+              <span className="text-gray-400">Inicio - </span>
               <span className="text-primary font-semibold">
                 Carrito de Compras
               </span>
@@ -116,113 +121,115 @@ export default function Cart1() {
             </div>
           </div>
 
-          <div className="mt-20 flex flex-col justify-center  xl:flex-row xl:items-start  ">
+          <div className="mt-20 flex flex-col items-center  justify-center  xl:flex-row xl:items-start  ">
+            <div className="w-full sm:w-auto">
+              {/* Selector de Tiendas */}
+              {isClient && items.length > 0 && (
+                <div className="flex items-center   gap-2" ref={storesRef}>
+                  <span className="font-bold text-primary sm:text-lg whitespace-nowrap">
+                    Tienda(s)
+                  </span>
+                  <span className="text-primary text-xl font-bold">:</span>
 
-            <div>
-            {/* Selector de Tiendas */}
-            {isClient && items.length > 0 && (
-              <div className="flex items-center gap-2" ref={storesRef}>
-                <span className="font-bold text-primary sm:text-lg whitespace-nowrap">
-                  Tienda(s)
-                </span>
-                <span className="text-primary text-xl font-bold">:</span>
-                
-                <div className="relative">
-                  <div
-                    className="flex items-center justify-between bg-gray-50 rounded-lg p-2 cursor-pointer  transition-colors min-w-[200px]"
-                    onClick={() => setOpenStores(!openStores)}
-                  >
-                    <span className="font-bold text-accent whitespace-nowrap truncate sm:text-lg">
-                      {allStores.find((t) => t.id === selectedStoreId)?.name || "Todas"}
-                    </span>
-                    <ChevronDown
-                      className={`h-5 w-5 ml-2 text-primary transition-transform duration-200 ${
-                        openStores ? "rotate-180" : ""
-                      }`}
-                    />
+                  <div className="relative">
+                    <div
+                      className="flex items-center justify-between bg-gray-50 rounded-lg p-2 cursor-pointer  transition-colors min-w-[200px]"
+                      onClick={() => setOpenStores(!openStores)}
+                    >
+                      <span className="font-bold text-accent whitespace-nowrap truncate sm:text-lg">
+                        {allStores.find((t) => t.id === selectedStoreId)
+                          ?.name || "Todas"}
+                      </span>
+                      <ChevronDown
+                        className={`h-5 w-5 ml-2 text-primary transition-transform duration-200 ${
+                          openStores ? "rotate-180" : ""
+                        }`}
+                      />
+                    </div>
+
+                    {openStores && (
+                      <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full min-w-[200px]">
+                        {allStores.map((tienda) => (
+                          <li
+                            key={tienda.id}
+                            className={`px-4 py-2 cursor-pointer hover:bg-gray-50 text-sm transition-colors ${
+                              selectedStoreId === tienda.id
+                                ? "bg-primary/5 text-primary font-bold"
+                                : "text-gray-700"
+                            }`}
+                            onClick={() => {
+                              setSelectedStoreId(tienda.id);
+                              setOpenStores(false);
+                            }}
+                          >
+                            {tienda.name}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-
-                  {openStores && (
-                    <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full min-w-[200px]">
-                      {allStores.map((tienda) => (
-                        <li
-                          key={tienda.id}
-                          className={`px-4 py-2 cursor-pointer hover:bg-gray-50 text-sm transition-colors ${
-                            selectedStoreId === tienda.id
-                              ? "bg-primary/5 text-primary font-bold"
-                              : "text-gray-700"
-                          }`}
-                          onClick={() => {
-                            setSelectedStoreId(tienda.id);
-                            setOpenStores(false);
-                          }}
-                        >
-                          {tienda.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* LISTA DEL CARRITO */}
-            <div className="w-full  mt-5 flex flex-col items-center justify-center gap-y-8 lg:w-140">
-
-              <div className="max-w-120 w-full xl:w-auto 2xl:w-full">
-
-              {isClient && (items.length === 0 ? (
-                <div className="flex flex-col gap-y-4 items-center justify-center">
-                  <p className="text-gray-400 text-md xl:text-2xl">
-                    Tu carrito está vacío.
-                  </p>
-                </div>
-              ) : (
-                Object.values(groupedItems).map((group) => (
-                  <div key={group.name} className="flex flex-col gap-y-4 mb-8">
-                    <div className="border-b pb-2">
-                      <h2 className=" font-bold text-primary">
-                        {group.name}
-                      </h2>
-                      {group.direccion && (
-                        <p className="text-sm text-gray-500 ">
-                          <span className="text-accent font-bold">dirección:</span> {group.direccion}
+              {/* LISTA DEL CARRITO */}
+              <div className="w-full  mt-5 flex flex-col  gap-y-8 lg:w-140">
+                <div className="max-w-120 w-full xl:w-auto 2xl:w-full">
+                  {isClient &&
+                    (items.length === 0 ? (
+                      <div className="flex flex-col gap-y-4 items-center justify-center">
+                        <p className="text-gray-400 text-md xl:text-2xl">
+                          Tu carrito está vacío.
                         </p>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-y-4 items-center justify-center">
-                      {group.items.map((item) => (
-                        <CartCard
-                          key={item.productId}
-                          brand={item.brand}
-                          price={item.price}
-                          image={item.image}
-                          title={item.title}
-                          quantityProducts={item.quantity}
-                          width="w-full"
-                          padding="p-3 sm:p-4"
-                          actionIcon="delete"
-                          productId={item.productId}
-                          cartId={item.cartId}
-                          tiendaId={item.tiendaId}
-                          onDelete={removeItem}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))
-              ))}
+                      </div>
+                    ) : (
+                      Object.values(groupedItems).map((group) => (
+                        <div
+                          key={group.name}
+                          className="flex flex-col gap-y-4 mb-8"
+                        >
+                          <div className="border-b pb-2">
+                            <h2 className=" font-bold text-primary">
+                              {group.name}
+                            </h2>
+                            {group.direccion && (
+                              <p className="text-sm text-gray-500 ">
+                                <span className="text-accent font-bold">
+                                  dirección:
+                                </span>{" "}
+                                {group.direccion}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-y-4 items-center justify-center">
+                            {group.items.map((item) => (
+                              <CartCard
+                                key={item.productId}
+                                brand={item.brand}
+                                price={item.price}
+                                image={item.image}
+                                title={item.title}
+                                quantityProducts={item.quantity}
+                                width="w-full"
+                                padding="p-3 sm:p-4"
+                                actionIcon="delete"
+                                productId={item.productId}
+                                cartId={item.cartId}
+                                tiendaId={item.tiendaId}
+                                onDelete={removeItem}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    ))}
+                </div>
               </div>
             </div>
 
-            </div>
-
-            <div>
+            <div className="max-w-200">
               <Amount />
             </div>
           </div>
-
-
         </div>
 
         <div className="sm:py-20">

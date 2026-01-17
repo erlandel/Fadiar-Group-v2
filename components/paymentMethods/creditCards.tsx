@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import BuyerDetailsStore from "../../store/buyerDetailsStore";
 import MatterCart1Store from "../../store/matterCart1Store";
-import { EmojioneDepartmentStore, EmojioneMoneyBag, StreamlineUltimateColorDataTransferCircle, TwemojiCreditCard } from "@/icons/icons";
+import { EmojioneDepartmentStore, TwemojiCreditCard } from "@/icons/icons";
 
 export default function CreditCards() {
   const [selectedMethod, setSelectedMethod] = useState("Tarjeta de Crédito/Débito");
@@ -39,7 +39,7 @@ export default function CreditCards() {
   return (
     <>
       <div>
-        <h5 className="text-primary font-bold text-xl">01 - Formas de Pago</h5>
+        <h5 className="text-primary font-bold text-2xl">01 - Formas de Pago</h5>
     
 
         <div className="mt-6 flex flex-col gap-4">
@@ -48,25 +48,25 @@ export default function CreditCards() {
               id: "visa",
               title: "Tarjeta de Crédito/Débito", 
               description: "Pago con VISA o MasterCard", 
-              icon: <TwemojiCreditCard className="w-7 h-7 " /> 
+              icon: <TwemojiCreditCard className="w-9 h-9 " /> 
             },
             { 
               id: "efectivo",
-              title: "Efectivo", 
+              title: "Efectivo o Transferencia ", 
               description: "Pago al momento de la entrega", 
-              icon: <EmojioneMoneyBag className="w-10 h-10 " /> 
+              icon: <img src="/images/MoneyTransfer.webp" alt="Efectivo o Transferencia" width={40} height={40} className="object-contain" /> 
             },
             { 
               id: "tienda",
               title: "Recogida en Tienda", 
               description: "Pago directo en el local", 
-              icon: <EmojioneDepartmentStore className="w-8 h-8 text-[#022954]" /> 
+              icon: <EmojioneDepartmentStore className="w-9 h-9 text-[#022954]" /> 
             },
             { 
               id: "zelle",
-              title: "Transferencia Zelle", 
+              title: "Zelle", 
               description: "Pago mediante transferencia bancaria", 
-              icon: <StreamlineUltimateColorDataTransferCircle className="w-9 h-9 " /> 
+              icon: <img src="/images/Zelle.webp" alt="Efectivo o Transferencia" width={37} height={37} className="object-contain" /> 
             }
           ]
           .filter((method) => {
@@ -79,19 +79,19 @@ export default function CreditCards() {
           .map((method) => (
             <label 
               key={method.id} 
-              className={`max-w-100 flex items-center justify-between gap-4 cursor-pointer p-4 border rounded-2xl h-24 transition-all focus-within:ring-0 focus-within:outline-none ${
+              className={`max-w-120  flex items-center justify-between gap-4 cursor-pointer p-4  border rounded-2xl h-30 transition-all focus-within:ring-0 focus-within:outline-none ${
                 selectedMethod === method.title 
                   ? "border-gray-300 " 
                   : "border-gray-200 hover:border-gray-300"
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center">
                   {method.icon}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[#022954] text-lg font-bold">{method.title}</span>
-                  <span className="text-gray-500 text-sm">{method.description}</span>
+                  <span className="text-[#022954] text-lg sm:text-xl font-bold">{method.title}</span>
+                  <span className="text-gray-500 text-sm sm:text-md">{method.description}</span>
                 </div>
               </div>
 

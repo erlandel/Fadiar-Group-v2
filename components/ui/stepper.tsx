@@ -15,7 +15,7 @@ export function CheckoutStepper({ currentStep = 0 }: CheckoutStepperProps) {
     },
     {
       id: 1,
-      label: "Datos de pago",
+      label: "Formas de Pago",
       icon: DollarSign,
     },
  
@@ -74,7 +74,7 @@ export function CheckoutStepper({ currentStep = 0 }: CheckoutStepperProps) {
               </div>
 
               <span
-                className={`mt-4 text-[10.71px] font-bold sm:text-sm transition-colors duration-300 absolute top-12 whitespace-nowrap text-center ${
+                className={`mt-4 text-xs font-bold sm:text-sm transition-colors duration-300 absolute top-12 whitespace-nowrap text-center ${
                   isActive
                     ? "text-primary font-bold"
                     : isCompleted

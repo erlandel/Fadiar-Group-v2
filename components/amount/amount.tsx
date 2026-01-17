@@ -465,7 +465,10 @@ export default function Amount() {
               htmlFor="delivery"
               className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-500"
             >
-              ¿Necesitas entrega a domicilio?
+              ¿Necesitas entrega a domicilio? 
+              <span className="text-accent text-xs ml-1"> 
+                (Se eliminarán las tiendas sin domicilio en el municipio seleccionado.)
+              </span>
             </label>
           </div>
         </div>

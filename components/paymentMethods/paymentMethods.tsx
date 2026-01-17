@@ -6,7 +6,7 @@ export default function PaymentMethods() {
   return (
     <BuyerDetailsProvider>
       <div className="flex flex-col mx-4  justify-center items-center md:items-start md:flex-row sm:justify-around  gap-2">
-        <div>
+        <div >
           <CreditCards />
         </div>
 

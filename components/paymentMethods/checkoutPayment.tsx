@@ -8,7 +8,7 @@ import MatterCart1Store from "../../store/matterCart1Store";
 
 export default function CheckoutPayment() {
   const router = useRouter();
-  const { validateForm, formData } = useBuyerDetailsContext();
+  const { formData } = useBuyerDetailsContext();
   const [isClient, setIsClient] = useState(false);
 
   // Evitar error de hidratación
@@ -25,29 +25,23 @@ export default function CheckoutPayment() {
 
   // Function to handle continue button
   const handleContinue = () => {
-    if (validateForm()) {
-      console.log("Form data is valid:", formData);
+    const paymentMethod = BuyerDetailsStore.getState().buyerDetails.paymentMethod;
 
-      const paymentMethod = BuyerDetailsStore.getState().buyerDetails.paymentMethod;
+    const completeData = {
+      firstName: formData.firstName,
+      lastName: `${formData.lastName1 || ""} ${formData.lastName2 || ""}`.trim(),
+      email: formData.email,
+      phone: formData.phone,
+      address: formData.address,
+      note: formData.note,
+      paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito",
+    };
 
-      const completeData = {
-        firstName: formData.firstName,
-        lastName: `${formData.lastName1 || ""} ${formData.lastName2 || ""}`.trim(),
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        note: formData.note,
-        paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito",
-      };
+    BuyerDetailsStore.getState().setBuyerDetails(completeData);
 
-      BuyerDetailsStore.getState().setBuyerDetails(completeData);
-
-      router.push("/cart4");
-      console.log("Datos guardados en el store:", completeData);
-      console.log("Método de pago:", paymentMethod);
-    } else {
-      console.log("Form validation failed");
-    }
+    router.push("/cart3");
+    console.log("Datos guardados en el store:", completeData);
+    console.log("Método de pago:", paymentMethod);
   };
 
   // Function to handle back button

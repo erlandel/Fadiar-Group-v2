@@ -66,7 +66,7 @@ export default function CartCard({
   return (
     <>
       <div
-        className={`${bgColor} ${width} ${padding} w-full max-w-200 border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
+        className={`${bgColor} ${width} ${padding} w-full border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
       >
         <div className="w-32 h-[124px] overflow-hidden rounded-2xl shrink-0">
           <img

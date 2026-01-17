@@ -14,9 +14,9 @@ export default function Cart2() {
               <span className="text-gray-400">
                 Home - Carrito de Compras -{" "}
               </span>
-              <span className="text-primary font-semibold">Datos de pago</span>
+              <span className="text-primary font-semibold">Formas de Pago</span>
             </p>
-            <h1 className="text-3xl text-primary font-bold ">Datos de pago</h1>
+            <h1 className="text-3xl text-primary font-bold ">Formas de Pago</h1>
           </div>
 
           <div className="flex justify-center items-center ">

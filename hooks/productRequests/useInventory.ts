@@ -36,6 +36,7 @@ export const useInventory = () => {
       }
 
       const data = await res.json();
+      console.log("data:", data);
       
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
       
