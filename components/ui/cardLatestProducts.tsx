@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { server_url } from "@/lib/apiClient";
 import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { CardProps } from "@/types/cardProps";
 import useCartStore from "@/store/cartStore";
 import { Loader } from "lucide-react";
+import { server_url } from "@/urlApi/urlApi";
 
 
 export default function CardLatestProducts({

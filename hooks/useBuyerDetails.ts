@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { buyerDetailsSchema, BuyerDetailsFormData } from "../validations/buyerDetailsSchema";
-import { z } from "zod";
 
 const defaultFormData = {
   firstName: "",

@@ -1,10 +1,10 @@
 "use client";
 import { MaterialIconThemeDependenciesUpdate } from "@/icons/icons";
-import { server_url } from "@/lib/apiClient";
 import { refreshToken } from "@/utils/refreshToken";
 import { useState, useEffect, useRef } from "react";
 import { useAuthStore } from "@/store/authStore";
 import useImgFileStore from "@/store/imgFileStore";
+import { getUserImageNameUrl, server_url } from "@/urlApi/urlApi";
 
 export default function Avatar() {
   const { auth, setAuth } = useAuthStore();
@@ -38,7 +38,7 @@ export default function Avatar() {
             }
           }
           try {
-            const res = await fetch(`${server_url}/getUserImageName`, {
+            const res = await fetch(`${getUserImageNameUrl}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

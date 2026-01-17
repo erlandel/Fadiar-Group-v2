@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { server_url } from "@/lib/apiClient";
 import cartStore from "@/store/cartStore";
 import { useDeleteFromCart } from "@/hooks/cartRequests/useDeleteFromCart";
 import { useUpdateCart } from "@/hooks/cartRequests/useUpdateCart";
 import { ShoppingCart, Trash2 } from "lucide-react";
+import { server_url } from "@/urlApi/urlApi";
 
 interface CardCart4Props {
   title: string;

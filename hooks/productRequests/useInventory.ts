@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { server_url } from "@/lib/apiClient";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
+import { inventory_managerUrl } from "@/urlApi/urlApi";
 
 interface InventoryData {
   products: Product[];
@@ -23,7 +23,7 @@ export const useInventory = () => {
       }
 
       const res = await fetch(
-        `${server_url}/inventory_manager?${queryParams.toString()}`,
+        `${inventory_managerUrl}?${queryParams.toString()}`,
         {
           headers: {
             "Content-Type": "application/json",

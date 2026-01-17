@@ -13,7 +13,7 @@ import MatterCart1Store, {
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
-import { server_url } from "@/lib/apiClient";
+import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 
 interface MunicipalityData {
   id: number;
@@ -113,7 +113,7 @@ export default function Amount() {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const res = await fetch(`${server_url}/obtener-provincias-municipios`);
+        const res = await fetch(`${get_provinces_municipalitiesUrl}`);
         const json = await res.json();
         if (Array.isArray(json)) {
           setData(json);

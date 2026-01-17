@@ -1,6 +1,7 @@
 "use client";
 import InputAuth from "@/components/inputAuth/inputAuth";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
+import { recover_credentials_by_emailUrl } from "@/urlApi/urlApi";
 import { RecoverPasswordSchemaFormData, recoverPasswordSchema } from "@/validations/recoverPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
@@ -29,7 +30,7 @@ export default function RecoverPassword() {
     mutationFn: async (payload: { email: string }) => {
       console.log("email: "+payload.email);
       const response = await fetch(
-        "https://app.fadiar.com:444/prueba/api/recuperar_credenciales_por_correo",
+        `${recover_credentials_by_emailUrl}`,
         {
           method: "POST",
           headers: {

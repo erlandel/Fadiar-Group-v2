@@ -380,7 +380,7 @@ export default function Products() {
               </p>
             )}
           </div>
-          {totalPages > 0 && (
+          {totalPages > 1 && (
             <div className="flex justify-center my-10">
               <Pagination
                 totalPages={totalPages}

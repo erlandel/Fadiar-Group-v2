@@ -1,4 +1,4 @@
-import { server_url } from "@/lib/apiClient";
+import { refresh_tokenUrl } from "@/urlApi/urlApi";
 import { AuthPayload } from "../store/authStore";
 
 export const refreshToken = async (
@@ -8,7 +8,7 @@ export const refreshToken = async (
   if (!auth) return null;
 
   try {
-    const refreshResponse = await fetch(`${server_url}/refresh-token`, {
+    const refreshResponse = await fetch(`${refresh_tokenUrl}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

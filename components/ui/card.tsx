@@ -1,13 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
-import { server_url } from "@/lib/apiClient";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { Loader } from "lucide-react";
+import { server_url } from "@/urlApi/urlApi";
 
 interface CardProps {
   category?: string;

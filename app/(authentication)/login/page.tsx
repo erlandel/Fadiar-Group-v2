@@ -10,6 +10,7 @@ import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import { useEffect } from "react";
+import { loginUrl } from "@/urlApi/urlApi";
 
 export default function Login() {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: async (payload: { email: string; password: string }) => {
       const response = await fetch(
-        "https://app.fadiar.com:444/prueba/api/login",
+       `${loginUrl}`,
         {
           method: "POST",
           headers: {

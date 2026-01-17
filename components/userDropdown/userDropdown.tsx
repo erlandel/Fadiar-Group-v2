@@ -12,9 +12,9 @@ import {
 import useAuthStore from "@/store/authStore";
 import useCartStore from "@/store/cartStore";
 import { useRouter } from "next/navigation";
-import { server_url } from "@/lib/apiClient";
 import { refreshToken } from "@/utils/refreshToken";
 import SuccesMessage from "@/messages/succesMessage";
+import { logoutUrl } from "@/urlApi/urlApi";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +32,7 @@ export default function UserDropdown() {
         // Refrescar el token antes de cerrar sesión
         const currentToken = await refreshToken(auth, setAuth);
 
-        const response = await fetch(`${server_url}/logout`, {
+        const response = await fetch(`${logoutUrl}/logout`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

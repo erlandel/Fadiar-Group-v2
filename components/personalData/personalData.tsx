@@ -5,7 +5,6 @@ import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
 import useAuthStore from "../../store/authStore";
 import useImgFileStore from "../../store/imgFileStore";
-import { server_url } from "@/lib/apiClient";
 import { refreshToken } from "../../utils/refreshToken";
 import { personalDataSchema } from "../../validations/personalDataSchema";
 import { addressSchema } from "../../validations/addressSchema";
@@ -14,6 +13,7 @@ import SuccesMessage from "@/messages/succesMessage";
 import ErrorMessage from "@/messages/errorMessage";
 import WarningMenssage from "@/messages/warningMenssage";
 import { Loader } from "lucide-react";
+import { editUserUrl, server_url } from "@/urlApi/urlApi";
 
 export default function PersonalData() {
   const { auth, setAuth } = useAuthStore();
@@ -82,7 +82,7 @@ export default function PersonalData() {
         Object.fromEntries(data.entries())
       );
 
-      const response = await fetch(`${server_url}/editUser`, {
+      const response = await fetch(`${editUserUrl}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${currentAccessToken}`,
@@ -164,7 +164,7 @@ export default function PersonalData() {
         Object.fromEntries(data.entries())
       );
 
-      const response = await fetch(`${server_url}/editUser`, {
+      const response = await fetch(`${editUserUrl}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${currentAccessToken}`,
@@ -238,7 +238,7 @@ export default function PersonalData() {
         Object.fromEntries(data.entries())
       );
 
-      const response = await fetch(`${server_url}/editUser`, {
+      const response = await fetch(`${server_url}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${currentAccessToken}`,

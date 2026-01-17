@@ -2,8 +2,6 @@
 import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
 import CardNineOffers from "@/components/ui/cardNineOffers";
 import CardSkeleton from "@/components/ui/skeletonCard";
-import { server_url } from "@/lib/apiClient";
-import { Product } from "@/types/product";
 import { useNineOffers } from "@/hooks/productRequests/useNineOffers";
 import { useCallback, useEffect, useRef, useState } from "react";
 

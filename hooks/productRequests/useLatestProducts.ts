@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { server_url } from "@/lib/apiClient";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
+import { latest_productsUrl } from "@/urlApi/urlApi";
 
 export const useLatestProducts = (count: number = 6) => {
   const { municipalityId } = useProductsByLocationStore();
@@ -9,7 +9,7 @@ export const useLatestProducts = (count: number = 6) => {
   return useQuery<Product[]>({
     queryKey: ["latest-products", municipalityId, count],
     queryFn: async () => {
-      const res = await fetch(`${server_url}/getNewerProducts`, {
+      const res = await fetch(`${latest_productsUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { server_url } from "@/lib/apiClient";
 import ShoppingCartIcon from "@/components/icons";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import useCartStore from "@/store/cartStore";
@@ -15,6 +14,7 @@ import RelatedProds from "@/section/relatedProds";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { Loader } from "lucide-react";
+import { server_url } from "@/urlApi/urlApi";
 
 function ProductContent({ id }: { id: string | null }) {
   const [qty, setQty] = useState(1);

@@ -1,6 +1,5 @@
 "use client";
 
-import FloatingLabelInput from "@/components/authenticationComponent/FloatingLabelInput";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -10,6 +9,7 @@ import {
 } from "@/validations/registerSchema";
 import InputAuth from "@/components/inputAuth/inputAuth";
 import { User, Mail, Lock, Loader, Eye, EyeOff, Check, X } from "lucide-react";
+import { registerUrl } from "@/urlApi/urlApi";
 
 export default function Register() {
   const router = useRouter();
@@ -164,7 +164,7 @@ export default function Register() {
 
     try {
       const response = await fetch(
-        "https://app.fadiar.com:444/prueba/api/register",
+        `${registerUrl}`,
         {
           method: "POST",
           headers: {

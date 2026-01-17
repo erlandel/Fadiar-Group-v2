@@ -1,0 +1,38 @@
+// export const server_url = 'https://app.fadiar.com:444/prueba/api';
+
+
+export const server_url = 'https://dwbwr5gh-5001.use.devtunnels.ms';
+
+export const loginUrl = `${server_url}/login`;
+
+export const  recover_credentials_by_emailUrl = `${server_url}/recuperar_credenciales_por_correo`;
+
+export const  registerUrl = `${server_url}/register`;
+
+export const  verifyCodeEmailUrl = `${server_url}/email_verification`;
+
+export const getUserImageNameUrl = `${server_url}/getUserImageName`;
+
+export const editUserUrl = `${server_url}/editUser`;
+
+export const add_product_to_cartUrl = `${server_url}/agregar_producto_carrito`;
+
+export const delete_product_from_cartUrl = `${server_url}/eliminar_producto_carrito`;
+
+export const get_cart_productsUrl = `${server_url}/obtener_productos_carrito`;
+
+export const get_cart_products_by_tiendaUrl = `${server_url}/obtener_productos_carrito_por_tienda`;
+
+export const best_selling_productsUrl = `${server_url}/img_mas_vendido`;
+
+export const inventory_managerUrl = `${server_url}/inventory_manager`;
+
+export const latest_productsUrl = `${server_url}/getNewerProducts`;
+
+export const most_viewed_productsUrl = `${server_url}/img_mas_vendido`;
+
+export const refresh_tokenUrl = `${server_url}/refresh-token`;
+
+export const get_provinces_municipalitiesUrl = `${server_url}/obtener-provincias-municipios`;
+
+export const logoutUrl = `${server_url}/logout`;

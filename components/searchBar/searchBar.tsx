@@ -2,9 +2,9 @@
 import { IcSharpSearch } from "@/icons/icons";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { server_url } from "@/lib/apiClient";
 import { Product } from "@/types/product";
 import { useInventory } from "@/hooks/productRequests/useInventory";
+import { server_url } from "@/urlApi/urlApi";
 
 function levenshtein(a: string, b: string) {
   const m = a.length;

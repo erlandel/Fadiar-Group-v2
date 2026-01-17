@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
-import { server_url } from "@/lib/apiClient";
 import ErrorMessage from "@/messages/errorMessage";
 import SuccesMessage from "@/messages/succesMessage";
 import { useSyncCart } from "./useSyncCart";
+import { delete_product_from_cartUrl } from "@/urlApi/urlApi";
 
 export const useDeleteFromCart = () => {
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,7 @@ export const useDeleteFromCart = () => {
       }
 
       const response = await fetch(
-        `${server_url}/eliminar_producto_carrito`,
+        `${delete_product_from_cartUrl}`,
         {
           method: "POST",
           headers: {

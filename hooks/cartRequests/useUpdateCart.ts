@@ -1,9 +1,9 @@
 import { useState } from "react";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
-import { server_url } from "@/lib/apiClient";
 import { useSyncCart } from "./useSyncCart";
 import ErrorMessage from "@/messages/errorMessage";
+import { get_cart_products_by_tiendaUrl } from "@/urlApi/urlApi";
 
 export const useUpdateCart = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export const useUpdateCart = () => {
         return;
       }
 
-      const response = await fetch(`${server_url}/modificar_cantidad_producto_carrito`, {
+      const response = await fetch(`${get_cart_products_by_tiendaUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

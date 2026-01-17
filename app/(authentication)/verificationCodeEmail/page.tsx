@@ -8,6 +8,7 @@ import InputAuthCode from "@/components/inputAuthCode/inputAuthCode";
 import { Loader, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
+import { verifyCodeEmailUrl } from "@/urlApi/urlApi";
 
 
 export default function VerificationCodeEmail() {
@@ -31,7 +32,7 @@ export default function VerificationCodeEmail() {
     mutationFn: async (payload: { code: string; email: string }) => {
        console.log("payload a enviar:", payload);
       const response = await fetch(
-        "https://app.fadiar.com:444/prueba/api/email_verification",
+        `${verifyCodeEmailUrl}`,
         {
           method: "POST",
           headers: {

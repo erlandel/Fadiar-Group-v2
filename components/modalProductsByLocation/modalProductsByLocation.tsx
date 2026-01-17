@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
-import { server_url } from "@/lib/apiClient"; // importas tu server_url
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 
 interface MunicipalityData {
   id: number;
@@ -65,7 +65,7 @@ const ModalProductsByLocation = () => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const res = await fetch(`${server_url}/obtener-provincias-municipios`);
+        const res = await fetch(`${get_provinces_municipalitiesUrl}`);
         const json = await res.json();
         console.log("res: ",json);
         setData(json); // json esperado: [{ provincia: 'La Habana', municipios: [...] }, ...]
