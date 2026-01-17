@@ -7,6 +7,7 @@ export type FormData = {
   province: string;
   municipality: string;
   delivery: boolean;
+  deliveryPrice?: number;
   customerName?: string;
   firstName: string;
   lastName1: string;
@@ -29,6 +30,7 @@ const defaultFormData: FormData = {
   province: "",
   municipality: "",
   delivery: false,
+  deliveryPrice: 0,
   customerName: "",
   firstName: "",
   lastName1: "",

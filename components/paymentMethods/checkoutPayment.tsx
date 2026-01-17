@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useBuyerDetailsContext } from "../../contexts/BuyerDetailsContext";
 import BuyerDetailsStore from "../../store/buyerDetailsStore";
 import cartStore from "../../store/cartStore";
+import MatterCart1Store from "../../store/matterCart1Store";
 
 export default function CheckoutPayment() {
   const router = useRouter();
@@ -15,22 +16,33 @@ export default function CheckoutPayment() {
     setIsClient(true);
   }, []);
 
-  // Obtener precios del carrito solo en el cliente
+  // Obtener precios del carrito y estado de domicilio solo en el cliente
   const subtotal = isClient ? cartStore.getState().getTotalPrice() : 0;
-  const total = isClient ? subtotal + 5 : 5;
+  const deliveryData = isClient ? MatterCart1Store.getState().formData : { delivery: false, deliveryPrice: 0 };
+  const delivery = deliveryData.delivery;
+  const deliveryCost = delivery ? (deliveryData.deliveryPrice || 5) : 0;
+  const total = subtotal + deliveryCost;
 
   // Function to handle continue button
   const handleContinue = () => {
     if (validateForm()) {
       console.log("Form data is valid:", formData);
       
+      // Obtener datos del MatterCart1Store
+      const matterData = MatterCart1Store.getState().formData;
+      
       // Obtener método de pago del store
       const paymentMethod = BuyerDetailsStore.getState().buyerDetails.paymentMethod;
       
-      // Guardar datos completos en el store (incluyendo método de pago)
+      // Guardar datos completos en el store (incluyendo método de pago y datos de matterCart1Store)
       const completeData = {
-        ...formData,
-        paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito", // Valor por defecto si no existe
+        firstName: matterData.firstName || formData.firstName,
+        lastName: `${matterData.lastName1 || formData.lastName1} ${matterData.lastName2 || formData.lastName2}`.trim(),
+        email: formData.email,
+        phone: matterData.phone || formData.phone,
+        address: matterData.address || formData.address,
+        note: matterData.note || formData.note,
+        paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito",
       };
       
       BuyerDetailsStore.getState().setBuyerDetails(completeData);
@@ -72,18 +84,21 @@ export default function CheckoutPayment() {
 
         <div className="mb-7">
           <div className="bg-[#F5F7FA] rounded-xl overflow-hidden">
-            <div className="flex justify-between items-center p-6 text-[#022954]">
-              <span className="text-md">Subtotal:</span>
-              <span className="font-medium text-xl">$ {subtotal} USD</span>
-            </div>
-             
+            {deliveryCost > 0 && (
+              <>
+                <div className="flex justify-between items-center p-6 text-[#022954]">
+                  <span className="text-md">Subtotal:</span>
+                  <span className="font-medium text-xl">$ {subtotal} USD</span>
+                </div>
 
-            <div>
-              <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-4 text-[#022954]">
-                <span className="text-md">Comisión por forma de pago:</span>
-                <span className="font-medium whitespace-nowrap text-xl">$ 5 USD</span>
-              </div>
-            </div>
+                <div>
+                  <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-4 text-[#022954]">
+                    <span className="text-md">Domicilio:</span>
+                    <span className="font-medium whitespace-nowrap text-xl">$ {deliveryCost} USD</span>
+                  </div>
+                </div>
+              </>
+            )}
 
             <div className="flex justify-between items-center p-4 py-6 bg-[#E2E6EA]">
               <span className="font-bold text-[#022954] text-xl">Total</span>
@@ -92,6 +107,8 @@ export default function CheckoutPayment() {
               </span>
             </div>
           </div>
+
+
         </div>
 
         <div className="flex justify-between space-x-4">

@@ -4,7 +4,8 @@ import { buyerDetailsSchema, BuyerDetailsFormData } from "../validations/buyerDe
 
 const defaultFormData = {
   firstName: "",
-  lastName: "",
+  lastName1: "",
+  lastName2: "",
   email: "",
   phone: "+53 ",
   address: "",
@@ -64,7 +65,9 @@ export function BuyerDetailsProvider({ children }: { children: ReactNode }) {
       const fieldErrors: Partial<Record<keyof BuyerDetailsFormData, string>> = {};
       result.error.issues.forEach((issue) => {
         const field = issue.path[0] as keyof BuyerDetailsFormData;
-        fieldErrors[field] = issue.message;
+        if (!fieldErrors[field]) {
+          fieldErrors[field] = issue.message;
+        }
       });
       setErrors(fieldErrors);
       return false;

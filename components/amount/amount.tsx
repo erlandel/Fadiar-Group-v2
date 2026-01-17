@@ -217,7 +217,10 @@ export default function Amount() {
     }
 
     // Guardar datos del formulario en el store
-    MatterCart1Store.getState().setFormData(formData);
+    MatterCart1Store.getState().setFormData({
+      ...formData,
+      deliveryPrice: deliveryPrice
+    });
 
     console.log(formData);
 

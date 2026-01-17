@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
 import { useBuyerDetailsContext } from "../../contexts/BuyerDetailsContext";
@@ -10,19 +10,76 @@ export default function BuyerDetails() {
     formData,
     errors,
     handleInputChange,
-    handlePhoneChange,
-    validateForm,
-    clearErrors,
+    handlePhoneChange,    
     setFormData,
   } = useBuyerDetailsContext();
+
+  const [lastName, setLastName] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLastName(value);
+    const trimmed = value.trim().replace(/\s+/g, " ");
+
+    if (trimmed.length === 0) {
+      setFormData({
+        lastName1: "",
+        lastName2: "",
+      });
+      setLastNameError("");
+      return;
+    }
+
+    const parts = trimmed.split(" ");
+    const lastName1 = parts.shift() ?? "";
+    const lastName2 = parts.join(" ");
+
+    setFormData({
+      lastName1,
+      lastName2,
+    });
+
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
+    let error = "";
+    if (lastName1.trim().length === 0) {
+      error = "Ingresa el primer apellido";
+    } else if (!nameRegex.test(lastName1)) {
+      error = "Error de escritura";
+    } else if (lastName2.trim().length === 0) {
+      error = "Ingresa el segundo apellido";
+    } else if (!nameRegex.test(lastName2)) {
+      error = "Error de escritura";
+    }
+
+    setLastNameError(error);
+  };
 
   // Cargar datos del store al montar el componente
   useEffect(() => {
     const savedData = BuyerDetailsStore.getState().buyerDetails;
     
-    // Solo cargar si hay datos guardados y son diferentes a los actuales
-    if (savedData && JSON.stringify(savedData) !== JSON.stringify(formData)) {
-      setFormData(savedData);
+    if (savedData) {
+      let lastName1 = "";
+      let lastName2 = "";
+
+      if (savedData.lastName) {
+        const parts = savedData.lastName.trim().replace(/\s+/g, " ").split(" ");
+        lastName1 = parts.shift() ?? "";
+        lastName2 = parts.join(" ");
+        setLastName(`${lastName1} ${lastName2}`.trim());
+      }
+
+      setFormData({
+        firstName: savedData.firstName ?? "",
+        lastName1,
+        lastName2,
+        email: savedData.email ?? "",
+        phone: savedData.phone ?? "+53 ",
+        address: savedData.address ?? "",
+        note: savedData.note ?? "",
+      });
     }
   }, []); // Array de dependencias vacío para que solo se ejecute una vez
 
@@ -47,7 +104,7 @@ export default function BuyerDetails() {
                 onChange={handleInputChange}
               />
               {errors.firstName && (
-                <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+                <p className="text-red-500 text-xs mt-1 ml-2">{errors.firstName}</p>
               )}
             </div>
             <div>
@@ -55,11 +112,13 @@ export default function BuyerDetails() {
                 type="text"
                 placeholder="Apellidos"
                 name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
+                value={lastName}
+                onChange={handleLastNameChange}
               />
-              {errors.lastName && (
-                <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+              {(lastNameError || errors.lastName1 || errors.lastName2) && (
+                <p className="text-red-500 text-xs mt-1 ml-2">
+                  {lastNameError || errors.lastName1 || errors.lastName2}
+                </p>
               )}
             </div>
             <div>
@@ -71,7 +130,7 @@ export default function BuyerDetails() {
                 onChange={handleInputChange}
               />
               {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                <p className="text-red-500 text-xs mt-1 ml-2">{errors.email}</p>
               )}
             </div>
 
@@ -83,7 +142,7 @@ export default function BuyerDetails() {
                 placeholder="Teléfono"
               />
               {errors.phone && (
-                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                <p className="text-red-500 text-xs mt-1  ml-2">{errors.phone}</p>
               )}
             </div>
           </div>
@@ -97,7 +156,7 @@ export default function BuyerDetails() {
               onChange={handleInputChange}
             />
             {errors.address && (
-              <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              <p className="text-red-500 text-xs mt-1 ml-2">{errors.address}</p>
             )}
           </div>
 
