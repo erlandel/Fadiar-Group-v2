@@ -24,7 +24,7 @@ export type FormState = {
   resetToDefaults: () => void;
 };
 
-const defaultFormData: FormData = {
+export const defaultFormData: FormData = {
   phone: "+53 ",
   identityCard: "",
   province: "",

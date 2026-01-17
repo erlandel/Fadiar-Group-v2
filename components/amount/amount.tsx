@@ -9,6 +9,7 @@ import { useStore } from "zustand";
 import cartStore from "../../store/cartStore";
 import MatterCart1Store, {
   FormData as MatterFormData,
+  defaultFormData,
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
@@ -48,9 +49,7 @@ export default function Amount() {
   const items = useStore(cartStore, (state) => state.items);
   const rawCart = useStore(cartStore, (state) => (state as any).rawCart);
 
-  const [formData, setFormData] = useState<MatterFormData>(
-    MatterCart1Store.getState().formData
-  );
+  const [formData, setFormData] = useState<MatterFormData>(defaultFormData);
 
   // Filtrar items si se solicita domicilio
   const filteredItems = items.filter((item) => {
@@ -101,6 +100,14 @@ export default function Amount() {
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    const persistedFormData = MatterCart1Store.getState().formData;
+    setFormData((prev) => ({
+      ...prev,
+      ...persistedFormData,
+    }));
   }, []);
 
   useEffect(() => {
@@ -332,7 +339,7 @@ export default function Amount() {
                 <InputField
                   type="text"
                   name="province"
-                  value={storeProvince}
+                  value={isClient ? storeProvince : ""}
                   readOnly
                   placeholder="Provincia"
                 />
