@@ -1,13 +1,11 @@
 "use client";
 
 import BuyerDetailsStore from "@/store/buyerDetailsStore";
-import BeneficiaryDetailsStore from "@/store/beneficiaryDetailsStore";
 import { useRouter } from "next/navigation";
 
 export default function PayerPaymentDetails() {
   const router = useRouter();
   const buyerDetails = BuyerDetailsStore((state) => state.buyerDetails);
-  const beneficiaryDetails = BeneficiaryDetailsStore((state) => state.beneficiaryDetails);
 
   return (
     <div className="w-full wrap-break-word">
