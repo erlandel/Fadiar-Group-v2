@@ -18,7 +18,7 @@ export const refreshToken = async (
       }),
     });
 
-    console.log("refreshResponse:", refreshResponse);
+    // console.log("refreshResponse:", refreshResponse);
     if (refreshResponse.ok) {
       const refreshData = await refreshResponse.json();
       if (refreshData.access_token) {
@@ -31,7 +31,7 @@ export const refreshToken = async (
           refresh_token: newRefreshToken,
         });
 
-        console.log("newAccessToken:", newAccessToken);
+        // console.log("newAccessToken:", newAccessToken);
         
         return newAccessToken;
       }

@@ -1,107 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MaterialSymbolsAdd } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
-
-
-interface Order {
-  id: string;
-  date: string;
-  time: string;
-  idCard: string;
-  phone: string;
-  status: "Entregado" | "Cancelado";
-  products: Array<{
-    name: string;
-    brand: string;
-    price: number;
-    image: string;
-  }>;
-}
-
-const mockOrders: Order[] = [
-  {
-    id: "#83803",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [
-      {
-        name: "Nevera 5.5 Pies",
-        brand: "Marca Eko",
-        price: 365,
-          image: "/images/004.svg",
-      },
-      {
-        name: "Freidora de Aire 5.5 L",
-        brand: "Marca Eko",
-        price: 63,
-         image: "/images/004.svg",
-      },
-        {
-        name: "Nevera 5.5 Pies",
-        brand: "Marca Eko",
-        price: 365,
-          image: "/images/004.svg",
-      },
-      {
-        name: "Freidora de Aire 5.5 L",
-        brand: "Marca Eko",
-        price: 63,
-         image: "/images/004.svg",
-      },   
-    ],
-  },
-  {
-    id: "#53833",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [],
-  },
-  {
-    id: "#63803",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Cancelado",
-    products: [],
-  },
-  {
-    id: "#53803",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [],
-  },
-  {
-    id: "#25603",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [],
-  },
-];
+import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
+import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 
 export default function OrdersTable() {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
+  const { orders, loading, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
+  const { fetchOrderProducts, loading: loadingProducts } = useGetOrderProducts();
 
-  const toggleOrder = (orderId: string) => {
+  useEffect(() => {
+    fetchOrders(0, 10, "");
+  }, [fetchOrders]);
+
+  const loadMore = () => {
+    const lastId = orders.length > 0 ? orders[orders.length - 1].id : 0;
+    fetchOrders(lastId, 10, "");
+  };
+
+  const toggleOrder = async (orderId: string) => {
+    const isOpening = !openOrderIds.includes(orderId);
+    
     setOpenOrderIds((prev) =>
-      prev.includes(orderId)
-        ? prev.filter((id) => id !== orderId)
-        : [...prev, orderId]
+      isOpening
+        ? [...prev, orderId]
+        : prev.filter((id) => id !== orderId)
     );
+
+    if (isOpening) {
+      const order = orders.find(o => o.id === orderId);
+      if (order && (!order.products || order.products.length === 0)) {
+        const products = await fetchOrderProducts(orderId);
+        if (products) {
+          updateOrderProducts(orderId, products);
+        }
+      }
+    }
   };
 
   return (
@@ -119,7 +55,7 @@ export default function OrdersTable() {
         </div>
 
         {/* Table Body with Accordion */}
-        {mockOrders.map((order) => {
+        {orders.map((order) => {
           const isOpen = openOrderIds.includes(order.id);
           return (
             <div key={order.id} className="py-2 ">
@@ -136,7 +72,7 @@ export default function OrdersTable() {
                     isOpen ? "text-white" : "text-[#022954]"
                   }`}
                 >
-                  {order.id}
+                  {order.id.toString().startsWith("#") ? order.id : `#${order.id}`}
                 </div>
                 <div
                   className={`text-center ${
@@ -157,21 +93,23 @@ export default function OrdersTable() {
                     isOpen ? "text-white" : "text-[#777777]"
                   }`}
                 >
-                  {order.idCard}
+                  {order.client_ci}
                 </div>
                 <div
                   className={`text-center ${
                     isOpen ? "text-white" : "text-[#777777]"
                   }`}
                 >
-                  {order.phone}
+                  {order.client_cell}
                 </div>
                 <div className="text-center">
                   <span
                     className={`inline-block px-4 py-1 rounded-full text-sm font-medium ${
-                      order.status === "Entregado"
-                        ? "bg-[#2BD530] text-white"
-                        : "bg-[#D52B2E] text-white"
+                      order.status === "Confirmado"
+                        ? "bg-[##2BD530] text-white"
+                        : order.status === "En espera"
+                        ? "bg-yellow-500 text-white"
+                        : "bg-[##D52B2E] text-white"
                     }`}
                   >
                     {order.status}
@@ -200,7 +138,7 @@ export default function OrdersTable() {
                 }`}
               >
                 <div className="px-6 py-6 bg-[#F5F7FA] rounded-b-xl">
-                  {order.products.length > 0 ? (
+                  {order.products && order.products.length > 0 ? (
                     <div className="max-h-[350px] overflow-y-auto ">
                       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-2">
                         {order.products.map((product, idx) => (
@@ -208,16 +146,21 @@ export default function OrdersTable() {
                             key={idx}
                             brand={product.brand}
                             price={product.price.toString()}
-                            image={product.image}
+                            image={product.img}
                             title={product.name}                      
                             padding="p-3 sm:p-4"
                             width="w-92"
                             actionIcon="none"
+                            quantityProducts={product.count}
                             hideQuantitySelector={true}
                             bgColor="bg-[F5F7FA]"
                           />
                         ))}
                       </div>
+                    </div>
+                  ) : loadingProducts && isOpen ? (
+                    <div className="text-center py-4 text-[#777777]">
+                      Cargando productos...
                     </div>
                   ) : (
                     <p className="text-[#777777] text-center py-4">
@@ -229,6 +172,27 @@ export default function OrdersTable() {
             </div>
           );
         })}
+
+        {loading && (
+          <div className="text-center py-4 text-[#777777]">Cargando pedidos...</div>
+        )}
+
+        {!loading && orders.length === 0 && (
+          <div className="text-center py-10 text-[#777777]">
+            No se encontraron pedidos.
+          </div>
+        )}
+
+        {!loading && hasMore && orders.length > 0 && (
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={loadMore}
+              className="bg-[#022954] text-white px-6 py-2 rounded-xl font-bold hover:bg-opacity-90 transition-colors"
+            >
+              Cargar más
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

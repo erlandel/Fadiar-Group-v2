@@ -1,82 +1,49 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MaterialSymbolsAdd } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
-
-interface Order {
-  id: string;
-  date: string;
-  time: string;
-  idCard: string;
-  phone: string;
-  status: "Entregado" | "Cancelado";
-  products: Array<{
-    name: string;
-    brand: string;
-    price: number;
-    image: string;
-  }>;
-}
-
-const mockOrders: Order[] = [
-  {
-    id: "#83803",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [
-      {
-        name: "Nevera 5.5 Pies",
-        brand: "Marca Eko",
-        price: 365,
-        image: "/images/004.svg",
-      },
-      {
-        name: "Freidora de Aire 5.5 L",
-        brand: "Marca Eko",
-        price: 63,
-        image: "/images/004.svg",
-      },
-    ],
-  },
-  {
-    id: "#53833",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Entregado",
-    products: [],
-  },
-  {
-    id: "#63803",
-    date: "2025-10-01",
-    time: "08:39",
-    idCard: "82022135776",
-    phone: "56131490",
-    status: "Cancelado",
-    products: [],
-  },
-];
+import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
+import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 
 export default function MobileOrdes() {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
+  const { orders, loading, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
+  const { fetchOrderProducts, loading: loadingProducts } = useGetOrderProducts();
 
-  const toggleOrder = (orderId: string) => {
+  useEffect(() => {
+    fetchOrders(0, 10, "");
+  }, [fetchOrders]);
+
+  const loadMore = () => {
+    const lastId = orders.length > 0 ? orders[orders.length - 1].id : 0;
+    fetchOrders(lastId, 10, "");
+  };
+
+  const toggleOrder = async (orderId: string) => {
+    const isOpening = !openOrderIds.includes(orderId);
+
     setOpenOrderIds((prev) =>
-      prev.includes(orderId)
-        ? prev.filter((id) => id !== orderId)
-        : [...prev, orderId]
+      isOpening
+        ? [...prev, orderId]
+        : prev.filter((id) => id !== orderId)
     );
+
+    if (isOpening) {
+      const order = orders.find(o => o.id === orderId);
+      if (order && (!order.products || order.products.length === 0)) {
+        const products = await fetchOrderProducts(orderId);
+        if (products) {
+          updateOrderProducts(orderId, products);
+        }
+      }
+    }
   };
 
   return (
     <div className="space-y-4 mt-4">
-      {mockOrders.map((order) => {
+      {orders.map((order) => {
         const isOpen = openOrderIds.includes(order.id);
         return (
           <div key={order.id} className="rounded-2xl overflow-hidden">
@@ -100,147 +67,82 @@ export default function MobileOrdes() {
                 >
                   <MaterialSymbolsAdd
                     style={{ color: isOpen ? "#FFFFFF" : "#777777" }}
-                    width={24}
-                    height={24}
+                    width={16}
+                    height={16}
                   />
                 </button>
               </div>
 
-              {/* Header with Pedido and ID in same line */}
-              <div className="flex justify-between items-center mb-4">
-                <p
-                  className={`text-sm font-bold ${
-                    isOpen ? "text-white" : "text-[#777777]"
-                  }`}
-                >
-                  Pedido
-                </p>
-                <p
-                  className={` font-bold ${
-                    isOpen ? "text-white" : "text-[#022954]"
-                  }`}
-                >
-                  {order.id}
-                </p>
-              </div>
-
-              {/* Order Details */}
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span
-                    className={`text-sm font-bold ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    Fecha
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    {order.date}
-                  </span>
+              {/* Order Info */}
+              <div className="grid grid-cols-2 gap-y-3">
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Pedido</p>
+                  <p className="font-bold">{order.id.toString().startsWith("#") ? order.id : `#${order.id}`}</p>
                 </div>
-
-                <div className="flex justify-between">
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Estado</p>
                   <span
-                    className={`text-sm font-bold ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    Hora
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    {order.time}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span
-                    className={`text-sm font-bold ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    Carnet de identidad
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    {order.idCard}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span
-                    className={`text-sm font-bold ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    Teléfono
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    {order.phone}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center pt-2">
-                  <span
-                    className={`text-sm font-bold ${
-                      isOpen ? "text-white" : "text-[#777777]"
-                    }`}
-                  >
-                    Estado
-                  </span>
-                  <span
-                    className={`px-6 py-2 rounded-full text-sm font-medium ${
-                      order.status === "Entregado"
+                    className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-medium ${
+                      order.status === "Confirmado"
                         ? "bg-[#2BD530] text-white"
+                        : order.status === "En espera"
+                        ? "bg-[#FFB020] text-white"
                         : "bg-[#D52B2E] text-white"
                     }`}
                   >
                     {order.status}
                   </span>
                 </div>
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Fecha</p>
+                  <p className="text-sm">{order.date}</p>
+                </div>
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Hora</p>
+                  <p className="text-sm">{order.time}</p>
+                </div>
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>ID Carnet</p>
+                  <p className="text-sm">{order.client_ci}</p>
+                </div>
+                <div>
+                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Teléfono</p>
+                  <p className="text-sm">{order.client_cell}</p>
+                </div>
               </div>
             </div>
 
-            {/* Accordion Content - Products */}
+            {/* Accordion Content */}
             <div
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
                 isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
               }`}
             >
-              <div className="p-4 bg-[#F5F7FA] rounded-b-2xl">
-                {order.products.length > 0 ? (
-                  <div className="space-y-3 max-h-[600px] overflow-y-auto">
+              <div className="px-4 py-6 bg-[#F5F7FA] rounded-b-2xl">
+                {order.products && order.products.length > 0 ? (
+                  <div className="space-y-4">
                     {order.products.map((product, idx) => (
                       <CartCard
                         key={idx}
                         brand={product.brand}
                         price={product.price.toString()}
-                        image={product.image}
+                        image={product.img}
                         title={product.name}
-                        padding="p-4"
+                        padding="p-3"
                         width="w-full"
                         actionIcon="none"
+                        quantityProducts={product.count}
                         hideQuantitySelector={true}
-                        bgColor="bg-[#F5F7FA]"
+                        bgColor="bg-white"
                       />
                     ))}
                   </div>
+                ) : loadingProducts && isOpen ? (
+                  <div className="text-center py-4 text-[#777777] text-sm">
+                    Cargando productos...
+                  </div>
                 ) : (
-                  <p className="text-[#777777] text-center py-4">
+                  <p className="text-[#777777] text-center py-4 text-sm">
                     No hay productos para mostrar
                   </p>
                 )}
@@ -249,6 +151,27 @@ export default function MobileOrdes() {
           </div>
         );
       })}
+
+      {loading && (
+        <div className="text-center py-4 text-[#777777] text-sm">Cargando pedidos...</div>
+      )}
+
+      {!loading && orders.length === 0 && (
+        <div className="text-center py-10 text-[#777777] text-sm">
+          No se encontraron pedidos.
+        </div>
+      )}
+
+      {!loading && hasMore && orders.length > 0 && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={loadMore}
+            className="bg-[#022954] text-white px-6 py-2 rounded-xl font-bold hover:bg-opacity-90 transition-colors text-sm"
+          >
+            Cargar más
+          </button>
+        </div>
+      )}
     </div>
   );
 }
