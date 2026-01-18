@@ -23,7 +23,7 @@ export default function CreditCards() {
     },
     { 
       id: "tienda",
-      title: "Recogida en Tienda", 
+      title: "Recogida en tienda", 
       description: "Pago directo en el local", 
       icon: <EmojioneDepartmentStore className="w-9 h-9 text-[#022954]" /> 
     },
@@ -71,7 +71,7 @@ export default function CreditCards() {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-100 ">
         <h5 className="text-primary font-bold text-2xl">01 - Formas de Pago</h5>
     
 
@@ -87,7 +87,7 @@ export default function CreditCards() {
           .map((method) => (
             <label 
               key={method.id} 
-              className={`w-full sm:max-w-100  lg:w-100  flex items-center justify-between gap-4 cursor-pointer p-4  border rounded-2xl h-30 transition-all focus-within:ring-0 focus-within:outline-none ${
+              className={`  flex items-center justify-between gap-4 cursor-pointer p-4  border rounded-2xl h-30 transition-all focus-within:ring-0 focus-within:outline-none ${
                 selectedMethod === method.title 
                   ? "border-gray-300 " 
                   : "border-gray-200 hover:border-gray-300"

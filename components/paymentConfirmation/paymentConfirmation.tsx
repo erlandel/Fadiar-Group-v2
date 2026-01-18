@@ -6,14 +6,95 @@ import MatterCart1Store from "@/store/matterCart1Store";
 import PayerPaymentDetails from "./payerPaymentDetails";
 import RecipientPaymentDetails from "./recipientPaymentDetails";
 import ProductListConfirmation from "./productListConfirmation";
-import { useConfirmOrder } from "@/hooks/orderRequests/useConfirmOrder";
+import { useMutation } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+import useAuthStore from "@/store/authStore";
+import { refreshToken } from "@/utils/refreshToken";
+import { add_orderUrl } from "@/urlApi/urlApi";
+import ErrorMessage from "@/messages/errorMessage";
+import SuccesMessage from "@/messages/succesMessage";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function PaymentConfirmation() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const totalPrice = cartStore((state) => state.getTotalPrice());
   const formData = MatterCart1Store((state) => state.formData);
-  const { confirmOrder, loading } = useConfirmOrder();
+  const clearCart = cartStore((state) => state.clearCart);
+  const updateFormData = MatterCart1Store((state) => state.updateFormData);
+  const { municipalityId } = useProductsByLocationStore();
+
+  const confirmOrderMutation = useMutation({
+    mutationFn: async () => {
+      const { auth, setAuth } = useAuthStore.getState();
+
+      if (!auth?.access_token) {
+        router.push("/login");
+        throw new Error("No hay sesión activa");
+      }
+
+      if (!municipalityId) {
+        ErrorMessage("Debe seleccionar un municipio antes de confirmar la orden");
+        throw new Error("Municipio no seleccionado");
+      }
+
+      if (!formData.identityCard || !formData.firstName || !formData.phone) {
+        ErrorMessage("Faltan datos del beneficiario para confirmar la orden");
+        throw new Error("Faltan datos del beneficiario");
+      }
+
+      const token = await refreshToken(auth, setAuth);
+
+      if (!token) {
+        ErrorMessage("No se pudo obtener una sesión válida");
+        throw new Error("Sesión inválida");
+      }
+
+      const requestBody = {
+        ci_cliente: formData.identityCard,
+        name_cliente: formData.firstName,
+        last_names: `${formData.lastName1} ${formData.lastName2}`.trim(),
+        cellphone_cliente: formData.phone,
+        id_municipio: municipalityId,
+        direccionExacta: formData.address || null,
+        emisor: "web",
+      };
+
+      const response = await fetch(`${add_orderUrl}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const msg = errorData.error || errorData.message || "No se pudo confirmar la orden";
+        ErrorMessage(msg);
+        throw new Error(msg);
+      }
+
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log("Respuesta del backend (agregar pedido):", data);
+      SuccesMessage("Orden confirmada correctamente");
+      clearCart();
+      updateFormData({ stores: [] });
+      router.push("/orders");
+    },
+    onError: (error) => {
+      console.error("Error al confirmar la orden:", error);
+      if (error.message !== "No hay sesión activa" && 
+          error.message !== "Municipio no seleccionado" && 
+          error.message !== "Faltan datos del beneficiario" && 
+          error.message !== "Sesión inválida") {
+        ErrorMessage("Error de conexión con el servidor");
+      }
+    },
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -37,7 +118,7 @@ export default function PaymentConfirmation() {
 
           <div className=" mt-10">
             <div>
-              <h5 className="text-primary font-bold text-xl pb-1">IMPORTE</h5>
+              <h5 className="text-primary font-bold text-xl ml-4 pb-1">IMPORTE</h5>
               <div className="w-full  border-b-2 border-gray"></div>
             </div>
 
@@ -80,19 +161,26 @@ export default function PaymentConfirmation() {
             <div className="flex justify-between space-x-2">
               <div className="w-full">
                 <button
-                  className="bg-white text-primary border border-primary py-3 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
-                  onClick={() => router.back()}
+                  className="bg-white text-primary border border-primary py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
+                  onClick={() => router.push("/cart2")}
                 >
                   Atrás
                 </button>
               </div>
               <div className="w-full">
                 <button
-                  className="bg-[#022954] text-white py-3 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                  onClick={confirmOrder}
-                  disabled={loading}
+                  className="bg-[#022954] text-white py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer hover:bg-[#034078] hover:shadow-lg  disabled:opacity-40 disabled:cursor-not-allowed"
+                  onClick={() => confirmOrderMutation.mutate()}
+                  disabled={confirmOrderMutation.isPending}
                 >
-                  {loading ? "Confirmando..." : "Confirmar Orden"}
+                  {confirmOrderMutation.isPending ? (
+                    <span className="inline-flex items-center justify-center gap-2">
+                      <Loader className="h-5 w-5 animate-spin" />
+                      Confirmando...
+                    </span>
+                  ) : (
+                    "Confirmar"
+                  )}
                 </button>
               </div>
             </div>

@@ -26,17 +26,6 @@ export default function CheckoutPayment() {
   const deliveryCost = delivery ? (deliveryData.deliveryPrice || 0) : 0;
   const total = subtotal + deliveryCost;
 
-  // Function to handle continue button
-  const handleContinue = () => {
-    router.push("/cart3");
-  };
-
-  // Function to handle back button
-  const handleBack = () => {
-    console.log("Atrás clicked - going back");
-    router.back();
-  };
-
   return (
     <>
       {/* FORMA DE PAGO*/}
@@ -87,7 +76,7 @@ export default function CheckoutPayment() {
         <div className="flex justify-between space-x-4">
           <div className="w-full">
             <button 
-              onClick={handleBack}
+              onClick={() => router.push("/cart1")}
               className="bg-white text-primary border border-primary py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
             >
               Atrás
@@ -95,8 +84,8 @@ export default function CheckoutPayment() {
           </div>
           <div className="w-full">
             <button 
-              onClick={handleContinue}
-              className="bg-[#022954] text-white py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
+              onClick={() => router.push("/cart3")}
+              className="bg-[#022954] text-white py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer hover:bg-[#034078] hover:shadow-lg  disabled:opacity-40"
             >
               Continuar
             </button>
