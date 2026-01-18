@@ -6,12 +6,14 @@ import MatterCart1Store from "@/store/matterCart1Store";
 import PayerPaymentDetails from "./payerPaymentDetails";
 import RecipientPaymentDetails from "./recipientPaymentDetails";
 import ProductListConfirmation from "./productListConfirmation";
+import { useConfirmOrder } from "@/hooks/orderRequests/useConfirmOrder";
 
 export default function PaymentConfirmation() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const totalPrice = cartStore((state) => state.getTotalPrice());
-  const { delivery, deliveryPrice } = MatterCart1Store((state) => state.formData);
+  const formData = MatterCart1Store((state) => state.formData);
+  const { confirmOrder, loading } = useConfirmOrder();
 
   useEffect(() => {
     setMounted(true);
@@ -42,7 +44,7 @@ export default function PaymentConfirmation() {
             <div>
               <div className="mb-4 mt-4 ">
                 <div className="bg-[#F5F7FA] rounded-xl overflow-hidden">
-                  {mounted && delivery && (
+                  {mounted && formData.delivery && (
                     <div className="p-4 space-y-6">
                       <div className="flex justify-between items-center  text-[#022954]">
                         <span className="text-md">Subtotal:</span>
@@ -55,7 +57,7 @@ export default function PaymentConfirmation() {
                         <div className="flex justify-between items-center text-[#022954]">
                           <span className="text-md">Domicilio:</span>
                           <span className="font-medium whitespace-nowrap text-xl">
-                            $ {(deliveryPrice || 0).toFixed(2)} USD
+                            $ {(formData.deliveryPrice || 0).toFixed(2)} USD
                           </span>
                         </div>
                       </div>
@@ -67,7 +69,7 @@ export default function PaymentConfirmation() {
                       Total
                     </span>
                     <span className="text-xl font-bold text-[#022954]">
-                      $ {(mounted ? totalPrice + (delivery ? (deliveryPrice || 0) : 0) : 0).toFixed(2)}{" "}
+                      $ {(mounted ? totalPrice + (formData.delivery ? (formData.deliveryPrice || 0) : 0) : 0).toFixed(2)}{" "}
                       <span className="text-2xl font-normal">USD</span>
                     </span>
                   </div>
@@ -85,8 +87,12 @@ export default function PaymentConfirmation() {
                 </button>
               </div>
               <div className="w-full">
-                <button className="bg-[#022954] text-white py-3 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer">
-                  Continuar
+                <button
+                  className="bg-[#022954] text-white py-3 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  onClick={confirmOrder}
+                  disabled={loading}
+                >
+                  {loading ? "Confirmando..." : "Confirmar Orden"}
                 </button>
               </div>
             </div>

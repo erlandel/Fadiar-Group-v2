@@ -36,3 +36,5 @@ export const refresh_tokenUrl = `${server_url}/refresh-token`;
 export const get_provinces_municipalitiesUrl = `${server_url}/obtener-provincias-municipios`;
 
 export const logoutUrl = `${server_url}/logout`;
+
+export const add_orderUrl = `${server_url}/add_order`;
