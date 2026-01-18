@@ -2,7 +2,6 @@
 import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
 import CardLatestProducts from "@/components/ui/cardLatestProducts";
 import CardSkeleton from "@/components/ui/skeletonCard";
-import { server_url } from "@/lib/apiClient";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { useBestSelling } from "@/hooks/productRequests/useBestSelling";
