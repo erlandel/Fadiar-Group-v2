@@ -32,7 +32,7 @@ export default function UserDropdown() {
         // Refrescar el token antes de cerrar sesión
         const currentToken = await refreshToken(auth, setAuth);
 
-        const response = await fetch(`${logoutUrl}/logout`, {
+        const response = await fetch(`${logoutUrl}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

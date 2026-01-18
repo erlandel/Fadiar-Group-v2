@@ -66,7 +66,7 @@ export const useGetOrders = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // console.log("data", data);
+        console.log("data", data);
         
         // Process data to separate date and time if they are together in 'date'
         const processedData = data.map((order: any) => {

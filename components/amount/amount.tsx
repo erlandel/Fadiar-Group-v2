@@ -263,8 +263,6 @@ export default function Amount() {
       stores: selectedStores
     });
 
-    console.log("Orden confirmada:", { ...formData, stores: selectedStores });
-
     // Si la validación es exitosa, navegar a cart2
     router.push("/cart2");
   };

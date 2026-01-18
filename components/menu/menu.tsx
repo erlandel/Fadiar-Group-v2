@@ -47,7 +47,7 @@ export default function Menu() {
 
       {/* Menú móvil - Drawer */}
       <div
-        className={`fixed top-0  left-0  p-2 h-9/12 rounded-2xl  w-75 bg-white z-50 transform transition-transform duration-300 xl:hidden ${
+        className={`fixed top-0  left-0  p-2 h-10/12 rounded-2xl  w-75 bg-white z-50 transform transition-transform duration-300 xl:hidden ${
           isOpen ? "translate-x-2" : "-translate-x-full"
         }`}
       >
