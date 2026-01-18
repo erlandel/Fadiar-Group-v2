@@ -1,14 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useBuyerDetailsContext } from "../../contexts/BuyerDetailsContext";
-import BuyerDetailsStore from "../../store/buyerDetailsStore";
-import cartStore from "../../store/cartStore";
 import MatterCart1Store from "../../store/matterCart1Store";
 
 export default function CheckoutPayment() {
   const router = useRouter();
-  const { formData } = useBuyerDetailsContext();
   const [isClient, setIsClient] = useState(false);
 
   // Evitar error de hidratación
@@ -17,31 +13,22 @@ export default function CheckoutPayment() {
   }, []);
 
   // Obtener precios del carrito y estado de domicilio solo en el cliente
-  const subtotal = isClient ? cartStore.getState().getTotalPrice() : 0;
-  const deliveryData = isClient ? MatterCart1Store.getState().formData : { delivery: false, deliveryPrice: 0 };
+  const deliveryData = isClient ? MatterCart1Store.getState().formData : { delivery: false, deliveryPrice: 0, stores: [] };
+  
+  const subtotal = isClient ? (deliveryData.stores || []).reduce((acc: number, store: any) => {
+    return acc + (store.products || []).reduce((storeAcc: number, product: any) => {
+      const price = parseFloat(String(product.price).replace(/[^0-9.]/g, ""));
+      return storeAcc + price * product.quantity;
+    }, 0);
+  }, 0) : 0;
+
   const delivery = deliveryData.delivery;
-  const deliveryCost = delivery ? (deliveryData.deliveryPrice || 5) : 0;
+  const deliveryCost = delivery ? (deliveryData.deliveryPrice || 0) : 0;
   const total = subtotal + deliveryCost;
 
   // Function to handle continue button
   const handleContinue = () => {
-    const paymentMethod = BuyerDetailsStore.getState().buyerDetails.paymentMethod;
-
-    const completeData = {
-      firstName: formData.firstName,
-      lastName: `${formData.lastName1 || ""} ${formData.lastName2 || ""}`.trim(),
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      note: formData.note,
-      paymentMethod: paymentMethod || "Tarjeta de Crédito/Débito",
-    };
-
-    BuyerDetailsStore.getState().setBuyerDetails(completeData);
-
     router.push("/cart3");
-    console.log("Datos guardados en el store:", completeData);
-    console.log("Método de pago:", paymentMethod);
   };
 
   // Function to handle back button
@@ -70,19 +57,19 @@ export default function CheckoutPayment() {
           <div className="w-full  border-b-2 border-gray"></div>
         </div>
 
-        <div className="mb-7">
+        <div className="mb-7 mt-4">
           <div className="bg-[#F5F7FA] rounded-xl overflow-hidden">
-            {deliveryCost > 0 && (
+            {isClient && delivery && (
               <>
                 <div className="flex justify-between items-center p-6 text-[#022954]">
                   <span className="text-md">Subtotal:</span>
-                  <span className="font-medium text-xl">$ {subtotal} USD</span>
+                  <span className="font-medium text-xl">$ {subtotal.toFixed(2)} USD</span>
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-4 text-[#022954]">
+                  <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-2 text-[#022954]">
                     <span className="text-md">Domicilio:</span>
-                    <span className="font-medium whitespace-nowrap text-xl">$ {deliveryCost} USD</span>
+                    <span className="font-medium whitespace-nowrap text-xl">$ {deliveryCost.toFixed(2)} USD</span>
                   </div>
                 </div>
               </>
@@ -91,12 +78,10 @@ export default function CheckoutPayment() {
             <div className="flex justify-between items-center p-4 py-6 bg-[#E2E6EA]">
               <span className="font-bold text-[#022954] text-xl">Total</span>
               <span className="text-xl font-bold text-[#022954]">
-                $ {total} <span className="text-xl font-normal">USD</span>
+                $ {total.toFixed(2)} <span className="text-xl font-normal">USD</span>
               </span>
             </div>
           </div>
-
-
         </div>
 
         <div className="flex justify-between space-x-4">

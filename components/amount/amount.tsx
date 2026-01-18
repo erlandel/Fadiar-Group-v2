@@ -223,13 +223,47 @@ export default function Amount() {
       return;
     }
 
-    // Guardar datos del formulario en el store
-    MatterCart1Store.getState().setFormData({
-      ...formData,
-      deliveryPrice: deliveryPrice
+    // Agrupar productos filtrados por tienda
+    const storesMap = new Map<string | number, any>();
+    
+    filteredItems.forEach((item) => {
+      if (!item.tiendaId) return;
+      
+      if (!storesMap.has(item.tiendaId)) {
+        const tiendaInfo = rawCart?.find((t: any) => t.id === item.tiendaId);
+        let storeDeliveryPrice = 0;
+        
+        if (formData.delivery && storeMunicipalityId && tiendaInfo) {
+          const domicilio = tiendaInfo.domicilios?.find(
+            (d: any) => d.id_municipio === storeMunicipalityId
+          );
+          if (domicilio) {
+            storeDeliveryPrice = Number(domicilio.price) || 0;
+          }
+        }
+
+        storesMap.set(item.tiendaId, {
+          id: item.tiendaId,
+          name: item.tiendaName || "Tienda Desconocida",
+          direccion: item.tiendaDireccion || "",
+          products: [],
+          deliveryPrice: storeDeliveryPrice
+        });
+      }
+      
+      storesMap.get(item.tiendaId).products.push(item);
     });
 
-    console.log(formData);
+    const selectedStores = Array.from(storesMap.values());
+
+    // Guardar datos del formulario y tiendas en el store
+    MatterCart1Store.getState().setFormData({
+      ...formData,
+      deliveryPrice: deliveryPrice,
+      stores: selectedStores
+    });
+
+    console.log("Orden confirmada:", { ...formData, stores: selectedStores });
 
     // Si la validación es exitosa, navegar a cart2
     router.push("/cart2");

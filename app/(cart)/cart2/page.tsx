@@ -12,7 +12,7 @@ export default function Cart2() {
           <div className="mt-10 ">
             <p className="text-xs text-gray-400 mb-4">
               <span className="text-gray-400">
-                Home - Carrito de Compras -{" "}
+                Inicio - Carrito de Compras -{" "}
               </span>
               <span className="text-primary font-semibold">Formas de Pago</span>
             </p>
@@ -30,7 +30,7 @@ export default function Cart2() {
           <PaymentMethods />
         </div>
 
-        <div className="sm:py-20  mt-70 sm:mt-20">
+        <div className="sm:py-20">
           <SectionAbout3 />
         </div>
       </div>

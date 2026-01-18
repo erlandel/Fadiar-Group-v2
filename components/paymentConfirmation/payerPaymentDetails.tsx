@@ -10,7 +10,7 @@ export default function PayerPaymentDetails() {
   const beneficiaryDetails = BeneficiaryDetailsStore((state) => state.beneficiaryDetails);
 
   return (
-    <div className=" 2xl:w-80" style={{ wordWrap: 'break-word' }}>
+    <div className="w-full wrap-break-word">
       <div>
         <h5 className="text-primary font-bold text-xl ml-4 pb-1">
           DATOS DE PAGO
@@ -26,51 +26,10 @@ export default function PayerPaymentDetails() {
           </p>
         </div>
 
-        <div className="w-full bg-[#F5F7FA] ">
-          <p className="ml-4 text-primary ">Datos de beneficiario</p>
-        </div>
-
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Nombre: <span className="text-primary wrap-break-word">{buyerDetails.firstName}</span>
-          </p>
-        </div>
-
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Apellidos: <span className="text-primary wrap-break-word">{buyerDetails.lastName}</span>
-          </p>
-        </div>
-
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Teléfono: <span className="text-primary wrap-break-word">{buyerDetails.phone}</span>
-          </p>
-        </div>
-
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Correo electrónico:{" "}
-            <span className="text-primary wrap-break-word">{buyerDetails.email}</span>
-          </p>
-        </div>
-        <div className="w-full bg-[#F5F7FA] ">
-          <p className="ml-4 text-primary ">Dirección de entrega</p>
-        </div>
-
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Dirección:{" "}
-            <span className="text-primary wrap-break-word">
-              {buyerDetails.address}
-            </span>
-          </p>
-        </div>
-
         <div className="w-full  border-b-2 border-gray"></div>
 
         <div className="ml-4">
-          <p className="text-accent cursor-pointer" onClick={() => router.push('/cart2')}>Editar datos de pago</p>
+          <p className="text-accent cursor-pointer" onClick={() => router.push('/cart2')}>Editar método de pago</p>
         </div>
       </div>
     </div>

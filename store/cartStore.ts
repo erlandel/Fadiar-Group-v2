@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist, createJSONStorage, PersistOptions } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 export type CartItem = {
   cartId?: number;

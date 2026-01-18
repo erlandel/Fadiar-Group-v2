@@ -1,6 +1,14 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+export type SelectedStore = {
+  id: string | number;
+  name: string;
+  direccion?: string;
+  products: any[];
+  deliveryPrice?: number;
+};
+
 export type FormData = {
   phone: string;
   identityCard: string;
@@ -14,6 +22,7 @@ export type FormData = {
   lastName2: string;
   address: string;
   note?: string;
+  stores?: SelectedStore[];
 };
 
 export type FormState = {
@@ -37,6 +46,7 @@ export const defaultFormData: FormData = {
   lastName2: "",
   address: "",
   note: "",
+  stores: [],
 };
 
 type FormStore = FormState;

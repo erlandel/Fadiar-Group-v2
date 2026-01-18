@@ -38,7 +38,7 @@ export default function CreditCards() {
 
   return (
     <>
-      <div>
+      <div className="w-full">
         <h5 className="text-primary font-bold text-2xl">01 - Formas de Pago</h5>
     
 
@@ -79,7 +79,7 @@ export default function CreditCards() {
           .map((method) => (
             <label 
               key={method.id} 
-              className={`max-w-120  flex items-center justify-between gap-4 cursor-pointer p-4  border rounded-2xl h-30 transition-all focus-within:ring-0 focus-within:outline-none ${
+              className={`w-full sm:max-w-100  lg:w-100  flex items-center justify-between gap-4 cursor-pointer p-4  border rounded-2xl h-30 transition-all focus-within:ring-0 focus-within:outline-none ${
                 selectedMethod === method.title 
                   ? "border-gray-300 " 
                   : "border-gray-200 hover:border-gray-300"

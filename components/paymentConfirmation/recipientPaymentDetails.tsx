@@ -8,7 +8,7 @@ export default function RecipientPaymentDetails() {
     const { formData } = MatterCart1Store();
 
     return(
-           <div className="  2xl:w-80" style={{ wordWrap: 'break-word' }}>
+           <div className="w-full wrap-break-word">
         <div>
         <h5 className="text-primary font-bold text-xl ml-4 pb-1">
           DATOS DE ENTREGA
@@ -78,7 +78,7 @@ export default function RecipientPaymentDetails() {
         {formData.delivery && (
           <div className="ml-4">
             <p className="text-[gray] ">
-              Dirección: {" "}
+              Dirección: 
               <span className="text-primary wrap-break-word">{formData.address}</span>
             </p>
           </div>

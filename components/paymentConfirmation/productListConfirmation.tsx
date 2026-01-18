@@ -1,8 +1,8 @@
 "use client"
 import { useEffect, useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
-import cartStore, { CartItem } from "@/store/cartStore";
-import CartCard from "../cartCard/cartCard";
+import MatterCart1Store from "@/store/matterCart1Store";
+import { server_url } from "@/urlApi/urlApi";
 
 export default function ProductListConfirmation() {
   const [isClient, setIsClient] = useState(false);
@@ -10,47 +10,13 @@ export default function ProductListConfirmation() {
   const [openStores, setOpenStores] = useState(false);
   const storesRef = useRef<HTMLDivElement | null>(null);
 
-  const cartItems = cartStore((state) => state.items);
-
-  const stores = cartItems.reduce((acc, item) => {
-    const tiendaId = item.tiendaId || "unknown";
-    if (!acc.find((s) => s.id === tiendaId)) {
-      acc.push({
-        id: tiendaId,
-        name: item.tiendaName || "Tienda",
-      });
-    }
-    return acc;
-  }, [] as { id: string | number; name: string }[]);
+  const { stores: formStores } = MatterCart1Store((state) => state.formData);
+  const stores = formStores || [];
 
   const allStores = [{ id: "all", name: "Todas" }, ...stores];
 
-  const groupedItems = cartItems.reduce(
-    (
-      acc: Record<
-        string | number,
-        { name: string; direccion: string; items: CartItem[] }
-      >,
-      item
-    ) => {
-      const tiendaId = item.tiendaId || "unknown";
-
-      if (selectedStoreId !== "all" && tiendaId !== selectedStoreId) {
-        return acc;
-      }
-
-      if (!acc[tiendaId]) {
-        acc[tiendaId] = {
-          name: item.tiendaName || "Tienda",
-          direccion: item.tiendaDireccion || "",
-          items: [],
-        };
-      }
-
-      acc[tiendaId].items.push(item);
-      return acc;
-    },
-    {}
+  const filteredStores = stores.filter(store => 
+    selectedStoreId === "all" || store.id === selectedStoreId
   );
 
   useEffect(() => {
@@ -86,8 +52,8 @@ export default function ProductListConfirmation() {
       </h5>
       <div className="w-full  border-b-2 border-gray"></div>
 
-      {isClient && cartItems.length > 0 && (
-        <div className="flex items-center justify-center gap-2 mt-4" ref={storesRef}>
+      {isClient && stores.length > 0 && (
+        <div className="flex items-center  gap-2 mt-4" ref={storesRef}>
           <span className="font-bold text-primary sm:text-lg whitespace-nowrap">
             Tienda(s)
           </span>
@@ -135,33 +101,57 @@ export default function ProductListConfirmation() {
 
       <div className="mt-4  flex flex-col justify-center items-center lg:flex-row lg:items-start  ">
         <div className="w-full max-w-120">
-          {Object.values(groupedItems).map((group) => (
+          {filteredStores.map((store) => (
             <div
-              key={group.name}
+              key={store.id}
               className="flex flex-col gap-y-4 mb-8"
             >
               <div className="border-b pb-2">
-                <h2 className=" font-bold text-primary">{group.name}</h2>
-                {group.direccion && (
+                <h2 className=" font-bold text-primary">{store.name}</h2>
+                {store.direccion && (
                   <p className="text-sm text-gray-500 ">
                     <span className="text-accent font-bold">
                       dirección:
                     </span>{" "}
-                    {group.direccion}
+                    {store.direccion}
                   </p>
                 )}
               </div>
               <div className="flex flex-col gap-y-4 items-center justify-center">
-                {group.items.map((item) => (
-                  <CartCard
+                {(store.products || []).map((item: any) => (
+                  <div
                     key={item.productId}
-                    brand={item.brand}
-                    price={item.price}
-                    image={item.image}
-                    title={item.title}
-                    quantityProducts={item.quantity}
-                    actionIcon="none"
-                  />
+                    className="bg-white w-full border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row p-2"
+                  >
+                    <div className="w-32 h-[124px] overflow-hidden rounded-2xl shrink-0">
+                      <img
+                        className="w-full h-full object-contain"
+                        src={`${server_url}/${item.image}`}
+                        alt={item.title}
+                      />
+                    </div>
+
+                    <div className="flex-1 flex flex-col ml-4 min-w-0">
+                      <div className="mb-3">
+                        <h3 className="text-primary font-bold text-md sm:text-xl truncate">
+                          {item.title}
+                        </h3>
+                        <p className="text-primary text-md sm:text-xl">{item.brand}</p>
+                      </div>
+
+                      <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
+                        ${item.price}{" "}
+                        <span className="text-primary font-normal text-lg sm:text-2xl">
+                          USD
+                        </span>
+                      </p>
+                      <div className="mt-auto  flex items-center justify-between gap-2">
+                        <p className="text-[#777777] text-md">
+                          Cantidad: {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -171,4 +161,3 @@ export default function ProductListConfirmation() {
     </div>
   );
 }
-

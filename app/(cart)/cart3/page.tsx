@@ -12,7 +12,7 @@ export default function Cart3() {
           <div className="mt-10 ">
             <p className="text-xs text-gray-400 mb-4">
               <span className="text-gray-400">
-                Home - Carrito de Compras -{" "}
+                Inicio - Carrito de Compras -{" "}
               </span>
               <span className="text-primary font-semibold">Confirmación</span>
             </p>
