@@ -8,7 +8,7 @@ export default function PayerPaymentDetails() {
   const buyerDetails = BuyerDetailsStore((state) => state.buyerDetails);
 
   return (
-    <div className="w-full wrap-break-word">
+    <div className="w-full  xl:min-w-full wrap-break-word">
       <div>
         <h5 className="text-primary font-bold text-xl ml-4 pb-1">
           DATOS DE PAGO

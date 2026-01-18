@@ -19,21 +19,21 @@ export default function PaymentConfirmation() {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row gap-8 space-y-6 xl:space-y-0">
-        <div className="xl:w-1/3">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="md:col-span-2 xl:col-span-1">
           <ProductListConfirmation />
         </div>
 
-        <div className=" xl:w-1/3">
+        <div className="w-full max-w-120 mx-auto md:mx-0">
           <RecipientPaymentDetails />
         </div>
 
-        <div className=" max-w-100 xl:w-1/3">
+        <div className="w-full max-w-120 mx-auto md:mx-0">
           <div>
             <PayerPaymentDetails />
           </div>
 
-          <div className="mt-10">
+          <div className=" mt-10">
             <div>
               <h5 className="text-primary font-bold text-xl pb-1">IMPORTE</h5>
               <div className="w-full  border-b-2 border-gray"></div>
@@ -93,6 +93,8 @@ export default function PaymentConfirmation() {
           </div>
 
         </div>
+
+
       </div>
     </>
   );

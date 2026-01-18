@@ -8,33 +8,66 @@ export default function CreditCards() {
   const [selectedMethod, setSelectedMethod] = useState("Tarjeta de Crédito/Débito");
   const delivery = MatterCart1Store((state) => state.formData.delivery);
 
+  const paymentMethods = [
+    { 
+      id: "visa",
+      title: "Tarjeta de Crédito/Débito", 
+      description: "Pago con VISA o MasterCard", 
+      icon: <TwemojiCreditCard className="w-9 h-9 " /> 
+    },
+    { 
+      id: "efectivo",
+      title: "Efectivo o Transferencia", 
+      description: "Pago al momento de la entrega", 
+      icon: <img src="/images/MoneyTransfer.webp" alt="Efectivo o Transferencia" width={40} height={40} className="object-contain" /> 
+    },
+    { 
+      id: "tienda",
+      title: "Recogida en Tienda", 
+      description: "Pago directo en el local", 
+      icon: <EmojioneDepartmentStore className="w-9 h-9 text-[#022954]" /> 
+    },
+    { 
+      id: "zelle",
+      title: "Zelle", 
+      description: "Pago mediante transferencia bancaria", 
+      icon: <img src="/images/Zelle.webp" alt="Efectivo o Transferencia" width={37} height={37} className="object-contain" /> 
+    }
+  ];
+
   // Cargar método de pago del store al montar
   useEffect(() => {
     const storeData = BuyerDetailsStore.getState().buyerDetails;
     const savedMethod = storeData.paymentMethod;
     
-    console.log("Método de pago del store:", savedMethod);
-    
-    if (savedMethod && savedMethod !== selectedMethod) {
-      setSelectedMethod(savedMethod);
+    if (savedMethod) {
+      // Normalizar el método guardado (por si acaso hay espacios extras)
+      const normalizedSaved = savedMethod.trim();
+      if (normalizedSaved !== selectedMethod) {
+        setSelectedMethod(normalizedSaved);
+      }
     }
-  }, []); // Solo ejecutar al montar
+  }, []);
+
+  // Ajustar el método seleccionado según delivery y asegurar que siempre haya uno válido
+  useEffect(() => {
+    const visibleMethods = paymentMethods.filter((method) => 
+      delivery ? method.id !== "tienda" : method.id === "tienda"
+    );
+
+    const isSelectedVisible = visibleMethods.some(m => m.title === selectedMethod);
+    
+    if (!isSelectedVisible && visibleMethods.length > 0) {
+      setSelectedMethod(visibleMethods[0].title);
+    }
+  }, [delivery, selectedMethod]);
 
   // Guardar método de pago en el store cuando cambie
   useEffect(() => {
-    BuyerDetailsStore.getState().setPaymentMethod(selectedMethod);
-  }, [selectedMethod]);
-
-  // Ajustar el método seleccionado si el filtro cambia
-  useEffect(() => {
-    if (delivery) {
-      if (selectedMethod === "Recogida en Tienda") {
-        setSelectedMethod("Tarjeta de Crédito/Débito");
-      }
-    } else {
-      setSelectedMethod("Recogida en Tienda");
+    if (selectedMethod) {
+      BuyerDetailsStore.getState().setPaymentMethod(selectedMethod);
     }
-  }, [delivery]);
+  }, [selectedMethod]);
 
   return (
     <>
@@ -43,32 +76,7 @@ export default function CreditCards() {
     
 
         <div className="mt-6 flex flex-col gap-4">
-          {[
-            { 
-              id: "visa",
-              title: "Tarjeta de Crédito/Débito", 
-              description: "Pago con VISA o MasterCard", 
-              icon: <TwemojiCreditCard className="w-9 h-9 " /> 
-            },
-            { 
-              id: "efectivo",
-              title: "Efectivo o Transferencia ", 
-              description: "Pago al momento de la entrega", 
-              icon: <img src="/images/MoneyTransfer.webp" alt="Efectivo o Transferencia" width={40} height={40} className="object-contain" /> 
-            },
-            { 
-              id: "tienda",
-              title: "Recogida en Tienda", 
-              description: "Pago directo en el local", 
-              icon: <EmojioneDepartmentStore className="w-9 h-9 text-[#022954]" /> 
-            },
-            { 
-              id: "zelle",
-              title: "Zelle", 
-              description: "Pago mediante transferencia bancaria", 
-              icon: <img src="/images/Zelle.webp" alt="Efectivo o Transferencia" width={37} height={37} className="object-contain" /> 
-            }
-          ]
+          {paymentMethods
           .filter((method) => {
             if (delivery) {
               return method.id !== "tienda";

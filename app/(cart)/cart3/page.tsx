@@ -30,7 +30,7 @@ export default function Cart3() {
           <PaymentConfirmation />
         </div>
 
-        <div className="sm:py-20  mt-70 sm:mt-20">
+        <div className="sm:py-20  ">
           <SectionAbout3 />
         </div>
       </div>
