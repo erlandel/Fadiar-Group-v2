@@ -21,7 +21,7 @@ export default function Home() {
           <SectionMoreproducts />
         </div>
 
-        <div className="mt-20 lg:mt-0">
+        <div className="mt-20 lg:mt-0 max-w-390">
           <NineOffers />
         </div>
 
