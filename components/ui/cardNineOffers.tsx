@@ -206,7 +206,7 @@ export default function CardNineOffers({
           style={{ height: "240px" }}
         >
           <div
-            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48 sm:min-w-[160px]"          
+            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48  sm:min-w-[160px]"          
           >
             <img
               className="h-full w-35 sm:w-48 2xl:w-full object-contain"

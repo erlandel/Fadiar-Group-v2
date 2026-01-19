@@ -104,7 +104,7 @@ export default function OrdersTable() {
                 </div>
                 <div className="text-center">
                   <span
-                    className={`inline-block px-4 py-1 rounded-full text-sm font-medium ${
+                    className={`inline-block px-5 py-2 rounded-full text-md font-medium ${
                       order.status === "Confirmado"
                         ? "bg-[##2BD530] text-white"
                         : order.status === "En espera"
@@ -137,10 +137,10 @@ export default function OrdersTable() {
                   isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
                 }`}
               >
-                <div className="px-6 py-6 bg-[#F5F7FA] rounded-b-xl">
+                <div className="pl-6 pr-0 py-6 bg-[#F5F7FA] rounded-b-xl">
                   {order.products && order.products.length > 0 ? (
-                    <div className="max-h-[350px] overflow-y-auto ">
-                      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-2">
+                    <div className="max-h-[350px] overflow-y-auto custom-scrollbar pr-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2  gap-2">
                         {order.products.map((product, idx) => (
                           <CartCard
                             key={idx}
@@ -153,17 +153,17 @@ export default function OrdersTable() {
                             actionIcon="none"
                             quantityProducts={product.count}
                             hideQuantitySelector={true}
-                            bgColor="bg-[F5F7FA]"
+                            bgColor="bg-[#F5F7FA]"
                           />
                         ))}
                       </div>
                     </div>
                   ) : loadingProducts && isOpen ? (
-                    <div className="text-center py-4 text-[#777777]">
+                    <div className="text-center py-4 text-[#777777] pr-6">
                       Cargando productos...
                     </div>
                   ) : (
-                    <p className="text-[#777777] text-center py-4">
+                    <p className="text-[#777777] text-center py-4 pr-6">
                       No hay productos para mostrar
                     </p>
                   )}

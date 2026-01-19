@@ -25,7 +25,7 @@ export default function RelatedProds({ products = [] }: RelatedProdsProps) {
   const visibleProducts = useMemo(() => products.slice(0, 6), [products]);
 
   return (
-    <section className="w-full py-10 px-5 xl:px-20">
+    <section className="w-full py-10 px-5 xl:px-10 2xl:px-20">
       <div className="flex flex-col gap-1 mb-8">
         <p className="text-[20px] font-bold text-primary">También le puede interesar</p>
         <h2 className="text-[24px] font-bold text-accent">Productos relacionados</h2>

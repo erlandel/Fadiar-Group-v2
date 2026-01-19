@@ -8,15 +8,15 @@ export default function Orders() {
   return (
     <>
       <div className="mx-4 xl:px-40 mt-10 md:mt-15">
-        <div className="  md:ml-40">
+        <div className="  lg:ml-40">
           <h2 className="text-3xl text-primary font-bold">Mis Pedidos</h2>
         </div>
 
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <MobileOrdes />
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <OrdersTable />
         </div>
       </div>

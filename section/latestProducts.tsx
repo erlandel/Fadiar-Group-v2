@@ -73,7 +73,7 @@ export const LatestProducts = ({
 
   return (
     <>
-      <div id="latest-products" className="w-full h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
+      <div id="latest-products" className="w-auto h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
         <div className="flex flex-col items-start mb-5  ">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Más recientes

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -42,7 +41,7 @@ export default function MobileOrdes() {
   };
 
   return (
-    <div className="space-y-4 mt-4">
+    <div className="space-y-4 mt-4 ">
       {orders.map((order) => {
         const isOpen = openOrderIds.includes(order.id);
         return (
@@ -74,15 +73,32 @@ export default function MobileOrdes() {
               </div>
 
               {/* Order Info */}
-              <div className="grid grid-cols-2 gap-y-3">
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Pedido</p>
-                  <p className="font-bold">{order.id.toString().startsWith("#") ? order.id : `#${order.id}`}</p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Estado</p>
+              <div className={`grid grid-cols-2 gap-y-3 items-center font-bold ${isOpen ? "text-white" : "text-[#777777]"}`}>
+                {/* Pedido */}
+                <p className="text-sm sm:text-lg">Pedido</p>
+                <p className={`font-bold text-right  sm:text-xl ${isOpen ? "text-white" : "text-primary"}`}>{order.id.toString().startsWith("#") ? order.id : `#${order.id}`}</p>
+
+                {/* Fecha */}
+                <p className="text-sm sm:text-lg">Fecha</p>
+                <p className=" font-bold text-right sm:text-xl">{order.date}</p>
+
+                {/* Hora */}
+                <p className="text-sm sm:text-lg">Hora</p>
+                <p className=" font-bold text-right sm:text-xl">{order.time}</p>
+
+                {/* Carnet de identidad */}
+                <p className="text-sm sm:text-lg">Carnet de identidad</p>
+                <p className=" font-bold text-right sm:text-xl">{order.client_ci}</p>
+
+                {/* Teléfono */}
+                <p className="text-sm sm:text-lg">Teléfono</p>
+                <p className=" font-bold text-right sm:text-xl">{order.client_cell}</p>
+
+                {/* Estado */}
+                <p className="text-sm sm:text-lg">Estado</p>
+                <div className="flex justify-end">
                   <span
-                    className={`inline-block px-3 py-0.5 rounded-full text-[10px] font-medium ${
+                    className={`inline-block px-5 py-2 md:px-8 md:py-3 rounded-full text-sm ${
                       order.status === "Confirmado"
                         ? "bg-[#2BD530] text-white"
                         : order.status === "En espera"
@@ -93,22 +109,6 @@ export default function MobileOrdes() {
                     {order.status}
                   </span>
                 </div>
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Fecha</p>
-                  <p className="text-sm">{order.date}</p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Hora</p>
-                  <p className="text-sm">{order.time}</p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>ID Carnet</p>
-                  <p className="text-sm">{order.client_ci}</p>
-                </div>
-                <div>
-                  <p className={`text-xs ${isOpen ? "text-gray-300" : "text-[#777777]"}`}>Teléfono</p>
-                  <p className="text-sm">{order.client_cell}</p>
-                </div>
               </div>
             </div>
 
@@ -118,9 +118,9 @@ export default function MobileOrdes() {
                 isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
               }`}
             >
-              <div className="px-4 py-6 bg-[#F5F7FA] rounded-b-2xl">
+              <div className="pl-4 pr-0 py-6 bg-[#F5F7FA] rounded-b-2xl">
                 {order.products && order.products.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-4">
                     {order.products.map((product, idx) => (
                       <CartCard
                         key={idx}
@@ -128,21 +128,21 @@ export default function MobileOrdes() {
                         price={product.price.toString()}
                         image={product.img}
                         title={product.name}
-                        padding="p-3"
+                        padding="p-3 sm:p-4"
                         width="w-full"
                         actionIcon="none"
                         quantityProducts={product.count}
                         hideQuantitySelector={true}
-                        bgColor="bg-white"
+                        bgColor="bg-[#F5F7FA]"
                       />
                     ))}
                   </div>
                 ) : loadingProducts && isOpen ? (
-                  <div className="text-center py-4 text-[#777777] text-sm">
+                  <div className="text-center py-4 text-[#777777] text-sm pr-4">
                     Cargando productos...
                   </div>
                 ) : (
-                  <p className="text-[#777777] text-center py-4 text-sm">
+                  <p className="text-[#777777] text-center py-4 text-sm pr-4">
                     No hay productos para mostrar
                   </p>
                 )}
