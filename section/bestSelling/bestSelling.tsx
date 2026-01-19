@@ -72,8 +72,8 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
 
   return (
     <>
-      <div id="best-selling" className="w-full h-auto mt-20 my-30">
-        <div className="flex flex-col items-start mb-5 ml-7 sm:ml-20">
+      <div id="best-selling" className="w-full h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
+        <div className="flex flex-col items-start mb-5  ">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Lo que le gusta a la gente!!!
           </h2>
@@ -82,7 +82,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
           </h1>
         </div>
 
-        <div className="relative px-5 xl:px-20">
+        <div className="relative ">
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"

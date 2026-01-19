@@ -81,7 +81,6 @@ export default function Login() {
     refresh_token: userInfo.refresh_token,
   });
 
-
   router.push("/");
 },
     onError: (error) => {

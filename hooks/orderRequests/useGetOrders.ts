@@ -28,6 +28,8 @@ export const useGetOrders = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchOrders = useCallback(async (lastId: string | number = 0, size: number = 10, searchText: string = "") => {
+    if (loading) return; // Evitar peticiones simultáneas
+
     const { auth, setAuth } = useAuthStore.getState();
 
     if (!auth?.access_token) {
@@ -37,21 +39,22 @@ export const useGetOrders = () => {
     setLoading(true);
 
     try {
+      // 1. Refrescar el token y esperar el resultado
       const token = await refreshToken(auth, setAuth);
+     
 
       if (!token) {
-        ErrorMessage("No se pudo obtener una sesión válida");
+        ErrorMessage("Tu sesión ha expirado. Por favor, inicia sesión de nuevo.");
         setLoading(false);
         return;
       }
 
+      // 2. Una vez obtenido el token, realizar la petición de órdenes
       const requestBody = {
         last_id: lastId,
         size: size,
         search_text: searchText
       };
-
-      console.log("Enviando body al backend:", requestBody);
 
       const response = await fetch(get_ordersUrl, {
         method: "POST",
@@ -66,7 +69,7 @@ export const useGetOrders = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("data", data);
+       
         
         // Process data to separate date and time if they are together in 'date'
         const processedData = data.map((order: any) => {

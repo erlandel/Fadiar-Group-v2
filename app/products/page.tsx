@@ -12,22 +12,15 @@ import CardSkeleton from "@/components/ui/skeletonCard";
 import { LatestProducts } from "@/section/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
-import useProductsByLocationStore from "@/store/productsByLocationStore";
 import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters";
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 
 export default function Products() {
-  const { 
-    provinceId,
-  } = useProductsByLocationStore();
-
   const { data: inventoryData, isLoading } = useInventory();
-  
+
   const allProducts = inventoryData?.products || [];
   const tiendas = inventoryData?.tiendas || [];
-  const currencys = inventoryData?.currencys || null;
   const globalProducts = allProducts; // En este contexto, allProducts ya son los productos disponibles
-
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
@@ -148,7 +141,7 @@ export default function Products() {
     // Filtro por tienda seleccionada
     if (selectedStoreId) {
       filtered = filtered.filter(
-        (product) => product.tiendaId === selectedStoreId
+        (product) => product.tiendaId === selectedStoreId,
       );
     }
 
@@ -265,7 +258,7 @@ export default function Products() {
 
   const removeFilter = (
     type: "category" | "brand" | "relevant",
-    value: string
+    value: string,
   ) => {
     if (type === "category") {
       setCategory(category.filter((c) => c !== value));
@@ -347,10 +340,9 @@ export default function Products() {
             ref={storeSelectorRef}
           />
 
-
           <div
             id="products"
-            className=" mx-4 xl:mx-0 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:mt-0 xl:grid-cols-4 2xl:grid-cols-5 gap-4 xl:mr-15 auto-rows-fr"
+            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4 xl:mr-15 auto-rows-fr justify-items-center"
           >
             {isLoading ? (
               // Mostrar 15 skeletons mientras carga

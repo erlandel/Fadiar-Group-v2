@@ -10,7 +10,7 @@ export default function SectionPromoHome1() {
         <div className="z-10 mt-8 row-start-1 col-start-1 flex flex-col md:flex-row md:justify-around items-center xl:justify-center  mx-4 xl:ml-10 2xl:mx-20">
           <div
             id="lorem"
-            className=" text-white md:mb-30 md:w-4/9  "
+            className=" text-white md:mb-30 md:w-5/9 lg:w-4/9  "
           >
             <h1 className="text-[28px]  lg:text-4xl xl:text-5xl font-bold  animate__animated  animate__lightSpeedInLeft">
               <samp className="text-[#D69F04] block">
@@ -26,7 +26,7 @@ export default function SectionPromoHome1() {
           </div>
 
           <div className="grid relative xl:place-items-start ">
-            <h1 className="row-start-1 col-start-1 z-20 font-['Just_Me_Again_Down_Here'] text-3xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white animate__animated animate__backInDown [animation-delay:1s] mt-4 xl:-mt-4  md:ml-20 xl:ml-20 ">
+            <h1 className="row-start-1 col-start-1 z-20 font-['Just_Me_Again_Down_Here'] text-3xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl text-white animate__animated animate__backInDown [animation-delay:1s] mt-4 xl:-mt-4  md:ml-10 xl:ml-20 ">
               Échale Sazón a la Olla
             </h1>
 

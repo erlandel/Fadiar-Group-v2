@@ -73,8 +73,8 @@ export const LatestProducts = ({
 
   return (
     <>
-      <div id="latest-products" className="w-full h-auto mt-20 my-30">
-        <div className="flex flex-col items-start mb-5 ml-7 sm:ml-20">
+      <div id="latest-products" className="w-full h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
+        <div className="flex flex-col items-start mb-5  ">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Más recientes
           </h2>
@@ -83,7 +83,7 @@ export const LatestProducts = ({
           </h1>
         </div>
 
-        <div className="relative px-5 xl:px-20">
+        <div className="relative">
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
