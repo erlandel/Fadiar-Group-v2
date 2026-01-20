@@ -239,14 +239,16 @@ function ProductContent({ id }: { id: string | null }) {
 
                   <button
                     className={`rounded-xl border border-primary transition-colors px-10 py-3 ${
-                      loading
-                        ? "bg-primary text-white "
-                        : isInCart
-                          ? "bg-primary text-white"
-                          : "hover:bg-primary hover:text-white"
+                      product.count === 0
+                        ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
+                        : loading
+                          ? "bg-primary text-white "
+                          : isInCart
+                            ? "bg-primary text-white"
+                            : "hover:bg-primary hover:text-white"
                     }`}
-                    onClick={loading ? undefined : handleAddToCart}
-                    disabled={loading}
+                    onClick={product.count === 0 || loading ? undefined : handleAddToCart}
+                    disabled={product.count === 0 || loading}
                   >
                     {loading ? (
                       <div className="flex h-6 w-6 items-center justify-center">
