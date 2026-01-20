@@ -51,14 +51,8 @@ export default function Amount() {
 
   const [formData, setFormData] = useState<MatterFormData>(defaultFormData);
 
-  // Filtrar items si se solicita domicilio
-  const filteredItems = items.filter((item) => {
-    if (!formData.delivery || !storeMunicipalityId) return true;
-    const tienda = rawCart?.find((t: any) => t.id === item.tiendaId);
-    return tienda?.domicilios?.some(
-      (d: any) => d.id_municipio === storeMunicipalityId
-    );
-  });
+  // Items del carrito (sin filtrar por domicilio)
+  const filteredItems = items;
 
   const totalPrice = filteredItems.reduce((total, item) => {
     const price = parseFloat(String(item.price).replace(/[^0-9.]/g, ""));
@@ -274,26 +268,27 @@ export default function Amount() {
     ? currentProvinceData.municipios
     : [];
 
+  const activeStoreIds = Array.from(
+    new Set(items.map((item) => item.tiendaId).filter((id) => id != null))
+  );
+
   const deliveryStores =
-    formData.delivery && Array.isArray(rawCart)
+    Array.isArray(rawCart) && activeStoreIds.length > 0
       ? rawCart.filter(
           (tienda: any) =>
-            Array.isArray(tienda.domicilios) && tienda.domicilios.length > 0
+            activeStoreIds.includes(tienda.id) &&
+            Array.isArray(tienda.domicilios) &&
+            tienda.domicilios.length > 0
         )
       : [];
 
   const municipalitiesWithCommonDelivery =
-    formData.delivery && deliveryStores.length > 1
-      ? (() => {
-          const common = municipalities.filter((mun) =>
-            deliveryStores.every((tienda: any) =>
-              tienda.domicilios.some(
-                (d: any) => d.id_municipio === mun.id
-              )
-            )
-          );
-          return common.length > 0 ? common : municipalities;
-        })()
+    deliveryStores.length > 0
+      ? municipalities.filter((mun) =>
+          deliveryStores.every((tienda: any) =>
+            tienda.domicilios.some((d: any) => d.id_municipio === mun.id)
+          )
+        )
       : municipalities;
 
   return (
@@ -521,7 +516,7 @@ export default function Amount() {
             >
               ¿Necesitas entrega a domicilio? 
               <span className="text-accent text-xs ml-1"> 
-                (En el municipio solo estarán disponibles los que tengan en común ambas tiendas.)
+                (Solo se mostrarán los municipios en los que todas las tiendas tengan domicilio en común.)
               </span>
             </label>
           </div>

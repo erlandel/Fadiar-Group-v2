@@ -10,7 +10,6 @@ import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import useCartStore from "@/store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
-import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 export default function Cart1() {
   const items = useCartStore((state) => state.items);
@@ -18,7 +17,6 @@ export default function Cart1() {
   const removeItem = useCartStore((state) => state.removeItem);
 
   const { delivery } = MatterCart1Store((state) => state.formData);
-  const { municipalityId } = useProductsByLocationStore();
 
   const [isClient, setIsClient] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | number>(
@@ -45,14 +43,8 @@ export default function Cart1() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filtrar items si se solicita domicilio
-  const filteredByDeliveryItems = items.filter((item) => {
-    if (!delivery || !municipalityId) return true;
-    const tienda = rawCart.find((t: any) => t.id === item.tiendaId);
-    return tienda?.domicilios?.some(
-      (d: any) => d.id_municipio === municipalityId
-    );
-  });
+  // Items del carrito (sin filtrar por domicilio)
+  const filteredByDeliveryItems = items;
 
   // Extraer tiendas únicas del carrito filtrado
   const stores = filteredByDeliveryItems.reduce((acc, item) => {
