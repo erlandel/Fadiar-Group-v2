@@ -68,8 +68,10 @@ export const useSyncCart = () => {
                  brand: p.brand,
                  category: p.categoria?.name,
                  warranty: p.warranty ? String(p.warranty) : undefined,
-                 price: String(p.price),
-                 temporal_price: p.temporal_price ? String(p.temporal_price) : undefined,
+                 price: (p.temporal_price && Number(p.temporal_price) !== 0) 
+                  ? String(p.temporal_price) 
+                  : String(p.price),
+                temporal_price: p.temporal_price ? String(p.temporal_price) : undefined,
                  image: p.img,
                  quantity: item.en_carrito,
                  tiendaId: tiendaId,
