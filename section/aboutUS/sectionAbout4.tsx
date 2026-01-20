@@ -5,7 +5,7 @@ export const SectionAbout4 = () => {
 
         <div 
          data-animate="animate__lightSpeedInLeft"
-        className="absolute animate-on-scroll text-3xl  font-bold mt-12 text-center w-full md:ml-10   md:w-120 md:text-4xl md:mt-25  xl:w-140 2xl:ml-40 2xl:text-5xl 2xl:mt-20">
+        className="absolute animate-on-scroll text-3xl  font-bold mt-12 text-center w-full md:ml-10   md:w-120 md:text-4xl md:mt-25 lg:ml-5 xl:ml-10  xl:w-140 2xl:ml-40 2xl:text-5xl 2xl:mt-20">
           <h1>
             <span className="text-accent">Pague de forma Segura</span>{" "}
             <span className="text-white">Presencial y en efectivo</span>
@@ -16,19 +16,19 @@ export const SectionAbout4 = () => {
           <img
             src="/images/Rectangle.webp"
             alt="Background"
-            className="absolute bottom-0 left-30 "
+            className="absolute bottom-0 left-30 w-full h-10 xl:h-15 "
           />
 
           <img
             src="/images/Vector15.webp"
             alt="Background"
-            className="absolute bottom-0 ml-70"
+            className="absolute bottom-0 ml-70 w-full h-20 xl:h-25"
           />
 
           <img
             src="/images/Vector16.webp"
             alt="Background"
-            className="absolute bottom-0 left-0  w-325"
+            className="absolute bottom-0 left-0  w-full h-27 xl:h-32"
           />
 
           <img
