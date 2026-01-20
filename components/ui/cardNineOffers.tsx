@@ -22,6 +22,7 @@ export default function CardNineOffers({
   productId,
   tiendaId,
   currency,
+  count,
 }: CardProps) {
   const router = useRouter();
   const { addToCart, loading } = useAddToCart();
@@ -99,6 +100,11 @@ export default function CardNineOffers({
             className="relative  w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
             style={{ height: "190px" }}
           >
+            {count === 0 && (
+              <div className="absolute top-2 right-[-35px] z-30 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+                Agotado
+              </div>
+            )}
             <img
               className="h-full w-full object-contain"
               alt={title}
@@ -179,14 +185,16 @@ export default function CardNineOffers({
 
               <button
                 className={`rounded-xl  border border-primary transition-colors py-2 px-4 2xl:py-2.5 2xl:px-5 ${
-                  loading
-                    ? "bg-primary text-white "
-                    : isInCart
-                      ? "bg-primary text-white"
-                      : "hover:bg-primary hover:text-white"
+                  count === 0
+                    ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
+                    : loading
+                      ? "bg-primary text-white "
+                      : isInCart
+                        ? "bg-primary text-white"
+                        : "hover:bg-primary hover:text-white"
                 }`}
-                onClick={loading ? undefined : handleAddToCart}
-                disabled={loading}
+                onClick={count === 0 || loading ? undefined : handleAddToCart}
+                disabled={count === 0 || loading}
               >
                 {loading ? (
                   <div className="flex h-5 w-5 items-center justify-center">
@@ -209,8 +217,13 @@ export default function CardNineOffers({
           style={{ height: "240px" }}
         >
           <div
-            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48  sm:min-w-[160px]"          
+            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48  sm:min-w-[160px]"
           >
+            {count === 0 && (
+              <div className="absolute top-2 right-[-35px] z-10 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+                Agotado
+              </div>
+            )}
             <img
               className="h-full w-35 sm:w-48 2xl:w-full object-contain"
               alt={title}
@@ -290,14 +303,16 @@ export default function CardNineOffers({
 
               <button
                 className={`rounded-xl  border border-primary transition-colors py-2 px-4  2xl:py-2.5 2xl:px-5 ${
-                  loading
-                    ? "bg-primary text-white"
-                    : isInCart
+                  count === 0
+                    ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
+                    : loading
                       ? "bg-primary text-white"
-                      : "hover:bg-primary hover:text-white"
+                      : isInCart
+                        ? "bg-primary text-white"
+                        : "hover:bg-primary hover:text-white"
                 }`}
-                onClick={loading ? undefined : handleAddToCart}
-                disabled={loading}
+                onClick={count === 0 || loading ? undefined : handleAddToCart}
+                disabled={count === 0 || loading}
               >
                 {loading ? (
                   <div className="flex h-5 w-5 items-center justify-center">

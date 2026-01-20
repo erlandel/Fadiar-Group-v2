@@ -15,6 +15,7 @@ interface Product {
   img: string;
   temporal_price?: string;
   tiendaId?: string | number;
+  count?: number;
 }
 
 type RelatedProdsProps = {
@@ -45,6 +46,7 @@ export default function RelatedProds({ products = [] }: RelatedProdsProps) {
               image={product.img}
               temporal_price={product?.temporal_price}
               tiendaId={product.tiendaId}
+              count={product.count}
               position="horizontal"
             />
           ))

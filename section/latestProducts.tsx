@@ -99,9 +99,11 @@ export const LatestProducts = ({
                     warranty={product.warranty}
                     price={product.price}
                     image={product.img}
+                    temporal_price={product.temporal_price}
                     position="vertical"
                     productId={product.id}
                     tiendaId={product.tiendaId}
+                    count={product.count}
                   />
                 </div>
               ))

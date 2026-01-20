@@ -73,6 +73,7 @@ export default function NineOffers() {
         image={offer.img}
         temporal_price={offer.temporal_price}
         tiendaId={offer.tiendaId}
+        count={offer.count}
         position={position}
       />
     );
