@@ -3,7 +3,7 @@ import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
 import { useSyncCart } from "./useSyncCart";
 import ErrorMessage from "@/messages/errorMessage";
-import { get_cart_products_by_tiendaUrl } from "@/urlApi/urlApi";
+import { update_cart_quantityUrl } from "@/urlApi/urlApi";
 
 export const useUpdateCart = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export const useUpdateCart = () => {
         return;
       }
 
-      const response = await fetch(`${get_cart_products_by_tiendaUrl}`, {
+      const response = await fetch(`${update_cart_quantityUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import { useDeleteFromCart } from "@/hooks/cartRequests/useDeleteFromCart";
 import { useUpdateCart } from "@/hooks/cartRequests/useUpdateCart";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
+import LoadingDots from "../loadingDots/loadingDots";
 
 interface CardCart4Props {
   title: string;
@@ -103,8 +104,8 @@ export default function CartCard({
                 }`}
               >
                 {updating && (
-                  <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <span className="loading-dots scale-125"></span>
+                  <div className="absolute inset-0 flex items-center justify-center z-20 bg-white/50 rounded-xl">
+                    <LoadingDots size="1.5rem" />
                   </div>
                 )}
                 <div className={`flex items-center transition-opacity duration-300 ${updating ? "opacity-40" : "opacity-100"}`}>

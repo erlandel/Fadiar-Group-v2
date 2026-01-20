@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+import LoadingDots from "@/components/loadingDots/loadingDots";
+
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 
 interface MunicipalityData {
@@ -18,12 +20,25 @@ interface ProvinceData {
 }
 
 const ModalProductsByLocation = () => {
-  const { province, provinceId, municipality, municipalityId, setLocation, setIsOpen } = useProductsByLocationStore();
+  const {
+    province,
+    provinceId,
+    municipality,
+    municipalityId,
+    setLocation,
+    setIsOpen,
+  } = useProductsByLocationStore();
   const [data, setData] = useState<ProvinceData[]>([]);
   const [selectedProvince, setSelectedProvince] = useState(province || "");
-  const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(provinceId || null);
-  const [selectedMunicipality, setSelectedMunicipality] = useState(municipality || "");
-  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<number | null>(municipalityId || null);
+  const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(
+    provinceId || null,
+  );
+  const [selectedMunicipality, setSelectedMunicipality] = useState(
+    municipality || "",
+  );
+  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<
+    number | null
+  >(municipalityId || null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [openProvinces, setOpenProvinces] = useState(false);
@@ -67,7 +82,7 @@ const ModalProductsByLocation = () => {
       try {
         const res = await fetch(`${get_provinces_municipalitiesUrl}`);
         const json = await res.json();
-        console.log("res: ",json);
+        console.log("res: ", json);
         setData(json); // json esperado: [{ provincia: 'La Habana', municipios: [...] }, ...]
       } catch (err) {
         console.error("Error fetching provinces:", err);
@@ -82,50 +97,83 @@ const ModalProductsByLocation = () => {
   const handleAccept = () => {
     setSubmitAttempted(true);
     // Validación básica: necesitamos provincia y municipio
-    if (!selectedProvince || !selectedMunicipality || selectedMunicipalityId === null) {
+    if (
+      !selectedProvince ||
+      !selectedMunicipality ||
+      selectedMunicipalityId === null
+    ) {
       setError(true);
       return;
     }
-    
+
     // Si no tenemos el ID de la provincia, intentamos buscarlo en la data cargada
     let finalProvinceId = selectedProvinceId;
     if (!finalProvinceId && selectedProvince) {
-      const foundProv = data.find(p => p.provincia === selectedProvince);
+      const foundProv = data.find((p) => p.provincia === selectedProvince);
       if (foundProv) finalProvinceId = foundProv.id;
     }
 
     setError(false);
-    
+
     // Guardar en el store
-    setLocation(selectedProvince, finalProvinceId, selectedMunicipality, selectedMunicipalityId);
+    setLocation(
+      selectedProvince,
+      finalProvinceId,
+      selectedMunicipality,
+      selectedMunicipalityId,
+    );
     setIsOpen(false);
-    
+
     console.log("Ubicación guardada:", {
       provincia: selectedProvince,
       provinciaId: finalProvinceId,
       municipio: selectedMunicipality,
-      municipioId: selectedMunicipalityId
+      municipioId: selectedMunicipalityId,
     });
   };
 
-  const municipalities = data.find((p) => p.provincia === selectedProvince)?.municipios || [];
+  const municipalities =
+    data.find((p) => p.provincia === selectedProvince)?.municipios || [];
 
   return (
     <div className="bg-white sm:w-150 py-6 rounded-lg shadow-xl ">
-      <h2 className="text-lg font-semibold mb-3 px-6">Lugar de entrega o recogida</h2>
+      <h2 className="text-lg font-semibold mb-3 px-6">
+        Lugar de entrega o recogida
+      </h2>
 
       <div className="bg-gray-200 w-full h-px mb-4"></div>
 
-      <p className="mb-4 text-gray-700 px-6 sm:tex">
+      <p className="mb-4 text-gray-700 px-6">
         Se mostrarán los productos según la ubicación seleccionada
       </p>
 
       {loading ? (
-       <p className="px-6 mb-2 loading-dots text-lg "> Cargando </p>
+        <div className= "w-full text-center my-10" >
+          <div className="sm:hidden ">
+            <LoadingDots
+              text="Cargando"
+              size="0.5rem"
+              textSize="1rem"
+              className="font-bold"
+              margin="3px"
+            />
+          </div>
 
+          <div className="hidden sm:block">
+            <LoadingDots
+              text="Cargando"
+              size="1.3rem"
+              textSize="1.3rem"
+              className="font-bold"
+              margin="3px"
+            />
+          </div>
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 gap-4 mb-4 px-6">
           {/* Provincia */}
+     
+
           <div className="flex flex-col relative" ref={provincesRef}>
             <label className="mb-1 text-sm font-medium">Provincia</label>
             <div
@@ -133,16 +181,14 @@ const ModalProductsByLocation = () => {
               className="flex h-12 items-center justify-between rounded-xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent"
               onClick={() => setOpenProvinces(!openProvinces)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   setOpenProvinces(!openProvinces);
                 }
               }}
             >
               <span
-                className={
-                  selectedProvince ? "text-gray-800" : "text-gray-500"
-                }
+                className={selectedProvince ? "text-gray-800" : "text-gray-500"}
               >
                 {selectedProvince || "Seleccione una provincia"}
               </span>
@@ -150,7 +196,9 @@ const ModalProductsByLocation = () => {
             </div>
 
             {error && !selectedProvince && (
-              <span className="text-red-500 text-sm mt-1 ml-2">Este campo es requerido</span>
+              <span className="text-red-500 text-sm mt-1 ml-2">
+                Este campo es requerido
+              </span>
             )}
 
             {openProvinces && (
@@ -190,7 +238,7 @@ const ModalProductsByLocation = () => {
                 }
               }}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   if (selectedProvince) {
                     setOpenMunicipalities(!openMunicipalities);
@@ -211,7 +259,9 @@ const ModalProductsByLocation = () => {
             </div>
 
             {submitAttempted && !selectedMunicipality && (
-              <span className="text-red-500 text-sm mt-1 ml-2">Este campo es requerido</span>
+              <span className="text-red-500 text-sm mt-1 ml-2">
+                Este campo es requerido
+              </span>
             )}
 
             {openMunicipalities && (
@@ -237,7 +287,6 @@ const ModalProductsByLocation = () => {
         </div>
       )}
       <div className="bg-gray-200 w-full h-px mb-4 shadow-[0_-2px_3px_rgba(0,0,0,0.25)]"></div>
-
 
       <div className="flex justify-center sm:justify-end px-6">
         <button

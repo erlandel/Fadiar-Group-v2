@@ -20,6 +20,8 @@ export const get_cart_productsUrl = `${server_url}/obtener_productos_carrito`;
 
 export const get_cart_products_by_tiendaUrl = `${server_url}/obtener_productos_carrito_por_tienda`;
 
+export const update_cart_quantityUrl = `${server_url}/modificar_cantidad_producto_carrito`;
+
 export const best_selling_productsUrl = `${server_url}/img_mas_vendido`;
 
 export const inventory_managerUrl = `${server_url}/inventory_manager`;

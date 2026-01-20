@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { MaterialSymbolsAdd } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
+import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 
@@ -159,8 +160,14 @@ export default function OrdersTable() {
                       </div>
                     </div>
                   ) : loadingProducts && isOpen ? (
-                    <div className="text-center py-4 text-[#777777] pr-6">
-                      Cargando productos...
+                    <div className="w-full text-center py-8 pr-6">
+                      <LoadingDots 
+                        text="Cargando productos"
+                        size="1.5rem"
+                        textSize="2rem"
+                        className="text-[#777777] font-bold"
+                        margin="6px"
+                      />
                     </div>
                   ) : (
                     <p className="text-[#777777] text-center py-4 pr-6">
@@ -174,7 +181,15 @@ export default function OrdersTable() {
         })}
 
         {loading && (
-          <div className="text-center py-4 text-[#777777]">Cargando pedidos...</div>
+          <div className="w-full text-center py-8">
+            <LoadingDots 
+              text="Cargando pedidos"
+              size="1.5rem"
+              textSize="2rem"
+              className="text-[#777777] font-bold"
+              margin="6px"
+            />
+          </div>
         )}
 
         {!loading && orders.length === 0 && (
