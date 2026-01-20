@@ -109,7 +109,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       {children}
       {!isAuthRoute && <Footer />}
       {!isAuthRoute && <ButtonBackTop />}
-      <ToastContainer />
+      <ToastContainer 
+        position="top-right"
+        className="xl:top-auto! xl:bottom-4!"
+      />
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );

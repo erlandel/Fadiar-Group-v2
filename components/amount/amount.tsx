@@ -14,6 +14,7 @@ import MatterCart1Store, {
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
+import InformationMessage from "../../messages/informationMessage";
 
 interface MunicipalityData {
   id: number;
@@ -501,6 +502,11 @@ export default function Amount() {
                 MatterCart1Store.getState().updateFormData({
                   delivery: isChecked,
                 });
+                if (isChecked) {
+                  InformationMessage(
+                    "Revise los municipios a los cuales se esta haciendo domicilio"
+                  );
+                }
                 if (!isChecked && errors.address) {
                   setErrors((prev) => ({ ...prev, address: undefined }));
                 }
@@ -522,8 +528,9 @@ export default function Amount() {
           </div>
         </div>
 
-        {isClient && formData.delivery && (
+        {isClient && formData.delivery && (          
           <div>
+          
      
             <div className="mt-6">
               <label className="ml-2 font-medium text-gray-600">
