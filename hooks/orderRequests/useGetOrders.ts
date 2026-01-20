@@ -70,6 +70,7 @@ export const useGetOrders = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("Datos del pedido recibidos:", data);
        
         
         // Process data to separate date and time if they are together in 'date'
@@ -88,11 +89,22 @@ export const useGetOrders = () => {
             finalTime = parts[1].split(".")[0]; // Remove milliseconds if present
           }
 
+          const rawStatus = order.state !== undefined ? order.state : order.status;
+          let finalStatus = order.status;
+
+          if (rawStatus === 1 || rawStatus === "1") {
+            finalStatus = "Confirmado";
+          } else if (rawStatus === 0 || rawStatus === "0") {
+            finalStatus = "En espera";
+          } else if (rawStatus === -1 || rawStatus === "-1") {
+            finalStatus = "Cancelado";
+          }
+
           return {
             ...order,
             date: finalDate,
             time: finalTime,
-            status: order.state === 1 ? "Confirmado" : order.state === 0 ? "En espera" : order.state === -1 ? "Cancelado" : order.status
+            status: finalStatus
           };
         });
 

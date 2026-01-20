@@ -20,7 +20,11 @@ export default function PayerPaymentDetails() {
         <div className="ml-4">
           <p className="text-[gray] ">
             Método de pago:{" "}
-            <span className="text-primary wrap-break-word">{buyerDetails.paymentMethod}</span>
+            <span className="text-primary wrap-break-word">
+              {buyerDetails.paymentMethod === "Recogida en tienda"
+                ? "presencial en la tienda"
+                : buyerDetails.paymentMethod}
+            </span>
           </p>
         </div>
 

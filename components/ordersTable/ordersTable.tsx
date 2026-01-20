@@ -107,10 +107,10 @@ export default function OrdersTable() {
                   <span
                     className={`inline-block px-5 py-2 rounded-full text-md font-medium ${
                       order.status === "Confirmado"
-                        ? "bg-[##2BD530] text-white"
+                        ? "bg-[#2BD530] text-white"
                         : order.status === "En espera"
                         ? "bg-yellow-500 text-white"
-                        : "bg-[##D52B2E] text-white"
+                        : "bg-[#D52B2E] text-white"
                     }`}
                   >
                     {order.status}

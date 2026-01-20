@@ -52,7 +52,7 @@ export default function CreditCards() {
   // Ajustar el método seleccionado según delivery y asegurar que siempre haya uno válido
   useEffect(() => {
     const visibleMethods = paymentMethods.filter((method) => 
-      delivery ? method.id !== "tienda" : method.id === "tienda"
+      delivery ? method.id !== "tienda" : (method.id === "tienda" || method.id === "zelle")
     );
 
     const isSelectedVisible = visibleMethods.some(m => m.title === selectedMethod);
@@ -81,7 +81,7 @@ export default function CreditCards() {
             if (delivery) {
               return method.id !== "tienda";
             } else {
-              return method.id === "tienda";
+              return method.id === "tienda" || method.id === "zelle";
             }
           })
           .map((method) => (

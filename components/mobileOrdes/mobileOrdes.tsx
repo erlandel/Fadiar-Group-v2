@@ -112,11 +112,11 @@ export default function MobileOrdes() {
                 <p className="text-sm sm:text-lg">Estado</p>
                 <div className="flex justify-end">
                   <span
-                    className={`inline-block px-5 py-2 md:px-8 md:py-3 rounded-full text-sm ${
+                    className={`inline-block px-5 py-2 md:px-8 md:py-3 rounded-full text-sm font-medium ${
                       order.status === "Confirmado"
                         ? "bg-[#2BD530] text-white"
                         : order.status === "En espera"
-                        ? "bg-[#FFB020] text-white"
+                        ? "bg-yellow-500 text-white"
                         : "bg-[#D52B2E] text-white"
                     }`}
                   >

@@ -61,27 +61,42 @@ export default function RecipientPaymentDetails() {
           <p className="ml-4 text-primary">Dirección de entrega</p>
         </div>
 
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Provincia: {" "}
-            <span className="text-primary wrap-break-word">{formData.province}</span>
-          </p>
-        </div>
+        {formData.delivery ? (
+          <>
+            <div className="ml-4">
+              <p className="text-[gray] ">
+                Provincia: {" "}
+                <span className="text-primary wrap-break-word">{formData.province}</span>
+              </p>
+            </div>
 
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Municipio: {" "}
-            <span className="text-primary wrap-break-word">{formData.municipality}</span>
-          </p>
-        </div>
+            <div className="ml-4">
+              <p className="text-[gray] ">
+                Municipio: {" "}
+                <span className="text-primary wrap-break-word">{formData.municipality}</span>
+              </p>
+            </div>
 
-        {formData.delivery && (
-          <div className="ml-4">
-            <p className="text-[gray] ">
-              Dirección: 
-              <span className="text-primary wrap-break-word">{formData.address}</span>
-            </p>
-          </div>
+            <div className="ml-4">
+              <p className="text-[gray] ">
+                Dirección: 
+                <span className="text-primary wrap-break-word">{formData.address}</span>
+              </p>
+            </div>
+          </>
+        ) : (
+          formData.stores?.map((store, index) => (
+            <div key={index} className="ml-4 space-y-1">
+              <p className="text-[gray]">
+                Tienda:{" "}
+                <span className="text-primary wrap-break-word">{store.name}</span>
+              </p>
+              <p className="text-[gray]">
+                Dirección:{" "}
+                <span className="text-primary wrap-break-word">{store.direccion}</span>
+              </p>
+            </div>
+          ))
         )}
 
         {formData.note && (
