@@ -1,23 +1,40 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { MaterialSymbolsAdd } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
+import LoadingDots from "../loadingDots/loadingDots";
+import { Loader } from "lucide-react";
 
 export default function MobileOrdes() {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
-  const { orders, loading, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
-  const { fetchOrderProducts, loading: loadingProducts } = useGetOrderProducts();
+  const { orders, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
+  const { fetchOrderProducts } = useGetOrderProducts();
+
+  const fetchOrdersMutation = useMutation({
+    mutationFn: (params: { lastId: string | number; size: number; searchText: string }) => 
+      fetchOrders(params.lastId, params.size, params.searchText),
+  });
+
+  const fetchOrderProductsMutation = useMutation({
+    mutationFn: (orderId: string) => fetchOrderProducts(orderId),
+    onSuccess: (products, orderId) => {
+      if (products) {
+        updateOrderProducts(orderId, products);
+      }
+    },
+  });
 
   useEffect(() => {
-    fetchOrders(0, 10, "");
-  }, [fetchOrders]);
+    fetchOrdersMutation.mutate({ lastId: 0, size: 10, searchText: "" });
+  }, []);
 
   const loadMore = () => {
     const lastId = orders.length > 0 ? orders[orders.length - 1].id : 0;
-    fetchOrders(lastId, 10, "");
+    fetchOrdersMutation.mutate({ lastId, size: 10, searchText: "" });
   };
 
   const toggleOrder = async (orderId: string) => {
@@ -32,10 +49,7 @@ export default function MobileOrdes() {
     if (isOpening) {
       const order = orders.find(o => o.id === orderId);
       if (order && (!order.products || order.products.length === 0)) {
-        const products = await fetchOrderProducts(orderId);
-        if (products) {
-          updateOrderProducts(orderId, products);
-        }
+        fetchOrderProductsMutation.mutate(orderId);
       }
     }
   };
@@ -137,10 +151,10 @@ export default function MobileOrdes() {
                       />
                     ))}
                   </div>
-                ) : loadingProducts && isOpen ? (
-                  <div className="text-center py-4 text-[#777777] text-sm pr-4">
-                    Cargando productos...
-                  </div>
+                ) : fetchOrderProductsMutation.isPending && fetchOrderProductsMutation.variables === order.id && isOpen ? (
+                    <div className="w-full flex justify-center items-center ">               
+                       <Loader className="h-10 w-10 animate-spin text-accent " strokeWidth={3} />
+                    </div>
                 ) : (
                   <p className="text-[#777777] text-center py-4 text-sm pr-4">
                     No hay productos para mostrar
@@ -152,17 +166,25 @@ export default function MobileOrdes() {
         );
       })}
 
-      {loading && (
-        <div className="text-center py-4 text-[#777777] text-sm">Cargando pedidos...</div>
+      {(fetchOrdersMutation.isPending || fetchOrdersMutation.status === "idle") && (
+          <div className="w-full text-center py-8">
+                    <LoadingDots 
+                      text="Cargando pedidos"
+                      size="1.2rem"
+                      textSize="1.3rem"
+                      className="text-[#777777] font-bold"
+                      margin="6px"
+                    />
+                  </div>
       )}
 
-      {!loading && orders.length === 0 && (
+      {fetchOrdersMutation.isSuccess && orders.length === 0 && (
         <div className="text-center py-10 text-[#777777] text-sm">
           No se encontraron pedidos.
         </div>
       )}
 
-      {!loading && hasMore && orders.length > 0 && (
+      {!fetchOrdersMutation.isPending && hasMore && orders.length > 0 && (
         <div className="flex justify-center mt-6">
           <button
             onClick={loadMore}

@@ -1,24 +1,40 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { MaterialSymbolsAdd } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
 import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
+import { Loader } from "lucide-react";
 
 export default function OrdersTable() {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
-  const { orders, loading, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
-  const { fetchOrderProducts, loading: loadingProducts } = useGetOrderProducts();
+  const { orders, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
+  const { fetchOrderProducts } = useGetOrderProducts();
+
+  const fetchOrdersMutation = useMutation({
+    mutationFn: (params: { lastId: string | number; size: number; searchText: string }) => 
+      fetchOrders(params.lastId, params.size, params.searchText),
+  });
+
+  const fetchOrderProductsMutation = useMutation({
+    mutationFn: (orderId: string) => fetchOrderProducts(orderId),
+    onSuccess: (products, orderId) => {
+      if (products) {
+        updateOrderProducts(orderId, products);
+      }
+    },
+  });
 
   useEffect(() => {
-    fetchOrders(0, 10, "");
-  }, [fetchOrders]);
+    fetchOrdersMutation.mutate({ lastId: 0, size: 10, searchText: "" });
+  }, []);
 
   const loadMore = () => {
     const lastId = orders.length > 0 ? orders[orders.length - 1].id : 0;
-    fetchOrders(lastId, 10, "");
+    fetchOrdersMutation.mutate({ lastId, size: 10, searchText: "" });
   };
 
   const toggleOrder = async (orderId: string) => {
@@ -33,10 +49,7 @@ export default function OrdersTable() {
     if (isOpening) {
       const order = orders.find(o => o.id === orderId);
       if (order && (!order.products || order.products.length === 0)) {
-        const products = await fetchOrderProducts(orderId);
-        if (products) {
-          updateOrderProducts(orderId, products);
-        }
+        fetchOrderProductsMutation.mutate(orderId);
       }
     }
   };
@@ -44,16 +57,19 @@ export default function OrdersTable() {
   return (
     <>
       <div>
+       
         {/* Table Header */}
-        <div className="grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_80px] gap-4 px-6 py-4 font-bold  text-[#777777] items-center">
-          <div className="text-center">Pedido</div>
-          <div className="text-center">Fecha</div>
-          <div className="text-center">Hora</div>
-          <div className="text-center">Carnet de identidad</div>
-          <div className="text-center">Teléfono</div>
-          <div className="text-center">Estado</div>
-          <div className="flex justify-center"></div>
-        </div>
+        {orders.length > 0 && (
+          <div className="grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_80px] gap-4 px-6 py-4 font-bold  text-[#777777] items-center">
+            <div className="text-center">Pedido</div>
+            <div className="text-center">Fecha</div>
+            <div className="text-center">Hora</div>
+            <div className="text-center">Carnet de identidad</div>
+            <div className="text-center">Teléfono</div>
+            <div className="text-center">Estado</div>
+            <div className="flex justify-center"></div>
+          </div>
+        )}
 
         {/* Table Body with Accordion */}
         {orders.map((order) => {
@@ -65,42 +81,26 @@ export default function OrdersTable() {
                 className={`grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_80px] gap-4 px-6 py-4 items-center transition-colors ${
                   isOpen
                     ? "bg-[#022954] text-white rounded-t-xl"
-                    : "bg-[#F5F7FA] rounded-2xl"
+                    : "bg-[#F5F7FA] text-[#777777] rounded-2xl"
                 }`}
               >
                 <div
                   className={`font-bold text-xl text-center ${
-                    isOpen ? "text-white" : "text-[#022954]"
+                    !isOpen && "text-[#022954]"
                   }`}
                 >
                   {order.id.toString().startsWith("#") ? order.id : `#${order.id}`}
                 </div>
-                <div
-                  className={`text-center ${
-                    isOpen ? "text-white" : "text-[#777777]"
-                  }`}
-                >
+                <div className="text-center">
                   {order.date}
                 </div>
-                <div
-                  className={`text-center ${
-                    isOpen ? "text-white" : "text-[#777777]"
-                  }`}
-                >
+                <div className="text-center">
                   {order.time}
                 </div>
-                <div
-                  className={`text-center ${
-                    isOpen ? "text-white" : "text-[#777777]"
-                  }`}
-                >
+                <div className="text-center">
                   {order.client_ci}
                 </div>
-                <div
-                  className={`text-center ${
-                    isOpen ? "text-white" : "text-[#777777]"
-                  }`}
-                >
+                <div className="text-center">
                   {order.client_cell}
                 </div>
                 <div className="text-center">
@@ -158,16 +158,11 @@ export default function OrdersTable() {
                           />
                         ))}
                       </div>
+                      
                     </div>
-                  ) : loadingProducts && isOpen ? (
-                    <div className="w-full text-center py-8 pr-6">
-                      <LoadingDots 
-                        text="Cargando productos"
-                        size="1.5rem"
-                        textSize="2rem"
-                        className="text-[#777777] font-bold"
-                        margin="6px"
-                      />
+                  ) : fetchOrderProductsMutation.isPending && fetchOrderProductsMutation.variables === order.id && isOpen ? (
+                    <div className="w-full flex justify-center items-center ">               
+                       <Loader className="h-10 w-10 animate-spin text-accent "strokeWidth={3} />
                     </div>
                   ) : (
                     <p className="text-[#777777] text-center py-4 pr-6">
@@ -180,7 +175,7 @@ export default function OrdersTable() {
           );
         })}
 
-        {loading && (
+        {(fetchOrdersMutation.isPending || fetchOrdersMutation.status === "idle") && (
           <div className="w-full text-center py-8">
             <LoadingDots 
               text="Cargando pedidos"
@@ -192,13 +187,13 @@ export default function OrdersTable() {
           </div>
         )}
 
-        {!loading && orders.length === 0 && (
+        {fetchOrdersMutation.isSuccess && orders.length === 0 && (
           <div className="text-center py-10 text-[#777777]">
             No se encontraron pedidos.
           </div>
         )}
 
-        {!loading && hasMore && orders.length > 0 && (
+        {!fetchOrdersMutation.isPending && hasMore && orders.length > 0 && (
           <div className="flex justify-center mt-6">
             <button
               onClick={loadMore}
