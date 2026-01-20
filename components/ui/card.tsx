@@ -8,6 +8,7 @@ import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import ShoppingCartIcon from "../icons";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
+import ProductLoadingId from "../productLoadingId/productLoadingId";
 
 interface CardProps {
   category?: string;
@@ -49,6 +50,7 @@ export default function Card({
   const removeItem = useCartStore((state) => state.removeItem);
   const cartItems = useCartStore((state) => state.items);
   const [isInCart, setIsInCart] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   useEffect(() => {
     if (productId !== undefined && productId !== null) {
@@ -71,9 +73,11 @@ export default function Card({
 
   const handleCardClick = () => {
     if (productId) {
+      setIsNavigating(true);
       router.push(`/productID?id=${productId}`);
     }
   };
+
 
   const handleButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -379,6 +383,7 @@ export default function Card({
           </div>
         </div>
       )}
+      {isNavigating && <ProductLoadingId />}
     </>
   );
 }

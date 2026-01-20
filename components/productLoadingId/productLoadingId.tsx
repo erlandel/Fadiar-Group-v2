@@ -1,21 +1,15 @@
 
 
 export default function ProductLoadingId() {
-    return( 
-    <>
-          <div >
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4  animate-shimmer"></div>
-            <div className="h-10 bg-gray-200 rounded w-1/2 mb-10 animate-shimmer"></div>
-            <div className="flex flex-col md:flex-row gap-16">
-              <div className="md:w-1/3 h-[400px] bg-gray-200 rounded-xl animate-shimmer"></div>
-              <div className="md:w-2/3 space-y-4">
-                <div className="h-6 bg-gray-200 rounded w-1/3 animate-shimmer"></div>
-                <div className="h-10 bg-gray-200 rounded w-1/2 animate-shimmer"></div>
-                <div className="h-8 bg-gray-200 rounded w-1/4 animate-shimmer"></div>
-              </div>
-            </div>
-          </div>
-    </>
-    );
-       
-    }
+  return (
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-white/1 backdrop-blur-xs">
+      <div className="flex space-x-2">
+        <div className="w-4 h-4 bg-accent rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="w-4 h-4 bg-accent rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="w-4 h-4 bg-accent rounded-full animate-bounce"></div>
+      </div>
+
+    </div>
+  );
+}
+

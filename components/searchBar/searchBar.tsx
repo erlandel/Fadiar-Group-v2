@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Product } from "@/types/product";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { server_url } from "@/urlApi/urlApi";
+import ProductLoadingId from "../productLoadingId/productLoadingId";
 
 function levenshtein(a: string, b: string) {
   const m = a.length;
@@ -28,6 +29,7 @@ export default function Serchbar() {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -73,10 +75,12 @@ export default function Serchbar() {
   };
 
   const handleProductClick = (productId: number) => {
+    setIsNavigating(true);
     router.push(`/productID?id=${productId}`);
     setIsOpen(false);
     setQuery("");
   };
+
 
   return (
     <>
@@ -135,6 +139,7 @@ export default function Serchbar() {
           </div>
         </div>
       </div>
+      {isNavigating && <ProductLoadingId />}
     </>
   );
 }
