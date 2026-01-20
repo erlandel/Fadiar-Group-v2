@@ -11,19 +11,19 @@ export default function SectionPromoHome2() {
             <img
               src="/images/Rectangle.webp"
               alt="Background"
-              className="absolute bottom-0 md:left-70 2xl:left-80 "
+              className="absolute bottom-0 right-0 w-full h-5 xl:h-12 xl:left-80 md:left-70 md:h-8  "
             />
 
             <img
               src="/images/Vector15.webp"
               alt="Background"
-              className="absolute bottom-0 ml-12 md:ml-120 2xl:ml-135"
+              className="absolute bottom-0 right-0 w-full left-15 h-8 sm:left-30 md:left-110 md:h-15  xl:h-20 xl:left-140  3xl:left-150 "
             />
 
             <img
               src="/images/Vector16.webp"
               alt="Background"
-              className="absolute bottom-0 left-4 md:left-95 2xl:left-110  w-330"
+              className="absolute bottom-0 right-0 w-full left-5 h-12 sm:left-15 md:left-90 md:h-20  xl:h-28 xl:left-110 "
             />
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function SectionPromoHome2() {
               data-animate="animate__fadeInRight"
               src="/images/productos.webp"
               alt="Background"
-              className="w-auto h-50 sm:h-60 md:h-70 lg:h-auto xl:h-100  animate-on-scroll [animation-delay:1.3s]"
+              className="w-auto h-50 sm:h-60 md:h-60 lg:h-auto xl:h-100  animate-on-scroll [animation-delay:1.3s]"
             />
           </div>
 
