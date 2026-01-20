@@ -115,7 +115,7 @@ function ProductContent({ id }: { id: string | null }) {
           <>
             <div id={"list"} className="mt-10">
               <p className="text-xs text-gray-400 mb-4">
-                <span className="text-gray-400">Home - </span>
+                <span className="text-gray-400">Inicio - </span>
                 <span className="text-gray-400">Products - </span>
                 <span className="text-primary font-semibold">
                   {product.categoria?.name}

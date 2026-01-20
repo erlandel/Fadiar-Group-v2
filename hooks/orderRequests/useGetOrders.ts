@@ -8,6 +8,7 @@ export interface OrderProduct {
   name: string;
   brand: string;
   price: number;
+  temporal_price?: number | string;
   img: string;
   count: number;
 }

@@ -146,7 +146,9 @@ export default function OrdersTable() {
                           <CartCard
                             key={idx}
                             brand={product.brand}
-                            price={product.price.toString()}
+                            price={(product.temporal_price && Number(product.temporal_price) !== 0) 
+                              ? String(product.temporal_price) 
+                              : String(product.price)}
                             image={product.img}
                             title={product.name}                      
                             padding="p-3 sm:p-4"
