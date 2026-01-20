@@ -292,6 +292,39 @@ export default function Amount() {
         )
       : municipalities;
 
+  // Auto-select common municipality if current is invalid or empty
+  useEffect(() => {
+    if (isClient && municipalitiesWithCommonDelivery.length > 0) {
+      const isCurrentValid = municipalitiesWithCommonDelivery.some(
+        (m) => m.municipio === storeMunicipality
+      );
+
+      if (!storeMunicipality || !isCurrentValid) {
+        const defaultMun = municipalitiesWithCommonDelivery[0];
+        setFormData((prev) => ({
+          ...prev,
+          municipality: defaultMun.municipio,
+        }));
+        MatterCart1Store.getState().updateFormData({
+          municipality: defaultMun.municipio,
+        });
+        setLocation(
+          storeProvince,
+          storeProvinceId,
+          defaultMun.municipio,
+          defaultMun.id
+        );
+      }
+    }
+  }, [
+    isClient,
+    municipalitiesWithCommonDelivery,
+    storeMunicipality,
+    storeProvince,
+    storeProvinceId,
+    setLocation,
+  ]);
+
   return (
     <div className="max-h-full   bg-white font-sans text-[#022954]">
       {/* Importe Section */}
@@ -355,6 +388,8 @@ export default function Amount() {
                 value={formData.phone}
                 onChange={handlePhoneChange}
                 placeholder="Teléfono"
+                inputMode="numeric"
+                pattern="[0-9]*"
               />
               {errors.phone && (
                 <p className="text-red-500 text-xs mt-1 ml-2">{errors.phone}</p>
@@ -368,6 +403,8 @@ export default function Amount() {
             </label>
             <InputField
               type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               placeholder="Carnet de Identidad"
               name="identityCard"
               value={formData.identityCard}

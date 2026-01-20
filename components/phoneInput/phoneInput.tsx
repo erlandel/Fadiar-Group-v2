@@ -22,6 +22,8 @@ interface PhoneInputProps {
   onChange?: (value: string) => void;
   placeholder?: string;
   defaultCountry?: { name: string; code: string; phoneCode: string };
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  pattern?: string;
 }
 
 export default function PhoneInput({
@@ -29,6 +31,8 @@ export default function PhoneInput({
   onChange,
   placeholder = "Teléfono",
   defaultCountry = { name: "Cuba", code: "CU", phoneCode: "+53" },
+  inputMode,
+  pattern,
 }: PhoneInputProps) {
   const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
@@ -177,6 +181,8 @@ export default function PhoneInput({
           placeholder={placeholder}
           value={inputPhoneValue}
           onChange={handlePhoneChange}
+          inputMode={inputMode}
+          pattern={pattern}
           className="flex-1 bg-transparent outline-none"
         />
       </div>
