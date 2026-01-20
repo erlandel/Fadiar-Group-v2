@@ -274,6 +274,28 @@ export default function Amount() {
     ? currentProvinceData.municipios
     : [];
 
+  const deliveryStores =
+    formData.delivery && Array.isArray(rawCart)
+      ? rawCart.filter(
+          (tienda: any) =>
+            Array.isArray(tienda.domicilios) && tienda.domicilios.length > 0
+        )
+      : [];
+
+  const municipalitiesWithCommonDelivery =
+    formData.delivery && deliveryStores.length > 1
+      ? (() => {
+          const common = municipalities.filter((mun) =>
+            deliveryStores.every((tienda: any) =>
+              tienda.domicilios.some(
+                (d: any) => d.id_municipio === mun.id
+              )
+            )
+          );
+          return common.length > 0 ? common : municipalities;
+        })()
+      : municipalities;
+
   return (
     <div className="max-h-full   bg-white font-sans text-[#022954]">
       {/* Importe Section */}
@@ -421,7 +443,7 @@ export default function Amount() {
 
                 {openMunicipalities && (
                   <ul className="absolute w-full mt-20 bg-white border border-gray-200 rounded-2xl shadow-lg z-20 max-h-60 overflow-auto">
-                    {municipalities.map((mun) => (
+                    {municipalitiesWithCommonDelivery.map((mun) => (
                       <li
                         key={mun.id}
                         className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
@@ -499,7 +521,7 @@ export default function Amount() {
             >
               ¿Necesitas entrega a domicilio? 
               <span className="text-accent text-xs ml-1"> 
-                (Se eliminarán las tiendas sin domicilio en el municipio seleccionado.)
+                (En el municipio solo estarán disponibles los que tengan en común ambas tiendas.)
               </span>
             </label>
           </div>
