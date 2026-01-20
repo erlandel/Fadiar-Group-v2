@@ -88,6 +88,8 @@ export default function NineOffers() {
         <h2 className="text-[24px] font-bold text-accent">Nuestras Ofertas</h2>
       </div>
 
+      <div className="w-full flex justify-center">
+      <div className="w-full max-w-350">
       {/* Screens smaller than xl: Horizontal Scroll with vertical cards */}
       <div className="xl:hidden">
         <div
@@ -140,6 +142,13 @@ export default function NineOffers() {
           </div>
         </div>
       </div>
+
+      </div>
+      </div>
+
+
+
+
     </main>
   );
 }

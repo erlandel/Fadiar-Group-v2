@@ -13,7 +13,7 @@ type BestSellingProps = {
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
   const { provinceId } = useProductsByLocationStore();
-  
+
   // Usar el hook de caché
   const { data: bestSellingProducts = [], isLoading } = useBestSelling(9);
 
@@ -24,7 +24,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
 
   const sortedProducts = useMemo(
     () => [...productsToUse].sort((a, b) => b.id - a.id),
-    [productsToUse]
+    [productsToUse],
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,7 +48,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
     const scrollPercentage = scrollLeft / maxScroll;
     const index = Math.min(
       Math.floor(scrollPercentage * totalPages),
-      totalPages - 1
+      totalPages - 1,
     );
 
     setActiveIndex(Math.max(0, index));
@@ -72,7 +72,10 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
 
   return (
     <>
-      <div id="best-selling" className="w-auto h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
+      <div
+        id="best-selling"
+        className="w-auto h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20"
+      >
         <div className="flex flex-col items-start mb-5  ">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Lo que le gusta a la gente!!!
@@ -82,42 +85,46 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
           </h1>
         </div>
 
-        <div className="relative ">
-          <div
-            ref={scrollRef}
-            className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {sortedProducts.length > 0
-              ? sortedProducts.map((product) => (
-                  <div key={product.id} className="shrink-0">
-                    <CardLatestProducts
-                      category={product.categoria?.name}
-                      title={product.name}
-                      brand={product.brand}
-                      warranty={product.warranty}
-                      price={product.price}
-                      image={product.img}
-                      temporal_price={product.temporal_price}
-                      position="vertical"
-                      productId={product.id}
-                      tiendaId={product.tiendaId}
-                      count={product.count}
-                    />
-                  </div>
-                ))
-              : Array.from({ length: 9 }).map((_, index) => (
-                  <div key={index} className="shrink-0">
-                    <CardSkeleton position={"vertical"} />
-                  </div>
-                ))}
-          </div>
-          <div>
-            <HorizontalScroll
-              totalPages={totalPages}
-              activeIndex={activeIndex}
-              scrollRef={scrollRef}
-            />
+        <div className="w-full">
+          <div className="relative ">
+            <div
+              ref={scrollRef}
+              className="flex overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              <div className="flex gap-4 w-fit mx-auto">
+                {sortedProducts.length > 0
+                  ? sortedProducts.map((product) => (
+                      <div key={product.id} className="shrink-0">
+                        <CardLatestProducts
+                          category={product.categoria?.name}
+                          title={product.name}
+                          brand={product.brand}
+                          warranty={product.warranty}
+                          price={product.price}
+                          image={product.img}
+                          temporal_price={product.temporal_price}
+                          position="vertical"
+                          productId={product.id}
+                          tiendaId={product.tiendaId}
+                          count={product.count}
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: 9 }).map((_, index) => (
+                      <div key={index} className="shrink-0">
+                        <CardSkeleton position={"vertical"} />
+                      </div>
+                    ))}
+              </div>
+            </div>
+            <div>
+              <HorizontalScroll
+                totalPages={totalPages}
+                activeIndex={activeIndex}
+                scrollRef={scrollRef}
+              />
+            </div>
           </div>
         </div>
       </div>

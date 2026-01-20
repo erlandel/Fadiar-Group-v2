@@ -15,7 +15,7 @@ export const LatestProducts = ({
   products: productsProp,
 }: SectionMasRecientesProps) => {
   const { municipalityId } = useProductsByLocationStore();
-  
+
   // Usar el hook de caché
   const { data: latestProductsData = [], isLoading } = useLatestProducts(6);
 
@@ -23,10 +23,7 @@ export const LatestProducts = ({
   const productsToUse =
     productsProp && productsProp.length > 0 ? productsProp : latestProductsData;
 
-  const lastSixProducts = useMemo(
-    () => [...productsToUse],
-    [productsToUse]
-  );
+  const lastSixProducts = useMemo(() => [...productsToUse], [productsToUse]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -49,7 +46,7 @@ export const LatestProducts = ({
     const scrollPercentage = scrollLeft / maxScroll;
     const index = Math.min(
       Math.floor(scrollPercentage * totalPages),
-      totalPages - 1
+      totalPages - 1,
     );
 
     setActiveIndex(Math.max(0, index));
@@ -73,7 +70,10 @@ export const LatestProducts = ({
 
   return (
     <>
-      <div id="latest-products" className="w-auto h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20">
+      <div
+        id="latest-products"
+        className="w-auto h-auto mt-20 my-30 mx-4 xl:mx-10 2xl:mx-20"
+      >
         <div className="flex flex-col items-start mb-5  ">
           <h2 className="text-[20px] font-bold text-[#022954]">
             Más recientes
@@ -83,46 +83,47 @@ export const LatestProducts = ({
           </h1>
         </div>
 
-        <div className="relative">
-          <div
-            ref={scrollRef}
-            className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {lastSixProducts.length > 0 ? (
-              lastSixProducts.map((product) => (
-                <div key={product.id} className="shrink-0">
-                  <CardLatestProducts
-                    category={product.categoria?.name}
-                    title={product.name}
-                    brand={product.brand}
-                    warranty={product.warranty}
-                    price={product.price}
-                    image={product.img}
-                    temporal_price={product.temporal_price}
-                    position="vertical"
-                    productId={product.id}
-                    tiendaId={product.tiendaId}
-                    count={product.count}
-                  />
-                </div>
-              ))
-            ) : (
-              Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="shrink-0">
-                  <CardSkeleton position={"vertical"} />
-                </div>
-              ))
-            )}
+        <div className="w-full">
+          <div className="relative">
+            <div
+              ref={scrollRef}
+              className="flex overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              <div className="flex gap-4 w-fit mx-auto">
+                {lastSixProducts.length > 0
+                  ? lastSixProducts.map((product) => (
+                      <div key={product.id} className="shrink-0">
+                        <CardLatestProducts
+                          category={product.categoria?.name}
+                          title={product.name}
+                          brand={product.brand}
+                          warranty={product.warranty}
+                          price={product.price}
+                          image={product.img}
+                          temporal_price={product.temporal_price}
+                          position="vertical"
+                          productId={product.id}
+                          tiendaId={product.tiendaId}
+                          count={product.count}
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: 6 }).map((_, index) => (
+                      <div key={index} className="shrink-0">
+                        <CardSkeleton position={"vertical"} />
+                      </div>
+                    ))}
+              </div>
+            </div>
+            <div>
+              <HorizontalScroll
+                totalPages={totalPages}
+                activeIndex={activeIndex}
+                scrollRef={scrollRef}
+              />
+            </div>
           </div>
-          <div>
-          <HorizontalScroll
-            totalPages={totalPages}
-            activeIndex={activeIndex}
-            scrollRef={scrollRef}
-          />
-          </div>
-
         </div>
       </div>
     </>

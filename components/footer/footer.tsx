@@ -29,7 +29,7 @@ export default function Footer() {
             href="/terrazas"
             className="text-gray-300 hover:text-accent transition-colors block"
           >
-            Terrazas y Condiciones
+            Términos y Condiciones
           </Link>
 
           <Link
