@@ -28,6 +28,54 @@ export const usePersonalData = () => {
     confirmPassword: "",
   });
 
+  const performUpdate = async ({
+    changes,
+    currentPassword,
+    file = null,
+    errorMessage = "No se pudo actualizar los datos",
+  }: {
+    changes: {
+      operation: string;
+      table: string;
+      attribute: string;
+      value: string;
+    }[];
+    currentPassword: string;
+    file?: File | null;
+    errorMessage?: string;
+  }) => {
+    if (!auth) {
+      throw new Error("No hay sesión activa");
+    }
+
+    const currentAccessToken = await refreshToken(auth, setAuth);
+
+    const data = new FormData();
+    data.append("ci", auth.person.id.toString());
+    data.append("id_user", auth.user.id.toString());
+    data.append("current_password", currentPassword);
+    data.append("changes", JSON.stringify(changes));
+
+    if (file) {
+      data.append("file", file);
+    }
+
+    const response = await fetch(`${editUserUrl}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${currentAccessToken}`,
+      },
+      body: data,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || errorMessage);
+    }
+
+    return { currentAccessToken };
+  };
+
   useEffect(() => {
     if (auth?.person) {
       setFormData((prev) => ({
@@ -57,45 +105,12 @@ export const usePersonalData = () => {
       lastname2: string;
       phone: string;
     }) => {
-      if (!auth) {
-        throw new Error("No hay sesión activa");
-      }
-
-      const currentAccessToken = await refreshToken(auth, setAuth);
-
-      const data = new FormData();
-      data.append("ci", auth.person.id.toString());
-      data.append("id_user", auth.user.id.toString());
-      data.append("current_password", payload.currentPassword);
-      data.append("changes", JSON.stringify(payload.cambios));
-
-      if (payload.file) {
-        data.append("file", payload.file);
-      }
-
-      console.log(
-        "Contenido de FormData (Personal Data):",
-        Object.fromEntries(data.entries())
-      );
-
-      const response = await fetch(`${editUserUrl}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
+      return performUpdate({
+        changes: payload.cambios,
+        currentPassword: payload.currentPassword,
+        file: payload.file,
+        errorMessage: "No se pudo actualizar los datos",
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || "No se pudo actualizar los datos"
-        );
-      }
-
-      return {
-        currentAccessToken,
-      };
     },
     onSuccess: (result, variables) => {
       if (!auth) {
@@ -134,12 +149,6 @@ export const usePersonalData = () => {
       address: string;
       currentPassword: string;
     }) => {
-      if (!auth) {
-        throw new Error("No hay sesión activa");
-      }
-
-      const currentAccessToken = await refreshToken(auth, setAuth);
-
       const cambios = [
         {
           operation: "UPDATE",
@@ -149,34 +158,14 @@ export const usePersonalData = () => {
         },
       ];
 
-      const data = new FormData();
-      data.append("ci", auth.person.id.toString());
-      data.append("id_user", auth.user.id.toString());
-      data.append("current_password", payload.currentPassword);
-      data.append("changes", JSON.stringify(cambios));
-
-      console.log(
-        "Contenido de FormData (Address):",
-        Object.fromEntries(data.entries())
-      );
-
-      const response = await fetch(`${editUserUrl}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
+      const result = await performUpdate({
+        changes: cambios,
+        currentPassword: payload.currentPassword,
+        errorMessage: "No se pudo actualizar la dirección",
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || "No se pudo actualizar la dirección"
-        );
-      }
-
       return {
-        currentAccessToken,
+        ...result,
         address: payload.address,
       };
     },
@@ -208,12 +197,6 @@ export const usePersonalData = () => {
       currentPassword: string;
       newPassword: string;
     }) => {
-      if (!auth) {
-        throw new Error("No hay sesión activa");
-      }
-
-      const currentAccessToken = await refreshToken(auth, setAuth);
-
       const cambios = [
         {
           operation: "UPDATE",
@@ -223,35 +206,11 @@ export const usePersonalData = () => {
         },
       ];
 
-      const data = new FormData();
-      data.append("ci", auth.person.id.toString());
-      data.append("id_user", auth.user.id.toString());
-      data.append("current_password", payload.currentPassword);
-      data.append("changes", JSON.stringify(cambios));
-
-      console.log(
-        "Contenido de FormData (Password):",
-        Object.fromEntries(data.entries())
-      );
-
-      const response = await fetch(`${editUserUrl}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${currentAccessToken}`,
-        },
-        body: data,
+      return performUpdate({
+        changes: cambios,
+        currentPassword: payload.currentPassword,
+        errorMessage: "No se pudo actualizar la contraseña",
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || "No se pudo actualizar la contraseña"
-        );
-      }
-
-      return {
-        currentAccessToken,
-      };
     },
     onSuccess: () => {
       SuccesMessage("Contraseña actualizada correctamente");
