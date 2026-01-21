@@ -29,7 +29,9 @@ export const useGetOrders = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchOrders = useCallback(async (lastId: string | number = 0, size: number = 10, searchText: string = "") => {
-    if (loading) return; // Evitar peticiones simultáneas
+    if (loading) return;
+
+    const requestSize = size + 10;
 
     const { auth, setAuth } = useAuthStore.getState();
 
@@ -50,10 +52,9 @@ export const useGetOrders = () => {
         return;
       }
 
-      // 2. Una vez obtenido el token, realizar la petición de órdenes
       const requestBody = {
         last_id: lastId,
-        size: size,
+        size: requestSize,
         search_text: searchText
       };
 
@@ -119,7 +120,7 @@ export const useGetOrders = () => {
           });
         }
         
-        if (data.length < size) {
+        if (data.length < requestSize) {
           setHasMore(false);
         } else {
           setHasMore(true);
