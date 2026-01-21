@@ -30,7 +30,7 @@ const FiltersDesktop = ({
   setRelevant,
 }: FiltersDesktopProps) => {
   return (
-    <div id="Sidebar" className="w-1/5 mx-4 hidden xl:flex flex-col gap-3">
+    <div id="Sidebar" className="w-1/5 mx-4 hidden xl:flex flex-col gap-3 mt-2">
       {/* Categorías */}
       <FilterSection
         title="Categorías"

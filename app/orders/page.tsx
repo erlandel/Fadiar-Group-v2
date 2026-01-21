@@ -47,7 +47,7 @@ export default function Orders() {
     <>
       <div className="mx-4 xl:px-40 mt-10 md:mt-15">
         <div className=" flex  justify-between items-center">
-          <div ref={titleRef} className="  lg:ml-40">
+          <div ref={titleRef} className="  lg:ml-40 scroll-mt-35 xl:scroll-mt-25">
             <h2 className="text-3xl text-primary font-bold">Mis Pedidos</h2>
           </div>
 

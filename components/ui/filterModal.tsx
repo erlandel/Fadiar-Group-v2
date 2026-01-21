@@ -147,11 +147,11 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   };
 
   return (
-    <div className="relative bg-[#F5F7FA] rounded-2xl border border-gray-200 p-6 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="relative bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       {/* Title */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full font-semibold text-[#1A2B49] text-base mb-4 flex items-center justify-between hover:text-[#17243b] transition-colors"
+        className="w-full font-semibold text-[#1A2B49] text-base mb-4 flex items-center justify-between hover:text-[#17243b] transition-colors pr-4"
       >
         {title}
         <span className={`text-[#1A2B49]/60 cursor-pointer transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
@@ -162,7 +162,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       {/* Content - Collapsible */}
       <div className={`transition-all duration-300 ease-in-out custom-scrollbar ${
         isOpen 
-          ? 'max-h-[450px] opacity-100 overflow-y-auto pr-2' 
+          ? 'max-h-[450px] opacity-100 overflow-y-auto' 
           : 'max-h-0 opacity-0 overflow-hidden'
       }`}>
         {/* CHECKBOX */}

@@ -276,8 +276,9 @@ export default function Products() {
 
   return (
     <main className="flex w-full h-auto flex-col">
-      <div id="main" className="flex flex-row">
+      <div id="main" className="flex flex-row ">
         {/* filters Desktop */}
+       
         <FiltersDesktop
           category={category}
           setCategory={setCategory}
@@ -333,12 +334,13 @@ export default function Products() {
           </div>
 
           {/* Selector y visualización de tiendas */}
-          <StoreSelector
-            tiendas={tiendas}
-            selectedStoreId={selectedStoreId}
-            setSelectedStoreId={setSelectedStoreId}
-            ref={storeSelectorRef}
-          />
+          <div ref={storeSelectorRef} className="scroll-mt-30 xl:scroll-mt-20">
+            <StoreSelector
+              tiendas={tiendas}
+              selectedStoreId={selectedStoreId}
+              setSelectedStoreId={setSelectedStoreId}
+            />
+          </div>
 
           <div
             id="products"

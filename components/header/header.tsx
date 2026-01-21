@@ -24,7 +24,7 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="sticky top-0  w-full bg-white z-50 shadow-sm">
+    <div className="sticky top-0  w-full bg-white z-60 shadow-sm">
       <div
         className={`pt-4 flex justify-between px-4 xl:justify-between xl:px-25 items-start ${isCart4 ? "2xl:px-20" : "2xl:px-28"}`}
       >
