@@ -342,7 +342,7 @@ export default function Products() {
 
           <div
             id="products"
-            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-4 xl:mr-15 auto-rows-fr justify-items-center"
+            className="mx-4 xl:mx-0 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 xl:mr-15 auto-rows-fr justify-items-center"
           >
             {isLoading ? (
               // Mostrar 15 skeletons mientras carga

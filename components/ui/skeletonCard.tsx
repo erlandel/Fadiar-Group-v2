@@ -10,7 +10,7 @@ interface CardSkeletonProps {
     return (
       <>
         {position === "vertical" ? (
-          <div className="bg-white  p-2 md:p-3 border border-gray-300 rounded-2xl shadow-sm w-45 sm:w-55  h-[500px] flex flex-col justify-between   ">
+          <div className="bg-white p-2 md:p-3 border border-gray-300 rounded-2xl shadow-sm w-full max-w-45 sm:max-w-55 h-[500px] flex flex-col justify-between">
             {/* Imagen skeleton */}
             <div
               className="w-full h-4/12 bg-gray-200 rounded-2xl shrink-0  animate-shimmer"
