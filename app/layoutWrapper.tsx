@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
-import ProductLoadingId from "@/components/productLoadingId/productLoadingId";
+import RouteLoading from "@/components/routeLoading/routeLoading";
 import RouteChangeListener from "@/components/RouteChangeListener";
 import ButtonBackTop from "@/components/buttonBackTop/buttonBackTop";
 import ModalProductsByLocation from "@/components/modalProductsByLocation/modalProductsByLocation";
@@ -99,7 +99,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       <Suspense fallback={null}>
         <RouteChangeListener />
       </Suspense>
-      <ProductLoadingId />
+      {!isAuthRoute && <RouteLoading />}
       {isOpen && (
         <div className="fixed inset-0 z-100 flex  justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className='h-auto w-auto '>

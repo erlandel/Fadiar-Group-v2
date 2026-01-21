@@ -110,8 +110,7 @@ body {
 
 .loading-dots-animated {
   display: inline-flex;
-  align-items: center;
-  height: 1em;
+  align-items: baseline;
   pointer-events: none;
 }
 
@@ -120,9 +119,39 @@ body {
   animation: dots-flexible var(--dots-duration, 1.5s) infinite steps(1);
   font-size: var(--dots-size, 1.5rem);
   color: var(--dots-color, #d69f04);
-  vertical-align: middle;
+  vertical-align: baseline;
   margin-left: var(--dots-margin, 4px);
   display: inline-block;
   width: var(--dots-container-width, 3.5em); /* Ancho ajustable */
   text-align: var(--dots-text-align, left);
+}
+
+@layer utilities {
+  .loader {
+    width: fit-content;
+    font-size: 40px;
+    font-family: monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #0000;
+    -webkit-text-stroke: 1px #d69f04;
+    background: linear-gradient(
+        90deg,
+        #0000 33%,
+        #d69f04 0 67%,
+        #0000 0
+      )
+      100%/300% 100% no-repeat text;
+    animation: l12 4s steps(14) infinite;
+  }
+
+  .loader::before {
+    content: "Loading";
+  }
+
+  @keyframes l12 {
+    to {
+      background-position: 0;
+    }
+  }
 }

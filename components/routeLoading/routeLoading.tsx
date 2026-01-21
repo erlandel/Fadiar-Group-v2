@@ -3,7 +3,7 @@
 
 import useLoadingStore from "@/store/loadingStore";
 
-export default function ProductLoadingId() {
+export default function RouteLoading() {
   const isLoading = useLoadingStore((state) => state.isLoading);
 
   if (!isLoading) return null;

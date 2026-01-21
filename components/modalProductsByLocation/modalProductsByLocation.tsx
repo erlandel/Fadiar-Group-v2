@@ -6,6 +6,7 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import LoadingDots from "@/components/loadingDots/loadingDots";
 
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
+import { Loading } from "../loading/loading";
 
 interface MunicipalityData {
   id: number;
@@ -147,26 +148,14 @@ const ModalProductsByLocation = () => {
         Se mostrarán los productos según la ubicación seleccionada
       </p>
 
-      {loading ? (
-        <div className= "w-full text-center my-10" >
-          <div className="sm:hidden ">
-            <LoadingDots
-              text="Cargando"
-              size="0.5rem"
-              textSize="1rem"
-              className="font-bold"
-              margin="3px"
-            />
-          </div>
 
-          <div className="hidden sm:block">
-            <LoadingDots
-              text="Cargando"
-              size="1.3rem"
-              textSize="1.3rem"
-              className="font-bold"
-              margin="3px"
-            />
+   
+
+      {loading ? (
+        <div className= "w-full flex justify-center items-center my-10" >      
+          <div >
+                <Loading/>
+           
           </div>
         </div>
       ) : (

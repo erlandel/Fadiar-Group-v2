@@ -25,7 +25,7 @@ export const LoadingDots: React.FC<LoadingDotsProps> = ({
   } as React.CSSProperties;
 
   return (
-    <div className={`inline-flex items-center justify-center ${className}`}>
+    <div className={`inline-flex items-baseline justify-center  ${className}`}>
       {text && (
         <span style={{ fontSize: textSize }} className="loading-text">
           {text}
