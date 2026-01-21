@@ -3,9 +3,16 @@
 import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import useLoadingStore from "@/store/loadingStore";
 
 export default function SectionMoreproducts() {
   const router = useRouter();
+  const startLoading = useLoadingStore((state) => state.startLoading);
+
+  const handleNavigate = (path: string) => {
+    startLoading();
+    router.push(path);
+  };
   return (
     <>
       <div className=" mx-4 xl:mx-10  2xl:mx-20 mt-10 2xl:mt-30 text-start animate__animated  animate__lightSpeedInLeft">
@@ -35,7 +42,7 @@ export default function SectionMoreproducts() {
                   name="Ver más"
                   color="#022954"
                   icon={<ArrowRight className="w-4 h-4 md:w-5 md:h-5" />}
-                  onClick={() => router.push("/products")}
+                  onClick={() => handleNavigate("/products")}
                 />
               </div>
             </div>
@@ -67,7 +74,7 @@ export default function SectionMoreproducts() {
                 name="Ver más"
                 color="#022954"
                 icon={<ArrowRight className="w-4 h-4 md:w-5 md:h-5" />}
-                onClick={() => router.push("/products")}
+                onClick={() => handleNavigate("/products")}
               />
             </div>
           </div>
