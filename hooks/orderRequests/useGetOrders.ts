@@ -31,7 +31,7 @@ export const useGetOrders = () => {
   const fetchOrders = useCallback(async (lastId: string | number = 0, size: number = 10, searchText: string = "") => {
     if (loading) return;
 
-    const requestSize = size + 10;
+    const requestSize = size + 11;
 
     const { auth, setAuth } = useAuthStore.getState();
 
@@ -120,7 +120,7 @@ export const useGetOrders = () => {
           });
         }
         
-        if (data.length < requestSize) {
+        if (data.length <= size + 10) {
           setHasMore(false);
         } else {
           setHasMore(true);

@@ -36,6 +36,19 @@ export default function Orders() {
     });
   }, [currentPage]);
 
+  useEffect(() => {
+    if (
+      !fetchOrdersMutation.isPending &&
+      fetchOrdersMutation.isSuccess &&
+      currentPage > 1
+    ) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      if (orders.length <= startIndex) {
+        setCurrentPage(1);
+      }
+    }
+  }, [orders.length, currentPage, fetchOrdersMutation.isPending, fetchOrdersMutation.isSuccess]);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     if (titleRef.current) {
