@@ -8,13 +8,13 @@ import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
 import { LatestProducts } from "@/section/latestProducts";
-import ProductLoadingId from "@/components/productLoadingId/productLoadingId";
 import { ProductID } from "@/types/productId";
 import RelatedProds from "@/section/relatedProds";
 import { BestSelling } from "@/section/bestSelling/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
+import useLoadingStore from "@/store/loadingStore";
 
 function ProductContent({ id }: { id: string | null }) {
   const [qty, setQty] = useState(1);
@@ -25,6 +25,13 @@ function ProductContent({ id }: { id: string | null }) {
 
   const { data: inventoryData, isLoading } = useInventory();
   const allProducts = (inventoryData?.products || []) as unknown as ProductID[];
+  const setIsLoading = useLoadingStore((state) => state.setIsLoading);
+
+  useEffect(() => {
+    setIsLoading(isLoading);
+    // Asegurarse de apagar el loader al desmontar
+    return () => setIsLoading(false);
+  }, [isLoading, setIsLoading]);
 
   // Encontrar el producto actual
   const product = useMemo(() => {
@@ -95,9 +102,7 @@ function ProductContent({ id }: { id: string | null }) {
   return (
     <main>
       <div className="px-4 md:px-20 2xl:px-36 mt-10">
-        {isLoading ? (
-          <ProductLoadingId />
-        ) : !product ? (
+        {isLoading ? null : !product ? (
           <div className="min-h-[400px] flex items-center justify-center">
             <div className="text-center">
               <h1 className="text-2xl font-bold text-primary mb-4">

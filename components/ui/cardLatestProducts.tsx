@@ -7,7 +7,7 @@ import { CardProps } from "@/types/cardProps";
 import useCartStore from "@/store/cartStore";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
-import ProductLoadingId from "../productLoadingId/productLoadingId";
+import useLoadingStore from "@/store/loadingStore";
 
 export default function CardLatestProducts({
   category,
@@ -28,7 +28,7 @@ export default function CardLatestProducts({
   const [quantity, setQuantity] = useState(Math.max(1, quantityProducts ?? 1));
   const cartItems = useCartStore((state) => state.items);
   const [isInCart, setIsInCart] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
+  const startLoading = useLoadingStore((state) => state.startLoading);
 
   useEffect(() => {
     if (productId !== undefined && productId !== null) {
@@ -44,7 +44,7 @@ export default function CardLatestProducts({
 
   const handleCardClick = () => {
     if (productId) {
-      setIsNavigating(true);
+      startLoading();
       router.push(`/productID?id=${productId}`);
     }
   };
@@ -205,7 +205,6 @@ export default function CardLatestProducts({
             </div>
           </div>
         </div>
-        {isNavigating && <ProductLoadingId />}
     </>
   );
 }

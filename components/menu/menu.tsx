@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import { MaterialSymbolsClose, MaterialSymbolsMenu } from "@/icons/icons";
+import useLoadingStore from "@/store/loadingStore";
 
 export default function Menu() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const startLoading = useLoadingStore((state) => state.startLoading);
 
   const links = [
     { href: "/", label: "Inicio" },
@@ -74,7 +76,10 @@ export default function Menu() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    if (pathname !== link.href) startLoading();
+                  }}
                   className={`text-md transition hover:text-primary ${
                     isActive ? "text-primary font-semibold" : "text-gray-700"
                   }`}
@@ -102,6 +107,9 @@ export default function Menu() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => {
+                  if (pathname !== link.href) startLoading();
+                }}
                 className={`transition hover:text-primary ${
                   isActive ? "text-primary font-semibold" : "text-gray-700"
                 }`}

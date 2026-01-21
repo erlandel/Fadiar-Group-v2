@@ -3,11 +3,12 @@
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
+import ProductLoadingId from "@/components/productLoadingId/productLoadingId";
+import RouteChangeListener from "@/components/RouteChangeListener";
 import ButtonBackTop from "@/components/buttonBackTop/buttonBackTop";
 import ModalProductsByLocation from "@/components/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
@@ -95,6 +96,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Suspense fallback={null}>
+        <RouteChangeListener />
+      </Suspense>
+      <ProductLoadingId />
       {isOpen && (
         <div className="fixed inset-0 z-100 flex  justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className='h-auto w-auto '>
