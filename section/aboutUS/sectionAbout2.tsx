@@ -54,7 +54,7 @@ export const SectionAbout2 = () => {
       <div className="relative w-full h-60 sm:h-110  text-white">
 
         <img
-          src="/images/group.webp"
+          src="/images/groupFadiar.webp"
           alt="Background"
           className="absolute inset-0 w-full h-full object-cover object-[50%_30%]"
         />

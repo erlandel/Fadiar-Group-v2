@@ -32,7 +32,45 @@ export default function Products() {
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
 
-  const itemsPerPage = 15;
+  const [itemsPerPage, setItemsPerPage] = useState(15);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const calculateItems = () => {
+      if (!gridRef.current) return;
+
+      const width = window.innerWidth;
+      const containerWidth = gridRef.current.offsetWidth;
+      const gap = 16; // gap-4
+
+      let rows = 5;
+      let columns;
+
+      if (width >= 1280) {
+        // xl
+        rows = 3;
+        const minWidth = 200;
+        columns = Math.floor((containerWidth + gap) / (minWidth + gap));
+      } else if (width >= 640) {
+        // sm
+        rows = 4;
+        const minWidth = 200;
+        columns = Math.floor((containerWidth + gap) / (minWidth + gap));
+      } else {
+        // < sm
+        rows = 5;
+        columns = 2; // Forzamos 2 columnas en móviles
+      }
+
+      const totalItems = Math.max(columns * rows, 1);
+
+      setItemsPerPage(totalItems);
+    };
+
+    calculateItems();
+    window.addEventListener("resize", calculateItems);
+    return () => window.removeEventListener("resize", calculateItems);
+  }, []);
 
   // Extraer categorías únicas de los productos (normalizado para evitar duplicados)
   const availableCategories = useMemo(() => {
@@ -344,7 +382,8 @@ export default function Products() {
 
           <div
             id="products"
-            className="mx-4 xl:mx-0 grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 xl:mr-15 auto-rows-fr justify-items-center"
+            ref={gridRef}
+            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 xl:mr-15 auto-rows-fr justify-items-center"
           >
             {isLoading ? (
               // Mostrar 15 skeletons mientras carga
@@ -374,6 +413,7 @@ export default function Products() {
               </p>
             )}
           </div>
+          
           {totalPages > 1 && (
             <div className="flex justify-center my-10">
               <Pagination
