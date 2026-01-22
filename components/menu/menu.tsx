@@ -78,7 +78,7 @@ export default function Menu() {
                   href={link.href}
                   onClick={() => {
                     setIsOpen(false);
-                    if (pathname !== link.href) startLoading();
+                    if (!isActive) startLoading();
                   }}
                   className={`text-md transition hover:text-primary ${
                     isActive ? "text-primary font-semibold" : "text-gray-700"
