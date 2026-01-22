@@ -148,11 +148,10 @@ const ModalProductsByLocation = () => {
         Se mostrarán los productos según la ubicación seleccionada
       </p>
 
-
-   
+ 
 
       {loading ? (
-        <div className= "w-full flex justify-center items-center my-10" >      
+        <div className= "w-full flex justify-center items-center my-2" >      
           <div >
                 <Loading/>
            
