@@ -92,7 +92,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
     elements.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [pathname]);
+  }, [pathname, children]);
 
   return (
     <QueryClientProvider client={queryClient}>

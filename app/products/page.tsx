@@ -313,9 +313,8 @@ export default function Products() {
   };
 
   return (
-    <main className="flex w-full h-auto flex-col">
-      <div id="main" className="flex flex-row ">
-        {/* filters Desktop */}
+    <main className="flex w-full h-auto flex-col ">
+      <div id="main" className="flex flex-row xl:gap-4">        {/* filters Desktop */}
        
         <FiltersDesktop
           category={category}
@@ -332,7 +331,7 @@ export default function Products() {
           setRelevant={setRelevant}
         />
 
-        <div id="content" className="w-full mb-20  xl:w-4/5 overflow-hidden">
+        <div id="content" className="w-full mb-20 xl:flex-1 overflow-hidden">
           <div id="content-ollas" className="xl:hidden">
             <SectionPromoHome1 />
           </div>
@@ -383,7 +382,7 @@ export default function Products() {
           <div
             id="products"
             ref={gridRef}
-            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 xl:mr-15 auto-rows-fr justify-items-center"
+            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 auto-rows-fr justify-items-center"
           >
             {isLoading ? (
               // Mostrar 15 skeletons mientras carga
