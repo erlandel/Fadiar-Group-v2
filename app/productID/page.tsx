@@ -100,7 +100,7 @@ function ProductContent({ id }: { id: string | null }) {
   const images = product ? [product.img, product.img, product.img] : [];
 
   return (
-    <main>
+    <>
       <div className="px-4 md:px-20 2xl:px-36 mt-10">
         {isLoading ? null : !product ? (
           <div className="min-h-[400px] flex items-center justify-center">
@@ -296,6 +296,18 @@ function ProductContent({ id }: { id: string | null }) {
       <div className="mt-20">
         <RelatedProds products={relatedProducts} />
       </div>
+    </>
+  );
+}
+
+export default function Product() {
+  return (
+    <main>
+      <Suspense>
+        <SearchParamsProvider>
+          {(id) => <ProductContent id={id} />}
+        </SearchParamsProvider>
+      </Suspense>
 
       <div className="mt-20">
         <SectionAbout4 />
@@ -309,15 +321,5 @@ function ProductContent({ id }: { id: string | null }) {
         <BestSelling />
       </div>
     </main>
-  );
-}
-
-export default function Product() {
-  return (
-    <Suspense>
-      <SearchParamsProvider>
-        {(id) => <ProductContent id={id} />}
-      </SearchParamsProvider>
-    </Suspense>
   );
 }
