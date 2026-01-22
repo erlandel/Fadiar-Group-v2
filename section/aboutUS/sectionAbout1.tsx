@@ -10,8 +10,9 @@ export const SectionAbout1 = () => {
           <h1 className="text-3xl text-primary font-bold">Sobre Nosotros</h1>
         </div>
 
-        <div className="flex flex-col xl:flex-row items-stretch justify-center gap-5 sm:gap-10  my-5 text-sm sm:text-lg xl:text-xl 3xl:text-2xl">
-          <div className="xl:w-3/5 flex flex-col">
+        <div className="flex flex-col xl:flex-row items-stretch justify-between gap-5 sm:gap-10  my-5 text-sm sm:text-lg lg:text-xl 3xl:text-2xl">
+
+          <div className="xl:w-2/3 flex flex-col">
             <div className="h-full flex flex-col ">
               <p>
                 <span className="text-primary font-bold">Grupo Fadiar </span>
@@ -62,7 +63,7 @@ export const SectionAbout1 = () => {
             </div>
           </div>
 
-          <div className="xl:w-2/5 flex ">
+          <div className="xl:w-1/3 flex ">
             <img
               src="/images/worker.webp"
               alt="dealer"
@@ -72,9 +73,11 @@ export const SectionAbout1 = () => {
             <img
               src="/images/workerMobile.webp"
               alt="dealer"
-              className="w-full h-full object-cover object-top xl:hidden "
+              className="w-full h-full  object-cover object-top xl:hidden "
             />
           </div>
+
+
         </div>
       </div>
     </>
