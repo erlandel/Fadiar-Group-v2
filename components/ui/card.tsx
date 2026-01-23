@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
-import ShoppingCartIcon from "../icons";
+import ShoppingCartIcon from "../shoppingCartIcon";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";

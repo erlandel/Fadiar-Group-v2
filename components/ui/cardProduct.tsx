@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
-import ShoppingCartIcon from "../icons";
+import ShoppingCartIcon from "../shoppingCartIcon";
 import { CardProps } from "@/types/cardProps";
 import useCartStore from "@/store/cartStore";
 import { Loader } from "lucide-react";

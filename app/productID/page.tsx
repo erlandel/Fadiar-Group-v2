@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import ShoppingCartIcon from "@/components/icons";
+import ShoppingCartIcon from "@/components/shoppingCartIcon";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
