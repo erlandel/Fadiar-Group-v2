@@ -1,4 +1,4 @@
-import CardNineOffers from "@/components/ui/cardNineOffers";
+import CardProduct from "@/components/ui/cardProduct";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import { useMemo } from "react";
 
@@ -35,7 +35,7 @@ export default function RelatedProds({ products = [] }: RelatedProdsProps) {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 place-items-center">
         {visibleProducts.length > 0 ? (
           visibleProducts.map((product) => (
-            <CardNineOffers
+            <CardProduct
               key={product.id}
               productId={product.id}
               category={product.categoria?.name}

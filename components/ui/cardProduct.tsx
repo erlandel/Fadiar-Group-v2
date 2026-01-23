@@ -9,7 +9,7 @@ import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
 
-export default function CardNineOffers({
+export default function CardProduct({
   category,
   title,
   brand,
@@ -91,7 +91,7 @@ export default function CardNineOffers({
       {position === "vertical" ? (
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white h-120 w-55  xl:w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
+          className={`bg-white h-120 w-55   p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
         >

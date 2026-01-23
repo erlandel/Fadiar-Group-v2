@@ -1,11 +1,11 @@
 "use client";
 import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
-import CardLatestProducts from "@/components/ui/cardLatestProducts";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { useBestSelling } from "@/hooks/productRequests/useBestSelling";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CardProduct from "@/components/ui/cardProduct";
 
 type BestSellingProps = {
   products?: Product[];
@@ -96,7 +96,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
                 {sortedProducts.length > 0
                   ? sortedProducts.map((product) => (
                       <div key={product.id} className="shrink-0">
-                        <CardLatestProducts
+                        <CardProduct
                           category={product.categoria?.name}
                           title={product.name}
                           brand={product.brand}

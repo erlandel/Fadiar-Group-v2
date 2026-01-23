@@ -1,6 +1,6 @@
 "use client";
 import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
-import CardNineOffers from "@/components/ui/cardNineOffers";
+import CardProduct from "@/components/ui/cardProduct";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import { useNineOffers } from "@/hooks/productRequests/useNineOffers";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -62,7 +62,7 @@ export default function NineOffers() {
     const offer = offers[index];
 
     return (
-      <CardNineOffers
+      <CardProduct
         key={offer.id}
         productId={offer.id}
         category={offer.categoria?.name}

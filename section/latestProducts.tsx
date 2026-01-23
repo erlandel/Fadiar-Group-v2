@@ -1,11 +1,11 @@
 "use client";
 import { HorizontalScroll } from "@/components/horizontalScroll/horizontalScroll";
-import CardLatestProducts from "@/components/ui/cardLatestProducts";
 import CardSkeleton from "@/components/ui/skeletonCard";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { useLatestProducts } from "@/hooks/productRequests/useLatestProducts";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CardProduct from "@/components/ui/cardProduct";
 
 type SectionMasRecientesProps = {
   products?: Product[];
@@ -94,7 +94,7 @@ export const LatestProducts = ({
                 {lastSixProducts.length > 0
                   ? lastSixProducts.map((product) => (
                       <div key={product.id} className="shrink-0">
-                        <CardLatestProducts
+                        <CardProduct
                           category={product.categoria?.name}
                           title={product.name}
                           brand={product.brand}
