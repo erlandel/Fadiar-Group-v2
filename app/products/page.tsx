@@ -314,23 +314,28 @@ export default function Products() {
 
   return (
     <main className="flex w-full h-auto flex-col ">
-      <div id="main" className="flex flex-row xl:gap-4">        {/* filters Desktop */}
-       
-        <FiltersDesktop
-          category={category}
-          setCategory={setCategory}
-          availableCategories={availableCategories}
-          priceRange={priceRange}
-          tempPrice={tempPrice}
-          setTempPrice={setTempPrice}
-          applyPriceFilter={applyPriceFilter}
-          brands={brands}
-          setBrands={setBrands}
-          availableBrands={availableBrands}
-          relevant={relevant}
-          setRelevant={setRelevant}
-        />
+      <div id="main" className="flex flex-row xl:gap-4">
+        {" "}
+        {/* filters Desktop */}
+        <div className="w-1/5 ml-2 hidden xl:flex flex-col gap-3 mt-2 shrink-0">
 
+          <FiltersDesktop
+            category={category}
+            setCategory={setCategory}
+            availableCategories={availableCategories}
+            priceRange={priceRange}
+            tempPrice={tempPrice}
+            setTempPrice={setTempPrice}
+            applyPriceFilter={applyPriceFilter}
+            brands={brands}
+            setBrands={setBrands}
+            availableBrands={availableBrands}
+            relevant={relevant}
+            setRelevant={setRelevant}
+          />
+        </div>
+
+        
         <div id="content" className="w-full mb-20 xl:flex-1 overflow-hidden">
           <div id="content-ollas" className="xl:hidden">
             <SectionPromoHome1 />
@@ -340,90 +345,95 @@ export default function Products() {
             <Pot />
           </div>
 
-          <div id={"list"} className="mt-20 px-4 xl:px-0">
-            {/* Header con título y botón de filtros */}
-            <div className="flex w-full justify-between items-start mb-4">
-              <div className="flex-1">
-                <h2 className="text-2xl text-accent font-bold">Productos</h2>
+          <div className="xl:ml-2">
+            <div id={"list"} className="mt-20 px-4 xl:px-0">
+              {/* Header con título y botón de filtros */}
+              <div className="flex w-full justify-between items-start mb-4">
+                <div className="flex-1">
+                  <h2 className="text-2xl text-accent font-bold">Productos</h2>
 
-                {/* Filtros aplicados */}
-                <ActiveFilters
-                  category={category}
-                  brands={brands}
-                  relevant={relevant}
-                  price={price}
-                  priceRange={priceRange}
-                  availableCategories={availableCategories}
-                  availableBrands={availableBrands}
-                  removeFilter={removeFilter}
-                  resetPrice={resetPrice}
-                  totalProducts={filteredProducts?.length ?? 0}
-                />
+                  {/* Filtros aplicados */}
+                  <ActiveFilters
+                    category={category}
+                    brands={brands}
+                    relevant={relevant}
+                    price={price}
+                    priceRange={priceRange}
+                    availableCategories={availableCategories}
+                    availableBrands={availableBrands}
+                    removeFilter={removeFilter}
+                    resetPrice={resetPrice}
+                    totalProducts={filteredProducts?.length ?? 0}
+                  />
+                </div>
+
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="xl:hidden z-50 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
+                >
+                  <Filter className="w-5 h-5" />
+                </button>
               </div>
-
-              <button
-                onClick={() => setIsFilterOpen(true)}
-                className="xl:hidden z-50 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
-              >
-                <Filter className="w-5 h-5" />
-              </button>
             </div>
-          </div>
 
-          {/* Selector y visualización de tiendas */}
-          <div ref={storeSelectorRef} className="scroll-mt-30 xl:scroll-mt-20">
-            <StoreSelector
-              tiendas={tiendas}
-              selectedStoreId={selectedStoreId}
-              setSelectedStoreId={setSelectedStoreId}
-            />
-          </div>
-
-          <div
-            id="products"
-            ref={gridRef}
-            className="mx-4 xl:mx-0 grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 auto-rows-fr justify-items-center"
-          >
-            {isLoading ? (
-              // Mostrar 15 skeletons mientras carga
-              Array.from({ length: itemsPerPage }).map((_, index) => (
-                <CardSkeleton key={`skeleton-${index}`} position="vertical" />
-              ))
-            ) : paginatedProducts && paginatedProducts.length > 0 ? (
-              paginatedProducts.map((product, index) => (
-                <CardAllProducts
-                  key={`${product.id}-${index}`}
-                  productId={product.id}
-                  category={product.categoria?.name}
-                  title={product.name}
-                  brand={product.brand}
-                  warranty={product.warranty}
-                  price={product.price}
-                  image={product.img}
-                  count={product.count}
-                  temporal_price={product?.temporal_price}
-                  tiendaId={product.tiendaId}
-                  position="vertical"
-                />
-              ))
-            ) : (
-              <p className="col-span-full text-center text-gray-500 h-80 text-xl sm:text-2xl  ">
-                No se encontraron productos
-              </p>
-            )}
-          </div>
-          
-          {totalPages > 1 && (
-            <div className="flex justify-center my-10">
-              <Pagination
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={(page) => {
-                  setCurrentPage(page);
-                }}
+            {/* Selector y visualización de tiendas */}
+            <div
+              ref={storeSelectorRef}
+              className="scroll-mt-30 xl:scroll-mt-20"
+            >
+              <StoreSelector
+                tiendas={tiendas}
+                selectedStoreId={selectedStoreId}
+                setSelectedStoreId={setSelectedStoreId}
               />
             </div>
-          )}
+
+            <div
+              id="products"
+              ref={gridRef}
+              className="mx-4  xl:mx-0 xl:mr-10 3xl:mr-15 grid grid-cols-2 sm:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 auto-rows-fr justify-items-center"
+            >
+              {isLoading ? (
+                // Mostrar 15 skeletons mientras carga
+                Array.from({ length: itemsPerPage }).map((_, index) => (
+                  <CardSkeleton key={`skeleton-${index}`} position="vertical" />
+                ))
+              ) : paginatedProducts && paginatedProducts.length > 0 ? (
+                paginatedProducts.map((product, index) => (
+                  <CardAllProducts
+                    key={`${product.id}-${index}`}
+                    productId={product.id}
+                    category={product.categoria?.name}
+                    title={product.name}
+                    brand={product.brand}
+                    warranty={product.warranty}
+                    price={product.price}
+                    image={product.img}
+                    count={product.count}
+                    temporal_price={product?.temporal_price}
+                    tiendaId={product.tiendaId}
+                    position="vertical"
+                  />
+                ))
+              ) : (
+                <p className="col-span-full text-center text-gray-500 h-80 text-xl sm:text-2xl  ">
+                  No se encontraron productos
+                </p>
+              )}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex justify-center my-10">
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  onPageChange={(page) => {
+                    setCurrentPage(page);
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
