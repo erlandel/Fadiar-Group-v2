@@ -91,9 +91,9 @@ export default function CardNineOffers({
       {position === "vertical" ? (
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white w-50 md:w-55 xl:w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
+          className={`bg-white h-120 w-55  xl:w-full p-2 sm:p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
-          } sm:h-[calc(2*240px+0.75rem)]`}
+          }`}
         >
           {/* Imagen */}
           <div
@@ -211,10 +211,10 @@ export default function CardNineOffers({
         // Card Horizontal
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white flex w-full max-w-115 gap-2 rounded-2xl border border-gray-200 p-3 shadow-sm sm:flex-row  ${
+          className={`bg-white flex w-full h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-3 shadow-sm sm:flex-row  ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
-          style={{ height: "240px" }}
+        
         >
           <div
             className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48  sm:min-w-[160px]"
