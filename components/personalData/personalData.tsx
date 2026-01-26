@@ -24,7 +24,9 @@ export default function PersonalData() {
         <form onSubmit={handleSavePersonalData}>
           <div className="flex justify-between items-center w-full">
             <div>
-              <h5 className="text-primary font-bold text-xl">Datos personales</h5>
+              <h5 className="text-primary font-bold text-xl">
+                Datos personales
+              </h5>
             </div>
 
             <div>
@@ -35,7 +37,7 @@ export default function PersonalData() {
               >
                 {isPersonalDataPending ? (
                   <span className="inline-flex items-center justify-center ">
-                    <Loader className="h-5 w-5 animate-spin " strokeWidth={3}/>
+                    <Loader className="h-5 w-5 animate-spin " strokeWidth={3} />
                     Guardar
                   </span>
                 ) : (
@@ -58,7 +60,9 @@ export default function PersonalData() {
                   onChange={handleInputChange}
                 />
                 {errors.firstName && (
-                  <span className="text-red-500 text-sm">{errors.firstName}</span>
+                  <span className="text-red-500 text-sm">
+                    {errors.firstName}
+                  </span>
                 )}
               </div>
               <div className="flex flex-col gap-2">
@@ -72,7 +76,9 @@ export default function PersonalData() {
                   onChange={handleInputChange}
                 />
                 {errors.lastName && (
-                  <span className="text-red-500 text-sm">{errors.lastName}</span>
+                  <span className="text-red-500 text-sm">
+                    {errors.lastName}
+                  </span>
                 )}
               </div>
 
@@ -82,6 +88,8 @@ export default function PersonalData() {
                   value={formData.phone}
                   onChange={handlePhoneChange}
                   placeholder="Teléfono"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                 />
                 {errors.phone && (
                   <span className="text-red-500 text-sm">{errors.phone}</span>
@@ -198,7 +206,9 @@ export default function PersonalData() {
                 onChange={handleInputChange}
               />
               {errors.confirmPassword && (
-                <span className="text-red-500 text-sm">{errors.confirmPassword}</span>
+                <span className="text-red-500 text-sm">
+                  {errors.confirmPassword}
+                </span>
               )}
             </div>
           </div>

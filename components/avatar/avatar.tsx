@@ -11,56 +11,79 @@ export default function Avatar() {
   const { pendingAvatar, setPendingAvatar } = useImgFileStore();
   const [avatarSrc, setAvatarSrc] = useState<string>("/images/avatar.webp");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const wasPending = useRef(false);
 
   // Sincronizar con el store de auth cuando cambie la imagen o se hidrate
   useEffect(() => {
     // Si hay un avatar pendiente (seleccionado localmente), no lo sobrescribimos
-    if (pendingAvatar) return;
+    if (pendingAvatar) {
+      wasPending.current = true;
+      return;
+    }
 
     if (auth?.user?.img) {
       setAvatarSrc(`${server_url}/${auth.user.img}`);
     } else {
-      setAvatarSrc("/images/avatar.png");
+      setAvatarSrc("/images/avatar.webp");
     }
   }, [auth?.user?.img, auth?.user?.id, pendingAvatar]);
 
   useEffect(() => {
     const fetchAvatar = async () => {
-          if (!auth?.user?.id || pendingAvatar) return;
-          let currentAccessToken = auth.access_token;
-          if (!currentAccessToken) {
-            const newAccessToken = await refreshToken(auth, setAuth);
-            if (newAccessToken) {
-              currentAccessToken = newAccessToken;
-            } else {
-              console.error("Failed to refresh token, cannot fetch avatar.");
-              return;
-            }
-          }
-          try {
-            const res = await fetch(`${getUserImageNameUrl}`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${currentAccessToken}`,
-              },
-              body: JSON.stringify({ id_user: auth.user.id }),
-          
+      if (!auth?.user?.id || pendingAvatar) return;
+
+      // Solo realizamos la petición si no tenemos imagen o si acabamos de terminar una subida
+      const shouldFetch = !auth?.user?.img || wasPending.current;
+      if (!shouldFetch) return;
+
+      let currentAccessToken = auth.access_token;
+      if (!currentAccessToken) {
+        const newAccessToken = await refreshToken(auth, setAuth);
+        if (newAccessToken) {
+          currentAccessToken = newAccessToken;
+        } else {
+          console.error("Failed to refresh token, cannot fetch avatar.");
+          return;
+        }
+      }
+      try {
+        const res = await fetch(`${getUserImageNameUrl}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentAccessToken}`,
+          },
+          body: JSON.stringify({ id_user: auth.user.id }),
         });
 
         const data = await res.json();
-        console.log("data:", data);
         if (data?.img && !pendingAvatar) {
           const newSrc = `${server_url}/${data.img}`;
           setAvatarSrc(newSrc);
+
+          // Actualizamos el store para persistir el nombre de la imagen y evitar futuras peticiones innecesarias
+          if (auth && data.img !== auth.user.img) {
+            setAuth({
+              ...auth,
+              user: {
+                ...auth.user,
+                img: data.img,
+              },
+            });
+          }
+        } else if (!pendingAvatar) {
+          setAvatarSrc("/images/avatar.webp");
         }
+        wasPending.current = false;
       } catch (error) {
-       
         console.error("Error fetching avatar:", error);
+        if (!pendingAvatar) {
+          setAvatarSrc("/images/avatar.webp");
+        }
       }
     };
     fetchAvatar();
-  }, [auth?.user?.id, pendingAvatar]);
+  }, [auth?.user?.id, auth?.user?.img, pendingAvatar, setAuth]);
 
   const handleClick = () => {
     fileInputRef.current?.click(); // Abrir selector de archivos
