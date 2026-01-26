@@ -5,8 +5,11 @@ import MatterCart1Store from "../../store/matterCart1Store";
 import { EmojioneDepartmentStore, TwemojiCreditCard } from "@/icons/icons";
 
 export default function CreditCards() {
-  const [selectedMethod, setSelectedMethod] = useState("Tarjeta de Crédito/Débito");
   const delivery = MatterCart1Store((state) => state.formData.delivery);
+  const savedPaymentMethod = BuyerDetailsStore((state) => state.buyerDetails.paymentMethod);
+  const setPaymentMethodStore = BuyerDetailsStore((state) => state.setPaymentMethod);
+
+  const [selectedMethod, setSelectedMethod] = useState(savedPaymentMethod);
 
   const paymentMethods = [
     { 
@@ -35,22 +38,18 @@ export default function CreditCards() {
     }
   ];
 
-  // Cargar método de pago del store al montar
+  // Sincronizar el estado local con el store cuando este se hidrate o cambie
   useEffect(() => {
-    const storeData = BuyerDetailsStore.getState().buyerDetails;
-    const savedMethod = storeData.paymentMethod;
-    
-    if (savedMethod) {
-      // Normalizar el método guardado (por si acaso hay espacios extras)
-      const normalizedSaved = savedMethod.trim();
-      if (normalizedSaved !== selectedMethod) {
-        setSelectedMethod(normalizedSaved);
-      }
+    if (savedPaymentMethod) {
+      setSelectedMethod(savedPaymentMethod);
     }
-  }, []);
+  }, [savedPaymentMethod]);
 
   // Ajustar el método seleccionado según delivery y asegurar que siempre haya uno válido
   useEffect(() => {
+    // No hacer nada hasta que tengamos un método seleccionado (para evitar sobrescribir durante la hidratación)
+    if (!selectedMethod) return;
+
     const visibleMethods = paymentMethods.filter((method) => 
       delivery ? method.id !== "tienda" : (method.id === "tienda" || method.id === "zelle")
     );
@@ -58,16 +57,17 @@ export default function CreditCards() {
     const isSelectedVisible = visibleMethods.some(m => m.title === selectedMethod);
     
     if (!isSelectedVisible && visibleMethods.length > 0) {
-      setSelectedMethod(visibleMethods[0].title);
+      const defaultForMode = visibleMethods[0].title;
+      setSelectedMethod(defaultForMode);
+      setPaymentMethodStore(defaultForMode);
     }
-  }, [delivery, selectedMethod]);
+  }, [delivery, selectedMethod, setPaymentMethodStore]);
 
-  // Guardar método de pago en el store cuando cambie
-  useEffect(() => {
-    if (selectedMethod) {
-      BuyerDetailsStore.getState().setPaymentMethod(selectedMethod);
-    }
-  }, [selectedMethod]);
+  // Guardar método de pago en el store cuando el usuario lo cambie manualmente
+  const handleMethodChange = (title: string) => {
+    setSelectedMethod(title);
+    setPaymentMethodStore(title);
+  };
 
   return (
     <>
@@ -109,7 +109,7 @@ export default function CreditCards() {
                   name="paymentMethod"
                   value={method.title}
                   checked={selectedMethod === method.title}
-                  onChange={(e) => setSelectedMethod(e.target.value)}
+                  onChange={(e) => handleMethodChange(e.target.value)}
                   className="peer absolute opacity-0 w-6 h-6 cursor-pointer"
                 />
                 <span className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:border-[#022954] peer-checked:after:w-3 peer-checked:after:h-3 peer-checked:after:rounded-full peer-checked:after:bg-[#022954] peer-checked:after:block after:hidden transition-all" />
