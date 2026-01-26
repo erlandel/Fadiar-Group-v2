@@ -211,13 +211,13 @@ export default function CardProduct({
         // Card Horizontal
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white flex w-full h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-3 shadow-sm sm:flex-row  ${
+          className={`bg-white flex w-full h-48 sm:h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-2 sm:p-3 shadow-sm sm:flex-row  ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
         
         >
           <div
-            className="relative  overflow-hidden rounded-2xl  w-35 sm:shrink-0 lg:w-48  sm:min-w-[160px]"
+            className="relative  overflow-hidden rounded-2xl  w-30   sm:shrink-0 lg:w-48  lg:min-w-[160px]"
           >
             {count === 0 && (
               <div className="absolute top-2 right-[-35px] z-10 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
@@ -225,7 +225,7 @@ export default function CardProduct({
               </div>
             )}
             <img
-              className="h-full w-35 sm:w-48 2xl:w-full object-contain"
+              className="h-full w-30 lg:w-48 2xl:w-full object-contain"
               alt={title}
               width={500}
               height={500}
