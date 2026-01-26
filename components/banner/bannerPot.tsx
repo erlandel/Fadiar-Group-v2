@@ -1,7 +1,7 @@
 import "@fontsource/just-me-again-down-here";
 import BottomShadow from "@/components/ui/bottomShadow";
 
-export default function SectionPromoHome1() {
+export default function BannerPot() {
   return (
     <>
       <div className="grid h-[400px] sm:h-[360px] lg:h-[300px]  xl:h-[400px]  ">

@@ -1,17 +1,17 @@
 "use client";
-import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
+import BannerPot from "@/components/banner/bannerPot";
 import FiltersDesktop from "@/components/pageProducts/filtersDesktop/filtersDesktop";
 import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { Filter } from "lucide-react";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import Pot from "@/section/pot/pot";
+import { BannerMoney } from "@/components/banner/bannerMoney";
+import Pot from "@/sections/pot/pot";
 import CardSkeleton from "@/components/ui/skeletonCard";
-import { LatestProducts } from "@/section/latestProducts";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters";
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 
@@ -338,7 +338,7 @@ export default function Products() {
         
         <div id="content" className="w-full mb-20 xl:flex-1 overflow-hidden">
           <div id="content-ollas" className="xl:hidden">
-            <SectionPromoHome1 />
+            <BannerPot />
           </div>
 
           <div className="hidden xl:block">
@@ -438,7 +438,7 @@ export default function Products() {
       </div>
 
       <div id="Banner dolar" className="w-full h-auto">
-        <SectionAbout4 />
+        <BannerMoney />
       </div>
 
       <div className="hidden xl:block">

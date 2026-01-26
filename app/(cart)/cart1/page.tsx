@@ -5,9 +5,9 @@ import Amount from "@/components/amount/amount";
 import CartCard from "@/components/cartCard/cartCard";
 import { CheckoutStepper } from "@/components/ui/stepper";
 import { ChevronDown } from "lucide-react";
-import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
+import { SectionMobile } from "@/sections/sectionMobile";
+import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useCartStore from "@/store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 
@@ -225,12 +225,12 @@ export default function Cart1() {
         </div>
 
         <div className="sm:py-20">
-          <SectionAbout3 />
+          <SectionMobile />
         </div>
       </div>
 
       <div className="sm:hidden mt-60">
-        <SectionAbout4 />
+        <BannerMoney />
       </div>
 
       <div className="xl:hidden">

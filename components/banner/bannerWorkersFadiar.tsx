@@ -3,7 +3,7 @@ import { statistics_about_us } from "@/urlApi/urlApi";
 import { useEffect, useState, useRef } from "react";
 import { Users, ShoppingBag, Package } from "lucide-react";
 
-export const SectionAbout2 = () => {
+export const BannerWorkersFadiar = () => {
   const [statistics, setStatistics] = useState<
     { name: string; text: string; value: number }[]
   >([]);

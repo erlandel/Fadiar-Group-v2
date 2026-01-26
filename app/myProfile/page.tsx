@@ -1,9 +1,9 @@
 "use client";
 import Avatar from "@/components/avatar/avatar";
 import PersonalData from "@/components/personalData/personalData";
-import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
+import { SectionMobile } from "@/sections/sectionMobile";
+import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useAuthStore from "@/store/authStore";
 
 export default function MyProfile() {
@@ -33,12 +33,12 @@ export default function MyProfile() {
       </div>
 
       <div className="sm:py-20  mt-60 sm:mt-10">
-        <SectionAbout3 />
+        <SectionMobile />
       </div>
       
 
       <div className="sm:hidden mt-60">
-        <SectionAbout4 />
+        <BannerMoney />
       </div>
 
       <div className="xl:hidden">

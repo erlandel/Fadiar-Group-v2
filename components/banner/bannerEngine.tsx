@@ -1,7 +1,7 @@
 import "@fontsource/just-me-again-down-here";
 import Countdown from "@/components/countdown/countdown";
 
-export default function SectionPromoHome2() {
+export default function BannerEngine() {
   return (
     <>
       <div className="grid h-[480px] sm:h-135 md:h-auto  items-center">

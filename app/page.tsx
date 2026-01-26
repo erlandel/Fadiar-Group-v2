@@ -1,12 +1,12 @@
 "use client";
 
 import "@fontsource/just-me-again-down-here";
-import SectionPromoHome1 from "@/section/home/sectionPromoHome1";
-import SectionMoreproducts from "@/section/home/sectionMoreproducts";
-import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
-import NineOffers from "@/section/NineOffers";
-import { LatestProducts } from "@/section/latestProducts";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
+import BannerPot from "@/components/banner/bannerPot";
+import SectionMoreproducts from "@/sections/home/sectionMoreproducts";
+import BannerEngine from "@/components/banner/bannerEngine";
+import NineOffers from "@/sections/sectionsProducts/NineOffers";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
       <div className="min-h-screen w-full bg-white">
 
         <div>
-          <SectionPromoHome1 />      
+          <BannerPot />      
         </div>
 
         <div className="mt-20 sm:mt-0">
@@ -27,7 +27,7 @@ export default function Home() {
         </div>
 
         <div className="mt-10 ">
-          <SectionPromoHome2/>
+          <BannerEngine/>
         </div>
         
         <div>

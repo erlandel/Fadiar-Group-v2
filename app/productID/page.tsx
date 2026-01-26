@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
+import { BannerMoney } from "@/components/banner/bannerMoney";
 import ShoppingCartIcon from "@/components/shoppingCartIcon";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import useCartStore from "@/store/cartStore";
 import { SearchParamsProvider } from "./SearchParamsProvider";
-import { LatestProducts } from "@/section/latestProducts";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 import { ProductID } from "@/types/productId";
-import RelatedProds from "@/section/relatedProds";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
+import RelatedProds from "@/sections/sectionsProducts/relatedProds";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
@@ -310,7 +310,7 @@ export default function Product() {
       </Suspense>
 
       <div className="mt-20">
-        <SectionAbout4 />
+        <BannerMoney />
       </div>
 
       <div className="hidden xl:block">

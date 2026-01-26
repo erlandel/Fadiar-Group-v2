@@ -1,11 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Loader } from "lucide-react";
 import MatterCart1Store from "../../store/matterCart1Store";
 
 export default function CheckoutPayment() {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Evitar error de hidratación
   useEffect(() => {
@@ -77,17 +79,28 @@ export default function CheckoutPayment() {
           <div className="w-full">
             <button 
               onClick={() => router.push("/cart1")}
-              className="bg-white text-primary border border-primary py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer"
+              className="bg-white text-primary border border-primary h-14 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer flex items-center justify-center"
             >
               Atrás
             </button>
           </div>
           <div className="w-full">
             <button 
-              onClick={() => router.push("/cart3")}
-              className="bg-[#022954] text-white py-4 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer hover:bg-[#034078] hover:shadow-lg  disabled:opacity-40"
+              onClick={() => {
+                setIsSubmitting(true);
+                router.push("/cart3");
+              }}
+              disabled={isSubmitting}
+              className="bg-[#022954] text-white h-14 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer hover:bg-[#034078] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
-              Continuar
+              {isSubmitting ? (
+                <span className="inline-flex items-center justify-center gap-2">
+                  <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                  Continuando...
+                </span>
+              ) : (
+                "Continuar"
+              )}
             </button>
           </div>
         </div>

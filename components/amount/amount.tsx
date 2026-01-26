@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Loader } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { InputField } from "../inputField/inputField";
@@ -42,6 +42,7 @@ export default function Amount() {
   const fullName = auth?.person
     ? `${auth.person.name} ${auth.person.lastname1} ${auth.person.lastname2}`
     : "";
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [data, setData] = useState<ProvinceData[]>([]);
   const [openMunicipalities, setOpenMunicipalities] = useState(false);
@@ -259,6 +260,7 @@ export default function Amount() {
     });
 
     // Si la validación es exitosa, navegar a cart2
+    setIsSubmitting(true);
     router.push("/cart2");
   };
 
@@ -332,10 +334,10 @@ export default function Amount() {
         <h2 className="text-xl font-bold uppercase tracking-wide mb-4 border-b pb-2 border-gray-200">
           Importe
         </h2>
-        <div className="flex justify-between text-xl items-center text-gray-500">
+        {/* <div className="flex justify-between text-xl items-center text-gray-500">
           <span>Subtotal</span>
           <span>$ {isClient ? totalPrice.toFixed(2) : "0.00"} USD</span>
-        </div>
+        </div> */}
       </div>
 
       {/* Personal Info Section */}
@@ -631,9 +633,17 @@ export default function Amount() {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-[#022954] text-white py-4 px-20 text-base font-semibold rounded-xl hover:bg-[#034078] hover:shadow-lg  hover:scale-103 transition cursor-pointer"
+            disabled={isSubmitting}
+            className="bg-[#022954] text-white h-14 w-72 text-base font-semibold rounded-xl hover:bg-[#034078] hover:shadow-lg hover:scale-103 transition cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            Confirmar Orden
+            {isSubmitting ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <Loader className="h-5 w-5 animate-spin" strokeWidth={3} />
+                Confirmando...
+              </span>
+            ) : (
+              "Confirmar Orden"
+            )}
           </button>
         </div>
       </form>

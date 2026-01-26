@@ -1,4 +1,4 @@
-export const SectionAbout4 = () => {
+export const BannerMoney = () => {
   return (
     <>
       <div className="bg-primary w-full h-[437px] md:h-[400px] relative">

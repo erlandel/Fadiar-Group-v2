@@ -2,11 +2,11 @@ import Accordion from "@/components/accordion/accordion";
 import { frequentlyAskedQuestions } from "@/data/frequentlyAskedQuestions";
 import { homeDeliveryPolicy } from "@/data/homeDeliveryPolicy";
 import { warrantyPolicy } from "@/data/warrantyPolicy";
-import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
-import SectionPromoHome2 from "@/section/home/sectionPromoHome2";
-import { LatestProducts } from "@/section/latestProducts";
+import { SectionMobile } from "@/sections/sectionMobile";
+import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
+import BannerEngine from "@/components/banner/bannerEngine";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 
 export default function Faq() {
   return (
@@ -49,18 +49,18 @@ export default function Faq() {
       </div>
 
       <div className="mt-10">
-        <SectionAbout3 />
+        <SectionMobile />
       </div>
 
 
          <div className="mt-15">
           
         <div className="block md:hidden">
-          <SectionAbout4 />
+          <BannerMoney />
         </div>
 
            <div className="hidden md:block">
-        <SectionPromoHome2/>
+        <BannerEngine/>
       </div>
 
 

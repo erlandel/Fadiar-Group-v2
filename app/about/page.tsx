@@ -1,28 +1,28 @@
-import { SectionAbout1 } from "@/section/aboutUS/sectionAbout1";
-import { SectionAbout2 } from "@/section/aboutUS/sectionAbout2";
-import { SectionAbout3 } from "@/section/aboutUS/sectionAbout3";
-import { SectionAbout4 } from "@/section/aboutUS/sectionAbout4";
-import { BestSelling } from "@/section/bestSelling/bestSelling";
-import { LatestProducts } from "@/section/latestProducts";
+import { AboutInformation } from "@/sections/aboutUS/aboutInformation";
+import { BannerWorkersFadiar } from "@/components/banner/bannerWorkersFadiar";
+import { SectionMobile } from "@/sections/sectionMobile";
+import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 
 const About = () => {
   return (
     <>
       <div>
         <div>
-          <SectionAbout1 />
+          <AboutInformation />
         </div>
 
         <div className="mt-20">
-          <SectionAbout2 />
+          <BannerWorkersFadiar />
         </div>
 
         <div className="mt-8">
-          <SectionAbout3 />
+          <SectionMobile />
         </div>
 
         <div className="mt-10">
-          <SectionAbout4 />
+          <BannerMoney />
         </div>
 
         <div className="hidden xl:block mt-10">
