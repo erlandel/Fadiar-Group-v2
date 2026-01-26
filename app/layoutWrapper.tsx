@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, Suspense, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
@@ -14,6 +14,7 @@ import ModalProductsByLocation from "@/components/modalProductsByLocation/modalP
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { useSyncCart } from "@/hooks/cartRequests/useSyncCart";
 import useAuthStore from "@/store/authStore";
+import useCartStore from "@/store/cartStore";
 
 function ScrollToTop() {
   const pathname = usePathname();
@@ -39,9 +40,11 @@ function ScrollToTop() {
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { province, municipality, isOpen, setIsOpen } = useProductsByLocationStore();
   const { syncCart } = useSyncCart();
   const auth = useAuthStore((state) => state.auth);
+  const items = useCartStore((state) => state.items);
   const [isHydrated, setIsHydrated] = useState(false);
   const hasSynced = useRef(false);
 
@@ -52,6 +55,19 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
+
+  // Protección de rutas del carrito
+  useEffect(() => {
+    if (isHydrated && pathname.startsWith('/cart')) {
+      const isAuthenticated = !!auth;
+      const hasItems = items.length > 0;
+
+      if (!isAuthenticated || !hasItems) {
+        router.replace("/");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHydrated, pathname, auth, router]);
 
   useEffect(() => {
     if (isHydrated && auth?.access_token && !hasSynced.current) {
