@@ -211,7 +211,7 @@ export default function MobileOrdes({
         <div className="w-full text-center py-8">
           <LoadingDots
             text="Cargando pedidos"
-            size="1.2rem"
+            size="1.0rem"
             textSize="1.3rem"
             className="text-[#777777] font-bold"
             margin="6px"
@@ -221,28 +221,28 @@ export default function MobileOrdes({
 
       {!fetchOrdersMutation.isPending &&
         fetchOrdersMutation.status !== "idle" && (
-        <div className="flex justify-center items-center gap-4 mt-5">
-          <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1 || fetchOrdersMutation.isPending}
-            className="disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110" />
-          </button>
+          <div className="flex justify-center items-center gap-4 mt-5">
+            <button
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1 || fetchOrdersMutation.isPending}
+              className="disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110" />
+            </button>
 
-          <div className="text-primary font-bold text-2xl text-center">
-            {currentPage}
+            <div className="text-primary font-bold text-2xl text-center">
+              {currentPage}
+            </div>
+
+            <button
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={!hasMore || fetchOrdersMutation.isPending}
+              className="disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 rotate-180" />
+            </button>
           </div>
-
-          <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={!hasMore || fetchOrdersMutation.isPending}
-            className="disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 rotate-180" />
-          </button>
-        </div>
-      )}
+        )}
     </div>
   );
 }
