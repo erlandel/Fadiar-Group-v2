@@ -12,32 +12,31 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen w-full bg-white">
-
         <div>
-          <BannerPot />      
+          <BannerPot />
         </div>
+
+        
 
         <div className="mt-20 sm:mt-0">
           <SectionMoreproducts />
         </div>
 
+        <div>
+          <LatestProducts />
+        </div>
 
         <div className="mt-20 lg:mt-0">
           <NineOffers />
         </div>
 
         <div className="mt-10 ">
-          <BannerEngine/>
+          <BannerEngine />
         </div>
-        
-        <div>
-          <LatestProducts/>
-        </div>
-     
-     <div>
-      <BestSelling/>
-     </div>
 
+        <div>
+          <BestSelling />
+        </div>
       </div>
     </>
   );

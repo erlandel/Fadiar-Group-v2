@@ -8,12 +8,12 @@ import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
 import { BannerMoney } from "@/components/banner/bannerMoney";
 import Pot from "@/sections/pot/pot";
-import CardSkeleton from "@/components/ui/skeletonCard";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters";
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
+import SkeletonCardAllProducts from "@/components/ui/skeletonCardAllProducts";
 
 export default function Products() {
   const { data: inventoryData, isLoading } = useInventory();
@@ -396,7 +396,7 @@ export default function Products() {
               {isLoading ? (
                 // Mostrar 15 skeletons mientras carga
                 Array.from({ length: itemsPerPage }).map((_, index) => (
-                  <CardSkeleton key={`skeleton-${index}`} position="vertical" />
+                  <SkeletonCardAllProducts key={`skeleton-${index}`} position="vertical" />
                 ))
               ) : paginatedProducts && paginatedProducts.length > 0 ? (
                 paginatedProducts.map((product, index) => (
