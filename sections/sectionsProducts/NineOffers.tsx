@@ -91,7 +91,7 @@ export default function NineOffers() {
       <div className="w-full flex justify-center">
       <div className="w-full max-w-350">
       {/* Screens smaller than xl: Horizontal Scroll with vertical cards */}
-      <div className="2xl:hidden">
+      <div className="xl:hidden">
         <div
           ref={scrollRef}
           className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
@@ -111,7 +111,7 @@ export default function NineOffers() {
       </div>
 
       {/* xl and up: mixed layout */}
-      <div className="hidden gap-3 2xl:grid xl:grid-cols-3">
+      <div className="hidden gap-3 xl:grid xl:grid-cols-3">
         {/* Columna Izquierda - 1/3 */}
         <div className="flex flex-col gap-3 ">
           {renderOfferCard(0, "horizontal")}
