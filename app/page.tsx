@@ -18,10 +18,7 @@ export default function Home() {
 
         
 
-        <div className="mt-20 sm:mt-0">
-          <SectionMoreproducts />
-        </div>
-
+     
         <div>
           <LatestProducts />
         </div>
@@ -37,6 +34,11 @@ export default function Home() {
         <div>
           <BestSelling />
         </div>
+
+           <div className="mt-20 sm:mt-0">
+          <SectionMoreproducts />
+        </div>
+
       </div>
     </>
   );
