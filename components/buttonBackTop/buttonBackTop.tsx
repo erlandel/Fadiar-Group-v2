@@ -5,36 +5,34 @@ import { ArrowUp } from 'lucide-react';
 
 export default function ButtonBackTop() {
   const [isVisible, setIsVisible] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
-    let scrollTimer: NodeJS.Timeout;
-
     const toggleVisibility = () => {
-      const scrolled = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+      // Intentamos obtener el scroll de varias fuentes comunes
+      const scrolledY = 
+        window.scrollY || 
+        window.pageYOffset || 
+        document.documentElement.scrollTop || 
+        document.body.scrollTop ||
+        (document.querySelector('main')?.scrollTop || 0);
       
-      if (scrolled > 300) {
+      if (scrolledY > 300) {
         setIsVisible(true);
-        setIsScrolling(true);
-
-        // Reiniciar el temporizador cada vez que hay scroll
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => {
-          setIsScrolling(false);
-        }, 5000); // 5 segundos
       } else {
         setIsVisible(false);
-        setIsScrolling(false);
       }
     };
 
+    // Usamos true para capturar el evento en la fase de captura, 
+    // lo que permite detectar scroll en elementos hijos si el window no es el que scrollea.
     window.addEventListener('scroll', toggleVisibility, true);
     document.addEventListener('scroll', toggleVisibility, true);
     
+    toggleVisibility();
+    
     return () => {
-      window.removeEventListener('scroll', toggleVisibility);
-      document.removeEventListener('scroll', toggleVisibility);
-      clearTimeout(scrollTimer);
+      window.removeEventListener('scroll', toggleVisibility, true);
+      document.removeEventListener('scroll', toggleVisibility, true);
     };
   }, []);
 
@@ -49,28 +47,24 @@ export default function ButtonBackTop() {
     };
 
     performScroll();
+    // Reintentar brevemente para asegurar que se procese el scroll en contenedores
     setTimeout(performScroll, 50);
+    setTimeout(performScroll, 150);
   };
 
   return (
-    <>
-      {isVisible && (
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            scrollToTop();
-          }}
-          type="button"
-          className={`z-9999 fixed right-3  bottom-10 2xl:right-5 flex h-8 w-8 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-110  active:scale-95 animate__animated ${
-            isScrolling ? 'animate__fadeInRight opacity-100' : 'animate__fadeOutRight opacity-0 pointer-events-none'
-          }`}
-
-        
-        >
-          <ArrowUp className="h-5 w-5 sm:h-6 sm:w-6 2xl:h-7 2xl:w-7" strokeWidth={2} />
-        </button>
-      )}
-    </>
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        scrollToTop();
+      }}
+      type="button"
+      className={`z-9999 fixed right-3 bottom-10 2xl:right-5 flex h-8 w-8 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-110 active:scale-95 animate__animated ${
+        isVisible ? 'animate__fadeInRight opacity-100' : 'animate__fadeOutRight opacity-0 pointer-events-none'
+      }`}
+    >
+      <ArrowUp className="h-5 w-5 sm:h-6 sm:w-6 2xl:h-7 2xl:w-7" strokeWidth={2} />
+    </button>
   );
 }
