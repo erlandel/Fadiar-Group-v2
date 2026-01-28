@@ -1,5 +1,5 @@
 "use client";
-import { statistics_about_us } from "@/urlApi/urlApi";
+import { statistics_about_usUrl } from "@/urlApi/urlApi";
 import { useEffect, useState, useRef } from "react";
 import { Users, ShoppingBag, Package } from "lucide-react";
 
@@ -13,7 +13,7 @@ export const BannerWorkersFadiar = () => {
 
   const Statistics_aboutFn = async () => {
     try {
-      const res = await fetch(`${statistics_about_us}`, {
+      const res = await fetch(`${statistics_about_usUrl}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

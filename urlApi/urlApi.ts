@@ -42,4 +42,6 @@ export const get_ordersUrl = `${server_url}/pedidos_manager`;
 
 export const get_product_orderUrl = `${server_url}/getOrder`;
 
-export const statistics_about_us = `${server_url}/estadisticas_acerca_de_nosotros`;
+export const statistics_about_usUrl = `${server_url}/estadisticas_acerca_de_nosotros`;
+
+export const upcomingProductsUrl = `${server_url}/getNewerProducts`;

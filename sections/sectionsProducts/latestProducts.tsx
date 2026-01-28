@@ -125,6 +125,7 @@ export const LatestProducts = ({
             </div>
           </div>
         </div>
+        
       </div>
     </>
   );
