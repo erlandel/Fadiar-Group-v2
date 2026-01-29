@@ -2,11 +2,9 @@ import Accordion from "@/components/accordion/accordion";
 import { frequentlyAskedQuestions } from "@/data/frequentlyAskedQuestions";
 import { SectionMobile } from "@/sections/sectionMobile";
 import { BannerMoney } from "@/components/banner/bannerMoney";
-import dynamic from "next/dynamic";
-
-const BestSelling = dynamic(() => import("@/sections/sectionsProducts/bestSelling").then(mod => mod.BestSelling), { ssr: false });
-const LatestProducts = dynamic(() => import("@/sections/sectionsProducts/latestProducts").then(mod => mod.LatestProducts), { ssr: false });
-const BannerUpcomingProducts = dynamic(() => import("@/components/banner/bannerUpcomingProducts"), { ssr: false });
+import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
+import BannerUpcomingProducts from "@/components/banner/bannerUpcomingProducts";
+import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 
 export default function Faq() {
   return (
