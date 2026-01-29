@@ -12,7 +12,7 @@ type BestSellingProps = {
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
   // Usar el hook de caché
-  const { data: bestSellingProducts = [] } = useBestSelling(9);
+  const { data: bestSellingProducts = [] } = useBestSelling(10);
 
   // Usar productos del estado de caché si no vienen como prop
   const productsToUse: Product[] = Array.isArray(productsProp)
