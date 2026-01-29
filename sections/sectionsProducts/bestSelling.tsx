@@ -62,7 +62,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
             />
           ) : (
             <div className="flex gap-4 overflow-hidden">
-              {Array.from({ length: 9 }).map((_, index) => (
+              {Array.from({ length: 10 }).map((_, index) => (
                 <div key={index} className="shrink-0">
                   <CardSkeleton position={"vertical"} />
                 </div>

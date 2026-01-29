@@ -3,16 +3,16 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { inventory_managerUrl } from "@/urlApi/urlApi";
 
-interface InventoryData {
+export interface InventoryData {
   products: Product[];
   tiendas: any[];
   currencys: any;
 }
 
-export const useInventory = () => {
+export const useInventory = <T = InventoryData>(select?: (data: InventoryData) => T) => {
   const { provinceId } = useProductsByLocationStore();
 
-  return useQuery<InventoryData>({
+  return useQuery<InventoryData, Error, T>({
     queryKey: ["inventory", provinceId],
     queryFn: async () => {
       const queryParams = new URLSearchParams();
@@ -61,5 +61,6 @@ export const useInventory = () => {
     staleTime: Infinity,
     // Refrescar cuando la ventana recupera el foco (opcional, pero recomendado)
     refetchOnWindowFocus: false,
+    select,
   });
 };
