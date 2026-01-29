@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import BuyerDetailsStore from "../../store/buyerDetailsStore";
 import MatterCart1Store from "../../store/matterCart1Store";
-import { EmojioneDepartmentStore, TwemojiCreditCard } from "@/icons/icons";
+import { EmojioneDepartmentStore } from "@/icons/icons";
 
 export default function CreditCards() {
   const delivery = MatterCart1Store((state) => state.formData.delivery);
@@ -12,16 +12,16 @@ export default function CreditCards() {
   const [selectedMethod, setSelectedMethod] = useState(savedPaymentMethod);
 
   const paymentMethods = [
-    { 
-      id: "visa",
-      title: "Tarjeta de Crédito/Débito", 
-      description: "Pago con VISA o MasterCard", 
-      icon: <TwemojiCreditCard className="w-9 h-9 " /> 
-    },
+    // { 
+    //   id: "visa",
+    //   title: "Tarjeta de Crédito/Débito", 
+    //   description: "Pago con VISA o MasterCard", 
+    //   icon: <TwemojiCreditCard className="w-9 h-9 " /> 
+    // },
     { 
       id: "efectivo",
-      title: "Efectivo o Transferencia", 
-      description: "Pago al momento de la entrega", 
+      title: "Pago al momento de la entrega", 
+      description: "Efectivo o Transferencia", 
       icon: <img src="/images/MoneyTransfer.webp" alt="Efectivo o Transferencia" width={40} height={40} className="object-contain" /> 
     },
     { 
@@ -71,7 +71,7 @@ export default function CreditCards() {
 
   return (
     <>
-      <div className="w-100 ">
+      <div className="w-115 ">
         <h5 className="text-primary font-bold text-2xl">01 - Formas de Pago</h5>
     
 

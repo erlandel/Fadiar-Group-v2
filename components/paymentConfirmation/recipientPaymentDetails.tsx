@@ -2,10 +2,27 @@
 
 import MatterCart1Store from "@/store/matterCart1Store";
 import { useRouter } from "next/navigation";
+import useAuthStore from "@/store/authStore";
 
 export default function RecipientPaymentDetails() {
     const router = useRouter();
     const { formData } = MatterCart1Store();
+    const { auth } = useAuthStore();
+
+    const person = auth?.person;
+
+    const beneficiaryFirstName = formData.delivery
+      ? formData.firstName
+      : person?.name || "";
+
+    const beneficiaryLastNames = formData.delivery
+      ? `${formData.lastName1} ${formData.lastName2}`.trim()
+      : `${person?.lastname1 ?? ""} ${person?.lastname2 ?? ""}`.trim();
+
+    const beneficiaryPhone =
+      formData.delivery && formData.phone
+        ? formData.phone
+        : person?.cellphone2 || "------";
 
     return(
         <div className="w-full  max-w-120  wrap-break-word">
@@ -32,28 +49,21 @@ export default function RecipientPaymentDetails() {
         <div className="ml-4">
           <p className="text-[gray] ">
             Nombre:{" "}
-            <span className="text-primary wrap-break-word">{formData.firstName}</span>
+            <span className="text-primary wrap-break-word">{beneficiaryFirstName}</span>
           </p>
         </div>
 
         <div className="ml-4">
           <p className="text-[gray] ">
             Apellidos:{" "}
-            <span className="text-primary wrap-break-word">{`${formData.lastName1} ${formData.lastName2}`.trim()}</span>
+            <span className="text-primary wrap-break-word">{beneficiaryLastNames}</span>
           </p>
         </div>
 
         <div className="ml-4">
           <p className="text-[gray] ">
-            Carnet de Identidad:{" "}
-            <span className="text-primary wrap-break-word">{formData.identityCard}</span>
-          </p>
-        </div>
-        
-        <div className="ml-4">
-          <p className="text-[gray] ">
             Teléfono:{" "}
-            <span className="text-primary wrap-break-word">{formData.phone}</span>
+            <span className="text-primary wrap-break-word">{beneficiaryPhone}</span>
           </p>
         </div>
 
