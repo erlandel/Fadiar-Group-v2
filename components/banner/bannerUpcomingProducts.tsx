@@ -4,7 +4,7 @@ import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts
 import CardProduct from "../ui/cardProduct";
 import CardCarousel from "../ui/cardCarousel";
 
-export default function BannerEngine() {
+export default function BannerUpcomingProducts() {
   const { data: upcomingProducts = [], isLoading } = useUpcomingProducts(10);
 
   return (

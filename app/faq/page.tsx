@@ -5,7 +5,7 @@ import { warrantyPolicy } from "@/data/warrantyPolicy";
 import { SectionMobile } from "@/sections/sectionMobile";
 import { BannerMoney } from "@/components/banner/bannerMoney";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
-import BannerEngine from "@/components/banner/bannerEngine";
+import BannerUpcomingProducts from "@/components/banner/bannerUpcomingProducts";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 
 export default function Faq() {
@@ -60,7 +60,7 @@ export default function Faq() {
         </div>
 
            <div className="hidden md:block">
-        <BannerEngine/>
+        <BannerUpcomingProducts/>
       </div>
 
 
