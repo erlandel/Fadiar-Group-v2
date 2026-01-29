@@ -325,7 +325,7 @@ export default function Amount() {
              <div className="w-full flex justify-center mt-3">
             <p className=" flex items-center  text-accent ">
               <NotoV1Information className="h-5 w-5 mr-0.5 " />
-              Revise los municipios a los cuales se esta haciendo domicilio
+              Revise los municipios a los cuales se está haciendo domicilio.
             </p>
           </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-3 ">

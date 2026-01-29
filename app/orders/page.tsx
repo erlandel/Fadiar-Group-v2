@@ -8,6 +8,7 @@ import { SectionMobile } from "@/sections/sectionMobile";
 import { BannerMoney } from "@/components/banner/bannerMoney";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
+import InformationMessage from "@/messages/informationMessage";
 
 export default function Orders() {
   const { orders, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
@@ -21,11 +22,6 @@ export default function Orders() {
       size: number;
       searchText: string;
     }) => fetchOrders(params.lastId, params.size, params.searchText),
-    onSuccess: () => {
-      if (titleRef.current) {
-        titleRef.current.scrollIntoView({ behavior: "auto", block: "start" });
-      }
-    },
   });
 
   useEffect(() => {
@@ -47,7 +43,12 @@ export default function Orders() {
         setCurrentPage(1);
       }
     }
-  }, [orders.length, currentPage, fetchOrdersMutation.isPending, fetchOrdersMutation.isSuccess]);
+  }, [
+    orders.length,
+    currentPage,
+    fetchOrdersMutation.isPending,
+    fetchOrdersMutation.isSuccess,
+  ]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -58,19 +59,20 @@ export default function Orders() {
 
   return (
     <>
+    <div className="mx-4 xl:px-40 mt-2">
+      <InformationMessage /> 
+    </div>
+    
       <div className="mx-4 xl:px-40 mt-10 md:mt-15">
-        <div className=" flex  justify-between items-center">
-          <div ref={titleRef} className="  lg:ml-40 scroll-mt-35 xl:scroll-mt-25">
-            <h2 className="text-3xl text-primary font-bold">Mis Pedidos</h2>
-          </div>
+    
 
-          <div>
-            {fetchOrdersMutation.isError && (
-              <p className="text-red-500 text-sm font-medium mb-2 text-center">
-                Error al cargar pedidos.
-              </p>
-            )}
-          </div>
+        <div className=" flex  justify-between items-center">
+          <div
+            ref={titleRef}
+            className="  lg:ml-40 scroll-mt-35 xl:scroll-mt-25 "
+          >
+            <h2 className="text-3xl text-primary font-bold">Mis Pedidos</h2>
+          </div>                
         </div>
 
         <div className="lg:hidden">
