@@ -21,6 +21,7 @@ export const useLatestProducts = (count: number = 6) => {
         }),
       });
 
+
       if (!res.ok) {
         throw new Error("Error al obtener los productos más recientes");
       }

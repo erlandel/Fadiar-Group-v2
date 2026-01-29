@@ -21,29 +21,17 @@ export const useConfirmOrder = () => {
       const { auth, setAuth } = useAuthStore.getState();
 
       if (!auth?.access_token) {
-        router.push("/login");
-        throw new Error("No hay sesión activa");
+        router.push("/login");   
       }
-
-      if (!municipalityId) {
-        ErrorMessage("Debe seleccionar un municipio antes de confirmar la orden");
-        throw new Error("Municipio no seleccionado");
-      }
-
-      if (!formData.identityCard || !formData.firstName || !formData.phone) {
-        ErrorMessage("Faltan datos del beneficiario para confirmar la orden");
-        throw new Error("Faltan datos del beneficiario");
-      }
+ 
 
       const token = await refreshToken(auth, setAuth);
 
       if (!token) {
         ErrorMessage("No se pudo obtener una sesión válida");
-        throw new Error("Sesión inválida");
       }
 
       const requestBody = {
-        ci_cliente: formData.identityCard,
         name_cliente: formData.firstName,
         last_names: `${formData.lastName1} ${formData.lastName2}`.trim(),
         cellphone_cliente: formData.phone,
@@ -63,10 +51,8 @@ export const useConfirmOrder = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        const msg =
-          errorData.error || errorData.message || "No se pudo confirmar la orden";
+        const msg =errorData.error || errorData.message || "No se pudo confirmar la orden";
         ErrorMessage(msg);
-        throw new Error(msg);
       }
 
       return response.json();
@@ -83,15 +69,7 @@ export const useConfirmOrder = () => {
       router.push("/orders");
     },
     onError: (error: any) => {
-      console.error("Error al confirmar la orden:", error);
-      if (
-        error.message !== "No hay sesión activa" &&
-        error.message !== "Municipio no seleccionado" &&
-        error.message !== "Faltan datos del beneficiario" &&
-        error.message !== "Sesión inválida"
-      ) {
-        ErrorMessage("Error de conexión con el servidor");
-      }
+      console.error("Error al confirmar la orden:", error);    
     },
   });
 

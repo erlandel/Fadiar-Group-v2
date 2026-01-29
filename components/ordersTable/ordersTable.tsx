@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { EmojioneLeftArrow, MaterialSymbolsAdd } from "@/icons/icons";
+import { EmojioneLeftArrow, MaterialSymbolsAdd, WhatsApp } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
 import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
@@ -68,9 +68,10 @@ export default function OrdersTable({
                   <div className="text-center">Pedido</div>
                   <div className="text-center">Fecha</div>
                   <div className="text-center">Hora</div>
-                  <div className="text-center">Carnet de identidad</div>
                   <div className="text-center">Teléfono</div>
                   <div className="text-center">Estado</div>
+                  <div className="text-center">Soporte</div>
+                  <div></div>
                 </div>
               )}
 
@@ -97,9 +98,8 @@ export default function OrdersTable({
                             : `#${order.id}`}
                         </div>
                         <div className="text-center">{order.date}</div>
-                        <div className="text-center">{order.time}</div>
-                        <div className="text-center">{order.client_ci}</div>
-                        <div className="text-center">{order.client_cell}</div>
+                        <div className="text-center">{order.time}</div>                   
+                        <div className="text-center">{order.client_cell}</div>                      
                         <div className="text-center">
                           <span
                             className={`inline-block px-5 py-2 rounded-full text-md font-medium ${
@@ -112,6 +112,9 @@ export default function OrdersTable({
                           >
                             {order.status}
                           </span>
+                        </div>
+                        <div className="flex justify-center ">
+                          <WhatsApp className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />
                         </div>
                         <div className="flex justify-center ">
                           <button

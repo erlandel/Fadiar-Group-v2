@@ -11,7 +11,6 @@ export type SelectedStore = {
 
 export type FormData = {
   phone: string;
-  identityCard: string;
   province: string;
   municipality: string;
   delivery: boolean;
@@ -35,7 +34,6 @@ export type FormState = {
 
 export const defaultFormData: FormData = {
   phone: "+53 ",
-  identityCard: "",
   province: "",
   municipality: "",
   delivery: false,

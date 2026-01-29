@@ -20,6 +20,7 @@ export const useBestSelling = (count: number = 9) => {
         }),
       });
 
+      console.log("Respuesta del backend (obtener productos más vendidos):", res);
       if (!res.ok) {
         throw new Error("Error al obtener productos más vendidos");
       }

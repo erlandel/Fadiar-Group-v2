@@ -19,7 +19,7 @@ export default function Menu() {
     { href: "/faq", label: "Preguntas Frecuentes" },
     { href: "/warranty", label: "Garantia" },
      { href: "/shipping", label: "Envios" },
-      { href: "/contacto", label: "Contacto" },
+      { href: "/contact", label: "Contacto" },
   ];
 
   const checkActive = (href: string) => {

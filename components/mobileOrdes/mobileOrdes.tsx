@@ -9,6 +9,7 @@ import LoadingDots from "../loadingDots/loadingDots";
 import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import { EmojioneLeftArrow } from "@/icons/icons";
+import { WhatsApp } from "@/icons/icons";
 
 interface MobileOrdesProps {
   orders: Order[];
@@ -118,11 +119,7 @@ export default function MobileOrdes({
                         {order.time}
                       </p>
 
-                      {/* Carnet de identidad */}
-                      <p className="text-sm sm:text-lg">Carnet de identidad</p>
-                      <p className=" font-bold text-right sm:text-xl">
-                        {order.client_ci}
-                      </p>
+                  
 
                       {/* Teléfono */}
                       <p className="text-sm sm:text-lg">Teléfono</p>
@@ -145,6 +142,13 @@ export default function MobileOrdes({
                           {order.status}
                         </span>
                       </div>
+
+    {/* Soporte */}
+                      <p className="text-sm sm:text-lg">Soporte</p>
+                      <p className=" flex justify-end">
+                        <WhatsApp className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
+                      </p>
+
                     </div>
                   </div>
 
