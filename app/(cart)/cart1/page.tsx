@@ -218,7 +218,7 @@ export default function Cart1() {
               </div>
             </div>
 
-            <div className="max-w-200">
+            <div className="w-full max-w-200">
               <Amount />
             </div>
           </div>

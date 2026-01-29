@@ -1,6 +1,6 @@
 "use client";
 import { Check, ChevronDown, Loader } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
@@ -13,20 +13,8 @@ import MatterCart1Store, {
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
-import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 import InformationMessage from "../../messages/informationMessage";
-
-interface MunicipalityData {
-  id: number;
-  municipio: string;
-}
-
-interface ProvinceData {
-  id: number;
-  provincia: string;
-  code: string;
-  municipios: MunicipalityData[];
-}
+import useLocation from "@/hooks/location/useLocation";
 
 export default function Amount() {
   const router = useRouter();
@@ -36,17 +24,20 @@ export default function Amount() {
     provinceId: storeProvinceId,
     municipality: storeMunicipality,
     municipalityId: storeMunicipalityId,
-    setLocation,
   } = useProductsByLocationStore();
+  const {
+    municipalities: baseMunicipalities,
+    handleMunicipalityChange,
+    openMunicipalities,
+    setOpenMunicipalities,
+    municipalitiesRef,
+  } = useLocation();
 
   const fullName = auth?.person
     ? `${auth.person.name} ${auth.person.lastname1} ${auth.person.lastname2}`
     : "";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [data, setData] = useState<ProvinceData[]>([]);
-  const [openMunicipalities, setOpenMunicipalities] = useState(false);
-  const municipalitiesRef = useRef<HTMLDivElement>(null);
 
   const items = useStore(cartStore, (state) => state.items);
   const rawCart = useStore(cartStore, (state) => (state as any).rawCart);
@@ -63,7 +54,7 @@ export default function Amount() {
 
   const totalItems = filteredItems.reduce(
     (total, item) => total + item.quantity,
-    0
+    0,
   );
 
   const [errors, setErrors] = useState<
@@ -82,7 +73,7 @@ export default function Amount() {
       let totalDelivery = 0;
       rawCart.forEach((tienda: any) => {
         const domicilio = tienda.domicilios?.find(
-          (d: any) => d.id_municipio === storeMunicipalityId
+          (d: any) => d.id_municipio === storeMunicipalityId,
         );
         if (domicilio) {
           totalDelivery += Number(domicilio.price) || 0;
@@ -106,41 +97,6 @@ export default function Amount() {
     }));
   }, []);
 
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const res = await fetch(`${get_provinces_municipalitiesUrl}`);
-        const json = await res.json();
-        if (Array.isArray(json)) {
-          setData(json);
-        } else {
-          console.error("Provinces data is not an array:", json);
-          setData([]);
-        }
-      } catch (err) {
-        console.error("Error fetching provinces:", err);
-      }
-    };
-
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        municipalitiesRef.current &&
-        !municipalitiesRef.current.contains(event.target as Node)
-      ) {
-        setOpenMunicipalities(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   // Sync store values with local form data initially or when store changes
   useEffect(() => {
     if (isClient) {
@@ -154,7 +110,7 @@ export default function Amount() {
 
   // Función para manejar cambios en los inputs
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -221,17 +177,17 @@ export default function Amount() {
 
     // Agrupar productos filtrados por tienda
     const storesMap = new Map<string | number, any>();
-    
+
     filteredItems.forEach((item) => {
       if (!item.tiendaId) return;
-      
+
       if (!storesMap.has(item.tiendaId)) {
         const tiendaInfo = rawCart?.find((t: any) => t.id === item.tiendaId);
         let storeDeliveryPrice = 0;
-        
+
         if (formData.delivery && storeMunicipalityId && tiendaInfo) {
           const domicilio = tiendaInfo.domicilios?.find(
-            (d: any) => d.id_municipio === storeMunicipalityId
+            (d: any) => d.id_municipio === storeMunicipalityId,
           );
           if (domicilio) {
             storeDeliveryPrice = Number(domicilio.price) || 0;
@@ -243,10 +199,10 @@ export default function Amount() {
           name: item.tiendaName || "Tienda Desconocida",
           direccion: item.tiendaDireccion || "",
           products: [],
-          deliveryPrice: storeDeliveryPrice
+          deliveryPrice: storeDeliveryPrice,
         });
       }
-      
+
       storesMap.get(item.tiendaId).products.push(item);
     });
 
@@ -256,7 +212,7 @@ export default function Amount() {
     MatterCart1Store.getState().setFormData({
       ...formData,
       deliveryPrice: deliveryPrice,
-      stores: selectedStores
+      stores: selectedStores,
     });
 
     // Si la validación es exitosa, navegar a cart2
@@ -264,15 +220,8 @@ export default function Amount() {
     router.push("/cart2");
   };
 
-  const currentProvinceData = Array.isArray(data)
-    ? data.find((p) => p.provincia === storeProvince)
-    : undefined;
-  const municipalities = currentProvinceData
-    ? currentProvinceData.municipios
-    : [];
-
   const activeStoreIds = Array.from(
-    new Set(items.map((item) => item.tiendaId).filter((id) => id != null))
+    new Set(items.map((item) => item.tiendaId).filter((id) => id != null)),
   );
 
   const deliveryStores =
@@ -281,24 +230,24 @@ export default function Amount() {
           (tienda: any) =>
             activeStoreIds.includes(tienda.id) &&
             Array.isArray(tienda.domicilios) &&
-            tienda.domicilios.length > 0
+            tienda.domicilios.length > 0,
         )
       : [];
 
   const municipalitiesWithCommonDelivery =
     deliveryStores.length > 0
-      ? municipalities.filter((mun) =>
+      ? baseMunicipalities.filter((mun) =>
           deliveryStores.every((tienda: any) =>
-            tienda.domicilios.some((d: any) => d.id_municipio === mun.id)
-          )
+            tienda.domicilios.some((d: any) => d.id_municipio === mun.id),
+          ),
         )
-      : municipalities;
+      : baseMunicipalities;
 
   // Auto-select common municipality if current is invalid or empty
   useEffect(() => {
     if (isClient && municipalitiesWithCommonDelivery.length > 0) {
       const isCurrentValid = municipalitiesWithCommonDelivery.some(
-        (m) => m.municipio === storeMunicipality
+        (m) => m.municipio === storeMunicipality,
       );
 
       if (!storeMunicipality || !isCurrentValid) {
@@ -310,25 +259,18 @@ export default function Amount() {
         MatterCart1Store.getState().updateFormData({
           municipality: defaultMun.municipio,
         });
-        setLocation(
-          storeProvince,
-          storeProvinceId,
-          defaultMun.municipio,
-          defaultMun.id
-        );
+        handleMunicipalityChange(defaultMun);
       }
     }
   }, [
     isClient,
     municipalitiesWithCommonDelivery,
     storeMunicipality,
-    storeProvince,
-    storeProvinceId,
-    setLocation,
+    handleMunicipalityChange,
   ]);
 
   return (
-    <div className="max-h-full   bg-white font-sans text-[#022954]">
+    <div className="w-full   bg-white font-sans text-[#022954]">
       {/* Importe Section */}
       <div className="mb-8">
         <h2 className="text-xl font-bold uppercase tracking-wide mb-4 border-b pb-2 border-gray-200">
@@ -343,84 +285,109 @@ export default function Amount() {
       {/* Personal Info Section */}
       <div className="mb-8">
         <h3 className="text-xl font-bold text-[#022954] mb-6">
-          {isClient ? fullName : ""}
+          Persona que recibe
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md ">
-          <div>
-            <label className="ml-2 font-medium text-gray-600">Nombre</label>
-            <InputField
-              type="text"
-              placeholder="Nombre"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
+
+        <div className="flex items-start space-x-2 mt-6">
+          <div className="relative flex items-center ">
+            <input
+              type="checkbox"
+              id="delivery"
+              className="peer h-4 w-4 shrink-0 rounded-sm border border-gray-400 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#022954] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 checked:bg-[#022954] checked:border-[#022954] appearance-none"
+              checked={formData.delivery}
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                setFormData((prev) => ({ ...prev, delivery: isChecked }));
+                MatterCart1Store.getState().updateFormData({
+                  delivery: isChecked,
+                });
+                if (isChecked) {
+                  InformationMessage(
+                    "Revise los municipios a los cuales se esta haciendo domicilio",
+                  );
+                }
+                if (!isChecked && errors.address) {
+                  setErrors((prev) => ({ ...prev, address: undefined }));
+                }
+              }}
             />
-            {errors.firstName && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.firstName}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="ml-2 font-medium text-gray-600">Apellidos</label>
-            <InputField
-              type="text"
-              placeholder="Apellidos"
-              name="lastName"
-              value={`${formData.lastName1} ${formData.lastName2}`.trimStart()}
-              onChange={handleInputChange}
-            />
-            {errors.lastName1 && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.lastName1}
-              </p>
-            )}
-            {!errors.lastName1 && errors.lastName2 && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.lastName2}
-              </p>
-            )}
+            <Check className="absolute h-3 w-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 left-0.5" />
           </div>
 
-          <div className="space-y-2">
-            <label className="ml-2 font-medium text-gray-600">Teléfono</label>
-            <div className="relative">
-              {/* Teléfono con bandera */}
-              <PhoneInput
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                placeholder="Teléfono"
-                inputMode="numeric"
-                pattern="[0-9]*"
-              />
-              {errors.phone && (
-                <p className="text-red-500 text-xs mt-1 ml-2">{errors.phone}</p>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <label className="ml-2 font-medium text-gray-600">
-              Carnet de Identidad
+          <div className="grid gap-1.5 leading-none">
+            <label
+              htmlFor="delivery"
+              className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-500"
+            >
+              ¿Necesitas entrega a domicilio?
             </label>
-            <InputField
-              type="text"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              placeholder="Carnet de Identidad"
-              name="identityCard"
-              value={formData.identityCard}
-              onChange={handleInputChange}
-            />
-            {errors.identityCard && (
-              <p className="text-red-500 text-xs mt-1 ml-2">
-                {errors.identityCard}
-              </p>
-            )}
           </div>
         </div>
 
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-6">
+        {isClient && formData.delivery && (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md mt-5 ">
+              <div>
+                <label className="ml-2 font-medium text-gray-600">Nombre</label>
+                <InputField
+                  type="text"
+                  placeholder="Nombre"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                />
+                {errors.firstName && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.firstName}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label className="ml-2 font-medium text-gray-600">
+                  Apellidos
+                </label>
+                <InputField
+                  type="text"
+                  placeholder="Apellidos"
+                  name="lastName"
+                  value={`${formData.lastName1} ${formData.lastName2}`.trimStart()}
+                  onChange={handleInputChange}
+                />
+                {errors.lastName1 && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.lastName1}
+                  </p>
+                )}
+                {!errors.lastName1 && errors.lastName2 && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.lastName2}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="ml-2 font-medium text-gray-600">
+                  Teléfono
+                </label>
+                <div className="relative">
+                  {/* Teléfono con bandera */}
+                  <PhoneInput
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    placeholder="Teléfono"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs mt-1 ml-2">
+                      {errors.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-6">
               <div>
                 <label className="ml-2 font-medium text-gray-600">
                   Provincia
@@ -448,14 +415,14 @@ export default function Amount() {
                   className="flex h-12 items-center justify-between rounded-2xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent"
                   onClick={() => {
                     if (storeProvince) {
-                      setOpenMunicipalities(!openMunicipalities);
+                      setOpenMunicipalities((prev) => !prev);
                     }
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
                       if (storeProvince) {
-                        setOpenMunicipalities(!openMunicipalities);
+                        setOpenMunicipalities((prev) => !prev);
                       }
                     }
                   }}
@@ -483,26 +450,16 @@ export default function Amount() {
                         key={mun.id}
                         className="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors text-gray-700"
                         onClick={() => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            municipality: mun.municipio,
-                          }));
-                          MatterCart1Store.getState().updateFormData({
-                            municipality: mun.municipio,
-                          });
-                          setLocation(
-                            storeProvince,
-                            storeProvinceId,
-                            mun.municipio,
-                            mun.id
-                          );
-                          setOpenMunicipalities(false);
-                          if (errors.municipality) {
+                          handleMunicipalityChange(mun, (m) => {
+                            const update = { municipality: m.municipio };
+                            setFormData((prev) => ({ ...prev, ...update }));
+                            MatterCart1Store.getState().updateFormData(update);
                             setErrors((prev) => ({
                               ...prev,
                               municipality: undefined,
                             }));
-                          }
+                          });
+                          setOpenMunicipalities(false);
                         }}
                       >
                         {mun.municipio}
@@ -511,66 +468,22 @@ export default function Amount() {
                   </ul>
                 )}
               </div>
+
+              
             </div>
 
+            <div className="mt-5">
+              <label className="ml-2  font-medium text-gray-600">Nota</label>
+              <textarea
+                placeholder="Escribe aquí información adicional relevante (horarios de disponibilidad del domicilio, teléfonos secundarios, observaciones, etc.)."
+                rows={5}
+                name="note"
+                // value={formData.note}
+                onChange={handleInputChange}
+                className="w-full  rounded-2xl px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
+              />
+            </div>
 
-        <div className="mt-5">
-            <label className="ml-2  font-medium text-gray-600">
-              Nota
-            </label>
-          <textarea
-            placeholder="Escribe aquí información adicional relevante (horarios de disponibilidad del domicilio, teléfonos secundarios, observaciones, etc.)."
-            rows={5}
-            name="note"
-            // value={formData.note}
-            onChange={handleInputChange}
-            className="w-full  rounded-2xl px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
-          />
-        </div>
-
-        <div className="flex items-start space-x-2 mt-6">
-          <div className="relative flex items-center ">
-            <input
-              type="checkbox"
-              id="delivery"
-              className="peer h-4 w-4 shrink-0 rounded-sm border border-gray-400 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#022954] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 checked:bg-[#022954] checked:border-[#022954] appearance-none"
-              checked={formData.delivery}
-              onChange={(e) => {
-                const isChecked = e.target.checked;
-                setFormData((prev) => ({ ...prev, delivery: isChecked }));
-                MatterCart1Store.getState().updateFormData({
-                  delivery: isChecked,
-                });
-                if (isChecked) {
-                  InformationMessage(
-                    "Revise los municipios a los cuales se esta haciendo domicilio"
-                  );
-                }
-                if (!isChecked && errors.address) {
-                  setErrors((prev) => ({ ...prev, address: undefined }));
-                }
-              }}
-            />
-            <Check className="absolute h-3 w-3 text-white pointer-events-none opacity-0 peer-checked:opacity-100 left-0.5" />
-          </div>
-
-          <div className="grid gap-1.5 leading-none">
-            <label
-              htmlFor="delivery"
-              className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-500"
-            >
-              ¿Necesitas entrega a domicilio? 
-              <span className="text-accent text-xs ml-1"> 
-                (Solo se mostrarán los municipios en los que todas las tiendas tengan domicilio en común.)
-              </span>
-            </label>
-          </div>
-        </div>
-
-        {isClient && formData.delivery && (          
-          <div>
-          
-     
             <div className="mt-6">
               <label className="ml-2 font-medium text-gray-600">
                 Dirección
@@ -598,23 +511,21 @@ export default function Amount() {
           RESUMEN DEL PEDIDO
         </h3>
         <div className="bg-[#F5F7FA] rounded-xl overflow-hidden">
-         
-
           {isClient && formData.delivery && (
             <div>
-               <div className="flex justify-between items-center p-4 text-[#022954]">
-            <span className="sm:text-xl">Subtotal</span>
-            <span className="sm:text-xl">
-              $ {isClient ? totalPrice.toFixed(2) : "0.00"} USD
-            </span>
-          </div>
+              <div className="flex justify-between items-center p-4 text-[#022954]">
+                <span className="sm:text-xl">Subtotal</span>
+                <span className="sm:text-xl">
+                  $ {isClient ? totalPrice.toFixed(2) : "0.00"} USD
+                </span>
+              </div>
 
-            <div className="flex justify-between items-center p-4 text-[#022954]">
-              <span className="sm:text-xl">Domicilio</span>
-              <span className="sm:text-xl">
-                $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} USD
-              </span>
-            </div>
+              <div className="flex justify-between items-center p-4 text-[#022954]">
+                <span className="sm:text-xl">Domicilio</span>
+                <span className="sm:text-xl">
+                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} USD
+                </span>
+              </div>
             </div>
           )}
           <div className="flex justify-between items-center p-4 bg-[#E2E6EA]">
