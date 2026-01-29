@@ -13,8 +13,8 @@ import MatterCart1Store, {
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
-import InformationMessage from "../../messages/informationMessage";
 import useLocation from "@/hooks/location/useLocation";
+import {  NotoV1Information } from "@/icons/icons";
 
 export default function Amount() {
   const router = useRouter();
@@ -284,7 +284,7 @@ export default function Amount() {
 
       {/* Personal Info Section */}
       <div className="mb-8">
-        <h3 className="text-xl font-bold text-[#022954] mb-6">
+        <h3 className="text-xl font-bold text-[#022954] ">
           Persona que recibe
         </h3>
 
@@ -301,11 +301,6 @@ export default function Amount() {
                 MatterCart1Store.getState().updateFormData({
                   delivery: isChecked,
                 });
-                if (isChecked) {
-                  InformationMessage(
-                    "Revise los municipios a los cuales se esta haciendo domicilio",
-                  );
-                }
                 if (!isChecked && errors.address) {
                   setErrors((prev) => ({ ...prev, address: undefined }));
                 }
@@ -324,9 +319,16 @@ export default function Amount() {
           </div>
         </div>
 
+    
         {isClient && formData.delivery && (
           <div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 text-md mt-5 ">
+             <div className="w-full flex justify-center mt-3">
+            <p className=" flex items-center  text-accent ">
+              <NotoV1Information className="h-5 w-5 mr-0.5 " />
+              Revise los municipios a los cuales se esta haciendo domicilio
+            </p>
+          </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-3 ">
               <div>
                 <label className="ml-2 font-medium text-gray-600">Nombre</label>
                 <InputField
@@ -342,6 +344,7 @@ export default function Amount() {
                   </p>
                 )}
               </div>
+
               <div>
                 <label className="ml-2 font-medium text-gray-600">
                   Apellidos
@@ -365,29 +368,6 @@ export default function Amount() {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <label className="ml-2 font-medium text-gray-600">
-                  Teléfono
-                </label>
-                <div className="relative">
-                  {/* Teléfono con bandera */}
-                  <PhoneInput
-                    value={formData.phone}
-                    onChange={handlePhoneChange}
-                    placeholder="Teléfono"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs mt-1 ml-2">
-                      {errors.phone}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-6">
               <div>
                 <label className="ml-2 font-medium text-gray-600">
                   Provincia
@@ -469,8 +449,46 @@ export default function Amount() {
                 )}
               </div>
 
-              
+              <div className="space-y-2">
+                <label className="ml-2 font-medium text-gray-600">
+                  Teléfono
+                </label>
+                <div className="relative">
+                  {/* Teléfono con bandera */}
+                  <PhoneInput
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    placeholder="Teléfono"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs mt-1 ml-2">
+                      {errors.phone}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="ml-2 font-medium text-gray-600">
+                  Dirección
+                </label>
+                <InputField
+                  type="text"
+                  placeholder="Dirección"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                />
+                {errors.address && (
+                  <p className="text-red-500 text-xs mt-1 ml-2">
+                    {errors.address}
+                  </p>
+                )}
+              </div>
             </div>
+
 
             <div className="mt-5">
               <label className="ml-2  font-medium text-gray-600">Nota</label>
@@ -482,24 +500,6 @@ export default function Amount() {
                 onChange={handleInputChange}
                 className="w-full  rounded-2xl px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent"
               />
-            </div>
-
-            <div className="mt-6">
-              <label className="ml-2 font-medium text-gray-600">
-                Dirección
-              </label>
-              <InputField
-                type="text"
-                placeholder="Dirección"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-              />
-              {errors.address && (
-                <p className="text-red-500 text-xs mt-1 ml-2">
-                  {errors.address}
-                </p>
-              )}
             </div>
           </div>
         )}
