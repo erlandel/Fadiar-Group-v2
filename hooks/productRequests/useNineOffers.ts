@@ -5,18 +5,8 @@ export const useNineOffers = (count: number = 9) => {
   return useInventory<Product[]>((data) => {
     const products = data?.products || [];
 
-    // Lógica para priorizar ofertas válidas
-    const hasValidOffer = (item: Product) => {
-      if (!item.temporal_price) return false;
-      const regular = parseFloat(item.price);
-      const temporal = parseFloat(item.temporal_price);
-      return (
-        !Number.isNaN(regular) &&
-        !Number.isNaN(temporal) &&
-        temporal > 0 &&
-        temporal < regular
-      );
-    };
+    // Lógica para filtrar ofertas: si tiene temporal_price, está en descuento
+    const hasValidOffer = (item: Product) => !!item.temporal_price;
 
     return products
       .filter(hasValidOffer)

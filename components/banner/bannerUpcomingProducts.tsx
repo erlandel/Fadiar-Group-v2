@@ -1,3 +1,5 @@
+'use client';
+
 import "@fontsource/just-me-again-down-here";
 import CardSkeleton from "../ui/skeletonCard";
 import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
