@@ -5,12 +5,13 @@ import CardSkeleton from "../ui/skeletonCard";
 import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
 import CardProduct from "../ui/cardProduct";
 import CardCarousel from "../ui/cardCarousel";
+import CardProductPreSale from "../ui/cardProductPreSale";
 
 export default function BannerUpcomingProducts() {
   const { data: upcomingProducts = [], isLoading } = useUpcomingProducts(10);
 
   return (
-    <section className="relative w-full h-160 sm:h-150 overflow-hidden">
+    <section className="relative w-full h-140 sm:h-130 overflow-hidden">
       {/* ===== BACKGROUND (CAPA INFERIOR) ===== */}
       <div className="absolute inset-0 bg-primary z-0">
         <img
@@ -48,7 +49,7 @@ export default function BannerUpcomingProducts() {
               speed={150}
               gap={1.5}
               renderItem={(product) => (
-                <CardProduct
+                <CardProductPreSale
                   category={product.categoria?.name}
                   title={product.name}
                   brand={product.brand}
