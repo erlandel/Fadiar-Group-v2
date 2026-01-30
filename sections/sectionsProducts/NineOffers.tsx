@@ -83,7 +83,7 @@ export default function NineOffers() {
 
   return (
     <main className="mx-4 xl:mx-10 2xl:mx-20 my-20">
-      <div className="flex flex-col gap-1 mb-8">
+      <div className="flex flex-col gap-1 mb-6">
         <p className="text-[20px] font-bold text-primary">¡No pierdas la oportunidad!</p>
         <h2 className="text-[24px] font-bold text-accent">Nuestras Ofertas</h2>
       </div>
@@ -94,7 +94,7 @@ export default function NineOffers() {
       <div className="xl:hidden">
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-scroll scroll-smooth scrollbar-hide pb-4"
+          className="flex items-center gap-4 overflow-x-scroll scroll-smooth scrollbar-hide py-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {cardIndexes.map((cardIndex) => (
@@ -111,7 +111,7 @@ export default function NineOffers() {
       </div>
 
       {/* xl and up: mixed layout */}
-      <div className="hidden gap-3 xl:grid xl:grid-cols-3">
+      <div className="hidden gap-3 xl:grid xl:grid-cols-3 ">
         {/* Columna Izquierda - 1/3 */}
         <div className="flex flex-col gap-3 ">
           {renderOfferCard(0, "horizontal")}

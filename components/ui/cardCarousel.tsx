@@ -191,7 +191,7 @@ export default function CardCarousel<T>({
 
       <div
         ref={containerRef}
-        className="flex overflow-x-auto scrollbar-hide select-none "
+        className="flex items-center overflow-x-auto scrollbar-hide select-none py-2 "
         style={{ gap: `${gap}rem` }}
         onScroll={handleScroll}
         onClick={handleInteraction}
