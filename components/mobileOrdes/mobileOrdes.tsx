@@ -215,7 +215,7 @@ export default function MobileOrdes({
         <div className="w-full text-center py-8">
           <LoadingDots
             text="Cargando pedidos"
-            size="1.0rem"
+            size="0.7rem"
             textSize="1.3rem"
             className="text-[#777777] font-bold"
             margin="6px"

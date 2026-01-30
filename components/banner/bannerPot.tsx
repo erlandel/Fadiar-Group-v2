@@ -19,9 +19,9 @@ export default function BannerPot() {
               <span>Electrodomésticos</span>
             </h1>
             <p className=" mt-4  xl:w-120 text-sm md:text-base xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
-              scelerisque, blandit duis sapien phasellus turpis sem convallis
-              imperdiet tempus.
+               600W-1000W de potencia y 6 meses de garantía: rendimiento con
+            respaldo total. Cocción rápida y uniforme, ideal para tu hogar o
+            negocio. Diseñadas para durar: materiales premium y fácil limpieza
             </p>
           </div>
 
