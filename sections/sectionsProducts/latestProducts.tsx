@@ -40,6 +40,7 @@ export const LatestProducts = ({
         <div className="w-full">
           {lastSixProducts.length > 0 ? (
             <CardCarousel
+             direction="right"
               items={lastSixProducts}
               renderItem={(product) => (
                 <CardProduct

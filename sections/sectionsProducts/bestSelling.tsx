@@ -42,6 +42,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
         <div className="w-full">
           {sortedProducts.length > 0 ? (
             <CardCarousel
+             direction="right"
               items={sortedProducts}
               renderItem={(product) => (
                 <CardProduct

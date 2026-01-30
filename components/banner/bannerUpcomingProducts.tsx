@@ -45,6 +45,7 @@ export default function BannerUpcomingProducts() {
         <div className="w-full    overflow-hidden">
           {!isLoading && upcomingProducts.length > 0 ? (
             <CardCarousel
+           
               items={upcomingProducts}
               speed={150}
               gap={1.5}

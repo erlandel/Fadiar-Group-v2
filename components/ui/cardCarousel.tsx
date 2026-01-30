@@ -9,6 +9,7 @@ interface CardCarouselProps<T> {
   speed?: number; // duration in seconds for one full loop
   gap?: number; // gap in rem
   pauseOnHover?: boolean;
+  direction?: "left" | "right";
 }
 
 export default function CardCarousel<T>({
@@ -17,6 +18,7 @@ export default function CardCarousel<T>({
   speed = 150,
   gap = 1,
   pauseOnHover = true,
+  direction = "left",
 }: CardCarouselProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
   const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -66,14 +68,18 @@ export default function CardCarousel<T>({
     
     const animate = () => {
       if (container) {
-        container.scrollLeft += scrollSpeed;
+        if (direction === "left") {
+          container.scrollLeft += scrollSpeed;
+        } else {
+          container.scrollLeft -= scrollSpeed;
+        }
       }
       animationFrameId = requestAnimationFrame(animate);
     };
 
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isPaused, speed]);
+  }, [isPaused, speed, direction]);
 
   const handleScroll = () => {
     const container = containerRef.current;
