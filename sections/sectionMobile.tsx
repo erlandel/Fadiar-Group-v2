@@ -18,8 +18,8 @@ export const SectionMobile = () => {
 
         <div className="mx-4 mt-20 md:mt-0 md:mx-0 md:w-140">
           <p className="text-gray-500 text-md">Al alcance de su mano</p>
-          <h1 className="text-3xl font-bold">
-            Descargue nuestra App{" "}
+          <h1 className="text-3xl font-bold text-primary">
+            Muy pronto nuestra App{" "}
             <span className="text-[#F5A623]">Grupo Fadiar</span>
           </h1>
           <p className="text-gray-500 mt-2">
@@ -27,10 +27,18 @@ export const SectionMobile = () => {
             turpis molestie, dictum est a, mattis tellus.
           </p>
           <div className="mt-8">
-            <ButtonPromoHome1 
+            {/* <ButtonPromoHome1 
             name="Descargar"
             color="#022854" 
             icon={<ArrowDownToLine  />}
+            iconPosition="left"
+            className = "inline-flex items-center sm:gap-2 rounded-xl px-6 sm:px-6 py-2 gap-1 sm:py-3 text-sm font-inter font-semibold text-white shadow-md transition hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+            /> */}
+
+               <ButtonPromoHome1 
+            name="Muy pronto"
+            color="#022854" 
+            // icon={<ArrowDownToLine  />}
             iconPosition="left"
             className = "inline-flex items-center sm:gap-2 rounded-xl px-6 sm:px-6 py-2 gap-1 sm:py-3 text-sm font-inter font-semibold text-white shadow-md transition hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
             />

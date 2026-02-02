@@ -14,6 +14,7 @@ import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters";
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 import SkeletonCardAllProducts from "@/components/ui/skeletonCardAllProducts";
+import useFilterStore from "@/store/filterStore";
 
 export default function Products() {
   const { data: inventoryData, isLoading } = useInventory();
@@ -27,7 +28,7 @@ export default function Products() {
   const [tempPrice, setTempPrice] = useState<[number, number]>([0, 200]);
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { isFilterOpen, setIsFilterOpen } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
@@ -294,6 +295,12 @@ export default function Products() {
     }
   }, [currentPage]);
 
+  useEffect(() => {
+    if (storeSelectorRef.current && window.innerWidth < 1280) {
+      storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [category, brands, price, relevant, selectedStoreId]);
+
   const removeFilter = (
     type: "category" | "brand" | "relevant",
     value: string,
@@ -366,23 +373,13 @@ export default function Products() {
                     totalProducts={filteredProducts?.length ?? 0}
                   />
                 </div>
-
-                <button
-                  onClick={() => setIsFilterOpen(true)}
-                  className="xl:hidden  z-50 flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-primary cursor-pointer"
-                >
-                  <Filter className="w-5 h-5" strokeWidth={2} />
-                  <span className="text-lg font-medium">
-                    Filtros
-                  </span>
-                </button>
               </div>
             </div>
 
             {/* Selector y visualización de tiendas */}
             <div
               ref={storeSelectorRef}
-              className="scroll-mt-30 xl:scroll-mt-20"
+              className="scroll-mt-35 xl:scroll-mt-25"
             >
               <StoreSelector
                 tiendas={tiendas}

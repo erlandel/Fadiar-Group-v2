@@ -10,6 +10,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import useCartStore from "@/store/cartStore";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
+import useFilterStore from "@/store/filterStore";
+import { Filter } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,6 +20,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
   const { setIsOpen } = useProductsByLocationStore();
+  const { setIsFilterOpen } = useFilterStore();
 
   useEffect(() => {
     setMounted(true);
@@ -69,7 +72,6 @@ export default function Header() {
               onClick={() => !isCartStep && setIsOpen(true)}
             />
           </div>
-          
         </div>
       </div>
 
@@ -77,8 +79,22 @@ export default function Header() {
         <Menu />
       </div>
 
-      <div className="xl:hidden px-4 mt-4 pb-4">
-        <Serchbar />
+      <div className="xl:hidden px-4 mt-4 pb-4 flex items-center gap-2">
+        <div className="flex-1">
+          <Serchbar />
+        </div>
+
+        {pathname === "/products" && (
+          <div>
+            <button
+              onClick={() => setIsFilterOpen(true)}
+              className="flex items-center gap-1 px-2 py-2 rounded-lg cursor-pointer "
+            >
+              <Filter className="w-5 h-5" strokeWidth={2} />
+              <span className="text-lg font-medium">Filtros</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
