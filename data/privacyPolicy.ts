@@ -2,7 +2,6 @@
 export const privacyPolicy=`
 1. IDENTIDAD DEL RESPONSABLE
 El responsable del tratamiento de los datos personales recogidos a través del sitio web Grupo Fadiar, disponible en https://sample1.grupofadiar.com/ (en adelante, el “Sitio Web”), es Grupo Fadiar.
-
 Si tienes cualquier duda relacionada con el tratamiento de tus datos personales, puedes contactar con nosotros a través del correo electrónico atencionalcliente@grupofadiar.com o del teléfono +53 63513228, así como mediante los canales de contacto indicados en nuestro Sitio Web oficial.
 
 2. DATOS PERSONALES QUE RECABAMOS
@@ -11,7 +10,6 @@ En función de cómo uses el Sitio Web, podemos recabar las siguientes categorí
 - Datos de contacto: correo electrónico, número de teléfono u otros medios de contacto que facilites.
 - Datos de acceso y uso: credenciales, historial de navegación en el Sitio Web, fecha y hora de acceso, secciones visitadas y configuración seleccionada.
 - Datos de comunicaciones: mensajes que nos envíes a través de formularios de contacto, soporte o canales de atención.
-
 En ningún caso recabamos más datos de los estrictamente necesarios para cada finalidad indicada en esta Política.
 
 3. FINALIDADES DEL TRATAMIENTO
@@ -37,10 +35,8 @@ Cuando ya no sean necesarios, los datos serán bloqueados y, una vez finalicen l
 
 6. COMUNICACIÓN DE DATOS A TERCEROS
 Podemos compartir tus datos personales únicamente en los siguientes casos:
-
 - Obligaciones legales: cuando exista una obligación legal o requerimiento de autoridades competentes, tribunales u organismos reguladores.
 - Operaciones corporativas: en caso de una fusión, adquisición, reestructuración o venta de activos, en cuyo caso los datos podrán ser transferidos a la entidad sucesora, respetando en todo momento la normativa de protección de datos.
-
 En ningún caso vendemos tus datos personales a terceros.
 
 7. TRANSFERENCIAS INTERNACIONALES
@@ -54,10 +50,7 @@ Puedes ejercer, en los casos y con el alcance previstos por la normativa aplicab
 - Derecho de oposición: oponerte al tratamiento de tus datos cuando se base en intereses legítimos, incluida la elaboración de perfiles.
 - Derecho de limitación del tratamiento: solicitar la limitación del tratamiento de tus datos en determinadas circunstancias.
 - Derecho a la portabilidad: recibir tus datos personales en un formato estructurado, de uso común y lectura mecánica, y transmitirlos a otro responsable cuando el tratamiento se base en el consentimiento o en un contrato y se efectúe por medios automatizados.
-
-Para ejercer tus derechos, puedes dirigirte a nuestro canal de contacto indicado en el Sitio Web, indicando claramente tu identidad y el derecho que deseas ejercer. Podremos solicitar información adicional para verificar tu identidad cuando sea necesario.
-
-Además, si consideras que tus datos no han sido tratados adecuadamente, puedes presentar una reclamación ante la autoridad de control competente en materia de protección de datos.
+Para ejercer tus derechos, puedes dirigirte a nuestro canal de contacto indicado en el Sitio Web, indicando claramente tu identidad y el derecho que deseas ejercer. Podremos solicitar información adicional para verificar tu identidad cuando sea necesario.Además, si consideras que tus datos no han sido tratados adecuadamente, puedes presentar una reclamación ante la autoridad de control competente en materia de protección de datos.
 
 9. SEGURIDAD DE LA INFORMACIÓN
 Aplicamos medidas técnicas y organizativas apropiadas para proteger tus datos personales frente a pérdidas, accesos no autorizados, alteraciones o divulgaciones indebidas. No obstante, ningún sistema es completamente seguro, por lo que no podemos garantizar la seguridad absoluta de la información.

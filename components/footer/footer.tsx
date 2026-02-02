@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import ModalPrivacyPolicy from "@/components/modalPrivacyPolicy/modalPrivacyPolicy";
+import ModalLegal from "@/components/modalLegal/modalLegal";
+import { privacyPolicy } from "@/data/privacyPolicy";
+import { termsConditions } from "@/data/termsConditions";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -14,6 +16,7 @@ import {
 
 export default function Footer() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   return (
     <footer className="bg-primary text-white mt-4 p-10 w-full">
@@ -31,12 +34,12 @@ export default function Footer() {
           <div className="space-y-6">
             <h4 className="text-2xl ">Enlaces</h4>
 
-            <Link
-              href="/terrazas"
-              className="text-gray-300 hover:text-accent transition-colors block"
+            <button
+              onClick={() => setIsTermsModalOpen(true)}
+              className="text-gray-300 hover:text-accent transition-colors block text-left cursor-pointer"
             >
               Términos y Condiciones
-            </Link>
+            </button>
 
             <button
               onClick={() => setIsPrivacyModalOpen(true)}
@@ -127,9 +130,18 @@ export default function Footer() {
           </div>
       </div>
         
-      <ModalPrivacyPolicy 
+      <ModalLegal 
         isOpen={isPrivacyModalOpen} 
         onClose={() => setIsPrivacyModalOpen(false)} 
+        title="Política de Privacidad"
+        content={privacyPolicy}
+      />
+
+      <ModalLegal 
+        isOpen={isTermsModalOpen} 
+        onClose={() => setIsTermsModalOpen(false)} 
+        title="Términos y Condiciones"
+        content={termsConditions}
       />
     </footer>
   );
