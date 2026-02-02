@@ -35,7 +35,7 @@ export const useAddToCart = () => {
 
       const requestBody = {
         id_product: item.productId,
-        id_tienda: item.tiendaId,
+        id_tienda: item.tiendaId || 1,
         count: item.quantity,
         emisor: "web",
       };
