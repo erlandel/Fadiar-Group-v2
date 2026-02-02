@@ -12,7 +12,7 @@ export const AboutInformation = () => {
 
         <div className="flex flex-col xl:flex-row items-stretch justify-between gap-5 sm:gap-10  my-5 text-sm sm:text-lg lg:text-xl 3xl:text-2xl">
 
-          <div className="xl:w-2/3 flex flex-col">
+          <div className="xl:w-2/3 flex flex-col text-justify">
             <div className="h-full flex flex-col ">
               <p>
                 <span className="text-primary font-bold">Grupo Fadiar </span>

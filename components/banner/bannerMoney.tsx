@@ -7,7 +7,7 @@ export const BannerMoney = () => {
         className="absolute animate-on-scroll text-3xl  font-bold mt-12 text-center w-full md:ml-10   md:w-120 md:text-4xl md:mt-25 lg:ml-5 xl:ml-10  xl:w-140 2xl:ml-40 2xl:text-5xl 2xl:mt-20">
           <h1>
             <span className="text-accent">Pague de forma Segura</span>{" "}
-            <span className="text-white">Presencial y en efectivo</span>
+            <span className="text-white">Presencial  en efectivo o transferencia</span>
           </h1>
         </div>
 
@@ -41,7 +41,7 @@ export const BannerMoney = () => {
           data-animate="animate__rotateInDownRight"
             src="/images/monyMobile.webp"
             alt="Background"
-            className="absolute  xl:hidden  bottom-0 right-0 w-130 sm:w-140 md:w-100 lg:w-140   lg:h-full lg:object-cover animate-on-scroll [animation-delay:0.5s]" 
+            className="absolute  xl:hidden  bottom-0 right-0 w-110 sm:w-130 md:w-100 lg:w-140   lg:h-full lg:object-cover animate-on-scroll [animation-delay:0.5s]" 
           />
         </div>
       </div>
