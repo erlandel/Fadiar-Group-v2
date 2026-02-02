@@ -8,6 +8,7 @@ import { Loader, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { verifyCodeEmailUrl } from "@/urlApi/urlApi";
+import useAuthStore from "@/store/authStore";
 
 
 export default function VerificationCodeEmail() {
@@ -15,6 +16,7 @@ export default function VerificationCodeEmail() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const setAuth = useAuthStore((s) => s.setAuth);
 
   useEffect(() => {
     // Recuperar el correo del localStorage
@@ -49,9 +51,27 @@ export default function VerificationCodeEmail() {
       }
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const userInfo =
+        data?.login_info?.data?.user_info ??
+        data?.user_info ??
+        data?.data?.user_info ??
+        null;
+
+      if (userInfo) {
+        setAuth({
+          person: userInfo.person,
+          user: userInfo.user,
+          type: userInfo.type,
+          access_token: userInfo.access_token,
+          refresh_token: userInfo.refresh_token,
+        });
+      }
+
+      console.log("Datos de autenticación actualizados:", data);
+
       localStorage.removeItem("verificationEmail");
-      router.push("/login");
+      router.push("/");
     },
     onError: (err: Error) => {
       setError(
