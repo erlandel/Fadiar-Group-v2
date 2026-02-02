@@ -4,14 +4,19 @@ import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import useLoadingStore from "@/store/loadingStore";
+import useFilterStore from "@/store/filterStore";
 
 export default function SectionMoreproducts() {
   const router = useRouter();
   const startLoading = useLoadingStore((state) => state.startLoading);
+  const setPreselectedCategory = useFilterStore(
+    (state) => state.setPreselectedCategory,
+  );
 
-  const handleNavigate = (path: string) => {
+  const handleNavigateWithCategory = (category: string) => {
+    setPreselectedCategory(category);
     startLoading();
-    router.push(path);
+    router.push("/products");
   };
   return (
     <>
@@ -32,7 +37,7 @@ export default function SectionMoreproducts() {
         >
           <div className="z-10 w-1/3  xl:mb-10">
             <div className="text-black  ">
-              <h4 className="font-bold text-xl">Ventilador</h4>
+              <h4 className="font-bold text-xl">Ventiladores</h4>
               <p className="text-xs w-42 sm:text-base sm:w-64 2xl:w-72">
                 Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
                 scelerisque.
@@ -42,7 +47,7 @@ export default function SectionMoreproducts() {
                   name="Ver más"
                   color="#022954"
                   icon={<ArrowRight className="w-4 h-4 md:w-5 md:h-5" />}
-                  onClick={() => handleNavigate("/products")}
+                  onClick={() => handleNavigateWithCategory("ventiladores")}
                 />
               </div>
             </div>
@@ -74,7 +79,9 @@ export default function SectionMoreproducts() {
                 name="Ver más"
                 color="#022954"
                 icon={<ArrowRight className="w-4 h-4 md:w-5 md:h-5" />}
-                onClick={() => handleNavigate("/products")}
+                onClick={() =>
+                  handleNavigateWithCategory("refrigeradores y neveras")
+                }
               />
             </div>
           </div>

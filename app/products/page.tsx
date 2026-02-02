@@ -3,7 +3,6 @@ import BannerPot from "@/components/banner/bannerPot";
 import FiltersDesktop from "@/components/pageProducts/filtersDesktop/filtersDesktop";
 import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { Filter } from "lucide-react";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
 import { BannerMoney } from "@/components/banner/bannerMoney";
@@ -21,20 +20,35 @@ export default function Products() {
 
   const allProducts = inventoryData?.products || [];
   const tiendas = inventoryData?.tiendas || [];
-  const globalProducts = allProducts; // En este contexto, allProducts ya son los productos disponibles
+  const globalProducts = allProducts;
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
   const [tempPrice, setTempPrice] = useState<[number, number]>([0, 200]);
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
-  const { isFilterOpen, setIsFilterOpen } = useFilterStore();
+  const { isFilterOpen, setIsFilterOpen, preselectedCategory, setPreselectedCategory } =
+    useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
 
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const normalizeText = (text: string) =>
+    text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+
+  useEffect(() => {
+    if (preselectedCategory) {
+      setCategory([preselectedCategory]);
+      setPreselectedCategory(null);
+    }
+  }, [preselectedCategory, setPreselectedCategory]);
 
   useEffect(() => {
     const calculateItems = () => {
@@ -88,7 +102,7 @@ export default function Products() {
         (typeof product.category === "string" ? product.category : null);
 
       if (categoryName) {
-        const normalized = categoryName.toLowerCase().trim();
+        const normalized = normalizeText(categoryName);
         // Usar el valor normalizado como clave para evitar duplicados como "Desmatt" vs "desmatt"
         if (!categoryMap.has(normalized)) {
           categoryMap.set(normalized, categoryName.trim()); // Guardar el primer nombre original que encontremos
@@ -123,7 +137,7 @@ export default function Products() {
           : null);
 
       if (brandName) {
-        const normalized = brandName.toLowerCase().trim();
+        const normalized = normalizeText(brandName);
         // Usar el valor normalizado como clave para evitar duplicados como "Ecko" vs "ecko"
         if (!brandMap.has(normalized)) {
           brandMap.set(normalized, brandName.trim()); // Guardar el primer nombre original que encontremos
@@ -193,8 +207,9 @@ export default function Products() {
           (typeof product.categoria === "string" ? product.categoria : null) ||
           (typeof product.category === "string" ? product.category : null) ||
           ""
-        ).toLowerCase();
-        return category.some((cat) => categoryName === cat.toLowerCase());
+        );
+        const normalizedCategoryName = normalizeText(categoryName);
+        return category.some((cat) => normalizedCategoryName === normalizeText(cat));
       });
     }
 
@@ -211,8 +226,9 @@ export default function Products() {
             ? (product as any).marca.name
             : null) ||
           ""
-        ).toLowerCase();
-        return brands.some((brand) => productBrand === brand.toLowerCase());
+        );
+        const normalizedBrand = normalizeText(productBrand);
+        return brands.some((brand) => normalizedBrand === normalizeText(brand));
       });
     }
 
