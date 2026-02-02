@@ -57,7 +57,11 @@ export default function Login() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error al iniciar sesión");
+        const message =
+          (errorData as { error?: string; message?: string })?.error ||
+          (errorData as { error?: string; message?: string })?.message ||
+          "Error al iniciar sesión";
+        throw new Error(message);
       }
       const data = await response.json();
     
@@ -83,10 +87,10 @@ export default function Login() {
 
   router.push("/");
 },
-    onError: (error) => {
+    onError: (error: Error) => {
       setShowErrors(true);
       setErrorBannerMessage(
-        "Usuario no encontrado. Verifica tu correo electrónico."
+        error.message || "Usuario no encontrado. Verifica tu correo electrónico."
       );
     },
   });

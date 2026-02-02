@@ -43,7 +43,11 @@ export default function RecoverPassword() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Error en la solicitud");
+        const message =
+          (errorData as { error?: string; message?: string })?.error ||
+          (errorData as { error?: string; message?: string })?.message ||
+          "Error en la solicitud";
+        throw new Error(message);
       }
       const data = await response.json();
       return data;
@@ -52,10 +56,10 @@ export default function RecoverPassword() {
       router.push("/login");
     },
 
-    onError: () => {
+    onError: (error: Error) => {
       setShowErrors(true);
       setErrorBannerMessage(
-        "Usuario no encontrado. Verifica tu correo electrónico."
+        error.message || "Usuario no encontrado. Verifica tu correo electrónico."
       );
     },
   });

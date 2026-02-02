@@ -1,6 +1,5 @@
 "use client";
 
-import FloatingLabelInput from "@/components/authenticationComponent/FloatingLabelInput";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -43,9 +42,10 @@ export default function VerificationCodeEmail() {
       );
       console.log('response:', response);
       console.log("response status:", response.status);
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(data.message || " Error al verificar la cuenta");
+        const message = data.error || data.message || "Error al verificar la cuenta";
+        throw new Error(message);
       }
       return data;
     },
@@ -53,9 +53,9 @@ export default function VerificationCodeEmail() {
       localStorage.removeItem("verificationEmail");
       router.push("/login");
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       setError(
-        err?.message || "Error al verificar el código. Intenta nuevamente."
+        err.message || "Error al verificar el código. Intenta nuevamente."
       );
     },
   });

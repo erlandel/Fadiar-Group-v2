@@ -8,6 +8,7 @@ import {
   type RegisterFormData,
 } from "@/validations/registerSchema";
 import InputAuth from "@/components/inputAuth/inputAuth";
+import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { User, Mail, Lock, Loader, Eye, EyeOff, Check, X } from "lucide-react";
 import { registerUrl } from "@/urlApi/urlApi";
 
@@ -23,6 +24,8 @@ export default function Register() {
   });
   const [fullName, setFullName] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showErrors, setShowErrors] = useState(false);
+  const [errorBannerMessage, setErrorBannerMessage] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -134,6 +137,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+     setShowErrors(true);
 
     const validation = registerSchema.safeParse(formData);
 
@@ -142,14 +146,17 @@ export default function Register() {
       validation.error.issues.forEach((error) => {
         const key = error.path[0] as string | undefined;
         if (key && !fieldErrors[key]) {
-          fieldErrors[key] = error.message; // keep first message only
+          fieldErrors[key] = error.message;
         }
       });
       setErrors(fieldErrors);
+      const firstMessage = validation.error.issues[0]?.message ?? "";
+      setErrorBannerMessage(firstMessage);
       return;
     }
 
     setIsSubmitting(true);
+    setErrorBannerMessage("");
 
     const dataToSend = {
       name: formData.name,
@@ -160,36 +167,37 @@ export default function Register() {
       type: "Cliente",
     };
 
-    console.log("Datos a enviar:", dataToSend);
-
     try {
-      const response = await fetch(
-        `${registerUrl}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        }
-      );
+      const response = await fetch(`${registerUrl}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
 
-      console.log(response);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Registro exitoso:", data);
-
-        // Guardar el correo en localStorage
-        localStorage.setItem("verificationEmail", formData.email);
-
-        router.push("/verificationCodeEmail");
-      } else {
-        throw new Error("Error en el registro");
+        console.error("Error al registrar:", errorData);
+        const message =
+          (errorData as { error?: string; message?: string })?.error ||
+          (errorData as { error?: string; message?: string })?.message ||
+          "Error en el registro";
+        throw new Error(message);
       }
+
+      const data = await response.json();
+
+      localStorage.setItem("verificationEmail", formData.email);
+
+      router.push("/verificationCodeEmail");
     } catch (error) {
-      console.error("Error:", error);
-      setErrors({ submit: "Error al registrar. Intenta nuevamente." });
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Error al registrar. Intenta nuevamente.";
+      setErrorBannerMessage(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -343,7 +351,12 @@ export default function Register() {
                     }
                   />
                 </div>
-        
+
+                {showErrors && !!errorBannerMessage && (
+                  <div className="w-full mt-5">
+                    <MessageErrorAuth message={errorBannerMessage} />
+                  </div>
+                )}
 
               <div className="mt-7 w-full">
                 <button
