@@ -20,7 +20,7 @@ export default function SectionMoreproducts() {
   };
   return (
     <>
-      <div className=" mx-4 xl:mx-10  2xl:mx-20 mt-10 2xl:mt-30 text-start animate__animated  animate__lightSpeedInLeft">
+      <div className=" mx-4 xl:mx-10  2xl:mx-20  mt-20 xl:mt-30 text-start animate__animated  animate__lightSpeedInLeft">
         <span className="text-[#022954] text-xl font-bold">
           Entra y consulta
           <h3 className="text-accent text-2xl font-bold">

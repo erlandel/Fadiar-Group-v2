@@ -11,7 +11,7 @@ export default function BannerUpcomingProducts() {
   const { data: upcomingProducts = [], isLoading } = useUpcomingProducts(10);
 
   return (
-    <section className="relative w-full h-140 sm:h-130 overflow-hidden">
+    <section className="relative w-full h-140 sm:h-130 overflow-hidden mt-20 xl:mt-30">
       {/* ===== BACKGROUND (CAPA INFERIOR) ===== */}
       <div className="absolute inset-0 bg-primary z-0">
         <img

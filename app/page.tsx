@@ -14,20 +14,18 @@ export default function Home() {
       <div className="min-h-screen w-full bg-white">
         <div>
           <BannerPot />
-        </div>
-
-        
+        </div>       
 
      
-        <div>
+        <div className="mt-25 sm:mt-0">
           <LatestProducts />
         </div>
 
-        <div className="mt-20 lg:mt-0">
+        <div>
           <NineOffers />
         </div>
 
-        <div className="mt-10 ">
+        <div >
           <BannerUpcomingProducts />
         </div>
 
@@ -35,7 +33,7 @@ export default function Home() {
           <BestSelling />
         </div>
 
-           <div className="mt-20 sm:mt-0">
+           <div >
           <SectionMoreproducts />
         </div>
 

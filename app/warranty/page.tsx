@@ -14,7 +14,7 @@ const Warranty = () => {
           <h1 className="text-3xl text-primary font-bold mb-8">Garantía</h1>
         </div>
 
-      <section className="mt-10">
+      <section>
         <div className="flex flex-col lg:flex-row justify-center gap-5 w-full">
           <div className="lg:w-1/3 md:mt-22 flex flex-col">
             <h1 className="text-3xl font-bold w-full">

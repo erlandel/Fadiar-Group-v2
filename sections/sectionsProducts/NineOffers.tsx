@@ -82,7 +82,7 @@ export default function NineOffers() {
   const cardIndexes = Array.from({ length: 9 }, (_, idx) => idx);
 
   return (
-    <main className="mx-4 xl:mx-10 2xl:mx-20 my-20">
+    <main className="mx-4 xl:mx-10 2xl:mx-20  mt-20 xl:mt-30">
       <div className="flex flex-col gap-1 mb-6">
         <p className="text-[20px] font-bold text-primary">¡No pierdas la oportunidad!</p>
         <h2 className="text-[24px] font-bold text-accent">Nuestras Ofertas</h2>

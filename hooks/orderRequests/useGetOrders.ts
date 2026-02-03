@@ -51,11 +51,12 @@ export const useGetOrders = () => {
         setLoading(false);
         return;
       }
-
+ const use_user_info= true;
       const requestBody = {
         last_id: lastId,
         size: requestSize,
-        search_text: searchText
+        search_text: searchText,
+        use_user_info             
       };
 
       const response = await fetch(get_ordersUrl, {

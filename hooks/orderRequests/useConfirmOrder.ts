@@ -31,6 +31,8 @@ export const useConfirmOrder = () => {
         ErrorMessage("No se pudo obtener una sesión válida");
       }
 
+      const use_user_info= true;
+
       const requestBody = {
         name_cliente: formData.firstName,
         last_names: `${formData.lastName1} ${formData.lastName2}`.trim(),
@@ -38,6 +40,7 @@ export const useConfirmOrder = () => {
         id_municipio: municipalityId,
         direccionExacta: formData.address || null,
         emisor: "web",
+         use_user_info
       };
 
       const response = await fetch(`${add_orderUrl}`, {

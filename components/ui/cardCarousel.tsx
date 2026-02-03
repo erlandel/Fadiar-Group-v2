@@ -173,7 +173,7 @@ export default function CardCarousel<T>({
           scroll("left");
         }}
         onMouseEnter={() => setIsPaused(true)}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2  bg-black/50 hover:bg-black/70  rounded-full hidden xl:group-hover:flex items-center justify-center shadow-md transition-all  "
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2  bg-black/50 hover:bg-black/70  rounded-full hidden xl:group-hover:flex items-center justify-center shadow-md transition-all  cursor-pointer"
       >
         <ChevronLeft className="w-6 h-6 text-white" strokeWidth={4} />
       </button>

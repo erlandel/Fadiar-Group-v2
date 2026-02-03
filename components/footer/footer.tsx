@@ -19,7 +19,7 @@ export default function Footer() {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   return (
-    <footer className="bg-primary text-white mt-4 p-10 w-full">
+    <footer className="bg-primary text-white p-10 w-full  mt-20 xl:mt-30">
       <div className="flex flex-col md:flex-row md:items-stretch justify-start md:justify-around gap-8 w-full">
         <div className="flex flex-col justify-between">
           <div>

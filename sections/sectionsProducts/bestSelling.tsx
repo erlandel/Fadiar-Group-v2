@@ -28,7 +28,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
     <>
       <div
         id="best-selling"
-        className="w-auto h-auto mt-20 my-30 "
+        className="w-auto h-auto  mt-20 xl:mt-30  "
       >
         <div className="flex flex-col items-start mb-5  mx-4 xl:mx-10 2xl:mx-20">
           <h2 className="text-[20px] font-bold text-[#022954]">
