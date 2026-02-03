@@ -21,7 +21,7 @@ export default function CardProductPreSale({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
-      router.push(`/productID?id=${productId}`);
+      router.push(`/productID?id=${productId}&preSale=true`);
     }
   };
 
@@ -39,8 +39,8 @@ export default function CardProductPreSale({
         className="relative w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
         style={{ height: "190px" }}
       >
-        <div className="absolute top-2 right-[-35px] z-30 bg-[#022954] text-white  text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
-          Próximo
+        <div className="absolute top-4  right-[-35px] z-30 bg-[#022954] text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+          Muy pronto
         </div>
         <img
           className="h-full w-full object-contain"

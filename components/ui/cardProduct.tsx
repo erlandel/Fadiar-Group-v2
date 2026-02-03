@@ -101,7 +101,7 @@ export default function CardProduct({
             style={{ height: "190px" }}
           >
             {count === 0 && (
-              <div className="absolute top-2 right-[-35px] z-30 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+              <div className="absolute  right-[-35px] z-30 bg-red-600 text-white text-[10px] font-bold w-[140px] py-1 rotate-45 shadow-md flex items-center justify-center">
                 Agotado
               </div>
             )}

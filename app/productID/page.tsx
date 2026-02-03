@@ -12,24 +12,35 @@ import { ProductID } from "@/types/productId";
 import RelatedProds from "@/sections/sectionsProducts/relatedProds";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
+import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
 
-function ProductContent({ id }: { id: string | null }) {
+function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boolean }) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const { addToCart, loading } = useAddToCart();
   const cartItems = useCartStore((state) => state.items);
   const [isInCart, setIsInCart] = useState(false);
 
-  const { data: inventoryData, isLoading } = useInventory();
-  const allProducts = (inventoryData?.products || []) as unknown as ProductID[];
+  const { data: inventoryData, isLoading: isInventoryLoading } = useInventory();
+  const { data: upcomingProducts, isLoading: isUpcomingLoading } = useUpcomingProducts();
+  const allProducts = useMemo(() => {
+    if (isPreSale) {
+      return (upcomingProducts || []) as unknown as ProductID[];
+    }
+    return (inventoryData?.products || []) as unknown as ProductID[];
+  }, [isPreSale, upcomingProducts, inventoryData]);
+  const inventoryProducts = useMemo(
+    () => (inventoryData?.products || []) as unknown as ProductID[],
+    [inventoryData]
+  );
+  const isLoading = isPreSale ? isUpcomingLoading : isInventoryLoading;
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   useEffect(() => {
     setIsLoading(isLoading);
-    // Asegurarse de apagar el loader al desmontar
     return () => setIsLoading(false);
   }, [isLoading, setIsLoading]);
 
@@ -40,10 +51,13 @@ function ProductContent({ id }: { id: string | null }) {
   }, [allProducts, id]);
 
   useEffect(() => {
+    if (isPreSale) {
+      return;
+    }
     if (product?.id !== undefined && product?.id !== null) {
       setIsInCart(cartItems.some((item) => item.productId === product.id));
     }
-  }, [product?.id, cartItems, product]);
+  }, [product?.id, cartItems, product, isPreSale]);
 
   // Sincronizar imagen seleccionada cuando cambia el producto (navegación)
   useEffect(() => {
@@ -55,7 +69,10 @@ function ProductContent({ id }: { id: string | null }) {
   const relatedProducts = useMemo(() => {
     if (!product) return [];
 
-    const sameCategory = allProducts.filter(
+    const sourceProducts =
+      inventoryProducts && inventoryProducts.length > 0 ? inventoryProducts : allProducts;
+
+    const sameCategory = sourceProducts.filter(
       (item) =>
         item.id !== product.id &&
         (item.categoria?.id || item.categoria?.name) ===
@@ -66,11 +83,11 @@ function ProductContent({ id }: { id: string | null }) {
       return sameCategory.slice(0, 6);
     }
 
-    const remaining = allProducts.filter(
+    const remaining = sourceProducts.filter(
       (item) => item.id !== product.id && !sameCategory.includes(item)
     );
     return [...sameCategory, ...remaining].slice(0, 6);
-  }, [allProducts, product]);
+  }, [allProducts, inventoryProducts, product]);
 
   const warrantyNumber = product ? Number(product.warranty ?? 0) : 0;
   const warrantyMonths = warrantyNumber > 0 ? warrantyNumber / 30 : 0;
@@ -133,11 +150,15 @@ function ProductContent({ id }: { id: string | null }) {
 
             <div className="flex flex-col md:flex-row gap-16 mt-10">
               <div className="md:w-1/3">
-                {/* Imagen Principal */}
                 <div className="relative w-fit mx-auto h-[400px] rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
-                  {product.count === 0 && (
+                  {product.count === 0 && !isPreSale && (
                     <div className="absolute top-7 right-[-35px] z-10 bg-red-600 text-white text-md font-bold w-[170px] py-1 rotate-45 shadow-md text-center">
                       Agotado
+                    </div>
+                  )}
+                  {isPreSale && (
+                    <div className="absolute top-7 right-[-35px] z-10 bg-[#022954] text-white text-md font-bold w-[170px] py-1 rotate-45 shadow-md flex items-center justify-center">
+                      Muy pronto
                     </div>
                   )}
 
@@ -220,50 +241,51 @@ function ProductContent({ id }: { id: string | null }) {
                   )}
                 </div>
 
-                {/* Cantidad */}
-                <div className="mt-auto pt-4 flex items-center justify-between">
-                  <div
-                    className={`flex items-center rounded-xl border border-primary font-bold `}
-                  >
-                    <button
-                      onClick={() => setQty(Math.max(1, qty - 1))}
-                      className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-l-xl"
+                {!isPreSale && (
+                  <div className="mt-auto pt-4 flex items-center justify-between">
+                    <div
+                      className={`flex items-center rounded-xl border border-primary font-bold `}
                     >
-                      −
-                    </button>
-                    <span className="px-4 my-1 border-x border-gray-300">
-                      {qty}
-                    </span>
+                      <button
+                        onClick={() => setQty(Math.max(1, qty - 1))}
+                        className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-l-xl"
+                      >
+                        −
+                      </button>
+                      <span className="px-4 my-1 border-x border-gray-300">
+                        {qty}
+                      </span>
+                      <button
+                        onClick={() => setQty(qty + 1)}
+                        className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-r-xl"
+                      >
+                        +
+                      </button>
+                    </div>
+
                     <button
-                      onClick={() => setQty(qty + 1)}
-                      className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-r-xl"
+                      className={`rounded-xl border border-primary transition-colors px-10 py-3 ${
+                        product.count === 0
+                          ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
+                          : loading
+                            ? "bg-primary text-white "
+                            : isInCart
+                              ? "bg-primary text-white"
+                              : "hover:bg-primary hover:text-white"
+                      }`}
+                      onClick={product.count === 0 || loading ? undefined : handleAddToCart}
+                      disabled={product.count === 0 || loading}
                     >
-                      +
+                      {loading ? (
+                        <div className="flex h-6 w-6 items-center justify-center">
+                          <Loader className="h-6 w-6 animate-spin" strokeWidth={3} />
+                        </div>
+                      ) : (
+                        <ShoppingCartIcon className="h-6 w-6" />
+                      )}
                     </button>
                   </div>
-
-                  <button
-                    className={`rounded-xl border border-primary transition-colors px-10 py-3 ${
-                      product.count === 0
-                        ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
-                        : loading
-                          ? "bg-primary text-white "
-                          : isInCart
-                            ? "bg-primary text-white"
-                            : "hover:bg-primary hover:text-white"
-                    }`}
-                    onClick={product.count === 0 || loading ? undefined : handleAddToCart}
-                    disabled={product.count === 0 || loading}
-                  >
-                    {loading ? (
-                      <div className="flex h-6 w-6 items-center justify-center">
-                        <Loader className="h-6 w-6 animate-spin" strokeWidth={3} />
-                      </div>
-                    ) : (
-                      <ShoppingCartIcon className="h-6 w-6" />
-                    )}
-                  </button>
-                </div>
+                )}
 
                 {/* Tabla de propiedades */}
                 {product.specs && product.specs.length > 0 && (
@@ -305,7 +327,7 @@ export default function Product() {
     <main>
       <Suspense>
         <SearchParamsProvider>
-          {(id) => <ProductContent id={id} />}
+          {({ id, isPreSale }) => <ProductContent id={id} isPreSale={isPreSale} />}
         </SearchParamsProvider>
       </Suspense>
 
