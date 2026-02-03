@@ -10,6 +10,7 @@ import Footer from "@/components/footer/footer";
 import RouteLoading from "@/components/routeLoading/routeLoading";
 import RouteChangeListener from "@/components/RouteChangeListener";
 import ButtonBackTop from "@/components/buttonBackTop/buttonBackTop";
+import ButtonFloatingCart from "@/components/buttonFloatingCart/buttonFloatingCart";
 import ModalProductsByLocation from "@/components/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { useSyncCart } from "@/hooks/cartRequests/useSyncCart";
@@ -129,6 +130,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
       </Suspense>
       {children}
       {!isAuthRoute && <Footer />}
+      {!isAuthRoute && <ButtonFloatingCart />}
       {!isAuthRoute && <ButtonBackTop />}
       <ToastContainer 
         position="top-right"

@@ -152,13 +152,13 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
               <div className="md:w-1/3">
                 <div className="relative w-fit mx-auto h-[400px] rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
                   {product.count === 0 && !isPreSale && (
-                    <div className="absolute top-7 right-[-35px] z-10 bg-red-600 text-white text-md font-bold w-[170px] py-1 rotate-45 shadow-md text-center">
+                    <div className="absolute top-4 -right-11  z-10 bg-red-600 text-white text-md font-bold w-40 py-1 rotate-45 shadow-md text-center">
                       Agotado
                     </div>
                   )}
                   {isPreSale && (
-                    <div className="absolute top-7 right-[-35px] z-10 bg-[#022954] text-white text-md font-bold w-[170px] py-1 rotate-45 shadow-md flex items-center justify-center">
-                      Muy pronto
+                     <div className="absolute top-4 -right-11  z-10 bg-accent text-white text-md font-bold w-40 py-1 rotate-45 shadow-md text-center">
+                      Pronto
                     </div>
                   )}
 

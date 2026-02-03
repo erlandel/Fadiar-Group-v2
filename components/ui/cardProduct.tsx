@@ -101,7 +101,7 @@ export default function CardProduct({
             style={{ height: "190px" }}
           >
             {count === 0 && (
-              <div className="absolute  right-[-35px] z-30 bg-red-600 text-white text-[10px] font-bold w-[140px] py-1 rotate-45 shadow-md flex items-center justify-center">
+              <div className="absolute top-2 -right-11 z-30 bg-red-600 text-white text-[10px] font-bold w-32 py-1 rotate-45 shadow-md text-center">
                 Agotado
               </div>
             )}
@@ -212,7 +212,7 @@ export default function CardProduct({
         // Card Horizontal
         <div
           onClick={productId ? handleCardClick : undefined}
-          className={`bg-white flex w-full h-48 sm:h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-2 sm:p-3 shadow-sm sm:flex-row  ${
+          className={`bg-white  flex w-full h-48 sm:h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-2 sm:p-3 shadow-sm sm:flex-row  ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
         
@@ -221,7 +221,7 @@ export default function CardProduct({
             className="relative  overflow-hidden rounded-2xl  w-30   sm:shrink-0 lg:w-48  lg:min-w-[160px]"
           >
             {count === 0 && (
-              <div className="absolute top-2 right-[-35px] z-10 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+              <div className="absolute top-2 -right-11  z-10 bg-red-600 text-white text-[10px] font-bold w-32 py-1 rotate-45 shadow-md text-center">
                 Agotado
               </div>
             )}

@@ -39,8 +39,8 @@ export default function CardProductPreSale({
         className="relative w-full overflow-hidden rounded-2xl bg-gray-50 shrink-0"
         style={{ height: "190px" }}
       >
-        <div className="absolute top-4  right-[-35px] z-30 bg-[#022954] text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
-          Muy pronto
+         <div className="absolute top-2 -right-11  z-10 bg-accent text-white text-[10px] font-bold w-32 py-1 rotate-45 shadow-md text-center">
+          Pronto
         </div>
         <img
           className="h-full w-full object-contain"

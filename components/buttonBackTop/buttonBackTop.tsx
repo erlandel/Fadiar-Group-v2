@@ -60,11 +60,11 @@ export default function ButtonBackTop() {
         scrollToTop();
       }}
       type="button"
-      className={`z-100 fixed right-3 bottom-10 2xl:right-5 flex h-8 w-8 sm:h-10 sm:w-10 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-110 active:scale-95 animate__animated ${
+      className={`z-100 fixed right-3 bottom-10 2xl:right-5 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-110 active:scale-95 animate__animated ${
         isVisible ? 'animate__fadeInRight opacity-100' : 'animate__fadeOutRight opacity-0 pointer-events-none'
       }`}
     >
-      <ArrowUp className="h-5 w-5 sm:h-6 sm:w-6 2xl:h-7 2xl:w-7" strokeWidth={2} />
+      <ArrowUp className="h-6 w-6" strokeWidth={2} />
     </button>
   );
 }

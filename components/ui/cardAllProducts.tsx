@@ -98,7 +98,7 @@ export default function CardAllProducts({
           style={{ height: "190px" }}
         >
           {count === 0 && (
-            <div className="absolute top-2 right-[-35px] z-10 bg-red-600 text-white text-[10px] font-bold px-10 py-1 rotate-45 shadow-md">
+            <div className="absolute top-2 -right-11 z-10 bg-red-600 text-white text-[10px] font-bold w-32 py-1 rotate-45 shadow-md text-center">
               Agotado
             </div>
           )}
