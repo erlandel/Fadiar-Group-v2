@@ -11,9 +11,13 @@ interface CardCart4Props {
   title: string;
   brand?: string;
   price: string;
+  temporal_price?: string;
   image: string;
   actionIcon?: "cart" | "delete" | "none";
   quantityProducts?: number;
+  currency?: {
+    currency: string;
+  };
   width?: string;
   padding?: string;
   bgColor?: string;
@@ -28,9 +32,11 @@ export default function CartCard({
   title,
   brand,
   price,
+  temporal_price,
   image,
   actionIcon = "cart",
   quantityProducts,
+  currency,
   width = "w-88",
   padding = "p-2",
   bgColor = "bg-white",
@@ -86,9 +92,12 @@ export default function CartCard({
           </div>
 
           <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
-            ${price}{" "}
+            $
+            {temporal_price && Number(temporal_price) !== 0
+              ? temporal_price
+              : price}{" "}
             <span className="text-primary font-normal text-lg sm:text-2xl">
-              USD
+              {currency?.currency }
             </span>
           </p>
           {/* quantityProducts */}

@@ -57,6 +57,8 @@ export default function Amount() {
     0,
   );
 
+  const currency = items.length > 0 ? items[0].currency?.currency : null;
+
   const [errors, setErrors] = useState<
     Partial<Record<keyof MatterFormData, string>>
   >({});
@@ -516,14 +518,14 @@ export default function Amount() {
               <div className="flex justify-between items-center p-4 text-[#022954]">
                 <span className="sm:text-xl">Subtotal</span>
                 <span className="sm:text-xl">
-                  $ {isClient ? totalPrice.toFixed(2) : "0.00"} USD
+                  $ {isClient ? totalPrice.toFixed(2) : "0.00"} {currency ?? "USD"}
                 </span>
               </div>
 
               <div className="flex justify-between items-center p-4 text-[#022954]">
                 <span className="sm:text-xl">Domicilio</span>
                 <span className="sm:text-xl">
-                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} USD
+                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} {currency ?? "USD"}
                 </span>
               </div>
             </div>
@@ -534,7 +536,7 @@ export default function Amount() {
             </span>
             <span className="text-xl sm:text-3xl font-bold text-[#022954]">
               $ {isClient ? (totalPrice + deliveryPrice).toFixed(2) : "0.00"}{" "}
-              <span className="text-xl sm:text-3xl">USD</span>
+              <span className="text-xl sm:text-3xl">{currency ?? "USD"}</span>
             </span>
           </div>
         </div>

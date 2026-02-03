@@ -9,6 +9,9 @@ export interface OrderProduct {
   brand: string;
   price: number;
   temporal_price?: number | string;
+  currency?: {
+    currency: string;
+  };
   img: string;
   count: number;
 }

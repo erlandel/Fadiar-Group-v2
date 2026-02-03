@@ -165,14 +165,15 @@ export default function MobileOrdes({
                             <CartCard
                               key={idx}
                               brand={product.brand}
-                              price={
-                                product.temporal_price &&
-                                Number(product.temporal_price) !== 0
+                              price={String(product.price)}
+                              temporal_price={
+                                product.temporal_price
                                   ? String(product.temporal_price)
-                                  : String(product.price)
+                                  : undefined
                               }
                               image={product.img}
                               title={product.name}
+                              currency={product.currency}
                               padding="p-3 sm:p-4"
                               width="w-full"
                               actionIcon="none"

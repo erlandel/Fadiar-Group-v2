@@ -140,9 +140,13 @@ export default function ProductListConfirmation() {
                       </div>
 
                       <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
-                        ${item.price}{" "}
+                        $
+                        {item.temporal_price &&
+                        Number(item.temporal_price) !== 0
+                          ? item.temporal_price
+                          : item.price}{" "}
                         <span className="text-primary font-normal text-lg sm:text-2xl">
-                          USD
+                          {item.currency?.currency }
                         </span>
                       </p>
                       <div className="mt-auto  flex items-center justify-between gap-2">

@@ -41,46 +41,44 @@ export const useSyncCart = () => {
         
         console.log("Carrito obtenido del backend:", data);
 
-        // Mapear la respuesta del backend al tipo CartItem
-        // Ahora la respuesta viene agrupada por tienda
         const mappedItems: CartItem[] = [];
-        
         const rawCarrito = data.carrito || [];
+
         setRawCart(rawCarrito);
 
         rawCarrito.forEach((tienda: any) => {
-           const tiendaId = tienda.id;
-           const tiendaName = tienda.name;
-           const tiendaDireccion = tienda.direccion;
-           
-           // Asumimos que los productos están en una propiedad de la tienda, 
-           // probablemente 'productos' o similar, basándonos en que antes 
-           // data.carrito era la lista de productos directamente.
-           const productos = tienda.productos || [];
-           
-           productos.forEach((item: any) => {
-             const p = item.producto;
-             if (p) {
-               mappedItems.push({
-                 cartId: item.id, // Este es el id_carrito
-                 productId: p.id,
-                 title: p.name,
-                 brand: p.brand,
-                 category: p.categoria?.name,
-                 warranty: p.warranty ? String(p.warranty) : undefined,
-                 price: (p.temporal_price && Number(p.temporal_price) !== 0) 
-                  ? String(p.temporal_price) 
-                  : String(p.price),
-                temporal_price: p.temporal_price ? String(p.temporal_price) : undefined,
-                 image: p.img,
-                 quantity: item.en_carrito,
-                 tiendaId: tiendaId,
-                 tiendaName: tiendaName,
-                 tiendaDireccion: tiendaDireccion,
-               });
-             }
-           });
-         });
+          const tiendaId = tienda.id;
+          const tiendaName = tienda.name;
+          const tiendaDireccion = tienda.direccion;
+          const productos = tienda.productos || [];
+          
+          productos.forEach((item: any) => {
+            const p = item.producto;
+            if (p) {
+              mappedItems.push({
+                cartId: item.id,
+                productId: p.id,
+                title: p.name,
+                brand: p.brand,
+                category: p.categoria?.name,
+                warranty: p.warranty ? String(p.warranty) : undefined,
+                price:
+                  p.temporal_price && Number(p.temporal_price) !== 0
+                    ? String(p.temporal_price)
+                    : String(p.price),
+                temporal_price: p.temporal_price
+                  ? String(p.temporal_price)
+                  : undefined,
+                image: p.img,
+                quantity: item.en_carrito,
+                currency: p.currency,
+                tiendaId: tiendaId,
+                tiendaName: tiendaName,
+                tiendaDireccion: tiendaDireccion,
+              });
+            }
+          });
+        });
 
         setItems(mappedItems);
       } else {

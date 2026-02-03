@@ -12,6 +12,9 @@ export type CartItem = {
   temporal_price?: string;
   image: string;
   quantity: number;
+  currency?: {
+    currency: string;
+  };
   tiendaId?: string | number;
   tiendaName?: string;
   tiendaDireccion?: string;

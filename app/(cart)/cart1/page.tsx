@@ -198,9 +198,11 @@ export default function Cart1() {
                                 key={item.productId}
                                 brand={item.brand}
                                 price={item.price}
+                                temporal_price={item.temporal_price}
                                 image={item.image}
                                 title={item.title}
                                 quantityProducts={item.quantity}
+                                currency={item.currency}
                                 width="w-full"
                                 padding="p-3 sm:p-4"
                                 actionIcon="delete"
