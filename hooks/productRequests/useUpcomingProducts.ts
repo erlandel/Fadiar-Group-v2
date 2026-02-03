@@ -1,35 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
-import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { Product } from "@/types/product";
 import { upcomingProductsUrl } from "@/urlApi/urlApi";
 
-export const useUpcomingProducts = (count: number = 4) => {
-  const { municipalityId } = useProductsByLocationStore();
+interface UpcomingProductsResponse {
+  products?: Product[];
+  currencys?: any;
+}
 
+export const useUpcomingProducts = () => {
   return useQuery<Product[]>({
-    queryKey: ["upcoming-products", municipalityId, count],
+    queryKey: ["upcoming-products"],
     queryFn: async () => {
       const res = await fetch(`${upcomingProductsUrl}`, {
-        method: "POST",
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify({
-          count,
-          municipio: municipalityId,
-         
-        }),
       });
 
       if (!res.ok) {
         throw new Error("Error al obtener los proximos productos");
       }
 
-      const data = await res.json();
+      const data: UpcomingProductsResponse = await res.json();
       return data.products || [];
     },
-    staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
-    enabled: !!municipalityId, // Solo se ejecuta si hay una provincia seleccionada
   });
 };

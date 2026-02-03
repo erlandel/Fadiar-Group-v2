@@ -1,14 +1,13 @@
 'use client';
 
 import "@fontsource/just-me-again-down-here";
-import CardSkeleton from "../ui/skeletonCard";
 import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
-import CardProduct from "../ui/cardProduct";
 import CardCarousel from "../ui/cardCarousel";
 import CardProductPreSale from "../ui/cardProductPreSale";
+import SkeletonCardProductPreSale from "../ui/skeletonCardProductPreSale";
 
 export default function BannerUpcomingProducts() {
-  const { data: upcomingProducts = [], isLoading } = useUpcomingProducts(10);
+  const { data: upcomingProducts = [], isLoading } = useUpcomingProducts();
 
   return (
     <section className="relative w-full h-140 sm:h-130 overflow-hidden mt-20 xl:mt-30">
@@ -68,7 +67,7 @@ export default function BannerUpcomingProducts() {
           ) : (
             <div className="flex justify-center gap-4">
               {Array.from({ length: 10 }).map((_, index) => (
-                <CardSkeleton key={index} position="vertical" />
+                <SkeletonCardProductPreSale key={index} position="vertical" />
               ))}
             </div>
           )}

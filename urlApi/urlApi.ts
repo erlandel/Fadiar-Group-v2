@@ -44,4 +44,4 @@ export const get_product_orderUrl = `${server_url}/getOrder`;
 
 export const statistics_about_usUrl = `${server_url}/estadisticas_acerca_de_nosotros`;
 
-export const upcomingProductsUrl = `${server_url}/getNewerProducts`;
+export const upcomingProductsUrl = `${server_url}/inventory_new_releases_manager`;
