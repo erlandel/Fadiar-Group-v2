@@ -452,6 +452,7 @@ export default function Products() {
                   <CardAllProducts
                     key={`${product.id}-${index}`}
                     productId={product.id}
+                  currency={product.currency}
                     category={product.categoria?.name}
                     title={product.name}
                     brand={product.brand}

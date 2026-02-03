@@ -143,11 +143,11 @@ export default function CardProduct({
                 <p className="flex flex-wrap items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954]">
                   ${temporal_price}
                   <span className="ml-1 text-base font-normal text-[#022954]">
-                    USD
+                    {currency?.currency ?? "USD"}
                   </span>
                 </p>
                 <p className="xl:text-md 2xl:text-lg text-[#777777] line-through">
-                  ${price} USD
+                  ${price} {currency?.currency ?? "USD"}
                 </p>
               </div>
             ) : (
@@ -261,11 +261,11 @@ export default function CardProduct({
                 <p className="flex items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954]">
                   ${temporal_price}
                   <span className="ml-1 text-base font-normal text-[#022954]">
-                    USD
+                    {currency?.currency ?? "USD"}
                   </span>
                 </p>
                 <p className="xl:text-md 2xl:text-lg text-[#777777] line-through">
-                  ${price} USD
+                  ${price} {currency?.currency ?? "USD"}
                 </p>
               </div>
             ) : (

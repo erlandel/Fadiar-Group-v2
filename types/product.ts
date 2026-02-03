@@ -11,6 +11,9 @@ export type Product = {
   temporal_price?: string;
   img: string;
   count?: number;
+  currency?: {
+    currency: string;
+  };
   categoria?: {
     id: number;
     name: string;

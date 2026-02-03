@@ -7,6 +7,9 @@ export type ProductID = {
   price: string;
   temporal_price?: string;
   img: string;
+  currency?: {
+    currency: string;
+  };
   categoria?: {
     id: number;
     name: string;

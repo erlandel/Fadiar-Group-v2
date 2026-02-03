@@ -224,7 +224,11 @@ export default function Searchbar() {
                         {product.name}
                       </p>
                       <p className="text-xs text-gray-500">
-                        {product.brand} - ${product.price}
+                        {product.brand} - $
+                        {product.temporal_price && Number(product.temporal_price) > 0
+                          ? product.temporal_price
+                          : product.price}{" "}
+                        {product.currency?.currency}
                       </p>
                         <p className="text-xs  text-blue-900 ">
                         {product.categoria?.name}

@@ -44,7 +44,6 @@ export default function BannerUpcomingProducts() {
         <div className="w-full    overflow-hidden">
           {!isLoading && upcomingProducts.length > 0 ? (
             <CardCarousel
-           
               items={upcomingProducts}
               speed={150}
               gap={1.5}
@@ -57,6 +56,7 @@ export default function BannerUpcomingProducts() {
                   price={product.price}
                   image={product.img}
                   temporal_price={product.temporal_price}
+                  currency={product.currency}
                   position="vertical"
                   productId={product.id}
                   tiendaId={product.tiendaId}

@@ -178,11 +178,11 @@ export default function Card({
                 <p className="flex items-baseline text-[#022954] font-bold text-2xl whitespace-nowrap">
                   ${temporal_price}
                   <span className="ml-1 text-[#022954] font-normal text-base">
-                    USD
+                    {currency?.currency ?? "USD"}
                   </span>
                 </p>
                 <p className="text-[#777777] text-md line-through whitespace-nowrap">
-                  ${price} USD
+                  ${price} {currency?.currency ?? "USD"}
                 </p>
               </div>
             ) : (

@@ -14,6 +14,9 @@ interface Product {
   price: string;
   img: string;
   temporal_price?: string;
+  currency?: {
+    currency: string;
+  };
   tiendaId?: string | number;
   count?: number;
 }
@@ -45,6 +48,7 @@ export default function RelatedProds({ products = [] }: RelatedProdsProps) {
               price={product.price}
               image={product.img}
               temporal_price={product?.temporal_price}
+              currency={product.currency}
               tiendaId={product.tiendaId}
               count={product.count}
               position="horizontal"

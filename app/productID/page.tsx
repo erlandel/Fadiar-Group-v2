@@ -207,15 +207,15 @@ function ProductContent({ id }: { id: string | null }) {
                   {product.temporal_price ? (
                     <>
                       <p className="text-3xl font-bold text-primary">
-                        ${product.temporal_price} USD
+                        ${product.temporal_price} {product.currency?.currency}
                       </p>
                       <p className="text-gray-400 line-through text-lg">
-                        ${product.price} USD
+                        ${product.price} {product.currency?.currency}
                       </p>
                     </>
                   ) : (
                     <p className="text-3xl font-bold text-primary">
-                      ${product.price} USD
+                      ${product.price} {product.currency?.currency}
                     </p>
                   )}
                 </div>
