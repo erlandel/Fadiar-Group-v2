@@ -12,9 +12,13 @@ export default function SectionMoreproducts() {
   const setPreselectedCategory = useFilterStore(
     (state) => state.setPreselectedCategory,
   );
+  const setShouldScrollToStore = useFilterStore(
+    (state) => state.setShouldScrollToStore,
+  );
 
   const handleNavigateWithCategory = (category: string) => {
     setPreselectedCategory(category);
+     setShouldScrollToStore(true);
     startLoading();
     router.push("/products");
   };

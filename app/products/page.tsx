@@ -25,10 +25,17 @@ export default function Products() {
   const [category, setCategory] = useState<string[]>([]);
   const [price, setPrice] = useState<[number, number]>([0, 200]);
   const [tempPrice, setTempPrice] = useState<[number, number]>([0, 200]);
+  const [priceInitialized, setPriceInitialized] = useState(false);
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
-  const { isFilterOpen, setIsFilterOpen, preselectedCategory, setPreselectedCategory } =
-    useFilterStore();
+  const {
+    isFilterOpen,
+    setIsFilterOpen,
+    preselectedCategory,
+    setPreselectedCategory,
+    shouldScrollToStore,
+    setShouldScrollToStore,
+  } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
@@ -42,6 +49,16 @@ export default function Products() {
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .trim();
+
+  useEffect(() => {
+    if (shouldScrollToStore && storeSelectorRef.current) {
+      const timer = setTimeout(() => {
+        storeSelectorRef.current?.scrollIntoView({ behavior: "smooth" });
+        setShouldScrollToStore(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldScrollToStore, setShouldScrollToStore]);
 
   useEffect(() => {
     if (preselectedCategory) {
@@ -177,6 +194,7 @@ export default function Products() {
       if (price[0] === 0 && price[1] === 200) {
         setPrice([priceRange.min, priceRange.max]);
         setTempPrice([priceRange.min, priceRange.max]);
+        setPriceInitialized(true);
       }
     }
   }, [priceRange.min, priceRange.max]);
@@ -312,10 +330,25 @@ export default function Products() {
   }, [currentPage]);
 
   useEffect(() => {
-    if (storeSelectorRef.current && window.innerWidth < 1280) {
+    const hasActiveFilters =
+      category.length > 0 ||
+      brands.length > 0 ||
+      relevant.length > 0 ||
+      (priceInitialized &&
+        (price[0] !== priceRange.min || price[1] !== priceRange.max));
+
+    if (storeSelectorRef.current && window.innerWidth < 1280 && hasActiveFilters) {
       storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [category, brands, price, relevant, selectedStoreId]);
+  }, [
+    category,
+    brands,
+    price,
+    relevant,
+    priceRange.min,
+    priceRange.max,
+    priceInitialized,
+  ]);
 
   const removeFilter = (
     type: "category" | "brand" | "relevant",
