@@ -325,8 +325,8 @@ export default function Amount() {
         {isClient && formData.delivery && (
           <div>
              <div className="w-full flex justify-center mt-3">
-            <p className=" flex items-center  text-accent ">
-              <NotoV1Information className="h-5 w-5 mr-0.5 " />
+            <p className=" flex  sm:items-center text-accent text-md  ">
+              <NotoV1Information className="h-4.5 w-4.5 mr-0.5 min-w-5 mt-1 sm:mt-0 " />
               Revise los municipios a los cuales se está haciendo domicilio.
             </p>
           </div>
