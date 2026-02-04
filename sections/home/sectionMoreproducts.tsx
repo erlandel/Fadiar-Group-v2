@@ -9,16 +9,16 @@ import useFilterStore from "@/store/filterStore";
 export default function SectionMoreproducts() {
   const router = useRouter();
   const startLoading = useLoadingStore((state) => state.startLoading);
-  const setPreselectedCategory = useFilterStore(
-    (state) => state.setPreselectedCategory,
+  const setSelectedCategories = useFilterStore(
+    (state) => state.setSelectedCategories,
   );
-  const setShouldScrollToStore = useFilterStore(
-    (state) => state.setShouldScrollToStore,
+  const setShouldScrollToProducts = useFilterStore(
+    (state) => state.setShouldScrollToProducts,
   );
 
   const handleNavigateWithCategory = (category: string) => {
-    setPreselectedCategory(category);
-     setShouldScrollToStore(true);
+    setSelectedCategories([category]);
+    setShouldScrollToProducts(true);
     startLoading();
     router.push("/products");
   };

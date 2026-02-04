@@ -14,6 +14,10 @@ import ActiveFilters from "@/components/pageProducts/activeFilters/activeFilters
 import StoreSelector from "@/components/pageProducts/storeSelector/storeSelector";
 import SkeletonCardAllProducts from "@/components/ui/skeletonCardAllProducts";
 import useFilterStore from "@/store/filterStore";
+import {
+  buildAvailableCategories,
+  normalizeText,
+} from "@/utils/productFiltersCategory";
 
 export default function Products() {
   const { data: inventoryData, isLoading } = useInventory();
@@ -22,20 +26,21 @@ export default function Products() {
   const tiendas = inventoryData?.tiendas || [];
   const globalProducts = allProducts;
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
-  const [category, setCategory] = useState<string[]>([]);
+  const {
+    isFilterOpen,
+    setIsFilterOpen,
+    selectedCategories: category,
+    setSelectedCategories: setCategory,
+    shouldScrollToStore,
+    setShouldScrollToStore,
+    shouldScrollToProducts,
+    setShouldScrollToProducts,
+  } = useFilterStore();
   const [price, setPrice] = useState<[number, number]>([0, 200]);
   const [tempPrice, setTempPrice] = useState<[number, number]>([0, 200]);
   const [priceInitialized, setPriceInitialized] = useState(false);
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
-  const {
-    isFilterOpen,
-    setIsFilterOpen,
-    preselectedCategory,
-    setPreselectedCategory,
-    shouldScrollToStore,
-    setShouldScrollToStore,
-  } = useFilterStore();
   const [currentPage, setCurrentPage] = useState(1);
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
@@ -44,29 +49,24 @@ export default function Products() {
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const normalizeText = (text: string) =>
-    text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim();
-
   useEffect(() => {
-    if (shouldScrollToStore && productosRef.current) {
+    if (
+      (shouldScrollToStore || shouldScrollToProducts) &&
+      productosRef.current
+    ) {
       const timer = setTimeout(() => {
         productosRef.current?.scrollIntoView({ behavior: "smooth" });
         setShouldScrollToStore(false);
+        setShouldScrollToProducts(false);
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [shouldScrollToStore, setShouldScrollToStore]);
-
-  useEffect(() => {
-    if (preselectedCategory) {
-      setCategory([preselectedCategory]);
-      setPreselectedCategory(null);
-    }
-  }, [preselectedCategory, setPreselectedCategory]);
+  }, [
+    shouldScrollToStore,
+    shouldScrollToProducts,
+    setShouldScrollToStore,
+    setShouldScrollToProducts,
+  ]);
 
   useEffect(() => {
     const calculateItems = () => {
@@ -107,33 +107,9 @@ export default function Products() {
 
   // Extraer categorías únicas de los productos (normalizado para evitar duplicados)
   const availableCategories = useMemo(() => {
-    const categoryMap = new Map<string, string>(); // Key: normalized, Value: original (el primero que encuentre)
     const productsToUse =
       globalProducts.length > 0 ? globalProducts : allProducts;
-
-    productsToUse.forEach((product) => {
-      // Intentar obtener el nombre de la categoría de varias formas para mayor robustez
-      const categoryName =
-        (typeof product.categoria === "object" && product.categoria?.name) ||
-        (typeof product.category === "object" && product.category?.name) ||
-        (typeof product.categoria === "string" ? product.categoria : null) ||
-        (typeof product.category === "string" ? product.category : null);
-
-      if (categoryName) {
-        const normalized = normalizeText(categoryName);
-        // Usar el valor normalizado como clave para evitar duplicados como "Desmatt" vs "desmatt"
-        if (!categoryMap.has(normalized)) {
-          categoryMap.set(normalized, categoryName.trim()); // Guardar el primer nombre original que encontremos
-        }
-      }
-    });
-    return Array.from(categoryMap.entries())
-      .sort(([a], [b]) => a.localeCompare(b)) // Ordenar por nombre normalizado
-      .map(([normalized, original]) => ({
-        value: normalized,
-        label: original,
-        key: normalized, // Clave única basada en el nombre normalizado
-      }));
+    return buildAvailableCategories(productsToUse);
   }, [allProducts, globalProducts]);
 
   // Extraer marcas únicas de los productos (normalizado para evitar duplicados)

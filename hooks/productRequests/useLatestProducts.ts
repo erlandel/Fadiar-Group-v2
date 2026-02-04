@@ -22,11 +22,14 @@ export const useLatestProducts = (count: number = 6) => {
       });
 
 
+     
+
       if (!res.ok) {
         throw new Error("Error al obtener los productos más recientes");
       }
 
       const data = await res.json();
+       console.log('respueta de last product: ',data.products);
       return data.products || [];
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
