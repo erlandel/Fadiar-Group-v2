@@ -1,6 +1,7 @@
 "use client";
 
-import { MapPin, Phone, Mail, Building2 } from "lucide-react";
+import { MapPin, Mail, Building2 } from "lucide-react";
+import { WhatsAppIcon } from "@/icons/icons";
 
 export function ContactInfo() {
   return (
@@ -37,42 +38,43 @@ export function ContactInfo() {
       </div>
 
       <div className="w-full max-w-105 ">
-            {/* Teléfono */}
-        <div className="w-full flex items-center justify-between gap-4 p-4 border border-gray-200  rounded-2xl h-40 sm:h-30 hover:border-accent transition-all hover:scale-101 duration-300 ease-in-out shadow-md">      
+            {/* WhatsApp */}
+        <a 
+          href="https://wa.me/5363513228"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full flex items-center justify-between gap-4 p-4 border border-gray-200 rounded-2xl h-40 sm:h-30 hover:border-accent transition-all hover:scale-101 duration-300 ease-in-out shadow-md group"
+        >      
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary rounded-lg shrink-0">
-              <Phone className="w-5 h-5 text-accent" />
+              <WhatsAppIcon width={20} height={20} className="text-accent" />
             </div>
             <div>
-              <h3 className="font-semibold text-primary mb-1">Teléfono</h3>
-              <a
-                href="tel:+5363513228"
-                className="text-gray-600 hover:text-accent transition-colors"
-              >
+              <h3 className="font-semibold text-primary mb-1">WhatsApp</h3>
+              <p className="text-gray-600 group-hover:text-accent transition-colors">
                 +53 63513228
-              </a>
+              </p>
             </div>
           </div>
-        </div>
+        </a>
 
-         {/* Email */}
-        <div className="w-full max-w-105 mt-4 flex items-center justify-between gap-4 p-4 border border-gray-200  rounded-2xl  h-40 sm:h-30 hover:border-accent transition-all hover:scale-101 duration-300 ease-in-out shadow-md ">
- 
+        {/* Email */}
+        <a 
+          href="mailto:atencionalcliente@grupofadiar.com"
+          className="w-full max-w-105 mt-4 flex items-center justify-between gap-4 p-4 border border-gray-200 rounded-2xl h-40 sm:h-30 hover:border-accent transition-all hover:scale-101 duration-300 ease-in-out shadow-md group"
+        >
           <div className="flex items-start gap-4">
             <div className="p-3 bg-primary rounded-lg shrink-0">
               <Mail className="w-5 h-5 text-accent" />
             </div>
             <div>
               <h3 className="font-semibold text-primary mb-1">Email</h3>
-              <a
-                href="mailto:atencionalcliente@grupofadiar.com"
-                className="text-gray-600 hover:text-accent transition-colors break-all"
-              >
+              <p className="text-gray-600 group-hover:text-accent transition-colors break-all">
                 atencionalcliente@grupofadiar.com
-              </a>
+              </p>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   );

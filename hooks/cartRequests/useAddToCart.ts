@@ -39,6 +39,7 @@ export const useAddToCart = () => {
         count: item.quantity,
         emisor: "web",
       };
+      console.log("Request count :", requestBody.count);
 
       const response = await fetch(`${add_product_to_cartUrl}`, {
         method: "POST",
