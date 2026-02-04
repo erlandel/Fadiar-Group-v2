@@ -160,7 +160,7 @@ export default function Menu() {
                   {link.href === "/products" && isProductsSubmenuOpen && (
                     <div
                       id="products-submenu"
-                      className="absolute left-0 right-0 top-full z-50 bg-white shadow-lg rounded-lg border border-gray-100 px-4 py-3 mt-2 overflow-y-auto custom-scrollbar max-h-120 flex flex-col gap-3"
+                      className="absolute left-0 top-full z-50 bg-white shadow-lg rounded-lg border border-gray-100 px-4 py-3 mt-2 overflow-x-auto overflow-y-auto custom-scrollbar max-h-120 flex flex-col gap-3 w-max"
                     >
                       <button
                         onClick={() => {
@@ -172,29 +172,44 @@ export default function Menu() {
                             setShouldScrollToProducts(true);
                           }
                         }}
-                        className={`w-full text-left text-sm transition ${
+                        className={`w-full text-left text-sm transition flex items-center gap-2 ${
                           pathname === "/products"
                             ? "text-primary font-bold"
                             : "text-gray-600 hover:text-primary"
                         }`}>
-                        Ver todos los productos
-                      </button>
-                      {availableCategories.map((cat) => (
-                        <button
-                          key={cat.value}
-                          onClick={() => {
-                            handleCategoryClick(cat.value);
-                            setIsOpen(false);
-                          }}
-                          className={`w-full text-left text-sm transition hover:text-primary ${
-                            selectedCategories.includes(cat.value)
-                              ? "text-primary font-bold"
-                              : "text-gray-600"
+                        <span
+                          className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
+                            pathname === "/products"
+                              ? "border-primary "
+                              : "border-gray-300 bg-transparent"
                           }`}
-                        >
-                          {cat.label}
-                        </button>
-                      ))}
+                        />
+                        <span className="whitespace-nowrap">Ver todos los productos</span>
+                      </button>
+                      {availableCategories.map((cat) => {
+                        const isSelected = selectedCategories.includes(cat.value);
+                        return (
+                          <button
+                            key={cat.value}
+                            onClick={() => {
+                              handleCategoryClick(cat.value);
+                              setIsOpen(false);
+                            }}
+                            className={`w-full text-left text-sm transition hover:text-primary flex items-center gap-2 ${
+                              isSelected ? "text-primary font-bold" : "text-gray-600"
+                            }`}
+                          >
+                            <span
+                              className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
+                                isSelected
+                                  ? "border-primary "
+                                  : "border-gray-300 bg-transparent"
+                              }`}
+                            />
+                            <span className="whitespace-nowrap">{cat.label}</span>
+                          </button>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -243,13 +258,20 @@ export default function Menu() {
                             <button
                               key={cat.value}
                               onClick={() => handleCategoryClick(cat.value)}
-                              className={`w-fit text-left py-2 text-sm transition-colors hover:text-primary cursor-pointer  ${
+                              className={`w-fit text-left py-2 text-sm transition-colors hover:text-primary cursor-pointer flex items-center gap-1 ${
                                 selectedCategories.includes(cat.value)
                                   ? "text-primary font-bold"
                                   : "text-gray-600"
                               }`}
                             >
-                              {cat.label}
+                              <span
+                                className={`inline-block w-3.5 h-3.5 rounded-full border-2 border-dashed flex-none shrink-0 ${
+                                  selectedCategories.includes(cat.value)
+                                    ? "border-primary "
+                                    : "border-gray-300 bg-transparent"
+                                }`}
+                              />
+                              <span className="whitespace-nowrap">{cat.label}</span>
                             </button>
                           ))}
                         </div>
