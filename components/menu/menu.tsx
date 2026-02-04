@@ -192,14 +192,14 @@ export default function Menu() {
             const isProducts = link.href === "/products";
 
             return (
-              <div key={link.href} className="group my-1">
+              <div key={link.href} className="group pb-2">
                 <Link
                 
                   href={link.href}
                   onClick={() => {
                     if (!isActive) startLoading();
                   }}
-                  className={`transition flex items-center gap- hover:text-primary   ${
+                  className={`transition flex items-center  hover:text-primary   ${
                     isActive ? "text-primary font-semibold" : "text-gray-700"
                   }`}
                 >
@@ -210,8 +210,10 @@ export default function Menu() {
                 </Link>
 
                 {isProducts && availableCategories.length > 0 && (
-                  <div className="absolute left-0 right-0 top-full mt-1 hidden group-hover:flex justify-center xl:-ml-5">
-                    <div className="w-full  bg-white shadow-lg rounded-b-lg border border-gray-100 px-6 py-4">
+                <div >            
+             
+                  <div className="absolute left-0 right-0 top-full hidden group-hover:flex justify-center xl:-ml-5">
+                    <div className="w-full  bg-white shadow-lg rounded-b-lg border border-gray-100 px-6 py-4 mt-0.5">
                       <div className=" overflow-y-auto custom-scrollbar pr-2">
                         <div className="flex flex-wrap gap-x-20 gap-y-3">
                       
@@ -232,6 +234,8 @@ export default function Menu() {
                       </div>
                     </div>
                   </div>
+                </div>
+
                 )}
               </div>
             );
