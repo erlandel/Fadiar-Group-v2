@@ -39,6 +39,7 @@ export default function Products() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const storeSelectorRef = useRef<HTMLDivElement>(null);
+  const productosRef = useRef<HTMLDivElement>(null);
 
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -51,9 +52,9 @@ export default function Products() {
       .trim();
 
   useEffect(() => {
-    if (shouldScrollToStore && storeSelectorRef.current) {
+    if (shouldScrollToStore && productosRef.current) {
       const timer = setTimeout(() => {
-        storeSelectorRef.current?.scrollIntoView({ behavior: "smooth" });
+        productosRef.current?.scrollIntoView({ behavior: "smooth" });
         setShouldScrollToStore(false);
       }, 300);
       return () => clearTimeout(timer);
@@ -337,8 +338,8 @@ export default function Products() {
       (priceInitialized &&
         (price[0] !== priceRange.min || price[1] !== priceRange.max));
 
-    if (storeSelectorRef.current && window.innerWidth < 1280 && hasActiveFilters) {
-      storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
+    if (productosRef.current && window.innerWidth < 1280 && hasActiveFilters) {
+      productosRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [
     category,
@@ -405,7 +406,10 @@ export default function Products() {
             <div id={"list"} className="mt-20 px-4 xl:px-0">
               {/* Header con título y botón de filtros */}
               <div className="flex w-full justify-between items-start mb-4">
-                <div className="flex-1">
+                <div 
+                  ref={productosRef}
+                  className="flex-1 scroll-mt-35 xl:scroll-mt-25"
+                >
                   <h2 className="text-2xl text-accent font-bold">Productos</h2>
 
                   {/* Filtros aplicados */}
