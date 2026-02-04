@@ -5,6 +5,7 @@ import { latest_productsUrl } from "@/urlApi/urlApi";
 
 export const useLatestProducts = (count: number = 6) => {
   const { municipalityId } = useProductsByLocationStore();
+  const emisor = 'web';
 
   return useQuery<Product[]>({
     queryKey: ["latest-products", municipalityId, count],
@@ -17,7 +18,7 @@ export const useLatestProducts = (count: number = 6) => {
         body: JSON.stringify({
           count,
           municipio: municipalityId,
-         
+          emisor,        
         }),
       });
 
