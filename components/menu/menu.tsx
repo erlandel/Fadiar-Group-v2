@@ -102,43 +102,51 @@ export default function Menu() {
               const isProducts = link.href === "/products";
 
               return (
-                <div key={link.href} className="flex flex-col">
+                <div key={link.href} className="flex flex-col relative">
                   <div className="flex items-center justify-between">
-                    <Link
-                      href={link.href}
-                      onClick={(e) => {
-                        if (isProducts) {
-                          e.preventDefault();
-                          setIsProductsSubmenuOpen(!isProductsSubmenuOpen);
-                          return;
-                        }
-                        setIsOpen(false);
-                        if (!isActive) startLoading();
-                      }}
-                      className={`text-md transition hover:text-primary ${
-                        isActive ? "text-primary font-semibold" : "text-gray-700"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                    {isProducts && (
+                    {isProducts ? (
                       <button
                         onClick={() =>
                           setIsProductsSubmenuOpen(!isProductsSubmenuOpen)
                         }
-                        className="p-2"
+                        className={`flex w-full items-center  text-md transition hover:text-primary ${
+                          isActive
+                            ? "text-primary font-semibold"
+                            : "text-gray-700"
+                        }`}
+                        aria-expanded={isProductsSubmenuOpen}
+                        aria-controls="products-submenu"
                       >
+                        <span>{link.label}</span>
                         {isProductsSubmenuOpen ? (
                           <ChevronUp className="w-5 h-5" />
                         ) : (
                           <ChevronDown className="w-5 h-5" />
                         )}
                       </button>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={() => {
+                          setIsOpen(false);
+                          if (!isActive) startLoading();
+                        }}
+                        className={`text-md transition hover:text-primary ${
+                          isActive
+                            ? "text-primary font-semibold"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
                     )}
                   </div>
 
                   {isProducts && isProductsSubmenuOpen && (
-                    <div className="flex flex-col gap-4 ml-4 mt-4 border-l-2 border-gray-100 pl-4 max-h-60 overflow-y-auto custom-scrollbar">
+                    <div
+                      id="products-submenu"
+                      className="absolute left-0 right-0 top-full z-50 bg-white shadow-lg rounded-lg border border-gray-100 px-4 py-3 mt-2 overflow-y-auto custom-scrollbar max-h-120 flex flex-col gap-3"
+                    >
                       <button
                         onClick={() => {
                           setIsOpen(false);
@@ -149,7 +157,7 @@ export default function Menu() {
                             setShouldScrollToProducts(true);
                           }
                         }}
-                        className="text-left text-sm text-gray-600 hover:text-primary"
+                        className="w-full text-left text-sm text-gray-600 hover:text-primary"
                       >
                         Ver todos los productos
                       </button>
@@ -160,7 +168,7 @@ export default function Menu() {
                             handleCategoryClick(cat.value);
                             setIsOpen(false);
                           }}
-                          className={`text-left text-sm transition hover:text-primary ${
+                          className={`w-full text-left text-sm transition hover:text-primary ${
                             selectedCategories.includes(cat.value)
                               ? "text-primary font-medium"
                               : "text-gray-600"
@@ -175,7 +183,7 @@ export default function Menu() {
               );
             })}
           </nav>
-          
+
         </div>
       </div>
 
