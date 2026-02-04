@@ -1,8 +1,10 @@
 "use client"
 
 export function ContactMap() {
-  // Coordenadas aproximadas de Ciudad Libertad, Marianao, La Habana, Cuba
-  const mapSrc = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3671.8!2d-82.45!3d23.05!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88cd7c6d38f9a5b5%3A0x7d4a4a4a4a4a4a4a!2sCiudad%20Libertad%2C%20Marianao%2C%20La%20Habana%2C%20Cuba!5e0!3m2!1ses!2s!4v1706540000000!5m2!1ses!2s`
+  const lat = 23.08525
+  const lng = -82.434639
+  const zoom = 15
+  const mapSrc = `https://maps.google.com/maps?q=${lat},${lng}&z=${zoom}&output=embed`
 
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden h-full">
