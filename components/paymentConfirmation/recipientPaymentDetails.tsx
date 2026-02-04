@@ -22,7 +22,7 @@ export default function RecipientPaymentDetails() {
     const beneficiaryPhone =
       formData.delivery && formData.phone
         ? formData.phone
-        : person?.cellphone2 || "------";
+        : person?.cellphone1 || "------";
 
     return(
         <div className="w-full  max-w-120  wrap-break-word">

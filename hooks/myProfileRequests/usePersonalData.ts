@@ -83,7 +83,7 @@ export const usePersonalData = () => {
         firstName: auth.person.name,
         lastName: `${auth.person.lastname1} ${auth.person.lastname2}`.trim(),
         email: auth.user.email,
-        phone: auth.person.cellphone2 || "",
+        phone: auth.person.cellphone1 || "",
         address: auth.person.address,
         password: "",
       }));
@@ -131,7 +131,7 @@ export const usePersonalData = () => {
           name: variables.firstName,
           lastname1: variables.lastname1,
           lastname2: variables.lastname2,
-          cellphone2: variables.phone,
+          cellphone1: variables.phone,
         },
         user: {
           ...auth.user,
@@ -313,11 +313,11 @@ export const usePersonalData = () => {
       });
     }
 
-    if (formData.phone !== (auth.person.cellphone2 || "")) {
+    if (formData.phone !== (auth.person.cellphone1 || "")) {
       cambios.push({
         operation: "UPDATE",
         table: "persons",
-        attribute: "cellphone2",
+        attribute: "cellphone1",
         value: formData.phone,
       });
     }
