@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MaterialSymbolsClose, MaterialSymbolsMenu } from "@/icons/icons";
 import useLoadingStore from "@/store/loadingStore";
@@ -16,6 +16,7 @@ export default function Menu() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isProductsSubmenuOpen, setIsProductsSubmenuOpen] = useState(false);
+  const productsItemRef = useRef<HTMLDivElement | null>(null);
   const startLoading = useLoadingStore((state) => state.startLoading);
   const { data: inventoryData } = useInventory();
   const {
@@ -54,6 +55,23 @@ export default function Menu() {
       router.push("/products");
     }
   };
+
+  useEffect(() => {
+    if (!isProductsSubmenuOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as Node;
+      if (
+        productsItemRef.current &&
+        !productsItemRef.current.contains(target)
+      ) {
+        setIsProductsSubmenuOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [isProductsSubmenuOpen]);
 
   return (
     <>
@@ -102,7 +120,11 @@ export default function Menu() {
               const isProducts = link.href === "/products";
 
               return (
-                <div key={link.href} className="flex flex-col relative">
+                <div
+                  key={link.href}
+                  className="flex flex-col relative"
+                  ref={isProducts ? productsItemRef : undefined}
+                >
                   <div className="flex items-center justify-between">
                     {isProducts ? (
                       <button
@@ -157,8 +179,11 @@ export default function Menu() {
                             setShouldScrollToProducts(true);
                           }
                         }}
-                        className="w-full text-left text-sm text-gray-600 hover:text-primary"
-                      >
+                        className={`w-full text-left text-sm transition ${
+                          pathname === "/products"
+                            ? "text-primary font-bold"
+                            : "text-gray-600 hover:text-primary"
+                        }`}>
                         Ver todos los productos
                       </button>
                       {availableCategories.map((cat) => (
@@ -170,7 +195,7 @@ export default function Menu() {
                           }}
                           className={`w-full text-left text-sm transition hover:text-primary ${
                             selectedCategories.includes(cat.value)
-                              ? "text-primary font-medium"
+                              ? "text-primary font-bold"
                               : "text-gray-600"
                           }`}
                         >
