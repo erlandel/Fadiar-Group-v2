@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 
@@ -25,7 +26,6 @@ const useLocation = () => {
     setLocation,
   } = useProductsByLocationStore();
 
-  const [data, setData] = useState<ProvinceData[]>([]);
   const [selectedProvince, setSelectedProvince] = useState(province || "");
   const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(
     provinceId || null,
@@ -36,8 +36,23 @@ const useLocation = () => {
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<
     number | null
   >(municipalityId || null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const provincesQuery = useQuery<ProvinceData[], Error>({
+    queryKey: ["provinces-municipalities"],
+    queryFn: async () => {
+      const res = await fetch(get_provinces_municipalitiesUrl);
+      const json = await res.json();
+      if (!Array.isArray(json)) {
+        throw new Error("Error al cargar las provincias");
+      }
+      return json as ProvinceData[];
+    },
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
+  const data = provincesQuery.data ?? [];
+  const loading = provincesQuery.isLoading;
+  const error = provincesQuery.error ? "Error al cargar las provincias" : null;
 
   const [openProvinces, setOpenProvinces] = useState(false);
   const [openMunicipalities, setOpenMunicipalities] = useState(false);
@@ -76,40 +91,6 @@ const useLocation = () => {
     setSelectedMunicipality(municipality || "");
     setSelectedMunicipalityId(municipalityId || null);
   }, [province, provinceId, municipality, municipalityId]);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchProvinces = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(get_provinces_municipalitiesUrl);
-        const json = await res.json();
-
-        if (!cancelled && Array.isArray(json)) {
-          setData(json);
-          setError(null);
-        } else if (!cancelled) {
-          setData([]);
-          setError("Error al cargar las provincias");
-        }
-      } catch {
-        if (!cancelled) {
-          setError("Error al cargar las provincias");
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchProvinces();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const handleProvinceChange = (
     prov: ProvinceData,
