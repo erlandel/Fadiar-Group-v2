@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import Image from "next/image";
 import { MaterialSymbolsClose, MaterialSymbolsMenu } from "@/icons/icons";
 import useLoadingStore from "@/store/loadingStore";
@@ -56,22 +56,7 @@ export default function Menu() {
     }
   };
 
-  useEffect(() => {
-    if (!isProductsSubmenuOpen) return;
-    const onPointerDown = (e: PointerEvent) => {
-      const target = e.target as Node;
-      if (
-        productsItemRef.current &&
-        !productsItemRef.current.contains(target)
-      ) {
-        setIsProductsSubmenuOpen(false);
-      }
-    };
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-    };
-  }, [isProductsSubmenuOpen]);
+  
 
   return (
     <>
@@ -114,25 +99,33 @@ export default function Menu() {
           <hr className="mb-6 border-gray-200" />
 
           {/* Links del menú móvil */}
-          <nav className="flex flex-col gap-6">
-            {links.map((link) => {
-              const isActive = checkActive(link.href);
-              const isProducts = link.href === "/products";
-
-              return (
+          <nav
+            className="flex flex-col gap-6"
+            onPointerDown={(e) => {
+              if (!isProductsSubmenuOpen) return;
+              const target = e.target as Node;
+              if (
+                productsItemRef.current &&
+                !productsItemRef.current.contains(target)
+              ) {
+                setIsProductsSubmenuOpen(false);
+              }
+            }}
+          >
+            {links.map((link) => (
                 <div
                   key={link.href}
                   className="flex flex-col relative"
-                  ref={isProducts ? productsItemRef : undefined}
+                  ref={link.href === "/products" ? productsItemRef : undefined}
                 >
                   <div className="flex items-center justify-between">
-                    {isProducts ? (
+                    {link.href === "/products" ? (
                       <button
                         onClick={() =>
                           setIsProductsSubmenuOpen(!isProductsSubmenuOpen)
                         }
                         className={`flex w-full items-center  text-md transition hover:text-primary ${
-                          isActive
+                          checkActive(link.href)
                             ? "text-primary font-semibold"
                             : "text-gray-700"
                         }`}
@@ -151,10 +144,10 @@ export default function Menu() {
                         href={link.href}
                         onClick={() => {
                           setIsOpen(false);
-                          if (!isActive) startLoading();
+                          if (!checkActive(link.href)) startLoading();
                         }}
                         className={`text-md transition hover:text-primary ${
-                          isActive
+                          checkActive(link.href)
                             ? "text-primary font-semibold"
                             : "text-gray-700"
                         }`}
@@ -164,7 +157,7 @@ export default function Menu() {
                     )}
                   </div>
 
-                  {isProducts && isProductsSubmenuOpen && (
+                  {link.href === "/products" && isProductsSubmenuOpen && (
                     <div
                       id="products-submenu"
                       className="absolute left-0 right-0 top-full z-50 bg-white shadow-lg rounded-lg border border-gray-100 px-4 py-3 mt-2 overflow-y-auto custom-scrollbar max-h-120 flex flex-col gap-3"
@@ -205,8 +198,7 @@ export default function Menu() {
                     </div>
                   )}
                 </div>
-              );
-            })}
+            ))}
           </nav>
 
         </div>
@@ -221,29 +213,25 @@ export default function Menu() {
       {/* Menú desktop - Solo visible en md y superiores */}
       <div className="hidden xl:block w-full bg-white ml-5">
         <nav className="relative flex justify-center gap-9 text-sm ">
-          {links.map((link) => {
-            const isActive = checkActive(link.href);
-            const isProducts = link.href === "/products";
-
-            return (
+          {links.map((link) => (
               <div key={link.href} className="group pb-2">
                 <Link
                 
                   href={link.href}
                   onClick={() => {
-                    if (!isActive) startLoading();
+                    if (!checkActive(link.href)) startLoading();
                   }}
                   className={`transition flex items-center  hover:text-primary   ${
-                    isActive ? "text-primary font-semibold" : "text-gray-700"
+                    checkActive(link.href) ? "text-primary font-semibold" : "text-gray-700"
                   }`}
                 >
                   {link.label}
-                  {isProducts && (
+                  {link.href === "/products" && (
                     <ChevronDown className="w-4 h-4 transition-transform group-hover:rotate-180" />
                   )}
                 </Link>
 
-                {isProducts && availableCategories.length > 0 && (
+                {link.href === "/products" && availableCategories.length > 0 && (
                 <div >            
              
                   <div className="absolute left-0 right-0 top-full hidden group-hover:flex justify-center xl:-ml-5">
@@ -272,8 +260,7 @@ export default function Menu() {
 
                 )}
               </div>
-            );
-          })}
+            ))}
         </nav>
       </div>
     </>
