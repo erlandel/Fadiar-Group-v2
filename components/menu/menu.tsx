@@ -50,7 +50,7 @@ export default function Menu() {
     toggleCategory(categoryValue);
     setShouldScrollToProducts(true);
 
-    if (pathname !== "/products") {
+    if (!checkActive("/products")) {
       startLoading();
       router.push("/products");
     }
@@ -165,7 +165,7 @@ export default function Menu() {
                       <button
                         onClick={() => {
                           setIsOpen(false);
-                          if (pathname !== "/products") {
+                          if (!checkActive("/products")) {
                             startLoading();
                             router.push("/products");
                           } else {

@@ -2,12 +2,13 @@
 
 import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useLoadingStore from "@/store/loadingStore";
 import useFilterStore from "@/store/filterStore";
 
 export default function SectionMoreproducts() {
   const router = useRouter();
+  const pathname = usePathname();
   const startLoading = useLoadingStore((state) => state.startLoading);
   const setSelectedCategories = useFilterStore(
     (state) => state.setSelectedCategories,
@@ -16,11 +17,20 @@ export default function SectionMoreproducts() {
     (state) => state.setShouldScrollToProducts,
   );
 
+  const checkActive = (href: string) => {
+    const normalizedPath = pathname.endsWith("/") ? pathname : `${pathname}/`;
+    const normalizedHref = href.endsWith("/") ? href : `${href}/`;
+    return normalizedPath === normalizedHref;
+  };
+
   const handleNavigateWithCategory = (category: string) => {
     setSelectedCategories([category]);
     setShouldScrollToProducts(true);
-    startLoading();
-    router.push("/products");
+    
+    if (!checkActive("/products")) {
+      startLoading();
+      router.push("/products");
+    }
   };
   return (
     <>
