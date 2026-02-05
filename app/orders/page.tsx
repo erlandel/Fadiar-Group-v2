@@ -9,12 +9,23 @@ import { BannerMoney } from "@/components/banner/bannerMoney";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
 import InformationMessage from "@/messages/informationMessage";
+import MatterCart1Store from "@/store/matterCart1Store";
 
 export default function Orders() {
   const { orders, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const titleRef = useRef<HTMLDivElement | null>(null);
+  const formData = MatterCart1Store((state) => state.formData);
+  const updateFormData = MatterCart1Store((state) => state.updateFormData);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  useEffect(() => {
+    if (formData.showDeliveryOverlay) {
+      setShowOverlay(true);
+      updateFormData({ showDeliveryOverlay: false });
+    }
+  }, [formData.showDeliveryOverlay, updateFormData]);
 
   const fetchOrdersMutation = useMutation({
     mutationFn: (params: {
@@ -59,9 +70,16 @@ export default function Orders() {
 
   return (
     <>
-    <div className="mx-4 xl:px-40 mt-2">
-      <InformationMessage /> 
-    </div>
+      {showOverlay && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-white/1 backdrop-blur-xs p-4">
+          <div className="max-w-300 w-full">
+            <InformationMessage onClose={() => setShowOverlay(false)} />
+          </div>
+        </div>
+      )}
+      <div className="mx-4 xl:px-40 mt-2">
+        <InformationMessage />
+      </div>
     
       <div className="mx-4 xl:px-40 mt-10 md:mt-15">
     

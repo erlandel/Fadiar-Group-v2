@@ -64,9 +64,14 @@ export const useConfirmOrder = () => {
       console.log("Respuesta del backend (agregar pedido):", data);
       SuccesMessage("Orden confirmada correctamente");
 
+      const isDelivery = formData.delivery;
+
       // Limpiar carrito y solo las tiendas del formulario tras éxito
       clearCart();
-      updateFormData({ stores: [] });
+      updateFormData({
+        stores: [],
+        showDeliveryOverlay: isDelivery,
+      });
 
       // Redirigir al inicio o a una página de éxito
       router.push("/orders");

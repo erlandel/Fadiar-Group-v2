@@ -22,6 +22,7 @@ export type FormData = {
   address: string;
   note?: string;
   stores?: SelectedStore[];
+  showDeliveryOverlay?: boolean;
 };
 
 export type FormState = {
@@ -45,6 +46,7 @@ export const defaultFormData: FormData = {
   address: "",
   note: "",
   stores: [],
+  showDeliveryOverlay: false,
 };
 
 type FormStore = FormState;
