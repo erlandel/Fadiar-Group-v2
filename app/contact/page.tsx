@@ -1,6 +1,6 @@
 import { ContactInfo } from "@/components/contactComponents/contactInfo";
 import { ContactMap } from "@/components/contactComponents/contactMap";
-import { Building2, Mail, MapPin, Phone } from "lucide-react";
+import ContactSocialNetworks from "@/components/contactComponents/contactSocialNetworks";
 
 const Contact = () => {
   return (
@@ -23,7 +23,11 @@ const Contact = () => {
             <ContactInfo />
           </div>
 
-          <div className="mt-5">
+          <div>
+              <ContactSocialNetworks/>
+          </div>
+
+          <div className="mt-10">
             <ContactMap />
           </div>
         </div>

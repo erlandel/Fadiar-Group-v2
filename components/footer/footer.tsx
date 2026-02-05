@@ -51,33 +51,21 @@ export default function Footer() {
 
           <div className="flex gap-4 mt-8 md:mt-12">
             <Link
-              href="https://facebook.com"
+              href="https://www.facebook.com/share/1DmQHQBWvG/?mibextid=wwXIfr"
               target="_blank"
               className="hover:scale-110 transition-transform"
             >
               <FacebookIcon width={32} height={32} />
             </Link>
             <Link
-              href="https://instagram.com"
+              href="https://www.instagram.com/grupo_fadiar?igsh=eTE5YTduNjN4NW1v&utm_source=qr"
               target="_blank"
               className="hover:scale-110 transition-transform"
             >
               <InstagramIcon width={32} height={32} />
             </Link>
-            <Link
-              href="https://tiktok.com"
-              target="_blank"
-              className="hover:scale-110 transition-transform"
-            >
-              <TikTokIcon width={32} height={32} />
-            </Link>
-            <Link
-              href="https://wa.me/5363513228"
-              target="_blank"
-              className="hover:scale-110 transition-transform"
-            >
-              <WhatsAppIcon width={32} height={32} />
-            </Link>
+        
+        
           </div>
         </div>
 
