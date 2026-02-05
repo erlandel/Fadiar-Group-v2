@@ -13,7 +13,7 @@ import MatterCart1Store, {
 } from "@/store/matterCart1Store";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
-import useLocation from "@/hooks/location/useLocation";
+import useLocation from "@/hooks/locationRequests/useLocation";
 import {  NotoV1Information } from "@/icons/icons";
 
 export default function Amount() {
