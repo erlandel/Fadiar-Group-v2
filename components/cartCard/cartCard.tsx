@@ -114,7 +114,12 @@ export default function CartCard({
               >
                 {updating && (
                   <div className="absolute inset-0 flex items-center justify-center z-20 bg-white/50 rounded-xl">
+                    <div className=" sm:hidden">
+                    <LoadingDots size="0.8rem" />
+                    </div>
+                    <div className="hidden sm:block">
                     <LoadingDots size="1.5rem" />
+                    </div>
                   </div>
                 )}
                 <div className={`flex items-center transition-opacity duration-300 ${updating ? "opacity-40" : "opacity-100"}`}>
