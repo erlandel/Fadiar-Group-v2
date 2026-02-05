@@ -30,8 +30,8 @@ export default function Menu() {
     { href: "/products", label: "Productos" },
     { href: "/about", label: "Sobre Nosotros" },
     { href: "/faq", label: "Preguntas Frecuentes" },
-    { href: "/warranty", label: "Garantia" },
-    { href: "/shipping", label: "Envios" },
+    { href: "/warranty", label: "Garantía" },
+    { href: "/shipping", label: "Envíos" },
     { href: "/contact", label: "Contacto" },
   ];
 
