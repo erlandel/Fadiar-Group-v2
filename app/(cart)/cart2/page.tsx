@@ -1,3 +1,4 @@
+import Link from "next/link";
 import PaymentMethods from "@/components/paymentMethods/paymentMethods";
 import { CheckoutStepper } from "@/components/ui/stepper";
 import { SectionMobile } from "@/sections/sectionMobile";
@@ -11,8 +12,11 @@ export default function Cart2() {
         <div className="mx-4">
           <div className="mt-10 ">
             <p className="text-xs text-gray-400 mb-4">
+              <Link href="/" className="text-gray-400 cursor-pointer">
+                Inicio -{" "}
+              </Link>
               <span className="text-gray-400">
-                Inicio - Carrito de Compras -{" "}
+                Carrito de Compras -{" "}
               </span>
               <span className="text-primary font-semibold">Formas de Pago</span>
             </p>

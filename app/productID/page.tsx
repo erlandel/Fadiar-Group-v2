@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
 import { BannerMoney } from "@/components/banner/bannerMoney";
@@ -137,7 +138,9 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
           <>
             <div id={"list"} className="mt-10">
               <p className="text-xs text-gray-400 mb-4">
-                <span className="text-gray-400">Inicio - </span>
+                <Link href="/" className="text-gray-400 cursor-pointer">
+                  Inicio -{" "}
+                </Link>
                 <span className="text-gray-400">Products - </span>
                 <span className="text-primary font-semibold">
                   {product.categoria?.name}

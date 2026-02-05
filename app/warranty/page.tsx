@@ -1,14 +1,16 @@
+import Link from "next/link";
 import Accordion from "@/components/accordion/accordion";
 import { warrantyPolicy } from "@/data/warrantyPolicy";
 
 const Warranty = () => {
   return (
     <>
-     <div className="px-4 md:px-25 2xl:px-28 mb-50">
-      
-         <div className="mt-10">
+      <div className="px-4 md:px-25 2xl:px-28 mb-50">
+        <div className="mt-10">
           <p className="text-xs text-gray-400 mb-4">
-            <span className="text-gray-400">Inicio - </span>
+            <Link href="/" className="text-gray-400 cursor-pointer">
+              Inicio -{" "}
+            </Link>
             <span className="text-primary font-semibold">Garantía</span>
           </p>
           <h1 className="text-3xl text-primary font-bold mb-8">Garantía</h1>

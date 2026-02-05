@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ContactInfo } from "@/components/contactComponents/contactInfo";
 import { ContactMap } from "@/components/contactComponents/contactMap";
 import ContactSocialNetworks from "@/components/contactComponents/contactSocialNetworks";
@@ -9,7 +10,9 @@ const Contact = () => {
         <div className="px-4 lg:px-25 2xl:px-28 mb-20">
           <div className="mt-10">
             <p className="text-xs text-gray-400 mb-4">
-              <span className="text-gray-400">Inicio - </span>
+              <Link href="/" className="text-gray-400 cursor-pointer">
+                Inicio -{" "}
+              </Link>
               <span className="text-primary font-semibold">
                 Información de Contacto
               </span>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Accordion from "@/components/accordion/accordion";
 import { frequentlyAskedQuestions } from "@/data/frequentlyAskedQuestions";
 import { SectionMobile } from "@/sections/sectionMobile";
@@ -12,7 +13,9 @@ export default function Faq() {
       <div className="px-4 md:px-25 2xl:px-28">
         <div className="mt-10">
           <p className="text-xs text-gray-400 mb-4">
-            <span className="text-gray-400">Inicio - </span>
+            <Link href="/" className="text-gray-400 cursor-pointer">
+              Inicio -{" "}
+            </Link>
             <span className="text-primary font-semibold">
               Preguntas Frecuentes
             </span>

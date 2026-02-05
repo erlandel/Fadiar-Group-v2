@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import Amount from "@/components/amount/amount";
 import CartCard from "@/components/cartCard/cartCard";
@@ -97,7 +98,9 @@ export default function Cart1() {
         <div className="mx-4">
           <div className="mt-10">
             <p className="text-xs text-gray-400 mb-4">
-              <span className="text-gray-400">Inicio - </span>
+              <Link href="/" className="text-gray-400 cursor-pointer">
+                Inicio -{" "}
+              </Link>
               <span className="text-primary font-semibold">
                 Carrito de Compras
               </span>

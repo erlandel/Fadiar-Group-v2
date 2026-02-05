@@ -1,10 +1,14 @@
+import Link from "next/link";
+
 export const AboutInformation = () => {
   return (
     <>
       <div className="px-4 md:px-6 xl:px-10 2xl:px-20">
-        <div className=" mt-10">
+          <div className=" mt-10">
           <p className="text-xs text-gray-400 mb-4">
-            <span className="text-gray-400">Inicio - </span>
+            <Link href="/" className="text-gray-400 cursor-pointer">
+              Inicio -{" "}
+            </Link>
             <span className="text-primary font-semibold">Sobre Nosotros</span>
           </p>
           <h1 className="text-3xl text-primary font-bold">Sobre Nosotros</h1>
