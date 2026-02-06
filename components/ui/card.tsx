@@ -175,13 +175,13 @@ export default function Card({
 
             {temporal_price !== null && temporal_price !== undefined ? (
               <div className="flex flex-row items-center justify-between gap-2">
-                <p className="flex items-baseline text-[#022954] font-bold text-2xl whitespace-nowrap">
+                <p className="flex items-baseline text-[#022954] font-bold xl:text-xl 2xl:text-2xl whitespace-nowrap">
                   ${temporal_price}
                   <span className="ml-1 text-[#022954] font-normal text-base">
                     {currency?.currency ?? "USD"}
                   </span>
                 </p>
-                <p className="text-[#777777] text-md line-through whitespace-nowrap">
+                <p className="text-[#777777] xl:text-md 2xl:text-lg line-through whitespace-nowrap">
                   ${price} {currency?.currency ?? "USD"}
                 </p>
               </div>
@@ -297,14 +297,14 @@ export default function Card({
 
             {temporal_price !== null && temporal_price !== undefined ? (
               <div className="flex flex-row items-center justify-between gap-2">
-                <p className="flex items-baseline text-[#022954] font-bold text-2xl whitespace-nowrap">
+                <p className="flex items-baseline text-[#022954] font-bold xl:text-xl 2xl:text-2xl whitespace-nowrap">
                   ${temporal_price}
                   <span className="ml-1 text-[#022954] font-normal text-base">
-                    USD
+                    {currency?.currency ?? "USD"}
                   </span>
                 </p>
-                <p className="text-[#777777] text-md line-through whitespace-nowrap">
-                  ${price} USD
+                <p className="text-[#777777] xl:text-md 2xl:text-lg line-through whitespace-nowrap">
+                  ${price} {currency?.currency ?? "USD"}
                 </p>
               </div>
             ) : (

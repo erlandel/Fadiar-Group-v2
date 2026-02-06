@@ -139,13 +139,13 @@ export default function ProductListConfirmation() {
                         <p className="text-primary text-md sm:text-xl">{item.brand}</p>
                       </div>
 
-                      <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
+                       <p className="flex items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954] mb-4">
                         $
                         {item.temporal_price &&
                         Number(item.temporal_price) !== 0
                           ? item.temporal_price
                           : item.price}{" "}
-                        <span className="text-primary font-normal text-lg sm:text-2xl">
+                            <span className="ml-1 text-base font-normal text-[#022954]">
                           {item.currency?.currency }
                         </span>
                       </p>

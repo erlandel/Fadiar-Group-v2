@@ -50,18 +50,23 @@ export default function CartCard({
   const currentQuantity = productId ? getItemQuantity(productId) : 0;
   const { deleteFromCart, loading: deleting } = useDeleteFromCart();
   const { updateQuantity, loading: updating } = useUpdateCart();
-  const [loadingType, setLoadingType] = useState<"increment" | "decrement" | null>(null);
+  const [loadingType, setLoadingType] = useState<
+    "increment" | "decrement" | null
+  >(null);
 
   const handleDelete = async () => {
     if (!productId) return;
-    
+
     if (cartId) {
       // Si tenemos cartId, usamos la lógica de backend
       await deleteFromCart(cartId, productId);
-    } 
+    }
   };
 
-  const handleUpdateQuantity = async (newQuantity: number, type: "increment" | "decrement") => {
+  const handleUpdateQuantity = async (
+    newQuantity: number,
+    type: "increment" | "decrement",
+  ) => {
     if (!cartId || newQuantity < 1) return;
     setLoadingType(type);
     try {
@@ -91,13 +96,13 @@ export default function CartCard({
             <p className="text-primary text-md sm:text-xl">{brand}</p>
           </div>
 
-          <p className="text-primary font-bold text-lg sm:text-2xl  mb-4">
+         <p className="flex items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954] mb-4">
             $
             {temporal_price && Number(temporal_price) !== 0
               ? temporal_price
               : price}{" "}
-            <span className="text-primary font-normal text-lg sm:text-2xl">
-              {currency?.currency }
+            <span className="ml-1 text-base font-normal text-[#022954]">
+              {currency?.currency ?? "USD"}
             </span>
           </p>
           {/* quantityProducts */}
@@ -115,14 +120,16 @@ export default function CartCard({
                 {updating && (
                   <div className="absolute inset-0 flex items-center justify-center z-20 bg-white/50 rounded-xl">
                     <div className=" sm:hidden">
-                    <LoadingDots size="0.8rem" />
+                      <LoadingDots size="0.8rem" />
                     </div>
                     <div className="hidden sm:block">
-                    <LoadingDots size="1.5rem" />
+                      <LoadingDots size="1.5rem" />
                     </div>
                   </div>
                 )}
-                <div className={`flex items-center transition-opacity duration-300 ${updating ? "opacity-40" : "opacity-100"}`}>
+                <div
+                  className={`flex items-center transition-opacity duration-300 ${updating ? "opacity-40" : "opacity-100"}`}
+                >
                   <button
                     className="px-3 sm:px-4 py-2 text-accent disabled:cursor-not-allowed"
                     onClick={() =>
@@ -155,7 +162,6 @@ export default function CartCard({
                     className="w-6 h-6 cursor-pointer text-red-500 transition-colors
                     animate__animated  animate__flash animate__infinite 
                     "
-                    
                   />
                 ) : (
                   <Trash2

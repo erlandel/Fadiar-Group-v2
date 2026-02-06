@@ -80,19 +80,21 @@ export default function CardProductPreSale({
             <p className="flex flex-wrap items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954]">
               ${temporal_price}
               <span className="ml-1 text-base font-normal text-[#022954]">
-                {currency?.currency }
+                {currency?.currency ?? "USD"}
               </span>
             </p>
             <p className="xl:text-md 2xl:text-lg text-[#777777] line-through">
-              ${price} {currency?.currency }
+              ${price} {currency?.currency ?? "USD"}
             </p>
           </div>
         ) : (
           <div className="flex flex-wrap items-baseline gap-2 text-[#022954]">
-            <p className="xl:text-2xl 2xl:text-3xl font-bold">${price}</p>
-            <span className="text-base font-normal">
-              {currency?.currency}
-            </span>
+            <p className="flex items-baseline xl:text-xl 2xl:text-2xl font-bold whitespace-nowrap">
+              ${price}
+              <span className="ml-1 text-base font-normal">
+                {currency?.currency ?? "USD"}
+              </span>
+            </p>
           </div>
         )}
       </div>
