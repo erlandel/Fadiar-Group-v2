@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, forwardRef } from "react";
 import { ChevronDown } from "lucide-react";
+import { onClickOutside } from "@/utils/clickOutside";
 
 interface StoreSelectorProps {
   tiendas: any[];
@@ -16,18 +17,11 @@ const StoreSelector = forwardRef<HTMLDivElement, StoreSelectorProps>(
 
     // Cerrar el menú al hacer clic fuera
     useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (
-          storesRef.current &&
-          !storesRef.current.contains(event.target as Node)
-        ) {
-          setOpenStores(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+      const cleanup = onClickOutside(storesRef, () => setOpenStores(false), {
+        enabled: openStores,
+      });
+      return cleanup;
+    }, [openStores]);
 
     if (tiendas.length === 0) return null;
 

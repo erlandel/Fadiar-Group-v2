@@ -1,10 +1,12 @@
+import { RefObject } from "react";
+
 export type ClickOutsideOptions = {
   eventTypes?: Array<"mousedown" | "touchstart">;
   enabled?: boolean;
 };
 
 export function onClickOutside(
-  target: HTMLElement | null,
+  target: HTMLElement | RefObject<HTMLElement | null> | null,
   handler: (e: MouseEvent | TouchEvent) => void,
   options?: ClickOutsideOptions
 ) {
@@ -14,13 +16,13 @@ export function onClickOutside(
   if (typeof document === "undefined") {
     return () => {};
   }
-  if (!enabled || !target) {
-    return () => {};
-  }
 
   const listener = (event: Event) => {
+    const el = target && "current" in target ? target.current : target;
+    if (!el || !enabled) return;
+
     const node = event.target as Node;
-    if (target && !target.contains(node)) {
+    if (!el.contains(node)) {
       handler(event as any);
     }
   };

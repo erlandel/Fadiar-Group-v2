@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { onClickOutside } from "@/utils/clickOutside";
 import { useEffect, useRef, useState } from "react";
 import { IcSharpSearch } from "@/icons/icons";
 
@@ -93,22 +94,10 @@ export default function PhoneInput({
 
   /* ===== CLICK FUERA ===== */
   useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    }
-
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    const cleanup = onClickOutside(dropdownRef, () => setIsDropdownOpen(false), {
+      enabled: isDropdownOpen,
+    });
+    return cleanup;
   }, [isDropdownOpen]);
 
   /* ===== SYNC PROPS ===== */

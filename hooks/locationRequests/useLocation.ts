@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
+import { onClickOutside } from "@/utils/clickOutside";
 
 interface MunicipalityData {
   id: number;
@@ -61,29 +62,18 @@ const useLocation = () => {
   const municipalitiesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const listener = (event: MouseEvent | TouchEvent) => {
-      const target = event.target as Node;
-
-      if (provincesRef.current && !provincesRef.current.contains(target)) {
-        setOpenProvinces(false);
-      }
-
-      if (
-        municipalitiesRef.current &&
-        !municipalitiesRef.current.contains(target)
-      ) {
-        setOpenMunicipalities(false);
-      }
-    };
-
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
+    const cleanupProvinces = onClickOutside(provincesRef, () => setOpenProvinces(false), {
+      enabled: openProvinces,
+    });
+    const cleanupMunicipalities = onClickOutside(municipalitiesRef, () => setOpenMunicipalities(false), {
+      enabled: openMunicipalities,
+    });
 
     return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
+      cleanupProvinces();
+      cleanupMunicipalities();
     };
-  }, []);
+  }, [openProvinces, openMunicipalities]);
 
   useEffect(() => {
     setSelectedProvince(province || "");

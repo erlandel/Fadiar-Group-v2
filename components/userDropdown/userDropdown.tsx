@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { refreshToken } from "@/utils/refreshToken";
 import SuccesMessage from "@/messages/succesMessage";
 import { logoutUrl } from "@/urlApi/urlApi";
+import { onClickOutside } from "@/utils/clickOutside";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,18 +78,11 @@ export default function UserDropdown() {
     }
   };
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    const cleanup = onClickOutside(dropdownRef, () => setIsOpen(false), {
+      enabled: isOpen,
+    });
+    return cleanup;
+  }, [isOpen]);
 
   return (
     <div className="relative" ref={dropdownRef}>

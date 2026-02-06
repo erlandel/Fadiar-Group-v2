@@ -3,6 +3,7 @@
 import { IcSharpSearch } from "@/icons/icons";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { onClickOutside } from "@/utils/clickOutside";
 import { Product } from "@/types/product";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { server_url } from "@/urlApi/urlApi";
@@ -118,19 +119,11 @@ export default function Searchbar() {
    * Cerrar dropdown al hacer click fuera
    */
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    const cleanup = onClickOutside(searchRef, () => setIsOpen(false), {
+      enabled: isOpen,
+    });
+    return cleanup;
+  }, [isOpen]);
 
   /**
    * Búsqueda optimizada con Jaro-Winkler 
