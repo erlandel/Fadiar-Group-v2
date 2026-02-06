@@ -115,7 +115,7 @@ export default function Menu() {
             {links.map((link) => (
                 <div
                   key={link.href}
-                  className="flex flex-col relative"
+                  className="flex flex-col relative font-bold"
                   ref={link.href === "/products" ? productsItemRef : undefined}
                 >
                   <div className="flex items-center justify-between">
@@ -126,7 +126,7 @@ export default function Menu() {
                         }
                         className={`flex w-full items-center  text-md transition hover:text-primary ${
                           checkActive(link.href)
-                            ? "text-primary font-semibold"
+                            ? "text-accent font-semibold"
                             : "text-gray-700"
                         }`}
                         aria-expanded={isProductsSubmenuOpen}
@@ -146,9 +146,9 @@ export default function Menu() {
                           setIsOpen(false);
                           if (!checkActive(link.href)) startLoading();
                         }}
-                        className={`text-md transition hover:text-primary ${
+                        className={`text-md transition hover:text-accent ${
                           checkActive(link.href)
-                            ? "text-primary font-semibold"
+                            ? "text-accent font-semibold"
                             : "text-gray-700"
                         }`}
                       >
@@ -174,13 +174,13 @@ export default function Menu() {
                         }}
                         className={`w-full text-left text-sm transition flex items-center gap-2 ${
                           pathname === "/products"
-                            ? "text-primary font-bold"
-                            : "text-gray-600 hover:text-primary"
+                            ? "text-accent font-bold"
+                            : "text-gray-600 hover:text-accent"
                         }`}>
                         <span
                           className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
                             pathname === "/products"
-                              ? "border-primary "
+                              ? "border-accent "
                               : "border-gray-300 bg-transparent"
                           }`}
                         />
@@ -195,14 +195,14 @@ export default function Menu() {
                               handleCategoryClick(cat.value);
                               setIsOpen(false);
                             }}
-                            className={`w-full text-left text-sm transition hover:text-primary flex items-center gap-2 ${
-                              isSelected ? "text-primary font-bold" : "text-gray-600"
+                            className={`w-full text-left text-sm transition hover:text-accent flex items-center gap-2 ${
+                              isSelected ? "text-accent font-bold" : "text-gray-600"
                             }`}
                           >
                             <span
                               className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
                                 isSelected
-                                  ? "border-primary "
+                                  ? "border-accent "
                                   : "border-gray-300 bg-transparent"
                               }`}
                             />
@@ -227,7 +227,7 @@ export default function Menu() {
 
       {/* Menú desktop - Solo visible en md y superiores */}
       <div className="hidden xl:block w-full bg-white ml-5">
-        <nav className="relative flex justify-center gap-9 text-sm ">
+        <nav className="relative flex justify-center gap-9 text-sm font-bold ">
           {links.map((link) => (
               <div key={link.href} className="group pb-2">
                 <Link
@@ -236,8 +236,8 @@ export default function Menu() {
                   onClick={() => {
                     if (!checkActive(link.href)) startLoading();
                   }}
-                  className={`transition flex items-center  hover:text-primary   ${
-                    checkActive(link.href) ? "text-primary font-semibold" : "text-gray-700"
+                  className={`transition flex items-center  hover:text-accent   ${
+                    checkActive(link.href) ? "text-accent font-semibold" : "text-gray-700"
                   }`}
                 >
                   {link.label}
@@ -258,16 +258,16 @@ export default function Menu() {
                             <button
                               key={cat.value}
                               onClick={() => handleCategoryClick(cat.value)}
-                              className={`w-fit text-left py-2 text-sm transition-colors hover:text-primary cursor-pointer flex items-center gap-1 ${
+                              className={`w-fit text-left py-2 text-sm transition-colors hover:text-accent cursor-pointer flex items-center gap-1 ${
                                 selectedCategories.includes(cat.value)
-                                  ? "text-primary font-bold"
+                                  ? "text-accent font-bold"
                                   : "text-gray-600"
                               }`}
                             >
                               <span
                                 className={`inline-block w-3.5 h-3.5 rounded-full border-2 border-dashed flex-none shrink-0 ${
                                   selectedCategories.includes(cat.value)
-                                    ? "border-primary "
+                                    ? "border-accent "
                                     : "border-gray-300 bg-transparent"
                                 }`}
                               />
