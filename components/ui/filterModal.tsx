@@ -147,7 +147,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   };
 
   return (
-    <div className="relative bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="relative font-bold bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       {/* Title */}
       <button 
         onClick={() => setIsOpen(!isOpen)}

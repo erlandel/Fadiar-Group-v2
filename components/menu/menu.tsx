@@ -173,13 +173,13 @@ export default function Menu() {
                           }
                         }}
                         className={`w-full text-left text-sm transition flex items-center gap-2 ${
-                          pathname === "/products"
+                          checkActive("/products")
                             ? "text-accent font-bold"
                             : "text-gray-600 hover:text-accent"
                         }`}>
                         <span
                           className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
-                            pathname === "/products"
+                            checkActive("/products")
                               ? "border-accent "
                               : "border-gray-300 bg-transparent"
                           }`}

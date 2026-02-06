@@ -15,8 +15,9 @@ import { Filter } from "lucide-react";
 
 export default function Header() {
   const pathname = usePathname();
-  const isCart4 = pathname === "/cart4";
-  const isCartStep = ["/cart1", "/cart2", "/cart3"].includes(pathname);
+  const normalizedPathname = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const isCart4 = normalizedPathname === "/cart4/";
+  const isCartStep = ["/cart1/", "/cart2/", "/cart3/"].includes(normalizedPathname);
   const [mounted, setMounted] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
   const { setIsOpen } = useProductsByLocationStore();
@@ -84,7 +85,7 @@ export default function Header() {
           <Serchbar />
         </div>
 
-        {pathname === "/products" && (
+        {normalizedPathname === "/products/" && (
           <div>
             <button
               onClick={() => setIsFilterOpen(true)}

@@ -36,7 +36,7 @@ const ActiveFilters: React.FC<ActiveFiltersProps> = ({
     price[1] !== priceRange.max;
 
   return (
-    <div className="flex flex-col gap-2 mb-2 mt-2 font-bold text-sm">
+    <div className="flex flex-col gap-2 mb-2 mt-2 font-bold text-sm ">
       {/* Filtros aplicados */}
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 ">
