@@ -252,7 +252,7 @@ export default function Menu() {
                   <div className="absolute left-0 right-0 top-full hidden group-hover:flex justify-center xl:-ml-5">
                     <div className="w-full  bg-white shadow-lg rounded-b-lg border border-gray-100 px-6 py-4 mt-0.5">
                       <div className="overflow-y-auto custom-scrollbar mx-2">
-                        <div className="grid grid-cols-[repeat(5,auto)] 2xl:grid-cols-[repeat(6,auto)] justify-between gap-x-4 gap-y-1 w-full">
+                        <div className="grid grid-cols-[repeat(6,auto)] 2xl:grid-cols-[repeat(7,auto)] justify-between gap-x-4 gap-y-1 w-full">
                       
                           {availableCategories.map((cat) => (
                             <button
