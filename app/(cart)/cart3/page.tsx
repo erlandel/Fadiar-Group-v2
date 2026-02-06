@@ -15,9 +15,9 @@ export default function Cart3() {
               <Link href="/" className="text-gray-400 cursor-pointer">
                 Inicio -{" "}
               </Link>
-              <span className="text-gray-400">
+              <Link href="/cart1" className="text-gray-400 cursor-pointer">
                 Carrito de Compras -{" "}
-              </span>
+              </Link>
               <span className="text-primary font-semibold">Confirmación</span>
             </p>
             <h1 className="text-3xl text-primary font-bold ">Confirmación</h1>
