@@ -1,14 +1,13 @@
 "use client"
-import { useEffect, useState, useRef } from "react";
-import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 import MatterCart1Store from "@/store/matterCart1Store";
-import { server_url } from "@/urlApi/urlApi";
+import CartCard from "@/components/cartCard/cartCard";
+import StoreSelector from "@/components/storeSelector/storeSelector";
+import ListByStore from "@/components/listByStore/listByStore";
 
 export default function ProductListConfirmation() {
   const [isClient, setIsClient] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | number>("all");
-  const [openStores, setOpenStores] = useState(false);
-  const storesRef = useRef<HTMLDivElement | null>(null);
 
   const { stores: formStores } = MatterCart1Store((state) => state.formData);
   const stores = formStores || [];
@@ -21,19 +20,6 @@ export default function ProductListConfirmation() {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        storesRef.current &&
-        !storesRef.current.contains(event.target as Node)
-      ) {
-        setOpenStores(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -53,113 +39,46 @@ export default function ProductListConfirmation() {
       <div className="w-full  border-b-2 border-gray"></div>
 
       {isClient && stores.length > 0 && (
-        <div className="flex items-center  gap-2 mt-4" ref={storesRef}>
-          <span className="font-bold text-primary sm:text-lg whitespace-nowrap">
-            Tienda(s)
-          </span>
-          <span className="text-primary text-xl font-bold">:</span>
-
-          <div className="relative">
-            <div
-              className="flex items-center justify-between bg-gray-50 rounded-lg p-2 cursor-pointer  transition-colors min-w-[200px]"
-              onClick={() => setOpenStores(!openStores)}
-            >
-              <span className="font-bold text-accent whitespace-nowrap truncate sm:text-lg">
-                {allStores.find((t) => t.id === selectedStoreId)?.name ||
-                  "Todas"}
-              </span>
-              <ChevronDown
-                className={`h-5 w-5 ml-2 text-primary transition-transform duration-200 ${
-                  openStores ? "rotate-180" : ""
-                }`}
-              />
-            </div>
-
-            {openStores && (
-              <ul className="absolute left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-100 max-h-60 overflow-auto py-1 w-full min-w-[200px]">
-                {allStores.map((tienda) => (
-                  <li
-                    key={tienda.id}
-                    className={`px-4 py-2 cursor-pointer hover:bg-gray-50 text-sm transition-colors ${
-                      selectedStoreId === tienda.id
-                        ? "bg-primary/5 text-primary font-bold"
-                        : "text-gray-700"
-                    }`}
-                    onClick={() => {
-                      setSelectedStoreId(tienda.id);
-                      setOpenStores(false);
-                    }}
-                  >
-                    {tienda.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        <div className="mt-4">
+          <StoreSelector
+            stores={allStores}
+            selectedId={selectedStoreId}
+            onChange={setSelectedStoreId}
+            label="Tienda(s)"
+          />
         </div>
       )}
 
       <div className="mt-4  flex flex-col justify-center items-center lg:flex-row lg:items-start  ">
         <div className="w-full max-w-120">
-          {filteredStores.map((store) => (
-            <div
-              key={store.id}
-              className="flex flex-col gap-y-4 mb-8"
-            >
-              <div className="border-b pb-2">
-                <h2 className=" font-bold text-primary">{store.name}</h2>
-                {store.direccion && (
-                  <p className="text-sm text-gray-500 ">
-                    <span className="text-accent font-bold">
-                      dirección:
-                    </span>{" "}
-                    {store.direccion}
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-y-4 items-center justify-center">
-                {(store.products || []).map((item: any) => (
-                  <div
-                    key={item.productId}
-                    className="bg-white w-full border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row p-2"
-                  >
-                    <div className="w-32 h-[124px] overflow-hidden rounded-2xl shrink-0">
-                      <img
-                        className="w-full h-full object-contain"
-                        src={`${server_url}/${item.image}`}
-                        alt={item.title}
-                      />
-                    </div>
-
-                    <div className="flex-1 flex flex-col ml-4 min-w-0">
-                      <div className="mb-3">
-                        <h3 className="text-primary font-bold text-md sm:text-xl truncate">
-                          {item.title}
-                        </h3>
-                        <p className="text-primary text-md sm:text-xl">{item.brand}</p>
-                      </div>
-
-                       <p className="flex items-baseline xl:text-xl 2xl:text-2xl font-bold text-[#022954] mb-4">
-                        $
-                        {item.temporal_price &&
-                        Number(item.temporal_price) !== 0
-                          ? item.temporal_price
-                          : item.price}{" "}
-                            <span className="ml-1 text-base font-normal text-[#022954]">
-                          {item.currency?.currency }
-                        </span>
-                      </p>
-                      <div className="mt-auto  flex items-center justify-between gap-2">
-                        <p className="text-[#777777] text-md">
-                          Cantidad: {item.quantity}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+          <ListByStore
+            groups={filteredStores.map((store) => ({
+              id: store.id,
+              name: store.name,
+              direccion: store.direccion,
+              items: (store.products || []) as any[],
+            }))}
+            renderItem={(item: any) => (
+              <CartCard
+                key={item.productId}
+                title={item.title}
+                brand={item.brand}
+                price={String(item.price)}
+                temporal_price={
+                  item.temporal_price !== undefined && item.temporal_price !== null
+                    ? String(item.temporal_price)
+                    : undefined
+                }
+                image={item.image}
+                actionIcon="none"
+                quantityProducts={item.quantity}
+                currency={item.currency ?? { currency: "" }}
+                bgColor="bg-white"
+                width="w-full"
+                padding="p-2"
+              />
+            )}
+          />
         </div>
       </div>
     </div>
