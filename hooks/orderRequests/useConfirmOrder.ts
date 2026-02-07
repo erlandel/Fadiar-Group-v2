@@ -71,6 +71,7 @@ export const useConfirmOrder = () => {
       updateFormData({
         stores: [],
         showDeliveryOverlay: isDelivery,
+        delivery: false,
       });
 
       // Redirigir al inicio o a una página de éxito
