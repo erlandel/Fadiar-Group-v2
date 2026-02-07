@@ -47,7 +47,8 @@ export default function Menu() {
   );
 
   const handleCategoryClick = (categoryValue: string) => {
-    setSelectedCategories([categoryValue]);
+    const isAlreadySelected = selectedCategories.includes(categoryValue);
+    setSelectedCategories(isAlreadySelected ? [] : [categoryValue]);
     setShouldScrollToProducts(true);
 
     if (!checkActive("/products")) {
@@ -185,13 +186,13 @@ export default function Menu() {
                           setSelectedCategories([]);
                         }}
                         className={`w-full text-left text-sm transition flex items-center gap-2 ${
-                          checkActive("/products")
+                          checkActive("/products") && selectedCategories.length === 0
                             ? "text-accent font-bold"
                             : "text-gray-600 hover:text-accent"
                         }`}>
                         <span
                           className={`inline-block w-4 h-4 rounded-full border-2 border-dashed ${
-                            checkActive("/products")
+                            checkActive("/products") && selectedCategories.length === 0
                               ? "border-accent "
                               : "border-gray-300 bg-transparent"
                           }`}
