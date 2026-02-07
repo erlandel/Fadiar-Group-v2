@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { MaterialSymbolsClose, MaterialSymbolsMenu } from "@/icons/icons";
 import useLoadingStore from "@/store/loadingStore";
@@ -21,7 +21,7 @@ export default function Menu() {
   const { data: inventoryData } = useInventory();
   const {
     selectedCategories,
-    toggleCategory,
+    setSelectedCategories,
     setShouldScrollToProducts,
   } = useFilterStore();
 
@@ -47,7 +47,7 @@ export default function Menu() {
   );
 
   const handleCategoryClick = (categoryValue: string) => {
-    toggleCategory(categoryValue);
+    setSelectedCategories([categoryValue]);
     setShouldScrollToProducts(true);
 
     if (!checkActive("/products")) {
@@ -55,6 +55,17 @@ export default function Menu() {
       router.push("/products");
     }
   };
+
+  const prevPathRef = useRef(pathname);
+  useEffect(() => {
+    const normalize = (p: string) => (p.endsWith("/") ? p : `${p}/`);
+    const prev = normalize(prevPathRef.current);
+    const curr = normalize(pathname);
+    if (prev === "/products/" && curr !== "/products/") {
+      setSelectedCategories([]);
+    }
+    prevPathRef.current = pathname;
+  }, [pathname, setSelectedCategories]);
 
   
 
@@ -171,6 +182,7 @@ export default function Menu() {
                           } else {
                             setShouldScrollToProducts(true);
                           }
+                          setSelectedCategories([]);
                         }}
                         className={`w-full text-left text-sm transition flex items-center gap-2 ${
                           checkActive("/products")
