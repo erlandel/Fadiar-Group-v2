@@ -1,14 +1,12 @@
 import ButtonPromoHome1 from "@/components/button/buttonPromoHome1";
 
-
-
 export const SectionMobile = () => {
   return (
     <>
       <div className="flex flex-col md:gap-20  md:flex-row items-center justify-center w-full h-72  my-50 md:my-0">
         <div>
           <img
-          data-animate="animate__flipInY"
+            data-animate="animate__flipInY"
             src="/images/mobile.webp"
             alt="Group"
             className="w-full  h-72 object-cover animate-on-scroll animate__slow  [animation-delay:0.6s] "
@@ -22,8 +20,9 @@ export const SectionMobile = () => {
             <span className="text-[#F5A623]">Grupo Fadiar</span>
           </h1>
           <p className="text-gray-500 mt-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-            turpis molestie, dictum est a, mattis tellus.
+            Diseñada para que comprar, gestionar tus pedidos y acceder a
+            nuestros servicios sea simple, rápido y seguro. Toda la experiencia
+            Grupo Fadiar, próximamente desde tu teléfono.
           </p>
           <div className="mt-8">
             {/* <ButtonPromoHome1 
@@ -34,12 +33,12 @@ export const SectionMobile = () => {
             className = "inline-flex items-center sm:gap-2 rounded-xl px-6 sm:px-6 py-2 gap-1 sm:py-3 text-sm font-inter font-semibold text-white shadow-md transition hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
             /> */}
 
-               <ButtonPromoHome1 
-            name="Muy pronto"
-            color="#022854" 
-            // icon={<ArrowDownToLine  />}
-            iconPosition="left"
-            className = "inline-flex items-center sm:gap-2 rounded-xl px-6 sm:px-6 py-2 gap-1 sm:py-3 text-sm font-inter font-semibold text-white shadow-md transition hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
+            <ButtonPromoHome1
+              name="Muy pronto"
+              color="#022854"
+              // icon={<ArrowDownToLine  />}
+              iconPosition="left"
+              className="inline-flex items-center sm:gap-2 rounded-xl px-6 sm:px-6 py-2 gap-1 sm:py-3 text-sm font-inter font-semibold text-white shadow-md transition hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
             />
           </div>
         </div>
