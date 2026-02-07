@@ -70,7 +70,8 @@ export const useConfirmOrder = () => {
       clearCart();
       updateFormData({
         stores: [],
-        showDeliveryOverlay: isDelivery,
+        showDeliveryOverlay: true,
+        overlayDelivery: isDelivery,
         delivery: false,
       });
 

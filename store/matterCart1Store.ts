@@ -23,6 +23,7 @@ export type FormData = {
   note?: string;
   stores?: SelectedStore[];
   showDeliveryOverlay?: boolean;
+  overlayDelivery?: boolean;
 };
 
 export type FormState = {
@@ -47,6 +48,7 @@ export const defaultFormData: FormData = {
   note: "",
   stores: [],
   showDeliveryOverlay: false,
+  overlayDelivery: false,
 };
 
 type FormStore = FormState;

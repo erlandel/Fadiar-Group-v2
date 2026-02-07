@@ -68,18 +68,52 @@ export default function Orders() {
     }
   };
 
+  const firstOrderId = orders.length > 0 ? orders[0].id : "";
+  const formattedOrderId =
+    firstOrderId && firstOrderId.toString().startsWith("#")
+      ? firstOrderId
+      : firstOrderId
+      ? `#${firstOrderId}`
+      : "";
+  const messageTitle = "¡Gracias por su compra!";
+  const effectiveDelivery = formData.overlayDelivery ?? formData.delivery;
+  const messageBodyLines = effectiveDelivery
+    ? [
+        "Su pedido ha sido confirmado exitosamente.",
+        `Número pedido: ${formattedOrderId}`,
+        "La entrega se realizará en un plazo de 24 a 48 horas",
+        "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles.",
+        "Gracias por confiar en Grupo Fadiar",
+      ]
+    : [
+        "Su pedido ha sido confirmado exitosamente.",
+        `Número pedido: ${formattedOrderId}`,
+        "Puede recogerlo en nuestra sede en un plazo de 7 días hábiles.",
+        "Deberá presentar su número de pedido al momento de la recogida.",
+        "Si necesita más información, nuestro equipo estará disponible para asistirle.",
+        "Gracias por confiar en Grupo Fadiar",
+      ];
+
   return (
     <>
       {showOverlay && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+        <div className="fixed inset-0 z-100 h-screen flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
           <div className="max-w-300 w-full">
-            <InformationMessage onClose={() => setShowOverlay(false)} />
+            <InformationMessage
+              onClose={() => {
+                setShowOverlay(false);
+                updateFormData({ overlayDelivery: false });
+              }}
+              title={messageTitle}
+              bodyLines={messageBodyLines}
+            />
           </div>
         </div>
       )}
-      <div className="mx-4 xl:px-40 mt-2">
+
+      {/* <div className="mx-4 xl:px-40 mt-2">
         <InformationMessage />
-      </div>
+      </div> */}
     
       <div className="mx-4 xl:px-40 mt-10 md:mt-15">
     
