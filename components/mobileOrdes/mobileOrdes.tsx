@@ -9,7 +9,7 @@ import LoadingDots from "../loadingDots/loadingDots";
 import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import { EmojioneLeftArrow } from "@/icons/icons";
-import { WhatsApp } from "@/icons/icons";
+import { WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
 
 interface MobileOrdesProps {
   orders: Order[];
@@ -143,7 +143,13 @@ export default function MobileOrdes({
                         </span>
                       </div>
 
-    {/* Soporte */}
+                      {/* Mensaje */}
+                      <p className="text-sm sm:text-lg">Mensaje</p>
+                      <p className=" flex justify-end">
+                        <StreamlineUltimateColorMessagesLogo className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
+                      </p>
+
+                      {/* Soporte */}
                       <p className="text-sm sm:text-lg">Soporte</p>
                       <p className=" flex justify-end">
                         <WhatsApp className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />

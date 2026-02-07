@@ -68,26 +68,21 @@ export default function Orders() {
     }
   };
 
-  const firstOrderId = orders.length > 0 ? orders[0].id : "";
-  const formattedOrderId =
-    firstOrderId && firstOrderId.toString().startsWith("#")
-      ? firstOrderId
-      : firstOrderId
-      ? `#${firstOrderId}`
-      : "";
+  const firstOrderId = formData.orderId || (orders.length > 0 ? orders[0].id : "");
+
   const messageTitle = "¡Gracias por su compra!";
   const effectiveDelivery = formData.overlayDelivery ?? formData.delivery;
   const messageBodyLines = effectiveDelivery
     ? [
         "Su pedido ha sido confirmado exitosamente.",
-        `Número pedido: ${formattedOrderId}`,
+        `Número pedido: ${firstOrderId}`,
         "La entrega se realizará en un plazo de 24 a 48 horas",
         "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles.",
         "Gracias por confiar en Grupo Fadiar",
       ]
     : [
         "Su pedido ha sido confirmado exitosamente.",
-        `Número pedido: ${formattedOrderId}`,
+        `Número pedido: #${firstOrderId}`,
         "Puede recogerlo en nuestra sede en un plazo de 7 días hábiles.",
         "Deberá presentar su número de pedido al momento de la recogida.",
         "Si necesita más información, nuestro equipo estará disponible para asistirle.",
@@ -102,7 +97,7 @@ export default function Orders() {
             <InformationMessage
               onClose={() => {
                 setShowOverlay(false);
-                updateFormData({ overlayDelivery: false });
+                updateFormData({ overlayDelivery: false, orderId: "" });
               }}
               title={messageTitle}
               bodyLines={messageBodyLines}

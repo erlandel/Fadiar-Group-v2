@@ -62,7 +62,11 @@ export const useConfirmOrder = () => {
     },
     onSuccess: (data) => {
       console.log("Respuesta del backend (agregar pedido):", data);
-      SuccesMessage("Orden confirmada correctamente");
+      
+      const orderId = data.orders?.[0]?.id;
+      const formattedOrderId = orderId ? `#${orderId}` : "";
+      
+      SuccesMessage(`Orden confirmada correctamente ${formattedOrderId}`);
 
       const isDelivery = formData.delivery;
 
@@ -73,7 +77,10 @@ export const useConfirmOrder = () => {
         showDeliveryOverlay: true,
         overlayDelivery: isDelivery,
         delivery: false,
+        orderId: orderId || "",
       });
+
+    
 
       // Redirigir al inicio o a una página de éxito
       router.push("/orders");

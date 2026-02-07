@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { EmojioneLeftArrow, MaterialSymbolsAdd, WhatsApp } from "@/icons/icons";
+import { EmojioneLeftArrow, MaterialSymbolsAdd, WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
 import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
@@ -64,12 +64,13 @@ export default function OrdersTable({
             <>
               {/* Table Header */}
               {orders.length > 0 && (
-                <div className="grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_80px] gap-4 px-6 py-4 font-bold  text-[#777777] items-center">
+                <div className="grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_1fr_80px] gap-4 px-6 py-4 font-bold  text-[#777777] items-center">
                   <div className="text-center">Pedido</div>
                   <div className="text-center">Fecha</div>
                   <div className="text-center">Hora</div>
                   <div className="text-center">Teléfono</div>
                   <div className="text-center">Estado</div>
+                  <div className="text-center">Mensaje</div>
                   <div className="text-center">Soporte</div>
                   <div></div>
                 </div>
@@ -82,7 +83,7 @@ export default function OrdersTable({
                     <div key={order.id} className="py-2 ">
                       {/* Order Row */}
                       <div
-                        className={`grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_80px] gap-4 px-6 py-4 items-center transition-colors ${
+                        className={`grid grid-cols-[1fr_1fr_1fr_1.5fr_1fr_1fr_1fr_80px] gap-4 px-6 py-4 items-center transition-colors ${
                           isOpen
                             ? "bg-[#022954] text-white rounded-t-xl"
                             : "bg-[#F5F7FA] text-[#777777] rounded-2xl"
@@ -112,6 +113,9 @@ export default function OrdersTable({
                           >
                             {order.status}
                           </span>
+                        </div>
+                        <div className="flex justify-center ">
+                          <StreamlineUltimateColorMessagesLogo className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />
                         </div>
                         <div className="flex justify-center ">
                           <WhatsApp className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />

@@ -24,6 +24,7 @@ export type FormData = {
   stores?: SelectedStore[];
   showDeliveryOverlay?: boolean;
   overlayDelivery?: boolean;
+  orderId?: string | number;
 };
 
 export type FormState = {
@@ -49,6 +50,7 @@ export const defaultFormData: FormData = {
   stores: [],
   showDeliveryOverlay: false,
   overlayDelivery: false,
+  orderId: "",
 };
 
 type FormStore = FormState;
