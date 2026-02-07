@@ -21,7 +21,6 @@ export default function Amount() {
   const { auth } = useAuthStore();
   const {
     province: storeProvince,
-    provinceId: storeProvinceId,
     municipality: storeMunicipality,
     municipalityId: storeMunicipalityId,
   } = useProductsByLocationStore();
@@ -43,6 +42,7 @@ export default function Amount() {
   const rawCart = useStore(cartStore, (state) => (state as any).rawCart);
 
   const [formData, setFormData] = useState<MatterFormData>(defaultFormData);
+  const [lastNameInput, setLastNameInput] = useState("");
 
   // Items del carrito (sin filtrar por domicilio)
   const filteredItems = items;
@@ -62,6 +62,16 @@ export default function Amount() {
   const [errors, setErrors] = useState<
     Partial<Record<keyof MatterFormData, string>>
   >({});
+
+  const FIELD_ORDER: (keyof MatterFormData)[] = [
+    "firstName",
+    "lastName1",
+    "lastName2",
+    "province",
+    "municipality",
+    "phone",
+    "address",
+  ];
 
   const [deliveryPrice, setDeliveryPrice] = useState(0);
 
@@ -97,6 +107,9 @@ export default function Amount() {
       ...prev,
       ...persistedFormData,
     }));
+    // Inicializar el input de apellidos con los datos persistidos
+    const initialLastName = `${persistedFormData.lastName1 || ""} ${persistedFormData.lastName2 || ""}`.trim();
+    setLastNameInput(initialLastName);
   }, []);
 
   // Sync store values with local form data initially or when store changes
@@ -117,8 +130,12 @@ export default function Amount() {
     const { name, value } = e.target;
 
     if (name === "lastName") {
-      // No trim() here to allow spaces while typing
-      const names = value.split(/\s+/);
+      // Actualizar el estado local del input inmediatamente
+      setLastNameInput(value);
+
+      // Dividir el valor para obtener lastName1 y lastName2
+      // Usamos regex para permitir múltiples espacios pero mantener la estructura
+      const names = value.trim().split(/\s+/).filter(Boolean);
       const lastName1 = names[0] || "";
       const lastName2 = names.slice(1).join(" ") || "";
 
@@ -174,6 +191,21 @@ export default function Amount() {
         fieldErrors[field] = issue.message;
       });
       setErrors(fieldErrors);
+
+      // Desplazarse al primer campo con error
+      const firstErrorField = FIELD_ORDER.find((field) => fieldErrors[field]);
+      if (firstErrorField) {
+        // lastName1 y lastName2 comparten el mismo contenedor
+        const elementId =
+          firstErrorField === "lastName1" || firstErrorField === "lastName2"
+            ? "field-lastName"
+            : `field-${firstErrorField}`;
+
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
       return;
     }
 
@@ -331,7 +363,7 @@ export default function Amount() {
             </p>
           </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-3 ">
-              <div>
+              <div id="field-firstName">
                 <label className="ml-2 font-medium text-gray-600">Nombre</label>
                 <InputField
                   type="text"
@@ -347,7 +379,7 @@ export default function Amount() {
                 )}
               </div>
 
-              <div>
+              <div id="field-lastName">
                 <label className="ml-2 font-medium text-gray-600">
                   Apellidos
                 </label>
@@ -355,7 +387,7 @@ export default function Amount() {
                   type="text"
                   placeholder="Apellidos"
                   name="lastName"
-                  value={`${formData.lastName1} ${formData.lastName2}`.trimStart()}
+                  value={lastNameInput}
                   onChange={handleInputChange}
                 />
                 {errors.lastName1 && (
@@ -370,7 +402,7 @@ export default function Amount() {
                 )}
               </div>
 
-              <div>
+              <div id="field-province">
                 <label className="ml-2 font-medium text-gray-600">
                   Provincia
                 </label>
@@ -388,7 +420,7 @@ export default function Amount() {
                 )}
               </div>
 
-              <div className="flex flex-col relative" ref={municipalitiesRef}>
+              <div className="flex flex-col relative" ref={municipalitiesRef} id="field-municipality">
                 <label className="ml-2 font-medium text-gray-600">
                   Municipio
                 </label>
@@ -451,7 +483,7 @@ export default function Amount() {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2" id="field-phone">
                 <label className="ml-2 font-medium text-gray-600">
                   Teléfono
                 </label>
@@ -472,7 +504,7 @@ export default function Amount() {
                 </div>
               </div>
 
-              <div>
+              <div id="field-address">
                 <label className="ml-2 font-medium text-gray-600">
                   Dirección
                 </label>
