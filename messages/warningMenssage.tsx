@@ -9,7 +9,9 @@ const WarningMenssage = (message: string) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
+    theme: "dark",
+    position: "top-right",
+    style: { backgroundColor: "#022854" },
   });
 };
 
