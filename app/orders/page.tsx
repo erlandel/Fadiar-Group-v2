@@ -75,7 +75,7 @@ export default function Orders() {
   const messageBodyLines = effectiveDelivery
     ? [
         "Su pedido ha sido confirmado exitosamente.",
-        `Número pedido: ${firstOrderId}`,
+        `Número pedido: #${firstOrderId}`,
         "La entrega se realizará en un plazo de 24 a 48 horas",
         "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles.",
         "Gracias por confiar en Grupo Fadiar",

@@ -2,10 +2,13 @@
 
 import BuyerDetailsStore from "@/store/buyerDetailsStore";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ModalPaymentDetails from "../modalPaymentDetails/modalPaymentDetails";
 
 export default function PayerPaymentDetails() {
   const router = useRouter();
   const buyerDetails = BuyerDetailsStore((state) => state.buyerDetails);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   return (
     <div className="w-full  xl:min-w-full wrap-break-word">
@@ -31,9 +34,19 @@ export default function PayerPaymentDetails() {
         <div className="w-full  border-b-2 border-gray"></div>
 
         <div className="ml-4">
-          <p className="text-accent cursor-pointer" onClick={() => router.push('/cart2')}>Editar método de pago</p>
+          <p
+            className="text-accent cursor-pointer"
+            onClick={() => setShowPaymentModal(true)}
+          >
+            Editar método de pago
+          </p>
         </div>
       </div>
+
+      <ModalPaymentDetails
+        show={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+      />
     </div>
   );
 }

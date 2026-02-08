@@ -64,9 +64,8 @@ export const useConfirmOrder = () => {
       console.log("Respuesta del backend (agregar pedido):", data);
       
       const orderId = data.orders?.[0]?.id;
-      const formattedOrderId = orderId ? `#${orderId}` : "";
       
-      SuccesMessage(`Orden confirmada correctamente ${formattedOrderId}`);
+      SuccesMessage(`Orden confirmada correctamente`);
 
       const isDelivery = formData.delivery;
 
