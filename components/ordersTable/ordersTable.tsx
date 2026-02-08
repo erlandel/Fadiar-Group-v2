@@ -70,7 +70,7 @@ export default function OrdersTable({
                   <div className="text-center">Hora</div>
                   <div className="text-center">Teléfono</div>
                   <div className="text-center">Estado</div>
-                  <div className="text-center">Mensaje</div>
+                  <div className="text-center">Información</div>
                   <div className="text-center">Soporte</div>
                   <div></div>
                 </div>
@@ -100,7 +100,7 @@ export default function OrdersTable({
                         </div>
                         <div className="text-center">{order.date}</div>
                         <div className="text-center">{order.time}</div>                   
-                        <div className="text-center">{order.client_cell}</div>                      
+                        <div className="text-center">{order.client_cell === "-" || order.client_cell.startsWith("-") ? "no disponible" : order.client_cell}</div>                      
                         <div className="text-center">
                           <span
                             className={`inline-block px-5 py-2 rounded-full text-md font-medium ${

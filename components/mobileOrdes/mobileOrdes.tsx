@@ -124,7 +124,7 @@ export default function MobileOrdes({
                       {/* Teléfono */}
                       <p className="text-sm sm:text-lg">Teléfono</p>
                       <p className=" font-bold text-right sm:text-xl">
-                        {order.client_cell}
+                        {order.client_cell === "-" || order.client_cell.startsWith("-") ? "no disponible" : order.client_cell}
                       </p>
 
                       {/* Estado */}
@@ -143,8 +143,8 @@ export default function MobileOrdes({
                         </span>
                       </div>
 
-                      {/* Mensaje */}
-                      <p className="text-sm sm:text-lg">Mensaje</p>
+                      {/* Información */}
+                      <p className="text-sm sm:text-lg">Información</p>
                       <p className=" flex justify-end">
                         <StreamlineUltimateColorMessagesLogo className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
                       </p>
