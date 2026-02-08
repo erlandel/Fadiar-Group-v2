@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import MatterCart1Store, {
   FormData as MatterFormData,
 } from "@/store/matterCart1Store";
@@ -15,7 +14,6 @@ import ModalRecipientPaymentDetails from "../modalRecipientPaymentDetails/modalR
 import ModalPaymentDetails from "../modalPaymentDetails/modalPaymentDetails";
 
 export default function RecipientPaymentDetails() {
-  const router = useRouter();
   const { formData } = MatterCart1Store();
   const { auth } = useAuthStore();
   const person = auth?.person;
@@ -76,6 +74,15 @@ export default function RecipientPaymentDetails() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (!showModal) {
+      setEditData({ ...formData });
+      setLastNameInput(
+        `${formData.lastName1 || ""} ${formData.lastName2 || ""}`.trim(),
+      );
+    }
+  }, [formData, showModal]);
 
   useEffect(() => {
     if (
@@ -142,9 +149,6 @@ export default function RecipientPaymentDetails() {
           ...prev,
           municipality: defaultMun.municipio,
         }));
-        MatterCart1Store.getState().updateFormData({
-          municipality: defaultMun.municipio,
-        });
         handleMunicipalityChange(defaultMun);
       }
     }

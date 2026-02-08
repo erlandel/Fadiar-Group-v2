@@ -4,7 +4,7 @@ import {  useRef } from "react";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
 import { Check, ChevronDown, X } from "lucide-react";
-import MatterCart1Store, { FormData as MatterFormData } from "@/store/matterCart1Store";
+import { FormData as MatterFormData } from "@/store/matterCart1Store";
 import { NotoV1Information } from "@/icons/icons";
 
 type MunicipalityData = {
@@ -92,9 +92,6 @@ export default function ModalRecipientPaymentDetails({
                 onChange={(e) => {
                   const isChecked = e.target.checked;
                   setEditData((prev) => ({ ...prev, delivery: isChecked }));
-                  MatterCart1Store.getState().updateFormData({
-                    delivery: isChecked,
-                  });
                   if (!isChecked && errors.address) {
                     setErrors((prev) => ({ ...prev, address: undefined }));
                   }
@@ -222,7 +219,6 @@ export default function ModalRecipientPaymentDetails({
                               handleMunicipalityChange(mun, (m) => {
                                 const update = { municipality: m.municipio };
                                 setEditData((prev) => ({ ...prev, ...update }));
-                                MatterCart1Store.getState().updateFormData(update);
                                 setErrors((prev) => ({
                                   ...prev,
                                   municipality: undefined,
