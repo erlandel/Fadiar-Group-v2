@@ -63,7 +63,7 @@ export default function NineOffers() {
 
     return (
       <CardProduct
-        key={offer.id}
+        key={`offer-${offer.id}`}
         productId={offer.id}
         category={offer.categoria?.name}
         title={offer.name}

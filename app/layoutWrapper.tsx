@@ -22,16 +22,59 @@ function ScrollToTop() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    const lastProductId = sessionStorage.getItem('last-product-id');
+    
+    const scrollToTarget = () => {
+      if (lastProductId && !pathname.includes('/productID')) {
+        // Buscamos todos los elementos que tengan este ID (pueden haber duplicados en carousels o versiones mobile/desktop)
+        const elements = document.querySelectorAll(`[id="product-${lastProductId}"]`);
+        
+        // Intentamos encontrar uno que sea visible en el DOM
+        const visibleElement = Array.from(elements).find(el => {
+          const style = window.getComputedStyle(el);
+          const rect = el.getBoundingClientRect();
+          return style.display !== 'none' && 
+                 style.visibility !== 'hidden' && 
+                 rect.width > 0 && 
+                 rect.height > 0;
+        });
+
+        const target = visibleElement || elements[0];
+
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          sessionStorage.removeItem('last-product-id');
+          return true;
+        }
+      }
+      return false;
     };
 
-    scrollToTop();
-    // Ejecutar de nuevo tras un breve delay para asegurar que el contenido renderizado no desplace el scroll
-    const timeoutId = setTimeout(scrollToTop, 10);
-    return () => clearTimeout(timeoutId);
+    const performScroll = () => {
+      if (!scrollToTarget()) {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }
+    };
+
+    if (lastProductId && !pathname.includes('/productID')) {
+      // Intentamos varias veces para dar tiempo a que los productos y carousels se carguen
+      let attempts = 0;
+      const intervalId = setInterval(() => {
+        if (scrollToTarget() || attempts > 10) {
+          clearInterval(intervalId);
+          if (attempts > 10) performScroll();
+        }
+        attempts++;
+      }, 100);
+      return () => clearInterval(intervalId);
+    } else {
+      performScroll();
+      // Pequeño delay para asegurar que el contenido renderizado no desplace el scroll
+      const timeoutId = setTimeout(performScroll, 50);
+      return () => clearTimeout(timeoutId);
+    }
   }, [pathname, searchParams]);
 
   return null;

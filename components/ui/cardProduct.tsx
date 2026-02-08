@@ -46,6 +46,7 @@ export default function CardProduct({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
+      sessionStorage.setItem('last-product-id', productId.toString());
       router.push(`/productID?id=${productId}`);
     }
   };
@@ -90,6 +91,7 @@ export default function CardProduct({
     <>
       {position === "vertical" ? (
         <div
+          id={`product-${productId}`}
           onClick={productId ? handleCardClick : undefined}
           className={`bg-white h-120 w-full max-w-55   p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
@@ -213,11 +215,11 @@ export default function CardProduct({
       ) : (
         // Card Horizontal
         <div
+          id={`product-${productId}`}
           onClick={productId ? handleCardClick : undefined}
           className={`bg-white  flex w-full h-48 sm:h-59 max-w-115 gap-2 rounded-2xl border border-gray-200 p-2 sm:p-3 shadow-sm sm:flex-row  ${
             productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
           }`}
-        
         >
           <div
             className="relative  overflow-hidden rounded-2xl  w-30   sm:shrink-0 lg:w-48  lg:min-w-[160px]"

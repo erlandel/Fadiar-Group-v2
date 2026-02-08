@@ -21,6 +21,7 @@ export default function CardProductPreSale({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
+      sessionStorage.setItem('last-product-id', productId.toString());
       router.push(`/productID?id=${productId}&preSale=true`);
     }
   };
@@ -29,6 +30,7 @@ export default function CardProductPreSale({
 
   return (
     <div
+      id={`product-${productId}`}
       onClick={productId ? handleCardClick : undefined}
       className={`bg-white h-100 w-full max-w-55 p-3 border border-gray-200 rounded-2xl shadow-sm flex flex-col justify-between gap-3 ${
         productId ? "cursor-pointer transition-shadow hover:shadow-md" : ""
