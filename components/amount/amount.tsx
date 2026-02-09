@@ -566,9 +566,9 @@ export default function Amount() {
             <span className="font-bold text-[#022954] text-xl sm:text-2xl">
               Total a pagar
             </span>
-            <span className="text-xl sm:text-3xl font-bold text-[#022954]">
+            <span className="text-xl sm:text-2xl font-bold text-[#022954]">
               $ {isClient ? (totalPrice + deliveryPrice).toFixed(2) : "0.00"}{" "}
-              <span className="text-xl sm:text-3xl">{currency ?? "USD"}</span>
+              <span className="text-xl sm:text-2xl">{currency ?? "USD"}</span>
             </span>
           </div>
         </div>

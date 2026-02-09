@@ -68,8 +68,8 @@ export default function CheckoutPayment() {
 
             <div className="flex justify-between items-center p-4 py-6 bg-[#E2E6EA]">
               <span className="font-bold text-[#022954] text-xl">Total</span>
-              <span className="text-xl font-bold text-[#022954]">
-                $ {total.toFixed(2)} <span className="text-xl font-normal">USD</span>
+              <span className="text-xl sm:text-2xl font-bold text-[#022954]">
+                $ {total.toFixed(2)} <span className="text-xl sm:text-2xl font-bold">USD</span>
               </span>
             </div>
           </div>

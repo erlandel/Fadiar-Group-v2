@@ -69,9 +69,9 @@ export default function PaymentConfirmation() {
                     <span className="font-bold text-[#022954] text-2xl">
                       Total
                     </span>
-                    <span className="text-xl font-bold text-[#022954]">
+                    <span className="text-xl sm:text-2xl font-bold text-[#022954]">
                       $ {(mounted ? totalPrice + (formData.delivery ? (formData.deliveryPrice || 0) : 0) : 0).toFixed(2)}{" "}
-                      <span className="text-2xl font-normal">USD</span>
+                      <span className="text-xl sm:text-2xl font-bold">USD</span>
                     </span>
                   </div>
                 </div>
