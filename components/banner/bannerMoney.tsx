@@ -1,7 +1,7 @@
 export const BannerMoney = () => {
   return (
     <>
-      <div className="bg-primary w-full h-[437px] md:h-[400px] relative">
+      <div className="bg-primary w-full h-[437px] md:h-[400px] relative overflow-hidden">
         <div 
          data-animate="animate__lightSpeedInLeft"
         className="absolute animate-on-scroll text-3xl  font-bold mt-12 text-center w-full md:ml-10   md:w-120 md:text-4xl md:mt-25 lg:ml-5 xl:ml-10  xl:w-140 2xl:ml-40 2xl:text-5xl 2xl:mt-20">
@@ -11,7 +11,7 @@ export const BannerMoney = () => {
           </h1>
         </div>
 
-        <div> 
+        <div className="absolute inset-0 overflow-hidden pointer-events-none"> 
           <img
             src="/images/Rectangle.webp"
             alt="Background"
