@@ -144,26 +144,30 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Suspense fallback={null}>
-        <RouteChangeListener />
-      </Suspense>
-      {!isAuthRoute && <RouteLoading />}
-      {isOpen && (
-        <div className="fixed inset-0 z-100 flex  justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className='h-auto w-auto '>
-          <ModalProductsByLocation />
+      <div className="relative flex min-h-screen w-full flex-col">
+        <Suspense fallback={null}>
+          <RouteChangeListener />
+        </Suspense>
+        {!isAuthRoute && <RouteLoading />}
+        {isOpen && (
+          <div className="fixed inset-0 z-100 flex  justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className='h-auto w-auto '>
+              <ModalProductsByLocation />
+            </div>
           </div>
-        </div>
-      )}
-      {!isAuthRoute && <Header />}
-      <Suspense fallback={null}>
-        <ScrollToTop />
-      </Suspense>
-      {children}
-      {!isAuthRoute && <Footer />}
-      {!isAuthRoute && <ButtonFloatingCart />}
-      {!isAuthRoute && <ButtonBackTop />}
-      <ToastContainer />
+        )}
+        {!isAuthRoute && <Header />}
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
+        <main className="grow w-full">
+          {children}
+        </main>
+        {!isAuthRoute && <Footer />}
+        {!isAuthRoute && <ButtonFloatingCart />}
+        {!isAuthRoute && <ButtonBackTop />}
+        <ToastContainer />
+      </div>
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
