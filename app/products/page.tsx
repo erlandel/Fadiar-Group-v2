@@ -68,12 +68,13 @@ export default function Products() {
       (shouldScrollToStore || shouldScrollToProducts) &&
       productosRef.current
     ) {
-      const timer = setTimeout(() => {
-        productosRef.current?.scrollIntoView({ behavior: "smooth" });
-        setShouldScrollToStore(false);
-        setShouldScrollToProducts(false);
-      }, 300);
-      return () => clearTimeout(timer);
+      // Usamos requestAnimationFrame para asegurar que el scroll ocurra 
+      // en el próximo frame disponible, lo más rápido posible.
+      requestAnimationFrame(() => {
+        productosRef.current?.scrollIntoView({ behavior: "auto" });
+      });
+      setShouldScrollToStore(false);
+      setShouldScrollToProducts(false);
     }
   }, [
     shouldScrollToStore,
@@ -362,7 +363,7 @@ export default function Products() {
   useEffect(() => {
     // Solo hacer scroll si la página ha cambiado realmente y NO es el montaje inicial
     if (!isInitialMount.current && prevPageRef.current !== currentPage && storeSelectorRef.current) {
-      storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
+      storeSelectorRef.current.scrollIntoView({ behavior: "auto" });
     }
     prevPageRef.current = currentPage;
   }, [currentPage]);
@@ -377,7 +378,7 @@ export default function Products() {
 
     // Solo hacer scroll si NO es el montaje inicial y hay filtros activos en móvil
     if (!isInitialMount.current && productosRef.current && window.innerWidth < 1280 && hasActiveFilters) {
-      productosRef.current.scrollIntoView({ behavior: "smooth" });
+      productosRef.current.scrollIntoView({ behavior: "auto" });
     }
   }, [
     category,
