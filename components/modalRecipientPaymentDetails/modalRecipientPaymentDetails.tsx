@@ -71,7 +71,7 @@ export default function ModalRecipientPaymentDetails({
         className="relative w-full max-w-170 mx-4 bg-white rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-[#022954]">Editar datos de entrega</h3>
+          <h3 className="text-primary font-bold text-2xl">Editar datos de entrega</h3>
           <button
             type="button"
             onClick={onClose}

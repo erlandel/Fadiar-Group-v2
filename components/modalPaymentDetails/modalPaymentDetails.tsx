@@ -16,8 +16,8 @@ export default function ModalPaymentDetails({
   }
 
   return (
-    <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/40 p-4">
-      <div className="relative w-full max-w-xl bg-white rounded-2xl p-6 max-h-[90vh] overflow-y-auto shadow-xl">
+    <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/40 p-4 sm:p-6">
+      <div className="relative w-full max-w-xl bg-white rounded-2xl p-4  max-h-[90vh] overflow-y-auto shadow-xl">
         <div className="w-full flex justify-center">
           <CreditCards />
         </div>

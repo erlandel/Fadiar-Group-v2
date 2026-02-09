@@ -72,7 +72,7 @@ export default function CreditCards() {
   return (
     <>
       <div className="w-115 ">
-        <h5 className="text-primary font-bold text-2xl">01 - Formas de Pago</h5>
+        <h5 className="text-primary font-bold text-2xl">Formas de Pago</h5>
     
 
         <div className="mt-6 flex flex-col gap-4">
@@ -94,7 +94,7 @@ export default function CreditCards() {
               }`}
             >
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center">
+                <div className="min-w-14 min-h-14 rounded-full bg-gray-100 flex items-center justify-center">
                   {method.icon}
                 </div>
                 <div className="flex flex-col">
