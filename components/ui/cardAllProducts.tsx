@@ -45,9 +45,6 @@ export default function CardAllProducts({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
-      sessionStorage.setItem('last-product-id', productId.toString());
-      sessionStorage.setItem('last-product-block', 'center');
-      sessionStorage.setItem('returning-from-product', 'true');
       router.push(`/productID?id=${productId}`);
     }
   };

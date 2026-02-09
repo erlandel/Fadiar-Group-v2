@@ -21,7 +21,6 @@ export default function CardProductPreSale({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
-      sessionStorage.setItem('last-product-id', productId.toString());
       router.push(`/productID?id=${productId}&preSale=true`);
     }
   };

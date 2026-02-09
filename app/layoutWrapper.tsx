@@ -20,61 +20,50 @@ import useCartStore from "@/store/cartStore";
 function ScrollToTop() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const lastPathRef = useRef(pathname);
 
   useEffect(() => {
-    const lastProductId = sessionStorage.getItem('last-product-id');
-    
-    const scrollToTarget = () => {
-      if (lastProductId && !pathname.includes('/productID')) {
-        const scrollBlock = (sessionStorage.getItem('last-product-block') as ScrollIntoViewOptions['block']) || 'center';
-        // Buscamos todos los elementos que tengan este ID
-        const elements = document.querySelectorAll(`[id="product-${lastProductId}"]`);
-        
-        // Detección ultra rápida de visibilidad
-        const target = (Array.from(elements) as HTMLElement[]).find(el => el.offsetParent !== null) || (elements[0] as HTMLElement);
+    // Solo restauramos si volvemos de un producto a una lista
+    const isBackFromProduct = lastPathRef.current.includes('/productID') && !pathname.includes('/productID');
+    lastPathRef.current = pathname;
 
-        if (target) {
-          // rAF para asegurar que el scroll se ejecute sin lag visual
-          requestAnimationFrame(() => {
-            target.scrollIntoView({ behavior: 'instant', block: scrollBlock });
-            
-            // Un segundo scroll después de un breve delay ayuda si el layout cambió por imágenes cargando
-            setTimeout(() => {
-              target.scrollIntoView({ behavior: 'instant', block: scrollBlock });
-            }, 100);
-          });
-          sessionStorage.removeItem('last-product-id');
-          sessionStorage.removeItem('last-product-block');
-          return true;
-        }
+    if (isBackFromProduct) {
+      const saved = sessionStorage.getItem(`scroll-${pathname}`);
+      if (saved) {
+        const y = parseInt(saved);
+        // Usar setTimeout para dar tiempo a que el contenido se renderice
+        const timer = setTimeout(() => {
+          window.scrollTo({ top: y, behavior: 'instant' });
+        }, 50);
+        return () => clearTimeout(timer);
       }
-      return false;
-    };
-
-    const performScroll = () => {
-      if (!scrollToTarget()) {
-        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        document.documentElement.scrollTo({ top: 0, left: 0, behavior: "instant" });
-        document.body.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      }
-    };
-
-    if (lastProductId && !pathname.includes('/productID')) {
-      let attempts = 0;
-      const intervalId = setInterval(() => {
-        if (scrollToTarget() || attempts > 10) {
-          clearInterval(intervalId);
-          if (attempts > 10) performScroll();
-        }
-        attempts++;
-      }, 100);
-      return () => clearInterval(intervalId);
-    } else {
-      performScroll();
-      const timeoutId = setTimeout(performScroll, 50);
-      return () => clearTimeout(timeoutId);
     }
+
+    // Para cualquier otra navegación, forzamos el top
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Guardamos la posición solo en páginas que no sean detalle de producto
+      if (!pathname.includes('/productID')) {
+        sessionStorage.setItem(`scroll-${pathname}`, window.scrollY.toString());
+      }
+    };
+
+    // Debounce manual para no saturar el storage
+    let timeoutId: NodeJS.Timeout;
+    const debouncedScroll = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, 100);
+    };
+
+    window.addEventListener('scroll', debouncedScroll);
+    return () => {
+      window.removeEventListener('scroll', debouncedScroll);
+      clearTimeout(timeoutId);
+    };
+  }, [pathname]);
 
   return null;
 }

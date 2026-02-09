@@ -328,7 +328,6 @@ export default function Products() {
   useEffect(() => {
     // Si aún no hemos hidratado el estado o restaurado la sesión, no resetear
     if (!isHydrated || isInitialMount.current) {
-      if (isInitialMount.current) isInitialMount.current = false;
       return;
     }
 
@@ -341,6 +340,16 @@ export default function Products() {
   }, [isHydrated, category, brands, price, relevant, selectedStoreId]);
 
   useEffect(() => {
+    // Marcar que el montaje inicial ha terminado
+    if (isHydrated) {
+      const timer = setTimeout(() => {
+        isInitialMount.current = false;
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated]);
+
+  useEffect(() => {
     // Solo aplicar clamping si ya hemos hidratado el estado y no estamos cargando
     if (isHydrated && !isLoading && currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
@@ -348,10 +357,14 @@ export default function Products() {
     }
   }, [isHydrated, isLoading, totalPages, currentPage]);
 
+  const prevPageRef = useRef(currentPage);
+
   useEffect(() => {
-    if (storeSelectorRef.current) {
+    // Solo hacer scroll si la página ha cambiado realmente y NO es el montaje inicial
+    if (!isInitialMount.current && prevPageRef.current !== currentPage && storeSelectorRef.current) {
       storeSelectorRef.current.scrollIntoView({ behavior: "smooth" });
     }
+    prevPageRef.current = currentPage;
   }, [currentPage]);
 
   useEffect(() => {
@@ -362,7 +375,8 @@ export default function Products() {
       (priceInitialized &&
         (price[0] !== priceRange.min || price[1] !== priceRange.max));
 
-    if (productosRef.current && window.innerWidth < 1280 && hasActiveFilters) {
+    // Solo hacer scroll si NO es el montaje inicial y hay filtros activos en móvil
+    if (!isInitialMount.current && productosRef.current && window.innerWidth < 1280 && hasActiveFilters) {
       productosRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [
