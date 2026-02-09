@@ -47,6 +47,7 @@ export default function CardAllProducts({
       startLoading();
       sessionStorage.setItem('last-product-id', productId.toString());
       sessionStorage.setItem('last-product-block', 'center');
+      sessionStorage.setItem('returning-from-product', 'true');
       router.push(`/productID?id=${productId}`);
     }
   };

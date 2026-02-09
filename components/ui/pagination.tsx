@@ -38,6 +38,7 @@ export default function Pagination({
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setActivePage(page);
+      sessionStorage.setItem('products-current-page', page.toString());
       onPageChange?.(page);
     }
   };
@@ -46,6 +47,7 @@ export default function Pagination({
     if (activePage < totalPages) {
       const nextPage = activePage + 1;
       setActivePage(nextPage);
+      sessionStorage.setItem('products-current-page', nextPage.toString());
       onPageChange?.(nextPage);
     }
   };
@@ -54,6 +56,7 @@ export default function Pagination({
     if (activePage > 1) {
       const prevPage = activePage - 1;
       setActivePage(prevPage);
+      sessionStorage.setItem('products-current-page', prevPage.toString());
       onPageChange?.(prevPage);
     }
   };

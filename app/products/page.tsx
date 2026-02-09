@@ -41,10 +41,24 @@ export default function Products() {
   const [priceInitialized, setPriceInitialized] = useState(false);
   const [brands, setBrands] = useState<string[]>([]);
   const [relevant, setRelevant] = useState<string[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isHydrated, setIsHydrated] = useState(false);
 
+  const isInitialMount = useRef(true);
   const storeSelectorRef = useRef<HTMLDivElement>(null);
   const productosRef = useRef<HTMLDivElement>(null);
+
+  // Efecto para restaurar la página desde sessionStorage al montar
+  useEffect(() => {
+    const savedPage = sessionStorage.getItem("products-current-page");
+    if (savedPage) {
+      const page = parseInt(savedPage);
+      if (page > 1) {
+        setCurrentPage(page);
+      }
+    }
+    setIsHydrated(true);
+  }, []);
 
   const [itemsPerPage, setItemsPerPage] = useState(15);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -283,6 +297,27 @@ export default function Products() {
     return filteredProducts.slice(startIndex, endIndex);
   }, [filteredProducts, currentPage, itemsPerPage]);
 
+  // Efecto para scroll al último producto visto
+  useEffect(() => {
+    if (isHydrated && !isLoading && paginatedProducts.length > 0) {
+      const lastProductId = sessionStorage.getItem("last-product-id");
+      const isReturning = sessionStorage.getItem("returning-from-product");
+
+      if (lastProductId && isReturning === "true") {
+        // Esperamos un poco a que el DOM se asiente
+        const timer = setTimeout(() => {
+          const element = document.getElementById(`product-${lastProductId}`);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            // Limpiamos el flag para que no haga scroll en cada cambio de página
+            sessionStorage.removeItem("returning-from-product");
+          }
+        }, 500);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isHydrated, isLoading, paginatedProducts]);
+
   useEffect(() => {
     if (tiendas.length > 0 && !selectedStoreId) {
       setSelectedStoreId(tiendas[0].id);
@@ -291,14 +326,27 @@ export default function Products() {
 
   // Resetear página cuando cambian los filtros
   useEffect(() => {
+    // Si aún no hemos hidratado el estado o restaurado la sesión, no resetear
+    if (!isHydrated || isInitialMount.current) {
+      if (isInitialMount.current) isInitialMount.current = false;
+      return;
+    }
+
+    // Si estamos regresando de un producto, no resetear la página
+    const isReturning = sessionStorage.getItem("returning-from-product");
+    if (isReturning === "true") return;
+
     setCurrentPage(1);
-  }, [category, brands, price, relevant, selectedStoreId]);
+    sessionStorage.setItem("products-current-page", "1");
+  }, [isHydrated, category, brands, price, relevant, selectedStoreId]);
 
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(1);
+    // Solo aplicar clamping si ya hemos hidratado el estado y no estamos cargando
+    if (isHydrated && !isLoading && currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+      sessionStorage.setItem("products-current-page", totalPages.toString());
     }
-  }, [totalPages, currentPage]);
+  }, [isHydrated, isLoading, totalPages, currentPage]);
 
   useEffect(() => {
     if (storeSelectorRef.current) {
@@ -459,6 +507,7 @@ export default function Products() {
                   currentPage={currentPage}
                   onPageChange={(page) => {
                     setCurrentPage(page);
+                    sessionStorage.setItem("products-current-page", page.toString());
                   }}
                 />
               </div>
