@@ -12,6 +12,14 @@ export default function RouteChangeListener() {
 
   // Detener el loader cuando la ruta cambia efectivamente
   useEffect(() => {
+    // Si salimos del ecosistema de productos, reseteamos la paginación
+    const productRoutes = ['/products', '/productID'];
+    const isProductRoute = productRoutes.some(route => pathname.startsWith(route));
+    
+    if (!isProductRoute) {
+      sessionStorage.removeItem('products-current-page');
+    }
+
     // En estático, el cambio de ruta puede ser instantáneo o fallar en disparar el useEffect
     // si la ruta se normaliza internamente por Next.js.
     // Usamos un pequeño delay para asegurar que el DOM se haya actualizado
