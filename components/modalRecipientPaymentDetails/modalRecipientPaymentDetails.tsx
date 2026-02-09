@@ -68,7 +68,7 @@ export default function ModalRecipientPaymentDetails({
     <div className="fixed inset-0 z-200 flex items-center justify-center bg-black/40">
       <div
         ref={modalRef}
-        className="relative w-full max-w-xl mx-4 bg-white rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-170 mx-4 bg-white rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-[#022954]">Editar datos de entrega</h3>
@@ -250,6 +250,7 @@ export default function ModalRecipientPaymentDetails({
                       placeholder="Teléfono"
                       inputMode="numeric"
                       pattern="[0-9]*"
+                      dropdownDirection="up"
                     />
                     {errors.phone && (
                       <p className="text-red-500 text-xs mt-1 ml-2">

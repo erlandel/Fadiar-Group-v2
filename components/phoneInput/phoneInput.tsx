@@ -25,6 +25,7 @@ interface PhoneInputProps {
   defaultCountry?: { name: string; code: string; phoneCode: string };
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
   pattern?: string;
+  dropdownDirection?: "up" | "down";
 }
 
 export default function PhoneInput({
@@ -34,6 +35,7 @@ export default function PhoneInput({
   defaultCountry = { name: "Cuba", code: "CU", phoneCode: "+53" },
   inputMode,
   pattern,
+  dropdownDirection = "down",
 }: PhoneInputProps) {
   const [countriesList, setCountriesList] = useState<Country[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
@@ -177,8 +179,12 @@ export default function PhoneInput({
       </div>
 
       {isDropdownOpen && (
-        <div className="absolute z-10 mt-2 w-full max-h-60 overflow-y-auto bg-white rounded-2xl shadow-lg border">
-          <div className="sticky top-0 bg-white border-b p-3">
+        <div 
+          className={`absolute z-10 w-full max-h-60 overflow-y-auto bg-white rounded-2xl shadow-lg border ${
+            dropdownDirection === "up" ? "bottom-full mb-2" : "mt-2"
+          }`}
+        >
+          <div className="sticky top-0 bg-white border-b p-3 z-20">
             <div className="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2">
               <IcSharpSearch className="w-5 h-5 text-gray-400" />
               <input
