@@ -26,24 +26,25 @@ function ScrollToTop() {
     
     const scrollToTarget = () => {
       if (lastProductId && !pathname.includes('/productID')) {
-        // Buscamos todos los elementos que tengan este ID (pueden haber duplicados en carousels o versiones mobile/desktop)
+        const scrollBlock = (sessionStorage.getItem('last-product-block') as ScrollIntoViewOptions['block']) || 'center';
+        // Buscamos todos los elementos que tengan este ID
         const elements = document.querySelectorAll(`[id="product-${lastProductId}"]`);
         
-        // Intentamos encontrar uno que sea visible en el DOM
-        const visibleElement = Array.from(elements).find(el => {
-          const style = window.getComputedStyle(el);
-          const rect = el.getBoundingClientRect();
-          return style.display !== 'none' && 
-                 style.visibility !== 'hidden' && 
-                 rect.width > 0 && 
-                 rect.height > 0;
-        });
-
-        const target = visibleElement || elements[0];
+        // Detección ultra rápida de visibilidad
+        const target = (Array.from(elements) as HTMLElement[]).find(el => el.offsetParent !== null) || (elements[0] as HTMLElement);
 
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // rAF para asegurar que el scroll se ejecute sin lag visual
+          requestAnimationFrame(() => {
+            target.scrollIntoView({ behavior: 'instant', block: scrollBlock });
+            
+            // Un segundo scroll después de un breve delay ayuda si el layout cambió por imágenes cargando
+            setTimeout(() => {
+              target.scrollIntoView({ behavior: 'instant', block: scrollBlock });
+            }, 100);
+          });
           sessionStorage.removeItem('last-product-id');
+          sessionStorage.removeItem('last-product-block');
           return true;
         }
       }
@@ -59,7 +60,6 @@ function ScrollToTop() {
     };
 
     if (lastProductId && !pathname.includes('/productID')) {
-      // Intentamos varias veces para dar tiempo a que los productos y carousels se carguen
       let attempts = 0;
       const intervalId = setInterval(() => {
         if (scrollToTarget() || attempts > 10) {
@@ -71,7 +71,6 @@ function ScrollToTop() {
       return () => clearInterval(intervalId);
     } else {
       performScroll();
-      // Pequeño delay para asegurar que el contenido renderizado no desplace el scroll
       const timeoutId = setTimeout(performScroll, 50);
       return () => clearTimeout(timeoutId);
     }
