@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useMemo, useState, Suspense } from "react";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import ShoppingCartIcon from "@/components/shoppingCartIcon";
 import { useAddToCart } from "@/hooks/cartRequests/useAddToCart";
 import useCartStore from "@/store/cartStore";
@@ -335,7 +335,7 @@ export default function Product() {
       </Suspense>
 
       <div className="mt-20">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="hidden xl:block">

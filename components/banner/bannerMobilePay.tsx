@@ -1,11 +1,11 @@
-export const BannerMoney = () => {
+export const BannerMobilePay = () => {
   return (
     <>
       <div className="bg-[url('/images/methodPaymentVersion_Mobile.webp')] xl:bg-[url('/images/methodPaymentVersion_Desktop.webp')] bg-cover bg-center bg-no-repeat  h-90 sm:h-110 w-full">
 
         <div className="flex flex-col md:flex-row items-center justify-center h-full mx-4 xl:mx-0 ">
           <div
-            className="animate-on-scroll  text-2xl md:text-3xl lg:text-4xl  xl:text-5xl md:w-140 lg:w-140 xl:w-170 font-bold relative z-10 "
+            className="animate-on-scroll  text-2xl md:text-3xl lg:text-4xl  xl:text-5xl md:w-140 lg:w-150 xl:w-170 font-bold relative z-10 "
             data-animate="animate__backInLeft"
             
           >

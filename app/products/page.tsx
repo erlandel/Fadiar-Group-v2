@@ -5,7 +5,7 @@ import FiltersMobile from "@/components/pageProducts/filtersMobile/filtersMobile
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import Pot from "@/sections/pot/pot";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
@@ -532,7 +532,7 @@ export default function Products() {
       </div>
 
       <div id="Banner dolar" className="w-full h-auto">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="hidden xl:block">

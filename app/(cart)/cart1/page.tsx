@@ -6,7 +6,7 @@ import Amount from "@/components/amount/amount";
 import CartCard from "@/components/cartCard/cartCard";
 import { CheckoutStepper } from "@/components/ui/stepper";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useCartStore from "@/store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
@@ -160,7 +160,7 @@ export default function Cart1() {
       </div>
 
       <div className="sm:hidden mt-60">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="xl:hidden">

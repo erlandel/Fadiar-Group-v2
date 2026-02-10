@@ -1,7 +1,7 @@
 import { AboutInformation } from "@/sections/aboutUS/aboutInformation";
 import { BannerWorkersFadiar } from "@/components/banner/bannerWorkersFadiar";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 
@@ -22,7 +22,7 @@ const About = () => {
         </div>
 
         <div className="mt-10">
-          <BannerMoney />
+          <BannerMobilePay />
         </div>
 
         <div className="hidden xl:block mt-10">

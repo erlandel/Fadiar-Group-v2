@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import MobileOrdes from "@/components/mobileOrdes/mobileOrdes";
 import OrdersTable from "@/components/ordersTable/ordersTable";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useGetOrders } from "@/hooks/orderRequests/useGetOrders";
 import InformationMessage from "@/messages/informationMessage";
@@ -150,7 +150,7 @@ export default function Orders() {
       </div>
 
       <div className="sm:hidden mt-60">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="xl:hidden">

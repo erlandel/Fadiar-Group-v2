@@ -2,7 +2,7 @@
 import Avatar from "@/components/avatar/avatar";
 import PersonalData from "@/components/personalData/personalData";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useAuthStore from "@/store/authStore";
 
@@ -38,7 +38,7 @@ export default function MyProfile() {
       
 
       <div className="sm:hidden mt-60">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="xl:hidden">

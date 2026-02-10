@@ -2,7 +2,7 @@ import Link from "next/link";
 import Accordion from "@/components/accordion/accordion";
 import { frequentlyAskedQuestions } from "@/data/frequentlyAskedQuestions";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import BannerUpcomingProducts from "@/components/banner/bannerUpcomingProducts";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
@@ -51,7 +51,7 @@ export default function Faq() {
 
       <div className="mt-15">
         <div className="block md:hidden">
-          <BannerMoney />
+          <BannerMobilePay />
         </div>
 
         <div className="hidden md:block">

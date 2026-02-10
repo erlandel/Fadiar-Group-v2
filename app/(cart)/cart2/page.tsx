@@ -2,7 +2,7 @@ import Link from "next/link";
 import PaymentMethods from "@/components/paymentMethods/paymentMethods";
 import { CheckoutStepper } from "@/components/ui/stepper";
 import { SectionMobile } from "@/sections/sectionMobile";
-import { BannerMoney } from "@/components/banner/bannerMoney";
+import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 
 export default function Cart2() {
@@ -39,7 +39,7 @@ export default function Cart2() {
         </div>
       </div>
       <div className="sm:hidden mt-60">
-        <BannerMoney />
+        <BannerMobilePay />
       </div>
 
       <div className="xl:hidden">
