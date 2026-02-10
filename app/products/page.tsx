@@ -509,9 +509,14 @@ export default function Products() {
                   />
                 ))
               ) : (
-                <p className="col-span-full text-center text-gray-500 h-80 text-xl sm:text-2xl  ">
-                  No se encontraron productos
-                </p>
+                <div className="flex flex-col justify-start items-center w-full col-span-full ">
+                  <img 
+                    src="/images/cartProductEmpty.webp" 
+                    alt="no se encontraron productos" 
+                    className=" object-contain"
+                  />
+              
+                </div>
               )}
             </div>
 

@@ -17,10 +17,9 @@ export default function Cart1() {
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
 
-
   const [isClient, setIsClient] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | number>(
-    "all"
+    "all",
   );
 
   useEffect(() => {
@@ -31,16 +30,19 @@ export default function Cart1() {
   const filteredByDeliveryItems = items;
 
   // Extraer tiendas únicas del carrito filtrado
-  const stores = filteredByDeliveryItems.reduce((acc, item) => {
-    const tiendaId = item.tiendaId || "unknown";
-    if (!acc.find((s) => s.id === tiendaId)) {
-      acc.push({
-        id: tiendaId,
-        name: item.tiendaName || "Tienda",
-      });
-    }
-    return acc;
-  }, [] as { id: string | number; name: string }[]);
+  const stores = filteredByDeliveryItems.reduce(
+    (acc, item) => {
+      const tiendaId = item.tiendaId || "unknown";
+      if (!acc.find((s) => s.id === tiendaId)) {
+        acc.push({
+          id: tiendaId,
+          name: item.tiendaName || "Tienda",
+        });
+      }
+      return acc;
+    },
+    [] as { id: string | number; name: string }[],
+  );
 
   // Resetear la tienda seleccionada si ya no está disponible
   useEffect(() => {
@@ -56,24 +58,30 @@ export default function Cart1() {
   const allStores = [{ id: "all", name: "Todas" }, ...stores];
 
   // Agrupar items por tienda (filtrando por la tienda seleccionada)
-  const groupedItems = filteredByDeliveryItems.reduce((acc, item) => {
-    const tiendaId = item.tiendaId || "unknown";
+  const groupedItems = filteredByDeliveryItems.reduce(
+    (acc, item) => {
+      const tiendaId = item.tiendaId || "unknown";
 
-    // Si hay una tienda seleccionada y no es "all", filtramos
-    if (selectedStoreId !== "all" && tiendaId !== selectedStoreId) {
+      // Si hay una tienda seleccionada y no es "all", filtramos
+      if (selectedStoreId !== "all" && tiendaId !== selectedStoreId) {
+        return acc;
+      }
+
+      if (!acc[tiendaId]) {
+        acc[tiendaId] = {
+          name: item.tiendaName || "Tienda",
+          direccion: item.tiendaDireccion || "",
+          items: [],
+        };
+      }
+      acc[tiendaId].items.push(item);
       return acc;
-    }
-
-    if (!acc[tiendaId]) {
-      acc[tiendaId] = {
-        name: item.tiendaName || "Tienda",
-        direccion: item.tiendaDireccion || "",
-        items: [],
-      };
-    }
-    acc[tiendaId].items.push(item);
-    return acc;
-  }, {} as Record<string | number, { name: string; direccion: string; items: typeof items }>);
+    },
+    {} as Record<
+      string | number,
+      { name: string; direccion: string; items: typeof items }
+    >,
+  );
 
   return (
     <div>
@@ -116,9 +124,11 @@ export default function Cart1() {
                   {isClient &&
                     (items.length === 0 ? (
                       <div className="flex flex-col gap-y-4 items-center justify-center">
-                        <p className="text-gray-400 text-md xl:text-2xl">
-                          Tu carrito está vacío.
-                        </p>
+                        <img
+                          src="/images/cart1.webp"
+                          alt="no se encontraron productos"
+                          className="w-full h-full object-contain"
+                        />
                       </div>
                     ) : (
                       <ListByStore
