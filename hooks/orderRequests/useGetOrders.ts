@@ -22,6 +22,7 @@ export interface Order {
   time: string;
   client_ci: string;
   client_cell: string;
+  direccion: string;
   status: "En espera" | "Confirmado" | "Cancelado" | string;
   products: OrderProduct[];
 }

@@ -10,6 +10,7 @@ import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import { EmojioneLeftArrow } from "@/icons/icons";
 import { WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
+import MatterCart1Store from "@/store/matterCart1Store";
 
 interface MobileOrdesProps {
   orders: Order[];
@@ -30,6 +31,16 @@ export default function MobileOrdes({
 }: MobileOrdesProps) {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
   const { fetchOrderProducts } = useGetOrderProducts();
+  const updateFormData = MatterCart1Store((state) => state.updateFormData);
+
+  const handleShowInfo = (order: Order) => {
+    const hasDelivery = !!(order.direccion && order.direccion.trim() !== "");
+    updateFormData({
+      showDeliveryOverlay: true,
+      overlayDelivery: hasDelivery,
+      orderId: order.id,
+    });
+  };
 
   const fetchOrderProductsMutation = useMutation({
     mutationFn: (orderId: string) => fetchOrderProducts(orderId),
@@ -146,7 +157,10 @@ export default function MobileOrdes({
                       {/* Información */}
                       <p className="text-sm sm:text-lg">Información</p>
                       <p className=" flex justify-end">
-                        <StreamlineUltimateColorMessagesLogo className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
+                        <StreamlineUltimateColorMessagesLogo
+                          onClick={() => handleShowInfo(order)}
+                          className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110"
+                        />
                       </p>
 
                       {/* Soporte */}

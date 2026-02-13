@@ -8,6 +8,7 @@ import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
+import MatterCart1Store from "@/store/matterCart1Store";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -28,6 +29,16 @@ export default function OrdersTable({
 }: OrdersTableProps) {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
   const { fetchOrderProducts } = useGetOrderProducts();
+  const updateFormData = MatterCart1Store((state) => state.updateFormData);
+
+  const handleShowInfo = (order: Order) => {
+    const hasDelivery = !!(order.direccion && order.direccion.trim() !== "");
+    updateFormData({
+      showDeliveryOverlay: true,
+      overlayDelivery: hasDelivery,
+      orderId: order.id,
+    });
+  };
 
   const fetchOrderProductsMutation = useMutation({
     mutationFn: (orderId: string) => fetchOrderProducts(orderId),
@@ -115,7 +126,10 @@ export default function OrdersTable({
                           </span>
                         </div>
                         <div className="flex justify-center ">
-                          <StreamlineUltimateColorMessagesLogo className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />
+                          <StreamlineUltimateColorMessagesLogo
+                            onClick={() => handleShowInfo(order)}
+                            className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 "
+                          />
                         </div>
                         <div className="flex justify-center ">
                           <WhatsApp className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />
