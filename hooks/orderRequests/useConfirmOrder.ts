@@ -40,7 +40,7 @@ export const useConfirmOrder = () => {
         last_names: `${formData.lastName1} ${formData.lastName2}`.trim(),
         cellphone_cliente: formData.phone,
         id_municipio: municipalityId,
-        direccionExacta: formData.address || null,
+        direccionExacta: formData.delivery ? (formData.address || "") : "",
         emisor: "web",
         use_user_info,
         nota: formData.note || "",
