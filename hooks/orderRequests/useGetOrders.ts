@@ -22,6 +22,7 @@ export interface Order {
   time: string;
   client_ci: string;
   client_cell: string;
+  client_cell2?: string;
   direccion: string;
   status: "En espera" | "Confirmado" | "Cancelado" | string;
   products: OrderProduct[];
@@ -106,11 +107,21 @@ export const useGetOrders = () => {
             finalStatus = "Cancelado";
           }
 
+          // Mostrar el cellphone2 en vez del cellphone1 si la dirrecion no esta vacia
+          let finalCell = order.client_cell;
+          const hasDirection = order.direccion && order.direccion.trim() !== "";
+          const cell2 = order.client_cell2 || order.cellphone2;
+
+          if (hasDirection && cell2) {
+            finalCell = cell2;
+          }
+
           return {
             ...order,
             date: finalDate,
             time: finalTime,
-            status: finalStatus
+            status: finalStatus,
+            client_cell: finalCell
           };
         });
 
