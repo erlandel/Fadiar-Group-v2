@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { EmojioneLeftArrow, MaterialSymbolsAdd, WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
+import {
+  EmojioneLeftArrow,
+  MaterialSymbolsAdd,
+  WhatsApp,
+  StreamlineUltimateColorMessagesLogo,
+} from "@/icons/icons";
 import CartCard from "../cartCard/cartCard";
 import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
+import { useGetOrderNote } from "@/hooks/orderRequests/useGetOrderNote";
 import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import MatterCart1Store from "@/store/matterCart1Store";
@@ -14,6 +20,7 @@ interface OrdersTableProps {
   orders: Order[];
   fetchOrdersMutation: any;
   updateOrderProducts: (orderId: string, products: OrderProduct[]) => void;
+  updateOrderNote: (orderId: string, nota: string) => void;
   hasMore: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -23,12 +30,14 @@ export default function OrdersTable({
   orders,
   fetchOrdersMutation,
   updateOrderProducts,
+  updateOrderNote,
   hasMore,
   currentPage,
   onPageChange,
 }: OrdersTableProps) {
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
   const { fetchOrderProducts } = useGetOrderProducts();
+  const { fetchOrderNote } = useGetOrderNote();
   const updateFormData = MatterCart1Store((state) => state.updateFormData);
 
   const handleShowInfo = (order: Order) => {
@@ -49,6 +58,15 @@ export default function OrdersTable({
     },
   });
 
+  const fetchOrderNoteMutation = useMutation({
+    mutationFn: (orderId: string) => fetchOrderNote(orderId),
+    onSuccess: (note, orderId) => {
+      if (note) {
+        updateOrderNote(orderId, note);
+      }
+    },
+  });
+
   const toggleOrder = async (orderId: string) => {
     const isOpening = !openOrderIds.includes(orderId);
 
@@ -58,8 +76,13 @@ export default function OrdersTable({
 
     if (isOpening) {
       const order = orders.find((o) => o.id === orderId);
-      if (order && (!order.products || order.products.length === 0)) {
-        fetchOrderProductsMutation.mutate(orderId);
+      if (order) {
+        if (!order.products || order.products.length === 0) {
+          fetchOrderProductsMutation.mutate(orderId);
+        }
+        if (!order.nota) {
+          fetchOrderNoteMutation.mutate(orderId);
+        }
       }
     }
   };
@@ -110,8 +133,13 @@ export default function OrdersTable({
                             : `#${order.id}`}
                         </div>
                         <div className="text-center">{order.date}</div>
-                        <div className="text-center">{order.time}</div>                   
-                        <div className="text-center">{order.client_cell === "-" || order.client_cell.startsWith("-") ? "no disponible" : order.client_cell}</div>                      
+                        <div className="text-center">{order.time}</div>
+                        <div className="text-center">
+                          {order.client_cell === "-" ||
+                          order.client_cell.startsWith("-")
+                            ? "no disponible"
+                            : order.client_cell}
+                        </div>
                         <div className="text-center">
                           <span
                             className={`inline-block px-5 py-2 rounded-full text-md font-medium ${
@@ -156,11 +184,96 @@ export default function OrdersTable({
                       <div
                         className={`overflow-hidden transition-all duration-300 ease-in-out ${
                           isOpen
-                            ? "max-h-[600px] opacity-100"
+                            ? "max-h-[800px] opacity-100"
                             : "max-h-0 opacity-0"
                         }`}
                       >
+                        <div className="bg-[#F5F7FA]">
+                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777] text-sm px-1">
+                            {/* Row 1 Header style: Labels on top, values below */}
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Nombre
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                {order.client_name || "No disponible"}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Apellidos
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                {order.client_last_names || "No disponible"}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Tienda
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                Pendiente
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Provincia
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                {order.provincia_completa?.provincia || "-"}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Municipio
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                {order.municipio_completo?.municipio || "-"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="mx-2 space-y-4">
+                            <div className="flex flex-col gap-1 col-span-full mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Dirección de la Tienda
+                              </span>
+                              <span className="wrap-break-word text-sm text-[#444444]">
+                                Pendiente
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <span className="font-bold text-[#022954] text-md tracking-wider ">
+                                Dirección del cliente
+                              </span>
+                              <span className="wrap-break-word text-sm text-[#444444]">
+                                {order.direccion || "No disponible"}
+                              </span>
+                            </div>
+
+                            {order.nota && order.nota.trim() !== "" && (
+                              <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                                <span className="font-bold text-[#022954] text-md tracking-wider ">
+                                  Nota del pedido
+                                </span>
+                                <span className="italic wrap-break-word text-sm text-[#444444]">
+                                  "{order.nota}"
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="border-t border-snow "></div>
+                        </div>
+
                         <div className="pl-6 pr-0 py-6 bg-[#F5F7FA] rounded-b-xl">
+                          {/* Client and Store Information */}
+
                           {order.products && order.products.length > 0 ? (
                             <div className="max-h-[350px] overflow-y-auto custom-scrollbar pr-6">
                               <div className="grid grid-cols-1 md:grid-cols-2  gap-2">
@@ -231,28 +344,28 @@ export default function OrdersTable({
 
         {!fetchOrdersMutation.isPending &&
           fetchOrdersMutation.status !== "idle" && (
-          <div className="flex justify-center items-center gap-4 mt-5">
-            <button
-              onClick={() => onPageChange(currentPage - 1)}
-              disabled={currentPage === 1 || fetchOrdersMutation.isPending}
-              className="disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110" />
-            </button>
+            <div className="flex justify-center items-center gap-4 mt-5">
+              <button
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage === 1 || fetchOrdersMutation.isPending}
+                className="disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110" />
+              </button>
 
-            <div className="text-primary font-bold text-2xl text-center">
-              {currentPage}
+              <div className="text-primary font-bold text-2xl text-center">
+                {currentPage}
+              </div>
+
+              <button
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={!hasMore || fetchOrdersMutation.isPending}
+                className="disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 rotate-180" />
+              </button>
             </div>
-
-            <button
-              onClick={() => onPageChange(currentPage + 1)}
-              disabled={!hasMore || fetchOrdersMutation.isPending}
-              className="disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <EmojioneLeftArrow className="h-10 w-10 text-primary cursor-pointer transition-transform duration-200 ease-in-out hover:scale-110 rotate-180" />
-            </button>
-          </div>
-        )}
+          )}
       </div>
     </>
   );

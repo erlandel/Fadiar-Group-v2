@@ -12,7 +12,7 @@ import InformationMessage from "@/messages/informationMessage";
 import MatterCart1Store from "@/store/matterCart1Store";
 
 export default function Orders() {
-  const { orders, hasMore, fetchOrders, updateOrderProducts } = useGetOrders();
+  const { orders, hasMore, fetchOrders, updateOrderProducts, updateOrderNote } = useGetOrders();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const titleRef = useRef<HTMLDivElement | null>(null);
@@ -138,6 +138,7 @@ export default function Orders() {
             orders={orders}
             fetchOrdersMutation={fetchOrdersMutation}
             updateOrderProducts={updateOrderProducts}
+            updateOrderNote={updateOrderNote}
             hasMore={hasMore}
             currentPage={currentPage}
             onPageChange={handlePageChange}

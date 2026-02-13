@@ -21,9 +21,18 @@ export interface Order {
   date: string;
   time: string;
   client_ci: string;
+  client_name?: string;
+  client_last_names?: string;
   client_cell: string;
   client_cell2?: string;
   direccion: string;
+  municipio_completo?: {
+    municipio: string;
+  };
+  provincia_completa?: {
+    provincia: string;
+  };
+  nota?: string;
   status: "En espera" | "Confirmado" | "Cancelado" | string;
   products: OrderProduct[];
 }
@@ -162,5 +171,13 @@ export const useGetOrders = () => {
     );
   }, []);
 
-  return { orders, loading, hasMore, fetchOrders, updateOrderProducts };
+  const updateOrderNote = useCallback((orderId: string, nota: string) => {
+    setOrders((prev) =>
+      prev.map((order) =>
+        order.id === orderId ? { ...order, nota } : order
+      )
+    );
+  }, []);
+
+  return { orders, loading, hasMore, fetchOrders, updateOrderProducts, updateOrderNote };
 };
