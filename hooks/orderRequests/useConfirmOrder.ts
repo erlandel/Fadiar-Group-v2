@@ -8,6 +8,7 @@ import SuccesMessage from "@/messages/succesMessage";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 import cartStore from "@/store/cartStore";
+import BuyerDetailsStore from "@/store/buyerDetailsStore";
 
 export const useConfirmOrder = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ export const useConfirmOrder = () => {
   const { municipalityId } = useProductsByLocationStore();
   const clearCart = cartStore((state) => state.clearCart);
   const updateFormData = MatterCart1Store((state) => state.updateFormData);
+  const { paymentMethod } = BuyerDetailsStore((state) => state.buyerDetails);
 
   const confirmOrderMutation = useMutation({
     mutationFn: async () => {
@@ -40,9 +42,12 @@ export const useConfirmOrder = () => {
         id_municipio: municipalityId,
         direccionExacta: formData.address || null,
         emisor: "web",
-         use_user_info
+        use_user_info,
+        nota: formData.note || "",
+       paymentMethod,
       };
 
+      console.log("requestBody en confirmar orden: ", requestBody);
       const response = await fetch(`${add_orderUrl}`, {
         method: "POST",
         headers: {
