@@ -43,7 +43,7 @@ export const useConfirmOrder = () => {
         direccionExacta: formData.delivery ? (formData.address || "") : "",
         emisor: "web",
         use_user_info,
-        nota: formData.note || "",
+        nota: formData.delivery ? (formData.note || "") : "",
        paymentMethod,
       };
 
