@@ -243,28 +243,30 @@ export default function OrdersTable({
                           </div>
 
                           <div className="mx-2 space-y-4">
-                            <div className="flex flex-col gap-1 col-span-full mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                              <span className="font-bold text-[#022954]  tracking-wider ">
-                                Dirección de la tienda
+                            <div className="flex items-center gap-2 col-span-full mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
+                                Dirección de la tienda:
                               </span>
                               <span className="wrap-break-word text-sm text-[#444444]">
                                 Pendiente
                               </span>
                             </div>
 
-                            <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                              <span className="font-bold text-[#022954] text-md tracking-wider ">
-                                Dirección
-                              </span>
-                              <span className="wrap-break-word text-sm text-[#444444]">
-                                {order.direccion || "No disponible"}
-                              </span>
-                            </div>
+                            {order.direccion && order.direccion.trim() !== "" && (
+                              <div className="flex items-center gap-2 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                                <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
+                                  Dirección:
+                                </span>
+                                <span className="wrap-break-word text-sm text-[#444444]">
+                                  {order.direccion}
+                                </span>
+                              </div>
+                            )}
 
                             {order.nota && order.nota.trim() !== "" && (
-                              <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                                <span className="font-bold text-[#022954] text-md tracking-wider ">
-                                  Nota del pedido
+                              <div className="flex items-center gap-2 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                                <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
+                                  Nota del pedido:
                                 </span>
                                 <span className="italic wrap-break-word text-sm text-[#444444]">
                                   "{order.nota}"
