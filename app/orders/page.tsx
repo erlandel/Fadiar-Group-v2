@@ -77,24 +77,24 @@ export default function Orders() {
   const messageBodyLines = effectiveDelivery
     ? [
         "Su pedido ha sido confirmado exitosamente.",
-        `Número pedido: #${firstOrderId}`,
-        "La entrega se realizará en un plazo de 24 a 48 horas",
+        `Número pedido: #${firstOrderId}.`,
+        "La entrega se realizará en un plazo de 24 a 48 horas.",
         "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles.",
-        "Gracias por confiar en Grupo Fadiar",
+        "Gracias por confiar en Grupo Fadiar.",
       ]
     : [
         "Su pedido ha sido confirmado exitosamente.",
-        `Número pedido: #${firstOrderId}`,
+        `Número pedido: #${firstOrderId}.`,
         "Puede recogerlo en nuestra sede en un plazo de 7 días hábiles.",
         "Deberá presentar su número de pedido al momento de la recogida.",
         "Si necesita más información, nuestro equipo estará disponible para asistirle.",
-        "Gracias por confiar en Grupo Fadiar",
+        "Gracias por confiar en Grupo Fadiar.",
       ];
 
   return (
     <>
       {showOverlay && (
-        <div className="fixed inset-0 z-100 h-screen flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+        <div className="fixed inset-0 z-250 h-screen flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
           <div className="max-w-300 w-full">
             <InformationMessage
               onClose={() => {
