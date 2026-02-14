@@ -34,10 +34,11 @@ export const useConfirmOrder = () => {
         ErrorMessage("No se pudo obtener una sesión válida");
       }
 
-      const use_user_info= true;
+      const isDelivery = formData.delivery;
+    
+    
 
       const person = auth?.person;
-      const isDelivery = formData.delivery;
 
       const source = isDelivery
         ? {
@@ -47,6 +48,7 @@ export const useConfirmOrder = () => {
             phone: formData.phone,
             address: formData.address,
             note: formData.note,
+            
           }
         : {
             name: person?.name,
@@ -57,17 +59,22 @@ export const useConfirmOrder = () => {
             note: "",
           };
 
-      const requestBody = {
+      const requestBody: any = {
         name_cliente: source.name || "",
         last_names: `${source.last1 || ""} ${source.last2 || ""}`.trim(),
         cellphone_cliente: source.phone || "",
         id_municipio: municipalityId,
         direccionExacta: source.address || "",
         emisor: "web",
-        use_user_info,
         nota: source.note || "",
         paymentMethod,
       };
+
+      if (isDelivery) {
+        requestBody.ci_cliente = 1;
+      } else {
+        requestBody.use_user_info = true;
+      }
 
       console.log("requestBody en confirmar orden: ", requestBody);
       const response = await fetch(`${add_orderUrl}`, {
@@ -87,6 +94,7 @@ export const useConfirmOrder = () => {
 
       return response.json();
     },
+
     onSuccess: (data) => {
       console.log("Respuesta del backend (agregar pedido):", data);
       

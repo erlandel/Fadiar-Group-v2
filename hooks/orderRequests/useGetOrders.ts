@@ -117,11 +117,13 @@ export const useGetOrders = () => {
           }
 
           // Mostrar el cellphone2 en vez del cellphone1 si la dirrecion no esta vacia
+          // Pero usar client_cell si tiene un +
           let finalCell = order.client_cell;
           const hasDirection = order.direccion && order.direccion.trim() !== "";
           const cell2 = order.client_cell2 || order.cellphone2;
+          const hasPlus = order.client_cell && order.client_cell.includes("+");
 
-          if (hasDirection && cell2) {
+          if (hasDirection && cell2 && !hasPlus) {
             finalCell = cell2;
           }
 
