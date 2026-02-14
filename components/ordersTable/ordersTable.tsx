@@ -15,6 +15,7 @@ import { useGetOrderNote } from "@/hooks/orderRequests/useGetOrderNote";
 import { Loader } from "lucide-react";
 import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import MatterCart1Store from "@/store/matterCart1Store";
+import { openWhatsAppHelp } from "@/utils/whatsapp";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -105,7 +106,7 @@ export default function OrdersTable({
                   <div className="text-center">Teléfono</div>
                   <div className="text-center">Estado</div>
                   <div className="text-center">Información</div>
-                  <div className="text-center">Soporte</div>
+                  <div className="text-center">Ayuda</div>
                   <div></div>
                 </div>
               )}
@@ -160,7 +161,10 @@ export default function OrdersTable({
                           />
                         </div>
                         <div className="flex justify-center ">
-                          <WhatsApp className="h-10 w-10 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 " />
+                          <WhatsApp
+                            onClick={() => openWhatsAppHelp(order.id)}
+                            className="h-9.5 w-9.5 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 "
+                          />
                         </div>
                         <div className="flex justify-center ">
                           <button

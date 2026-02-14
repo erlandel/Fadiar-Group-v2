@@ -12,6 +12,7 @@ import { EmojioneLeftArrow } from "@/icons/icons";
 import { WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
 import MatterCart1Store from "@/store/matterCart1Store";
 import { useGetOrderNote } from "@/hooks/orderRequests/useGetOrderNote";
+import { openWhatsAppHelp } from "@/utils/whatsapp";
 
 interface MobileOrdesProps {
   orders: Order[];
@@ -179,9 +180,12 @@ export default function MobileOrdes({
                       </p>
 
                       {/* Soporte */}
-                      <p className="text-sm sm:text-lg">Soporte</p>
-                      <p className=" flex justify-end">
-                        <WhatsApp className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
+                      <p className="text-sm sm:text-lg">Ayuda</p>
+                      <p className=" flex justify-end">                          
+                        <WhatsApp 
+                         onClick={() => openWhatsAppHelp(order.id)}
+                        className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110"
+                         />
                       </p>
                     </div>
                   </div>
