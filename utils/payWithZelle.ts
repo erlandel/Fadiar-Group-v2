@@ -45,14 +45,14 @@ export function payWithZelle(params: {
   const productLines = items
     .map((it, idx) => {
       return [
-        `${idx + 1}. Nombre de la tienda: ${it.tiendaName || "No especificada"}`,
-        `   nombre del producto: ${it.title}`,
+        `${idx + 1}. nombre del producto: ${it.title}`,
         `   marca: ${it.brand}`,
         `   cantidad: ${it.quantity}`,
       ].join("\n");
     })
     .join("\n");
   const deliveryMethod = formData.delivery ? "Domicilio" : "Recogida en tienda";
+  const tiendaName = items[0]?.tiendaName || "No especificada";
   const deliveryLine = formData.delivery && formData.address ? `Dirección: ${formData.address}` : "";
   const noteLine = formData.note ? `Nota: ${formData.note}` : "";
 
@@ -66,10 +66,10 @@ export function payWithZelle(params: {
     `Municipio: ${formData.municipality}`,
     `Método de entrega: ${deliveryMethod}`,
     deliveryLine,
-    deliveryPrice > 0 ? `Costo de envío: ${deliveryPrice.toFixed(2)}` : "",
+    `Tienda: ${tiendaName}`,
     `Producto(s):`,
     productLines || `Sin productos`,
-    `Precio Total a pagar: ${total.toFixed(2)}`,
+    // `Precio Total a pagar: ${total.toFixed(2)}`,
     noteLine
   ].filter(line => line !== "").join("\n");
   const phoneDigits = supportNumber.replace(/[^\d]/g, "");
