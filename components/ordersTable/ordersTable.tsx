@@ -194,14 +194,15 @@ export default function OrdersTable({
                       >
                         {/* Client and Store Information */}
                         <div className="bg-[#F5F7FA]">
-                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777]  px-1 ">
+                          <div className="pt-4  flex flex-wrap justify-between gap-y-6 gap-x-4 mb-6  text-[#777777] px-5">
                             {/* Row 1 Header style: Labels on top, values below */}
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
                                 Método de entrega
                               </span>
                               <span className="wrap-break-word text-sm">
-                                {order.direccion && order.direccion.trim() !== ""
+                                {order.direccion &&
+                                order.direccion.trim() !== ""
                                   ? "Domicilio"
                                   : "Recogida en tienda"}
                               </span>
@@ -232,26 +233,28 @@ export default function OrdersTable({
                               <span className="wrap-break-word text-sm">
                                 {order.municipio_completo?.municipio || "-"}
                               </span>
-                            </div>
-
-                            <div className="flex flex-col gap-1 ">
-                              <span className="font-bold text-[#022954]  tracking-wider ">
-                                Tienda
-                              </span>
-                              <span className="wrap-break-word text-sm">
-                                Pendiente
-                              </span>
-                            </div>
+                            </div>                            
                           </div>
 
                           <div className="mx-2 space-y-4">
-                            <div className="flex items-center gap-2  mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                              <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
-                                Dirección de la tienda:
-                              </span>
-                              <span className="wrap-break-word text-sm text-[#444444]">
-                                Pendiente
-                              </span>
+                            <div className="w-full   justify-between items-center  mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <div className="flex  items-center gap-2 ">
+                                <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
+                                  Tienda:
+                                </span>
+                                <span className="wrap-break-word text-sm text-[#444444]">
+                                  Pendiente
+                                </span>
+                              </div>
+
+                              <div className="flex  items-center gap-2 mt-1 ">
+                                <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
+                                  Dirección de la tienda:
+                                </span>
+                                <span className="wrap-break-word text-sm text-[#444444]">
+                                  Pendiente
+                                </span>
+                              </div>
                             </div>
 
                             <div className="w-full   justify-between items-center  mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
@@ -260,7 +263,7 @@ export default function OrdersTable({
                                   Nombre:
                                 </span>
                                 <span className="wrap-break-word text-sm text-[#444444]">
-                                  {order.client_name }
+                                  {order.client_name}
                                 </span>
                               </div>
 
@@ -272,7 +275,6 @@ export default function OrdersTable({
                                   {order.client_last_names}
                                 </span>
                               </div>
-
                             </div>
 
                             {order.direccion &&
