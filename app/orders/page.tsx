@@ -12,7 +12,8 @@ import InformationMessage from "@/messages/informationMessage";
 import MatterCart1Store from "@/store/matterCart1Store";
 
 export default function Orders() {
-  const { orders, hasMore, fetchOrders, updateOrderProducts, updateOrderNote } = useGetOrders();
+  const { orders, hasMore, fetchOrders, updateOrderProducts, updateOrderNote } =
+    useGetOrders();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const titleRef = useRef<HTMLDivElement | null>(null);
@@ -68,7 +69,8 @@ export default function Orders() {
     }
   };
 
-  const firstOrderId = formData.orderId || (orders.length > 0 ? orders[0].id : "");
+  const firstOrderId =
+    formData.orderId || (orders.length > 0 ? orders[0].id : "");
 
   const messageTitle = "¡Gracias por su compra!";
   const effectiveDelivery = formData.overlayDelivery ?? formData.delivery;
@@ -109,17 +111,15 @@ export default function Orders() {
       {/* <div className="mx-4 xl:px-40 mt-2">
         <InformationMessage />
       </div> */}
-    
-      <div className="mx-4 xl:px-40 mt-10 md:mt-15">
-    
 
+      <div className="mx-4 mt-10 md:mt-15 xl:px-20 2xl:px-40 ">
         <div className=" flex  justify-between items-center">
           <div
             ref={titleRef}
             className="  lg:ml-40 scroll-mt-35 xl:scroll-mt-25 "
           >
             <h2 className="text-3xl text-primary font-bold">Mis Pedidos</h2>
-          </div>                
+          </div>
         </div>
 
         <div className="lg:hidden">

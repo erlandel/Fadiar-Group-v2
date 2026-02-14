@@ -240,7 +240,7 @@ export default function OrdersTable({
                           <div className="mx-2 space-y-4">
                             <div className="flex flex-col gap-1 col-span-full mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                               <span className="font-bold text-[#022954]  tracking-wider ">
-                                Dirección de la Tienda
+                                Dirección de la tienda
                               </span>
                               <span className="wrap-break-word text-sm text-[#444444]">
                                 Pendiente
@@ -249,7 +249,7 @@ export default function OrdersTable({
 
                             <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                               <span className="font-bold text-[#022954] text-md tracking-wider ">
-                                Dirección del cliente
+                                Dirección 
                               </span>
                               <span className="wrap-break-word text-sm text-[#444444]">
                                 {order.direccion || "No disponible"}
@@ -268,7 +268,7 @@ export default function OrdersTable({
                             )}
                           </div>
 
-                          <div className="border-t border-snow "></div>
+                          <div className="border-t border-snow mt-4"></div>
                         </div>
 
                         <div className="pl-6 pr-0 py-6 bg-[#F5F7FA] rounded-b-xl">
