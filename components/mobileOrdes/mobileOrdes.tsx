@@ -203,7 +203,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Método de entrega
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               {order.direccion && order.direccion.trim() !== ""
                                 ? "Domicilio"
                                 : "Recogida en tienda"}
@@ -214,7 +214,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Método de pago
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               Pendiente
                             </p>
                           </div>
@@ -223,7 +223,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Provincia
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               {order.provincia_completa?.provincia || "-"}
                             </p>
                           </div>
@@ -232,7 +232,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Municipio
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               {order.municipio_completo?.municipio || "-"}
                             </p>
                           </div>
@@ -241,7 +241,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Tienda
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               Pendiente
                             </p>
                           </div>
@@ -250,7 +250,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Dirección de la tienda
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               Pendiente
                             </p>
                           </div>
@@ -259,7 +259,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Nombre
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               {order.client_name || "No disponible"}
                             </p>
                           </div>
@@ -268,7 +268,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Apellidos
                             </p>
-                            <p className="font-bold text-base sm:text-xl break-words">
+                            <p className="font-bold text-base sm:text-xl `wrap-break-word">
                               {order.client_last_names || "No disponible"}
                             </p>
                           </div>
@@ -278,7 +278,7 @@ export default function MobileOrdes({
                               <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                                 Dirección
                               </p>
-                              <p className="font-bold text-base sm:text-xl break-words">
+                              <p className="font-bold text-base sm:text-xl `wrap-break-word">
                                 {order.direccion}
                               </p>
                             </div>
@@ -291,7 +291,7 @@ export default function MobileOrdes({
                               <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                                 Nota del pedido
                               </p>
-                              <p className="italic font-bold text-base sm:text-xl break-words">
+                              <p className="italic font-bold text-base sm:text-xl `wrap-break-word">
                                 {noteLoadingOrderId === order.id
                                   ? "Cargando nota..."
                                   : `${notesByOrder[order.id]}`}
