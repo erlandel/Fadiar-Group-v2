@@ -188,8 +188,9 @@ export default function OrdersTable({
                             : "max-h-0 opacity-0"
                         }`}
                       >
+                        {/* Client and Store Information */}
                         <div className="bg-[#F5F7FA]">
-                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777] text-sm px-1">
+                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777]  px-1">
                             {/* Row 1 Header style: Labels on top, values below */}
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
@@ -211,15 +212,6 @@ export default function OrdersTable({
 
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
-                                Tienda
-                              </span>
-                              <span className="wrap-break-word text-sm">
-                                Pendiente
-                              </span>
-                            </div>
-
-                            <div className="flex flex-col gap-1 ">
-                              <span className="font-bold text-[#022954]  tracking-wider ">
                                 Provincia
                               </span>
                               <span className="wrap-break-word text-sm">
@@ -233,6 +225,15 @@ export default function OrdersTable({
                               </span>
                               <span className="wrap-break-word text-sm">
                                 {order.municipio_completo?.municipio || "-"}
+                              </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1 ">
+                              <span className="font-bold text-[#022954]  tracking-wider ">
+                                Tienda
+                              </span>
+                              <span className="wrap-break-word text-sm">
+                                Pendiente
                               </span>
                             </div>
                           </div>
@@ -249,7 +250,7 @@ export default function OrdersTable({
 
                             <div className="flex flex-col gap-1 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                               <span className="font-bold text-[#022954] text-md tracking-wider ">
-                                Dirección 
+                                Dirección
                               </span>
                               <span className="wrap-break-word text-sm text-[#444444]">
                                 {order.direccion || "No disponible"}
@@ -272,8 +273,6 @@ export default function OrdersTable({
                         </div>
 
                         <div className="pl-6 pr-0 py-6 bg-[#F5F7FA] rounded-b-xl">
-                          {/* Client and Store Information */}
-
                           {order.products && order.products.length > 0 ? (
                             <div className="max-h-[350px] overflow-y-auto custom-scrollbar pr-6">
                               <div className="grid grid-cols-1 md:grid-cols-2  gap-2">

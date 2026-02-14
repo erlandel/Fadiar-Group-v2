@@ -130,12 +130,13 @@ export default function MobileOrdes({
                         {order.time}
                       </p>
 
-                  
-
                       {/* Teléfono */}
                       <p className="text-sm sm:text-lg">Teléfono</p>
                       <p className=" font-bold text-right sm:text-xl">
-                        {order.client_cell === "-" || order.client_cell.startsWith("-") ? "no disponible" : order.client_cell}
+                        {order.client_cell === "-" ||
+                        order.client_cell.startsWith("-")
+                          ? "no disponible"
+                          : order.client_cell}
                       </p>
 
                       {/* Estado */}
@@ -168,7 +169,6 @@ export default function MobileOrdes({
                       <p className=" flex justify-end">
                         <WhatsApp className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110" />
                       </p>
-
                     </div>
                   </div>
 
@@ -178,9 +178,97 @@ export default function MobileOrdes({
                       isOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="pl-4 pr-0 py-6 bg-[#F5F7FA] rounded-b-2xl">
+                    <div className=" py-6 bg-[#F5F7FA] rounded-b-2xl">
+                      {/* Información del cliente y tienda (adaptado a móvil) */}
+                      <div className="bg-[#F5F7FA] ">
+                        <div className=" mx-5 grid grid-cols-2 gap-y-3 gap-x-4 mb-4  text-[#777777] text-sm">
+                          {/* Nombre: etiqueta izquierda, valor derecha */}
+                          <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Nombre
+                            </p>
+                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                              {order.client_name || "No disponible"}
+                            </p>
+                          </div>
+
+                          {/* Apellidos: etiqueta izquierda, valor derecha */}
+                          <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Apellidos
+                            </p>
+                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                              {order.client_last_names || "No disponible"}
+                            </p>
+                          </div>
+                      
+
+                          <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Provincia
+                            </p>
+                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                              {order.provincia_completa?.provincia || "-"}
+                            </p>
+                          </div>
+
+                          <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Municipio
+                            </p>
+                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                              {order.municipio_completo?.municipio || "-"}
+                            </p>
+                          </div>
+
+                              <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Tienda
+                            </p>
+                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                              Pendiente
+                            </p>
+                          </div>
+
+                        </div>
+
+                        <div className="mx-3 space-y-3 text-sm sm:text-lg">
+                          <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                            <span className="font-bold text-[#022954] tracking-wider">
+                              Dirección de la tienda
+                            </span>
+                            <span className="wrap-break-word  text-[#444444]">
+                              Pendiente
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100 ">
+                            <span className="font-bold text-[#022954] tracking-wider">
+                              Dirección
+                            </span>
+                            <span className="wrap-break-word  text-[#444444]">
+                              {order.direccion || "No disponible"}
+                            </span>
+                          </div>
+
+                          {order.nota && order.nota.trim() !== "" && (
+                            <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <span className="font-bold text-[#022954] tracking-wider">
+                                Nota del pedido
+                              </span>
+                              <span className="italic wrap-break-word  text-[#444444]">
+                                "{order.nota}"
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="border-t border-snow mt-4"></div>
+                      </div>
+
+                      {/* Productos del pedido */}
                       {order.products && order.products.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-4 mt-4">
                           {order.products.map((product, idx) => (
                             <CartCard
                               key={idx}
@@ -206,14 +294,14 @@ export default function MobileOrdes({
                       ) : fetchOrderProductsMutation.isPending &&
                         fetchOrderProductsMutation.variables === order.id &&
                         isOpen ? (
-                        <div className="w-full flex justify-center items-center ">
+                        <div className="w-full flex justify-center items-center mt-4">
                           <Loader
                             className="h-10 w-10 animate-spin text-accent "
                             strokeWidth={3}
                           />
                         </div>
                       ) : (
-                        <p className="text-[#777777] text-center py-4 text-sm pr-4">
+                        <p className="text-[#777777] text-center py-4 text-sm pr-4 mt-2">
                           No hay productos para mostrar
                         </p>
                       )}

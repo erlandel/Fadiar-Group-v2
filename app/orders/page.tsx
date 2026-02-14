@@ -122,7 +122,7 @@ export default function Orders() {
           </div>
         </div>
 
-        <div className="lg:hidden">
+        <div className="xl:hidden">
           <MobileOrdes
             orders={orders}
             fetchOrdersMutation={fetchOrdersMutation}
@@ -133,7 +133,7 @@ export default function Orders() {
           />
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden xl:block">
           <OrdersTable
             orders={orders}
             fetchOrdersMutation={fetchOrdersMutation}
