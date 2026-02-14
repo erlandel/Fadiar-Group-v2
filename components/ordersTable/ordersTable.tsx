@@ -198,19 +198,21 @@ export default function OrdersTable({
                             {/* Row 1 Header style: Labels on top, values below */}
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
-                                Nombre
+                                Método de entrega
                               </span>
                               <span className="wrap-break-word text-sm">
-                                {order.client_name || "No disponible"}
+                                {order.direccion && order.direccion.trim() !== ""
+                                  ? "Domicilio"
+                                  : "Recogida en tienda"}
                               </span>
                             </div>
 
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
-                                Apellidos
+                                Método de pago
                               </span>
                               <span className="wrap-break-word text-sm">
-                                {order.client_last_names || "No disponible"}
+                                Pendiente
                               </span>
                             </div>
 
@@ -243,7 +245,7 @@ export default function OrdersTable({
                           </div>
 
                           <div className="mx-2 space-y-4">
-                            <div className="flex items-center gap-2 col-span-full mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                            <div className="flex items-center gap-2  mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                               <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
                                 Dirección de la tienda:
                               </span>
@@ -252,19 +254,41 @@ export default function OrdersTable({
                               </span>
                             </div>
 
-                            {order.direccion && order.direccion.trim() !== "" && (
-                              <div className="flex items-center gap-2 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                                <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
-                                  Dirección:
+                            <div className="w-full   justify-between items-center  mt-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <div className="flex  items-center gap-2 ">
+                                <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
+                                  Nombre:
                                 </span>
                                 <span className="wrap-break-word text-sm text-[#444444]">
-                                  {order.direccion}
+                                  {order.client_name }
                                 </span>
                               </div>
-                            )}
+
+                              <div className="flex  items-center gap-2 mt-1 ">
+                                <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
+                                  Apellidos:
+                                </span>
+                                <span className="wrap-break-word text-sm text-[#444444]">
+                                  {order.client_last_names}
+                                </span>
+                              </div>
+
+                            </div>
+
+                            {order.direccion &&
+                              order.direccion.trim() !== "" && (
+                                <div className="flex items-center gap-2  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                                  <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
+                                    Dirección:
+                                  </span>
+                                  <span className="wrap-break-word text-sm text-[#444444]">
+                                    {order.direccion}
+                                  </span>
+                                </div>
+                              )}
 
                             {order.nota && order.nota.trim() !== "" && (
-                              <div className="flex items-center gap-2 col-span-full  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                              <div className="flex items-center gap-2  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                                 <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
                                   Nota del pedido:
                                 </span>
