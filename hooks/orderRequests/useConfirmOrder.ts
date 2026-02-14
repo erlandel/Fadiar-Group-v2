@@ -9,6 +9,7 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 import cartStore from "@/store/cartStore";
 import BuyerDetailsStore from "@/store/buyerDetailsStore";
+import { payWithZelle } from "@/utils/payWithZelle";
 
 export const useConfirmOrder = () => {
   const router = useRouter();
@@ -35,16 +36,37 @@ export const useConfirmOrder = () => {
 
       const use_user_info= true;
 
+      const person = auth?.person;
+      const isDelivery = formData.delivery;
+
+      const source = isDelivery
+        ? {
+            name: formData.firstName,
+            last1: formData.lastName1,
+            last2: formData.lastName2,
+            phone: formData.phone,
+            address: formData.address,
+            note: formData.note,
+          }
+        : {
+            name: person?.name,
+            last1: person?.lastname1,
+            last2: person?.lastname2,
+            phone: person?.cellphone1,
+            address: "",
+            note: "",
+          };
+
       const requestBody = {
-        name_cliente: formData.firstName,
-        last_names: `${formData.lastName1} ${formData.lastName2}`.trim(),
-        cellphone_cliente: formData.phone,
+        name_cliente: source.name || "",
+        last_names: `${source.last1 || ""} ${source.last2 || ""}`.trim(),
+        cellphone_cliente: source.phone || "",
         id_municipio: municipalityId,
-        direccionExacta: formData.delivery ? (formData.address || "") : "",
+        direccionExacta: source.address || "",
         emisor: "web",
         use_user_info,
-        nota: formData.delivery ? (formData.note || "") : "",
-       paymentMethod,
+        nota: source.note || "",
+        paymentMethod,
       };
 
       console.log("requestBody en confirmar orden: ", requestBody);
@@ -74,7 +96,15 @@ export const useConfirmOrder = () => {
 
       const isDelivery = formData.delivery;
 
-      // Limpiar carrito y solo las tiendas del formulario tras éxito
+      if (paymentMethod && paymentMethod.toLowerCase() === "zelle") {
+        payWithZelle({
+          orderId,
+          items: cartStore.getState().items,
+          formData,
+        });
+      }
+
+      // Limpiar carrito y solo las tiendas del formulario tras éxito 
       clearCart();
       updateFormData({
         stores: [],
@@ -82,6 +112,7 @@ export const useConfirmOrder = () => {
         overlayDelivery: isDelivery,
         delivery: false,
         orderId: orderId || "",
+        note: "",
       });
 
     
