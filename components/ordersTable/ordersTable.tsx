@@ -200,7 +200,7 @@ export default function OrdersTable({
                               <span className="font-bold text-[#022954]  tracking-wider ">
                                 Método de entrega
                               </span>
-                              <span className="wrap-break-word text-sm">
+                              <span className="wrap-break-word text-md">
                                 {order.direccion &&
                                 order.direccion.trim() !== ""
                                   ? "Domicilio"
@@ -212,7 +212,7 @@ export default function OrdersTable({
                               <span className="font-bold text-[#022954]  tracking-wider ">
                                 Método de pago
                               </span>
-                              <span className="wrap-break-word text-sm">
+                              <span className="wrap-break-word text-md">
                                 Pendiente
                               </span>
                             </div>
@@ -221,7 +221,7 @@ export default function OrdersTable({
                               <span className="font-bold text-[#022954]  tracking-wider ">
                                 Provincia
                               </span>
-                              <span className="wrap-break-word text-sm">
+                              <span className="wrap-break-word text-md">
                                 {order.provincia_completa?.provincia || "-"}
                               </span>
                             </div>
@@ -230,7 +230,7 @@ export default function OrdersTable({
                               <span className="font-bold text-[#022954]  tracking-wider ">
                                 Municipio
                               </span>
-                              <span className="wrap-break-word text-sm">
+                              <span className="wrap-break-word text-md">
                                 {order.municipio_completo?.municipio || "-"}
                               </span>
                             </div>                            
@@ -242,7 +242,7 @@ export default function OrdersTable({
                                 <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
                                   Tienda:
                                 </span>
-                                <span className="wrap-break-word text-sm text-[#444444]">
+                                <span className="wrap-break-word text-md text-[#444444]">
                                   Pendiente
                                 </span>
                               </div>
@@ -251,7 +251,7 @@ export default function OrdersTable({
                                 <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
                                   Dirección de la tienda:
                                 </span>
-                                <span className="wrap-break-word text-sm text-[#444444]">
+                                <span className="wrap-break-word text-md text-[#444444]">
                                   Pendiente
                                 </span>
                               </div>
@@ -262,7 +262,7 @@ export default function OrdersTable({
                                 <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
                                   Nombre:
                                 </span>
-                                <span className="wrap-break-word text-sm text-[#444444]">
+                                <span className="wrap-break-word text-md text-[#444444]">
                                   {order.client_name}
                                 </span>
                               </div>
@@ -271,7 +271,7 @@ export default function OrdersTable({
                                 <span className="font-bold text-[#022954] tracking-wider whitespace-nowrap">
                                   Apellidos:
                                 </span>
-                                <span className="wrap-break-word text-sm text-[#444444]">
+                                <span className="wrap-break-word text-md text-[#444444]">
                                   {order.client_last_names}
                                 </span>
                               </div>
@@ -283,7 +283,7 @@ export default function OrdersTable({
                                   <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
                                     Dirección:
                                   </span>
-                                  <span className="wrap-break-word text-sm text-[#444444]">
+                                  <span className="wrap-break-word text-md text-[#444444]">
                                     {order.direccion}
                                   </span>
                                 </div>
@@ -294,7 +294,7 @@ export default function OrdersTable({
                                 <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
                                   Nota del pedido:
                                 </span>
-                                <span className="italic wrap-break-word text-sm text-[#444444]">
+                                <span className="italic wrap-break-word text-md text-[#444444]">
                                   "{order.nota}"
                                 </span>
                               </div>
