@@ -39,7 +39,7 @@ export const useGetOrderNote = () => {
       });
 
       const data = await response.json();
-      console.log("data recibida:", data);
+      console.log("data recibida para nota:", data);
 
       if (response.ok) {
         // Acceder a messages[0].message basado en la estructura proporcionada

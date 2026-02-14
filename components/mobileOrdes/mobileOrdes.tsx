@@ -11,6 +11,7 @@ import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
 import { EmojioneLeftArrow } from "@/icons/icons";
 import { WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
 import MatterCart1Store from "@/store/matterCart1Store";
+import { useGetOrderNote } from "@/hooks/orderRequests/useGetOrderNote";
 
 interface MobileOrdesProps {
   orders: Order[];
@@ -32,6 +33,9 @@ export default function MobileOrdes({
   const [openOrderIds, setOpenOrderIds] = useState<string[]>([]);
   const { fetchOrderProducts } = useGetOrderProducts();
   const updateFormData = MatterCart1Store((state) => state.updateFormData);
+  const { fetchOrderNote } = useGetOrderNote();
+  const [notesByOrder, setNotesByOrder] = useState<Record<string, string | null>>({});
+  const [noteLoadingOrderId, setNoteLoadingOrderId] = useState<string | null>(null);
 
   const handleShowInfo = (order: Order) => {
     const hasDelivery = !!(order.direccion && order.direccion.trim() !== "");
@@ -60,6 +64,16 @@ export default function MobileOrdes({
 
     if (isOpening) {
       const order = orders.find((o) => o.id === orderId);
+      if (!notesByOrder[orderId]) {
+        setNoteLoadingOrderId(orderId);
+        try {
+          const note = await fetchOrderNote(orderId);
+          const trimmed = typeof note === "string" ? note.trim() : "";
+          setNotesByOrder((prev) => ({ ...prev, [orderId]: trimmed || null }));
+        } finally {
+          setNoteLoadingOrderId((prev) => (prev === orderId ? null : prev));
+        }
+      }
       if (order && (!order.products || order.products.length === 0)) {
         fetchOrderProductsMutation.mutate(orderId);
       }
@@ -181,13 +195,13 @@ export default function MobileOrdes({
                     <div className=" py-6 bg-[#F5F7FA] rounded-b-2xl">
                       {/* Información del cliente y tienda (adaptado a móvil) */}
                       <div className="bg-[#F5F7FA] ">
-                        <div className=" mx-5 grid grid-cols-2 gap-y-3 gap-x-4 mb-4  text-[#777777] text-sm">
+                        <div className=" mx-5 grid grid-cols-2 gap-y-3 gap-x-4 mb-4  text-[#777777] text-sm sm:text-lg">
                           {/* Nombre: etiqueta izquierda, valor derecha */}
                           <div className="col-span-2 grid grid-cols-2 items-center">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Nombre
                             </p>
-                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               {order.client_name || "No disponible"}
                             </p>
                           </div>
@@ -197,7 +211,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Apellidos
                             </p>
-                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               {order.client_last_names || "No disponible"}
                             </p>
                           </div>
@@ -207,7 +221,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Provincia
                             </p>
-                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               {order.provincia_completa?.provincia || "-"}
                             </p>
                           </div>
@@ -216,7 +230,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Municipio
                             </p>
-                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               {order.municipio_completo?.municipio || "-"}
                             </p>
                           </div>
@@ -225,7 +239,7 @@ export default function MobileOrdes({
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Tienda
                             </p>
-                            <p className="text-right font-bold sm:text-lg wrap-break-word">
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               Pendiente
                             </p>
                           </div>
@@ -251,13 +265,17 @@ export default function MobileOrdes({
                             </span>
                           </div>
 
-                          {order.nota && order.nota.trim() !== "" && (
+                          {(noteLoadingOrderId === order.id ||
+                            (notesByOrder[order.id] &&
+                              notesByOrder[order.id]!.trim() !== "")) && (
                             <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                               <span className="font-bold text-[#022954] tracking-wider">
                                 Nota del pedido
                               </span>
                               <span className="italic wrap-break-word  text-[#444444]">
-                                "{order.nota}"
+                                {noteLoadingOrderId === order.id
+                                  ? "Cargando nota..."
+                                  : `"${notesByOrder[order.id]}"`}
                               </span>
                             </div>
                           )}
@@ -268,7 +286,7 @@ export default function MobileOrdes({
 
                       {/* Productos del pedido */}
                       {order.products && order.products.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto custom-scrollbar pr-4 mt-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-[400px] overflow-y-auto custom-scrollbar mx-4 mt-4">
                           {order.products.map((product, idx) => (
                             <CartCard
                               key={idx}
