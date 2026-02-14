@@ -197,31 +197,29 @@ export default function MobileOrdes({
                     }`}
                   >
                     <div className=" py-6 bg-[#F5F7FA] rounded-b-2xl">
-                      {/* Información del cliente y tienda (adaptado a móvil) */}
                       <div className="bg-[#F5F7FA] ">
                         <div className=" mx-5 grid grid-cols-2 gap-y-3 gap-x-4 mb-4  text-[#777777] text-sm sm:text-lg">
-                          {/* Nombre: etiqueta izquierda, valor derecha */}
-                          <div className="col-span-2 grid grid-cols-2 items-center">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
-                              Nombre
+                              Método de entrega
                             </p>
                             <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
-                              {order.client_name || "No disponible"}
+                              {order.direccion && order.direccion.trim() !== ""
+                                ? "Domicilio"
+                                : "Recogida en tienda"}
                             </p>
                           </div>
 
-                          {/* Apellidos: etiqueta izquierda, valor derecha */}
-                          <div className="col-span-2 grid grid-cols-2 items-center">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
-                              Apellidos
+                              Método de pago
                             </p>
                             <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
-                              {order.client_last_names || "No disponible"}
+                              Pendiente
                             </p>
                           </div>
-                      
 
-                          <div className="col-span-2 grid grid-cols-2 items-center">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Provincia
                             </p>
@@ -230,7 +228,7 @@ export default function MobileOrdes({
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-center">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Municipio
                             </p>
@@ -239,7 +237,7 @@ export default function MobileOrdes({
                             </p>
                           </div>
 
-                              <div className="col-span-2 grid grid-cols-2 items-center">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
                             <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Tienda
                             </p>
@@ -247,40 +245,56 @@ export default function MobileOrdes({
                               Pendiente
                             </p>
                           </div>
-
-                        </div>
-
-                        <div className="mx-3 space-y-3 text-sm sm:text-lg">
-                          <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                            <span className="font-bold text-[#022954] tracking-wider">
+                          <div className="col-span-2 grid grid-cols-2 items-start">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                               Dirección de la tienda
-                            </span>
-                            <span className="wrap-break-word  text-[#444444]">
+                            </p>
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
                               Pendiente
-                            </span>
+                            </p>
                           </div>
 
-                          <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100 ">
-                            <span className="font-bold text-[#022954] tracking-wider">
-                              Dirección
-                            </span>
-                            <span className="wrap-break-word  text-[#444444]">
-                              {order.direccion || "No disponible"}
-                            </span>
+                          <div className="col-span-2 grid grid-cols-2 items-start">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Nombre
+                            </p>
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                              {order.client_name || "No disponible"}
+                            </p>
                           </div>
+
+                          <div className="col-span-2 grid grid-cols-2 items-center">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                              Apellidos
+                            </p>
+                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                              {order.client_last_names || "No disponible"}
+                            </p>
+                          </div>
+
+                          {order.direccion && order.direccion.trim() !== "" && (
+                            <div className="col-span-2 grid grid-cols-2 items-start">
+                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                                Dirección
+                              </p>
+                              <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                                {order.direccion}
+                              </p>
+                            </div>
+                          )}
 
                           {(noteLoadingOrderId === order.id ||
                             (notesByOrder[order.id] &&
                               notesByOrder[order.id]!.trim() !== "")) && (
-                            <div className="flex flex-col gap-1 col-span-full bg-blue-50/50 p-3 rounded-lg border border-blue-100">
-                              <span className="font-bold text-[#022954] tracking-wider">
+                            <div className="col-span-2 grid grid-cols-2 items-start">
+                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
                                 Nota del pedido
-                              </span>
-                              <span className="italic wrap-break-word  text-[#444444]">
+                              </p>
+                              <p className="italic text-right font-bold text-base sm:text-xl wrap-break-word">
                                 {noteLoadingOrderId === order.id
                                   ? "Cargando nota..."
                                   : `"${notesByOrder[order.id]}"`}
-                              </span>
+                              </p>
                             </div>
                           )}
                         </div>
