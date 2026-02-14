@@ -198,86 +198,87 @@ export default function MobileOrdes({
                   >
                     <div className=" py-6 bg-[#F5F7FA] rounded-b-2xl">
                       <div className="bg-[#F5F7FA] ">
-                        <div className=" mx-5 grid grid-cols-2 gap-y-3 gap-x-4 mb-4  text-[#777777] text-sm sm:text-lg">
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                        <div className=" mx-5 flex flex-col gap-y-3 mb-4 text-[#777777] text-sm sm:text-lg">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Método de entrega
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               {order.direccion && order.direccion.trim() !== ""
                                 ? "Domicilio"
                                 : "Recogida en tienda"}
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Método de pago
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               Pendiente
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Provincia
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               {order.provincia_completa?.provincia || "-"}
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Municipio
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               {order.municipio_completo?.municipio || "-"}
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Tienda
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
-                              Pendiente
-                            </p>
-                          </div>
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
-                              Dirección de la tienda
-                            </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               Pendiente
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-start">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
+                              Dirección de la tienda
+                            </p>
+                            <p className="font-bold text-base sm:text-xl break-words">
+                              Pendiente
+                            </p>
+                          </div>
+
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Nombre
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               {order.client_name || "No disponible"}
                             </p>
                           </div>
 
-                          <div className="col-span-2 grid grid-cols-2 items-center">
-                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                          <div className="flex flex-wrap justify-between items-start gap-x-4">
+                            <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                               Apellidos
                             </p>
-                            <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                            <p className="font-bold text-base sm:text-xl break-words">
                               {order.client_last_names || "No disponible"}
                             </p>
                           </div>
 
                           {order.direccion && order.direccion.trim() !== "" && (
-                            <div className="col-span-2 grid grid-cols-2 items-start">
-                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                            <div className="flex flex-wrap justify-between items-start gap-x-4">
+                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                                 Dirección
                               </p>
-                              <p className="text-right font-bold text-base sm:text-xl wrap-break-word">
+                              <p className="font-bold text-base sm:text-xl break-words">
                                 {order.direccion}
                               </p>
                             </div>
@@ -286,14 +287,14 @@ export default function MobileOrdes({
                           {(noteLoadingOrderId === order.id ||
                             (notesByOrder[order.id] &&
                               notesByOrder[order.id]!.trim() !== "")) && (
-                            <div className="col-span-2 grid grid-cols-2 items-start">
-                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider">
+                            <div className="flex flex-wrap justify-between items-start gap-x-4 mt-2">
+                              <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                                 Nota del pedido
                               </p>
-                              <p className="italic text-right font-bold text-base sm:text-xl wrap-break-word">
+                              <p className="italic font-bold text-base sm:text-xl break-words">
                                 {noteLoadingOrderId === order.id
                                   ? "Cargando nota..."
-                                  : `"${notesByOrder[order.id]}"`}
+                                  : `${notesByOrder[order.id]}`}
                               </p>
                             </div>
                           )}
