@@ -112,7 +112,7 @@ export default function Orders() {
         <InformationMessage />
       </div> */}
 
-      <div className="mx-4 mt-10 md:mt-15 xl:px-20 2xl:px-40 ">
+      <div className="mx-4 mt-10 md:mt-15 xl:px-20 2xl:px-30 ">
         <div className=" flex  justify-between items-center">
           <div
             ref={titleRef}

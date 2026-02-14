@@ -194,7 +194,7 @@ export default function OrdersTable({
                       >
                         {/* Client and Store Information */}
                         <div className="bg-[#F5F7FA]">
-                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777]  px-1">
+                          <div className="pt-4 mx-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-6 gap-x-4 mb-6 pr-6 text-[#777777]  px-1 ">
                             {/* Row 1 Header style: Labels on top, values below */}
                             <div className="flex flex-col gap-1 ">
                               <span className="font-bold text-[#022954]  tracking-wider ">
