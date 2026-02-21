@@ -303,14 +303,16 @@ export default function RecipientPaymentDetails() {
           </p>
         </div>
 
-        <div className="ml-4">
-          <p className="text-[gray] ">
-            Teléfono:{" "}
-            <span className="text-primary wrap-break-word">
-              {beneficiaryPhone}
-            </span>
-          </p>
-        </div>
+        {!beneficiaryPhone.startsWith("-") && (
+          <div className="ml-4">
+            <p className="text-[gray] ">
+              Teléfono:{" "}
+              <span className="text-primary wrap-break-word">
+                {beneficiaryPhone}
+              </span>
+            </p>
+          </div>
+        )}
 
         <div className="w-full bg-[#F5F7FA] ">
           <p className="ml-4 text-primary">Dirección de entrega</p>
