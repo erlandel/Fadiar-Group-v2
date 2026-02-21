@@ -60,7 +60,11 @@ export const usePersonalData = () => {
       data.append("file", file);
     }
 
- 
+    // Para ver el contenido de FormData, necesitamos iterar sobre sus entradas
+    console.log('data en personalData:');
+    for (let [key, value] of data.entries()) {
+      console.log(`${key}:`, value);
+    }
 
     const response = await fetch(`${editUserUrl}`, {
       method: "POST",
