@@ -30,8 +30,8 @@ export const useLatestProducts = (count: number = 6) => {
       }
 
       const data = await res.json();
-       console.log('respueta de last product: ',data.products);
-      return data.products || [];
+      console.log('respueta de last product: ',data.products);
+      return (data.products || []).map((p: any) => ({ ...p, id: String(p.id) }));
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,

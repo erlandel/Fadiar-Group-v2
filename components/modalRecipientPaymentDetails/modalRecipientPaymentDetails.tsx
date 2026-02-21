@@ -6,11 +6,7 @@ import PhoneInput from "../phoneInput/phoneInput";
 import { Check, ChevronDown, X } from "lucide-react";
 import { FormData as MatterFormData } from "@/store/matterCart1Store";
 import { NotoV1Information } from "@/icons/icons";
-
-type MunicipalityData = {
-  id: number;
-  municipio: string;
-};
+import { MunicipalityData } from "@/types/location";
 
 type ModalRecipientPaymentDetailsProps = {
   show: boolean;

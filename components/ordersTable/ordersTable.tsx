@@ -13,7 +13,7 @@ import LoadingDots from "@/components/loadingDots/loadingDots";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 import { useGetOrderNote } from "@/hooks/orderRequests/useGetOrderNote";
 import { Loader } from "lucide-react";
-import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
+import { Order, OrderProduct } from "@/types/order";
 import MatterCart1Store from "@/store/matterCart1Store";
 import { openWhatsAppHelp } from "@/utils/whatsapp";
 

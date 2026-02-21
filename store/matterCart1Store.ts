@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export type SelectedStore = {
-  id: string | number;
+  id: string;
   name: string;
   direccion?: string;
   products: any[];
@@ -24,7 +24,7 @@ export type FormData = {
   stores?: SelectedStore[];
   showDeliveryOverlay?: boolean;
   overlayDelivery?: boolean;
-  orderId?: string | number;
+  orderId?: string;
 };
 
 export type FormState = {

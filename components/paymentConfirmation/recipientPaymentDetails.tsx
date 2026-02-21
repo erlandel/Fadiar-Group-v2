@@ -94,7 +94,7 @@ export default function RecipientPaymentDetails() {
       let totalDelivery = 0;
       rawCart.forEach((tienda: any) => {
         const domicilio = tienda.domicilios?.find(
-          (d: any) => d.id_municipio === storeMunicipalityId,
+          (d: any) => String(d.id_municipio) === String(storeMunicipalityId),
         );
         if (domicilio) {
           totalDelivery += Number(domicilio.price) || 0;
@@ -132,7 +132,7 @@ export default function RecipientPaymentDetails() {
     deliveryStores.length > 0
       ? baseMunicipalities.filter((mun) =>
           deliveryStores.every((tienda: any) =>
-            tienda.domicilios.some((d: any) => d.id_municipio === mun.id),
+            tienda.domicilios.some((d: any) => String(d.id_municipio) === String(mun.id)),
           ),
         )
       : baseMunicipalities;

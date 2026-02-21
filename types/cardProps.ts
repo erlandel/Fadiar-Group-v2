@@ -10,8 +10,8 @@ export type CardProps = {
   maxWidthVertical?: string;
   quantityProducts?: number;
   temporal_price?: string;
-  productId?: string | number;
-  tiendaId?: string | number;
+  productId?: string;
+  tiendaId?: string;
   currency?: {
     currency: string;
   };

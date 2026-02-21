@@ -1,6 +1,5 @@
-
 export type ProductID = {
-  id: number;
+  id: string;
   name: string;
   brand: string;
   warranty: string;
@@ -11,11 +10,11 @@ export type ProductID = {
     currency: string;
   };
   categoria?: {
-    id: number;
+    id: string;
     name: string;
   };
   description?: string;
-  tiendaId?: string | number;
+  tiendaId?: string;
   count?: number;
   specs?: Array<{ name: string; description: string }>;
 }

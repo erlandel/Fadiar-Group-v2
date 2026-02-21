@@ -22,8 +22,8 @@ interface CardProps {
   actionIcon?: "cart" | "delete" | "none";
   quantityProducts?: number;
   temporal_price?: string;
-  productId?: string | number;
-  tiendaId?: string | number;
+  productId?: string;
+  tiendaId?: string;
   currency?: {
     currency: string;
   };
@@ -92,7 +92,7 @@ export default function Card({
     e.stopPropagation();
 
     
-    if (!productId && productId !== 0) {
+    if (!productId) {
       console.warn("Product without ID cannot be added to cart");
       return;
     }
@@ -117,7 +117,7 @@ export default function Card({
 
   const handleRemoveFromCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!productId && productId !== 0) {
+    if (!productId) {
       console.warn("Product without ID cannot be removed");
       return;
     }

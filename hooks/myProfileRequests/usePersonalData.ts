@@ -51,8 +51,8 @@ export const usePersonalData = () => {
     const currentAccessToken = await refreshToken(auth, setAuth);
 
     const data = new FormData();
-    data.append("ci", auth.person.id.toString());
-    data.append("id_user", auth.user.id.toString());
+    data.append("ci", auth.person.id);
+    data.append("id_user", auth.user.id);
     data.append("current_password", currentPassword);
     data.append("changes", JSON.stringify(changes));
 

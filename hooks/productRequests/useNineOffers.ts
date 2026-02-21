@@ -10,7 +10,7 @@ export const useNineOffers = (count: number = 9) => {
 
     return products
       .filter(hasValidOffer)
-      .sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+      .sort((a, b) => Number(a.id) - Number(b.id))
       .slice(0, count);
   });
 };

@@ -1,4 +1,6 @@
-export const server_url = 'https://app.fadiar.com:444/prueba/api';
+// export const server_url = 'https://app.fadiar.com:444/prueba/api';
+
+export const server_url = 'https://zlgwqq5f-5001.use2.devtunnels.ms';
 
 export const loginUrl = `${server_url}/login`;
 

@@ -1,9 +1,5 @@
 export type Product = {
-  id: number;
-  category: {
-    id: number;
-    name: string;
-  };
+  id: string;
   name: string;
   brand: string;
   warranty: string;
@@ -15,7 +11,7 @@ export type Product = {
     currency: string;
   };
   categoria?: {
-    id: number;
+    id: string;
     name: string;
   };
   tiendaId?: string;

@@ -30,7 +30,7 @@ export default function Orders() {
 
   const fetchOrdersMutation = useMutation({
     mutationFn: (params: {
-      lastId: string | number;
+      lastId: string ;
       size: number;
       searchText: string;
     }) => fetchOrders(params.lastId, params.size, params.searchText),
@@ -38,7 +38,7 @@ export default function Orders() {
 
   useEffect(() => {
     fetchOrdersMutation.mutate({
-      lastId: 0,
+      lastId: "",
       size: (currentPage - 1) * itemsPerPage,
       searchText: "",
     });

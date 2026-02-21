@@ -26,7 +26,8 @@ export const useBestSelling = (count: number = 9) => {
       }
 
       const data = await res.json();
-      return Array.isArray(data) ? data : [];
+      const products = Array.isArray(data) ? data : [];
+      return products.map((p: any) => ({ ...p, id: String(p.id) }));
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,

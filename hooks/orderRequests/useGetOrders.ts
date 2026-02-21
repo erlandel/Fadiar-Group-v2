@@ -4,45 +4,14 @@ import { refreshToken } from "@/utils/refreshToken";
 import { get_ordersUrl } from "@/urlApi/urlApi";
 import ErrorMessage from "@/messages/errorMessage";
 
-export interface OrderProduct {
-  name: string;
-  brand: string;
-  price: number;
-  temporal_price?: number | string;
-  currency?: {
-    currency: string;
-  };
-  img: string;
-  count: number;
-}
-
-export interface Order {
-  id: string;
-  date: string;
-  time: string;
-  client_ci: string;
-  client_name?: string;
-  client_last_names?: string;
-  client_cell: string;
-  client_cell2?: string;
-  direccion: string;
-  municipio_completo?: {
-    municipio: string;
-  };
-  provincia_completa?: {
-    provincia: string;
-  };
-  nota?: string;
-  status: "En espera" | "Confirmado" | "Cancelado" | string;
-  products: OrderProduct[];
-}
+import { Order, OrderProduct } from "../../types/order";
 
 export const useGetOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchOrders = useCallback(async (lastId: string | number = 0, size: number = 10, searchText: string = "") => {
+  const fetchOrders = useCallback(async (lastId: string = "", size: number = 10, searchText: string = "") => {
     if (loading) return;
 
     const requestSize = size + 11;
@@ -65,13 +34,14 @@ export const useGetOrders = () => {
         setLoading(false);
         return;
       }
- const use_user_info= true;
+
       const requestBody = {
         last_id: lastId,
         size: requestSize,
         search_text: searchText,
-        use_user_info             
       };
+
+      console.log("requestBody en fetchOrders: ", requestBody);
 
       const response = await fetch(get_ordersUrl, {
         method: "POST",
@@ -136,7 +106,7 @@ export const useGetOrders = () => {
           };
         });
 
-        if (lastId === 0) {
+        if (lastId === '') {
           setOrders(processedData);
         } else {
           setOrders((prev) => {

@@ -4,7 +4,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 /* ===== Tipos ===== */
 
 export type Person = {
-  id: number;
+  id: string;
   name: string;
   lastname1: string;
   lastname2: string;
@@ -15,21 +15,21 @@ export type Person = {
 };
 
 export type User = {
-  id: number;
+  id: string;
   username: string;
   email: string;
   active: boolean;
   img: string | null;
-  id_person: number;
-  id_type: number;
-  id_paquete: number | null;
+  id_person: string;
+  id_type: string;
+  id_paquete: string | null;
   referredcode: string;
   registrationid: string | null;
   password?: string;
 };
 
 export type UserType = {
-  id: number;
+  id: string;
   category: number;
   type: string;
 };

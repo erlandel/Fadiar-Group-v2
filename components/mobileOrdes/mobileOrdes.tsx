@@ -7,7 +7,7 @@ import CartCard from "../cartCard/cartCard";
 import { useGetOrderProducts } from "@/hooks/orderRequests/useGetOrderProducts";
 import LoadingDots from "../loadingDots/loadingDots";
 import { Loader } from "lucide-react";
-import { Order, OrderProduct } from "@/hooks/orderRequests/useGetOrders";
+import { Order, OrderProduct } from "@/types/order";
 import { EmojioneLeftArrow } from "@/icons/icons";
 import { WhatsApp, StreamlineUltimateColorMessagesLogo } from "@/icons/icons";
 import MatterCart1Store from "@/store/matterCart1Store";

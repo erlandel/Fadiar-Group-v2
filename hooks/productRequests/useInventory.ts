@@ -45,6 +45,7 @@ export const useInventory = <T = InventoryData>(select?: (data: InventoryData) =
         ...t,
         productos: (t.productos || []).map((p: any) => ({
           ...p,
+          id: String(p.id),
           tiendaId: t.id
         }))
       }));

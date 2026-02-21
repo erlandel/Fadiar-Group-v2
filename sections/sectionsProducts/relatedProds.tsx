@@ -1,25 +1,7 @@
 import CardProduct from "@/components/ui/cardProduct";
 import CardSkeleton from "@/components/ui/skeletonCard";
+import { Product } from "@/types/product";
 import { useMemo } from "react";
-
-interface Product {
-  id: number;
-  categoria?: {
-    id: number;
-    name: string;
-  };
-  name: string;
-  brand: string;
-  warranty: string;
-  price: string;
-  img: string;
-  temporal_price?: string;
-  currency?: {
-    currency: string;
-  };
-  tiendaId?: string | number;
-  count?: number;
-}
 
 type RelatedProdsProps = {
   products?: Product[];

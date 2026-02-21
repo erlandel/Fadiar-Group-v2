@@ -48,7 +48,7 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
   // Encontrar el producto actual
   const product = useMemo(() => {
     if (!allProducts.length || !id) return null;
-    return allProducts.find((p) => p.id === parseInt(id)) || null;
+    return allProducts.find((p) => p.id.toString() === id.toString()) || null;
   }, [allProducts, id]);
 
   useEffect(() => {

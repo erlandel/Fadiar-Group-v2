@@ -5,18 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { get_provinces_municipalitiesUrl } from "@/urlApi/urlApi";
 import { onClickOutside } from "@/utils/clickOutside";
+import { ProvinceData, MunicipalityData } from "@/types/location";
 
-interface MunicipalityData {
-  id: number;
-  municipio: string;
-}
-
-interface ProvinceData {
-  id: number;
-  provincia: string;
-  code: string;
-  municipios: MunicipalityData[];
-}
 
 const useLocation = () => {
   const {
@@ -28,14 +18,14 @@ const useLocation = () => {
   } = useProductsByLocationStore();
 
   const [selectedProvince, setSelectedProvince] = useState(province || "");
-  const [selectedProvinceId, setSelectedProvinceId] = useState<number | null>(
+  const [selectedProvinceId, setSelectedProvinceId] = useState<string | null>(
     provinceId || null,
   );
   const [selectedMunicipality, setSelectedMunicipality] = useState(
     municipality || "",
   );
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<
-    number | null
+    string | null
   >(municipalityId || null);
   const provincesQuery = useQuery<ProvinceData[], Error>({
     queryKey: ["provinces-municipalities"],

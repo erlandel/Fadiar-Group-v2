@@ -7,7 +7,7 @@ import { ShoppingCart, Trash2 } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import LoadingDots from "../loadingDots/loadingDots";
 
-interface CardCart4Props {
+interface CardCartProps {
   title: string;
   brand?: string;
   price: string;
@@ -22,10 +22,10 @@ interface CardCart4Props {
   padding?: string;
   bgColor?: string;
   hideQuantitySelector?: boolean;
-  productId?: number | string;
+  productId?: string;
   cartId?: number;
-  tiendaId?: number | string;
-  onDelete?: (productId: number | string) => void;
+  tiendaId?: string;
+  onDelete?: (productId: string) => void;
 }
 
 export default function CartCard({
@@ -45,7 +45,7 @@ export default function CartCard({
   cartId,
   tiendaId,
   onDelete,
-}: CardCart4Props) {
+}: CardCartProps) {
   const { getItemQuantity } = cartStore();
   const currentQuantity = productId ? getItemQuantity(productId) : 0;
   const { deleteFromCart, loading: deleting } = useDeleteFromCart();
@@ -59,7 +59,7 @@ export default function CartCard({
 
     if (cartId) {
       // Si tenemos cartId, usamos la lógica de backend
-      await deleteFromCart(cartId, productId);
+      await deleteFromCart(cartId.toString(), productId.toString());
     }
   };
 

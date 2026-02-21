@@ -35,7 +35,7 @@ export const useConfirmOrder = () => {
       }
 
       const isDelivery = formData.delivery;
-    
+    const use_user_info=!isDelivery;
     
 
       const person = auth?.person;
@@ -68,13 +68,9 @@ export const useConfirmOrder = () => {
         emisor: "web",
         nota: source.note || "",
         paymentMethod,
+        use_user_info,
       };
 
-      if (isDelivery) {
-        requestBody.ci_cliente = 1;
-      } else {
-        requestBody.use_user_info = true;
-      }
 
       console.log("requestBody en confirmar orden: ", requestBody);
       const response = await fetch(`${add_orderUrl}`, {

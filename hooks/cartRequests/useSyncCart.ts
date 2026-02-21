@@ -57,7 +57,7 @@ export const useSyncCart = () => {
             if (p) {
               mappedItems.push({
                 cartId: item.id,
-                productId: p.id,
+                productId: String(p.id),
                 title: p.name,
                 brand: p.brand,
                 category: p.categoria?.name,

@@ -62,7 +62,7 @@ export default function CardProduct({
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!productId && productId !== 0) {
+    if (!productId) {
       console.warn("Product without ID cannot be added to cart");
       return;
     }

@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export type CartItem = {
-  cartId?: number;
-  productId: number | string;
+  cartId?: string;
+  productId: string;
   title: string;
   brand: string;
   category?: string;
@@ -15,7 +15,7 @@ export type CartItem = {
   currency?: {
     currency: string;
   };
-  tiendaId?: string | number;
+  tiendaId?: string;
   tiendaName?: string;
   tiendaDireccion?: string;
 };
@@ -24,12 +24,12 @@ export type CartState = {
   items: CartItem[];
   rawCart: any[];
   addOrUpdateItem: (item: CartItem) => void;
-  updateQuantity: (productId: number | string, quantity: number) => void;
-  removeItem: (productId: number | string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string) => void;
   setItems: (items: CartItem[]) => void;
   setRawCart: (cart: any[]) => void;
   clearCart: () => void;
-  getItemQuantity: (productId: number | string) => number;
+  getItemQuantity: (productId: string) => number;
   getTotalItems: () => number;
   getTotalPrice: () => number;
 };

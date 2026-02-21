@@ -14,7 +14,7 @@ export const useDeleteFromCart = () => {
   const removeItemLocal = useCartStore((state) => state.removeItem);
   const { syncCart } = useSyncCart();
 
-  const deleteFromCart = async (cartId: number, productId: number | string) => {
+  const deleteFromCart = async (cartId: string, productId: string) => {
     const { auth, setAuth } = useAuthStore.getState();
 
     if (!auth?.access_token) {

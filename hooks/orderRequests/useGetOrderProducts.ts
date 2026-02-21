@@ -3,7 +3,7 @@ import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
 import { get_product_orderUrl } from "@/urlApi/urlApi";
 import ErrorMessage from "@/messages/errorMessage";
-import { OrderProduct } from "./useGetOrders";
+import { OrderProduct } from "../../types/order";
 
 export const useGetOrderProducts = () => {
   const [loading, setLoading] = useState(false);

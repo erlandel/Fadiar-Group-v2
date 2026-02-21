@@ -167,7 +167,7 @@ export default function Searchbar() {
     setIsOpen(true);
   };
 
-  const handleProductClick = (productId: number) => {
+  const handleProductClick = (productId: string) => {
     startLoading();
     router.push(`/productID?id=${productId}`);
     setIsOpen(false);

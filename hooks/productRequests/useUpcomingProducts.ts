@@ -31,11 +31,13 @@ export const useUpcomingProducts = () => {
       }
 
       const data = await res.json();
+      console.log("Productos de prventa",data);
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
       const processedTiendas = realTiendas.map((t: any) => ({
         ...t,
         productos: (t.productos || []).map((p: any) => ({
           ...p,
+          id: String(p.id),
           tiendaId: t.id,
         })),
       }));

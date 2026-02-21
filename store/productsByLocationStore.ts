@@ -3,19 +3,19 @@ import { persist, createJSONStorage } from "zustand/middleware";
 
 interface ProductsByLocationState {
   province: string;
-  provinceId: number | null;
+  provinceId: string | null;
   municipality: string;
-  municipalityId: number | null;
+  municipalityId: string | null;
   isOpen: boolean;
   products: any[];
   tiendas: any[];
   currencys: any;
   globalProducts: any[];
-  lastFetchedMunicipalityId: number | null;
-  setLocation: (province: string, provinceId: number | null, municipality: string, municipalityId: number | null) => void;
+  lastFetchedMunicipalityId: string | null;
+  setLocation: (province: string, provinceId: string | null, municipality: string, municipalityId: string | null) => void;
   clearLocation: () => void;
   setIsOpen: (isOpen: boolean) => void;
-  setProductsData: (data: { products: any[]; tiendas: any[]; currencys: any; municipalityId: number | null }) => void;
+  setProductsData: (data: { products: any[]; tiendas: any[]; currencys: any; municipalityId: string | null }) => void;
   setGlobalProducts: (products: any[]) => void;
 }
 
