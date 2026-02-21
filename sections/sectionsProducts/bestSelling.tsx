@@ -20,7 +20,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
     : bestSellingProducts;
 
   const sortedProducts = useMemo(
-    () => [...productsToUse].sort((a, b) => b.id - a.id),
+    () => [...productsToUse].sort((a, b) => b.id.localeCompare(a.id)),
     [productsToUse],
   );
 

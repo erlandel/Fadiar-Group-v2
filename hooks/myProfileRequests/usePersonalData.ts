@@ -60,6 +60,8 @@ export const usePersonalData = () => {
       data.append("file", file);
     }
 
+ 
+
     const response = await fetch(`${editUserUrl}`, {
       method: "POST",
       headers: {

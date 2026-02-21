@@ -213,9 +213,9 @@ export default function Products() {
       filtered = filtered.filter((product) => {
         const categoryName = (
           (typeof product.categoria === "object" && product.categoria?.name) ||
-          (typeof product.category === "object" && product.category?.name) ||
+          (typeof (product as any).category === "object" && (product as any).category?.name) ||
           (typeof product.categoria === "string" ? product.categoria : null) ||
-          (typeof product.category === "string" ? product.category : null) ||
+          (typeof (product as any).category === "string" ? (product as any).category : null) ||
           ""
         );
         const normalizedCategoryName = normalizeText(categoryName);
