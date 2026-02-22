@@ -55,8 +55,8 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
                   temporal_price={product.temporal_price}
                   currency={product.currency}
                   position="vertical"
-                  productId={product.id}
-                  tiendaId={product.tiendaId}
+                  productId={product.id}                  
+                  tiendaId={product.tiendaId || product.id_tienda}
                   count={product.count}
                 />
               )}

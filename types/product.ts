@@ -15,4 +15,5 @@ export type Product = {
     name: string;
   };
   tiendaId?: string;
+  id_tienda?: string;
 };

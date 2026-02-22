@@ -54,7 +54,7 @@ export const LatestProducts = ({
                   currency={product.currency}
                   position="vertical"
                   productId={product.id}
-                  tiendaId={product.tiendaId}
+                  tiendaId={product.tiendaId || product.id_tienda}
                   count={product.count}
                 />
               )}
