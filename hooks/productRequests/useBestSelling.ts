@@ -4,7 +4,7 @@ import { Product } from "@/types/product";
 import { best_selling_productsUrl } from "@/urlApi/urlApi";
 
 export const useBestSelling = (count: number = 9) => {
-  const { municipalityId } = useProductsByLocationStore();
+  const { municipalityId,provinceId } = useProductsByLocationStore();
 
   return useQuery<Product[]>({
     queryKey: ["best-selling", municipalityId, count],
@@ -16,7 +16,8 @@ export const useBestSelling = (count: number = 9) => {
         },
         body: JSON.stringify({
           count,
-          municipio: municipalityId,        
+          municipio: municipalityId,   
+          id_provincia:provinceId     
         }),
       });
 
@@ -31,6 +32,6 @@ export const useBestSelling = (count: number = 9) => {
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,
-    enabled: !!municipalityId, // Solo se ejecuta si hay una provincia seleccionada
+    enabled: !!provinceId, // Solo se ejecuta si hay una provincia seleccionada
   });
 };

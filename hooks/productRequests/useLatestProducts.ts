@@ -4,7 +4,7 @@ import { Product } from "@/types/product";
 import { latest_productsUrl } from "@/urlApi/urlApi";
 
 export const useLatestProducts = (count: number = 6) => {
-  const { municipalityId } = useProductsByLocationStore();
+  const { municipalityId,provinceId } = useProductsByLocationStore();
   const emisor = 'web';
 
   return useQuery<Product[]>({
@@ -18,7 +18,8 @@ export const useLatestProducts = (count: number = 6) => {
         body: JSON.stringify({
           count,
           municipio: municipalityId,
-          emisor,        
+          id_provincia:provinceId,     
+          emisor,   
         }),
       });
 
@@ -35,6 +36,6 @@ export const useLatestProducts = (count: number = 6) => {
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,
-    enabled: !!municipalityId, // Solo se ejecuta si hay una provincia seleccionada
+    enabled: !!provinceId, // Solo se ejecuta si hay una provincia seleccionada
   });
 };

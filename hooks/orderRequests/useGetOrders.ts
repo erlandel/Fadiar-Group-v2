@@ -143,7 +143,7 @@ export const useGetOrders = () => {
     );
   }, []);
 
-  const updateOrderNote = useCallback((orderId: string, nota: string) => {
+  const updateOrderNote = useCallback((orderId: string, nota: Order["nota"]) => {
     setOrders((prev) =>
       prev.map((order) =>
         order.id === orderId ? { ...order, nota } : order
