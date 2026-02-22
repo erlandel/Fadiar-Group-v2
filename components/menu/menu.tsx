@@ -62,7 +62,11 @@ export default function Menu() {
     const normalize = (p: string) => (p.endsWith("/") ? p : `${p}/`);
     const prev = normalize(prevPathRef.current);
     const curr = normalize(pathname);
-    if (prev === "/products/" && curr !== "/products/") {
+    if (
+      prev === "/products/" &&
+      curr !== "/products/" &&
+      !curr.startsWith("/productID")
+    ) {
       setSelectedCategories([]);
     }
     prevPathRef.current = pathname;
