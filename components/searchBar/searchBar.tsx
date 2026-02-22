@@ -4,6 +4,7 @@ import { IcSharpSearch } from "@/icons/icons";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { onClickOutside } from "@/utils/clickOutside";
+import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
 import { Product } from "@/types/product";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import { server_url } from "@/urlApi/urlApi";
@@ -104,8 +105,15 @@ function calculateScore(query: string, target: string): number {
 }
 
 export default function Searchbar() {
-  const { data, isLoading } = useInventory();
-  const allProducts = data?.products ?? [];
+  const { data, isLoading: isInventoryLoading } = useInventory();
+  const { data: upcomingProducts = [], isLoading: isUpcomingLoading } = useUpcomingProducts();
+  
+  const allProducts: Product[] = [
+    ...(data?.products ?? []),
+    ...upcomingProducts.map((p) => ({ ...p, isPreSale: true })),
+  ];
+
+  const isLoading = isInventoryLoading || isUpcomingLoading;
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -167,9 +175,13 @@ export default function Searchbar() {
     setIsOpen(true);
   };
 
-  const handleProductClick = (productId: string) => {
+  const handleProductClick = (productId: string, isPreSale?: boolean) => {
     startLoading();
-    router.push(`/productID?id=${productId}`);
+    if (isPreSale) {
+      router.push(`/productID?id=${productId}&preSale=true`);
+    } else {
+      router.push(`/productID?id=${productId}`);
+    }
     setIsOpen(false);
     setQuery("");
   };
@@ -203,7 +215,7 @@ export default function Searchbar() {
               searchResults.slice(0, 5).map((product, index) => (
                 <div
                   key={product.id}
-                  onClick={() => handleProductClick(product.id)}
+                  onClick={() => handleProductClick(product.id, product.isPreSale)}
                   className={`p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0 animate-fade-in-up [animation-delay:${index * 50}ms]`}
                 >
                   <div className="flex items-center space-x-3">

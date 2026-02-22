@@ -1,13 +1,19 @@
 'use client';
 
 import "@fontsource/just-me-again-down-here";
-import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
+import { useQueryClient } from "@tanstack/react-query";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
+import type { Product } from "@/types/product";
 import CardCarousel from "../ui/cardCarousel";
 import CardProductPreSale from "../ui/cardProductPreSale";
 import SkeletonCardProductPreSale from "../ui/skeletonCardProductPreSale";
 
 export default function BannerUpcomingProducts() {
-  const { data: upcomingProducts = [], isLoading } = useUpcomingProducts();
+  const queryClient = useQueryClient();
+  const { provinceId } = useProductsByLocationStore();
+  const upcomingProducts =
+    (queryClient.getQueryData<Product[]>(["upcoming-products", provinceId]) ?? []);
+  const isLoading = false;
 
   return (
     <section className="relative w-full h-140 sm:h-130 overflow-hidden mt-20 xl:mt-30">

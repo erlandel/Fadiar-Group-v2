@@ -16,4 +16,5 @@ export type Product = {
   };
   tiendaId?: string;
   id_tienda?: string;
+  isPreSale?: boolean;
 };
