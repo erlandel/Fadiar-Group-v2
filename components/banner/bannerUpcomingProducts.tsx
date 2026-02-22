@@ -13,9 +13,10 @@ export default function BannerUpcomingProducts() {
   const { provinceId } = useProductsByLocationStore();
   const upcomingProducts =
     (queryClient.getQueryData<Product[]>(["upcoming-products", provinceId]) ?? []);
+
   const isLoading = false;
 
-  return (
+  return upcomingProducts.length > 0 ? (
     <section className="relative w-full h-140 sm:h-130 overflow-hidden mt-20 xl:mt-30">
       {/* ===== BACKGROUND (CAPA INFERIOR) ===== */}
       <div className="absolute inset-0 bg-primary z-0">
@@ -80,5 +81,5 @@ export default function BannerUpcomingProducts() {
         </div>
       </div>
     </section>
-  );
+  ) : null;
 }
