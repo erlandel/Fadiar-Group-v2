@@ -20,13 +20,25 @@ export type Order = {
   client_cell: string;
   client_cell2?: string;
   direccion: string;
+  tipo_pago:string;
   municipio_completo?: {
     municipio: string;
   };
   provincia_completa?: {
     provincia: string;
   };
-  nota?: string;
+  tienda:{
+    name:string;
+    direccion:string;
+  }
+  
+  nota?: {
+    id: string;
+    id_user: string;
+    id_order: string;
+    date: string;
+    message: string;
+  }[];
   status: "En espera" | "Confirmado" | "Cancelado" | string;
   products: OrderProduct[];
 }

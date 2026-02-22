@@ -44,7 +44,7 @@ export const useGetOrderNote = () => {
       if (response.ok) {
         // Acceder a messages[0].message basado en la estructura proporcionada
         if (data && data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
-          return data.messages[0].message || null;
+          return data.messages;
         }
         return null;
       } else {

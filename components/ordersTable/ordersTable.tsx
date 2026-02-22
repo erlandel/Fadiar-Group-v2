@@ -21,7 +21,7 @@ interface OrdersTableProps {
   orders: Order[];
   fetchOrdersMutation: any;
   updateOrderProducts: (orderId: string, products: OrderProduct[]) => void;
-  updateOrderNote: (orderId: string, nota: string) => void;
+  updateOrderNote: (orderId: string, nota: Order["nota"]) => void;
   hasMore: boolean;
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -213,7 +213,7 @@ export default function OrdersTable({
                                 Método de pago
                               </span>
                               <span className="wrap-break-word text-md">
-                                Pendiente
+                                {order.tipo_pago}
                               </span>
                             </div>
 
@@ -233,7 +233,7 @@ export default function OrdersTable({
                               <span className="wrap-break-word text-md">
                                 {order.municipio_completo?.municipio || "-"}
                               </span>
-                            </div>                            
+                            </div>
                           </div>
 
                           <div className="mx-2 space-y-4">
@@ -243,7 +243,7 @@ export default function OrdersTable({
                                   Tienda:
                                 </span>
                                 <span className="wrap-break-word text-md text-[#444444]">
-                                  Pendiente
+                                  {order.tienda.name}
                                 </span>
                               </div>
 
@@ -252,7 +252,7 @@ export default function OrdersTable({
                                   Dirección de la tienda:
                                 </span>
                                 <span className="wrap-break-word text-md text-[#444444]">
-                                  Pendiente
+                                  {order.tienda.direccion}
                                 </span>
                               </div>
                             </div>
@@ -289,14 +289,18 @@ export default function OrdersTable({
                                 </div>
                               )}
 
-                            {order.nota && order.nota.trim() !== "" && (
-                              <div className="flex items-center gap-2  bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                            {order.nota && order.nota.length > 0 && (
+                              <div className="flex flex-col gap-2 bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                                 <span className="font-bold text-[#022954] text-md tracking-wider whitespace-nowrap">
                                   Nota del pedido:
                                 </span>
-                                <span className="italic wrap-break-word text-md text-[#444444]">
-                                  "{order.nota}"
-                                </span>
+                                <div className="flex flex-col gap-1">
+                                  {order.nota.map((notaItem, index) => (
+                                    <span key={notaItem.id} className="italic wrap-break-word text-md text-[#444444]">
+                                      {index + 1}. {notaItem.message}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
                             )}
                           </div>

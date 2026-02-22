@@ -35,8 +35,12 @@ export default function MobileOrdes({
   const { fetchOrderProducts } = useGetOrderProducts();
   const updateFormData = MatterCart1Store((state) => state.updateFormData);
   const { fetchOrderNote } = useGetOrderNote();
-  const [notesByOrder, setNotesByOrder] = useState<Record<string, string | null>>({});
-  const [noteLoadingOrderId, setNoteLoadingOrderId] = useState<string | null>(null);
+  const [notesByOrder, setNotesByOrder] = useState<
+    Record<string, any[] | null>
+  >({});
+  const [noteLoadingOrderId, setNoteLoadingOrderId] = useState<string | null>(
+    null,
+  );
 
   const handleShowInfo = (order: Order) => {
     const hasDelivery = !!(order.direccion && order.direccion.trim() !== "");
@@ -69,8 +73,7 @@ export default function MobileOrdes({
         setNoteLoadingOrderId(orderId);
         try {
           const note = await fetchOrderNote(orderId);
-          const trimmed = typeof note === "string" ? note.trim() : "";
-          setNotesByOrder((prev) => ({ ...prev, [orderId]: trimmed || null }));
+          setNotesByOrder((prev) => ({ ...prev, [orderId]: note }));
         } finally {
           setNoteLoadingOrderId((prev) => (prev === orderId ? null : prev));
         }
@@ -181,11 +184,11 @@ export default function MobileOrdes({
 
                       {/* Soporte */}
                       <p className="text-sm sm:text-lg">Ayuda</p>
-                      <p className=" flex justify-end">                          
-                        <WhatsApp 
-                         onClick={() => openWhatsAppHelp(order.id)}
-                        className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110"
-                         />
+                      <p className=" flex justify-end">
+                        <WhatsApp
+                          onClick={() => openWhatsAppHelp(order.id)}
+                          className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110"
+                        />
                       </p>
                     </div>
                   </div>
@@ -215,7 +218,7 @@ export default function MobileOrdes({
                               Método de pago
                             </p>
                             <p className="font-bold text-base sm:text-xl `wrap-break-word">
-                              Pendiente
+                              {order.tipo_pago}
                             </p>
                           </div>
 
@@ -242,7 +245,7 @@ export default function MobileOrdes({
                               Tienda
                             </p>
                             <p className="font-bold text-base sm:text-xl `wrap-break-word">
-                              Pendiente
+                              {order.tienda.name}
                             </p>
                           </div>
 
@@ -251,7 +254,7 @@ export default function MobileOrdes({
                               Dirección de la tienda
                             </p>
                             <p className="font-bold text-base sm:text-xl `wrap-break-word">
-                              Pendiente
+                              {order.tienda.direccion}
                             </p>
                           </div>
 
@@ -286,16 +289,27 @@ export default function MobileOrdes({
 
                           {(noteLoadingOrderId === order.id ||
                             (notesByOrder[order.id] &&
-                              notesByOrder[order.id]!.trim() !== "")) && (
-                            <div className="flex flex-wrap justify-between items-start gap-x-4 mt-2">
+                              notesByOrder[order.id]!.length > 0)) && (
+                            <div className="flex flex-col gap-y-2 mt-2">
                               <p className="text-sm sm:text-lg font-bold text-[#022954] tracking-wider shrink-0">
                                 Nota del pedido
                               </p>
-                              <p className="italic font-bold text-base sm:text-xl `wrap-break-word">
-                                {noteLoadingOrderId === order.id
-                                  ? "Cargando nota..."
-                                  : `${notesByOrder[order.id]}`}
-                              </p>
+                              {noteLoadingOrderId === order.id ? (
+                                <p className="italic font-bold text-base sm:text-xl wrap-break-word">
+                                  Cargando nota...
+                                </p>
+                              ) : (
+                                <div className="flex flex-col gap-1">
+                                  {notesByOrder[order.id]!.map((notaItem, index) => (
+                                    <p
+                                      key={notaItem.id}
+                                      className="italic font-bold text-base sm:text-xl wrap-break-word"
+                                    >
+                                      {index + 1}. {notaItem.message}
+                                    </p>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           )}
                         </div>
