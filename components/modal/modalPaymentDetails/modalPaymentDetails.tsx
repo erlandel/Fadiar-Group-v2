@@ -1,6 +1,6 @@
 "use client";
 
-import CreditCards from "../paymentMethods/creditCards";
+import CreditCards from "../../paymentMethods/creditCards";
 
 type ModalPaymentDetailsProps = {
   show: boolean;

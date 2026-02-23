@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useLocation from "@/hooks/locationRequests/useLocation";
-import { Loading } from "../loading/loading";
+import { Loading } from "../../loading/loading";
 
 const ModalProductsByLocation = () => {
   const { setIsOpen } = useProductsByLocationStore();

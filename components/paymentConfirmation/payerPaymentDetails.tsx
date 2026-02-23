@@ -3,7 +3,7 @@
 import BuyerDetailsStore from "@/store/buyerDetailsStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ModalPaymentDetails from "../modalPaymentDetails/modalPaymentDetails";
+import ModalPaymentDetails from "../modal/modalPaymentDetails/modalPaymentDetails";
 
 export default function PayerPaymentDetails() {
   const router = useRouter();

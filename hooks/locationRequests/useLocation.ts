@@ -8,7 +8,9 @@ import { onClickOutside } from "@/utils/clickOutside";
 import { ProvinceData, MunicipalityData } from "@/types/location";
 
 
-const useLocation = () => {
+const useLocation = (config?: { useGlobalStore?: boolean }) => {
+  const useGlobalStore = config?.useGlobalStore ?? true;
+
   const {
     province,
     provinceId,
@@ -17,16 +19,18 @@ const useLocation = () => {
     setLocation,
   } = useProductsByLocationStore();
 
-  const [selectedProvince, setSelectedProvince] = useState(province || "");
+  const [selectedProvince, setSelectedProvince] = useState(
+    useGlobalStore ? (province || "") : ""
+  );
   const [selectedProvinceId, setSelectedProvinceId] = useState<string | null>(
-    provinceId || null,
+    useGlobalStore ? (provinceId || null) : null
   );
   const [selectedMunicipality, setSelectedMunicipality] = useState(
-    municipality || "",
+    useGlobalStore ? (municipality || "") : ""
   );
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState<
     string | null
-  >(municipalityId || null);
+  >(useGlobalStore ? (municipalityId || null) : null);
   const provincesQuery = useQuery<ProvinceData[], Error>({
     queryKey: ["provinces-municipalities"],
     queryFn: async () => {
@@ -66,11 +70,12 @@ const useLocation = () => {
   }, [openProvinces, openMunicipalities]);
 
   useEffect(() => {
+    if (!useGlobalStore) return;
     setSelectedProvince(province || "");
     setSelectedProvinceId(provinceId || null);
     setSelectedMunicipality(municipality || "");
     setSelectedMunicipalityId(municipalityId || null);
-  }, [province, provinceId, municipality, municipalityId]);
+  }, [province, provinceId, municipality, municipalityId, useGlobalStore]);
 
   const handleProvinceChange = (
     prov: ProvinceData,
@@ -80,7 +85,9 @@ const useLocation = () => {
     setSelectedProvinceId(prov.id);
     setSelectedMunicipality("");
     setSelectedMunicipalityId(null);
-    setLocation(prov.provincia, prov.id, "", null);
+    if (useGlobalStore) {
+      setLocation(prov.provincia, prov.id, "", null);
+    }
     if (onSelect) onSelect(prov);
   };
 
@@ -101,7 +108,9 @@ const useLocation = () => {
 
     setSelectedMunicipality(mun.municipio);
     setSelectedMunicipalityId(mun.id);
-    setLocation(finalProvince, finalProvinceId ?? null, mun.municipio, mun.id);
+    if (useGlobalStore) {
+      setLocation(finalProvince, finalProvinceId ?? null, mun.municipio, mun.id);
+    }
     if (onSelect) onSelect(mun);
   };
 

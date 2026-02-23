@@ -48,4 +48,12 @@ export const statistics_about_usUrl = `${server_url}/estadisticas_acerca_de_noso
 
 export const upcomingProductsUrl = `${server_url}/inventory_new_releases_manager`;
 
+export const get_addressesUrl = `${server_url}/obtener-direccion-domicilio-cliente`;
+
+export const add_addressUrl = `${server_url}//crear-direccion-domicilio-cliente`;
+
+export const edit_addressUrl = `${server_url}/edit_address`;
+
+export const delete_addressUrl = `${server_url}/delete_address`;
+
 export const noteUrl = `${server_url}/get_messages`;

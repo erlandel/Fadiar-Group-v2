@@ -18,7 +18,7 @@ export const AboutInformation = () => {
           <div className="xl:w-2/3 flex flex-col text-justify">
             <div className="h-full flex flex-col ">
 
-              <div className="hidden xl:block">
+              {/* <div className="hidden xl:block">
               <p>
                 <span className="text-primary font-bold">Grupo Fadiar </span>
                 es una empresa con trayectoria de dos años, marcada por un
@@ -52,9 +52,9 @@ export const AboutInformation = () => {
                 proyecto sea una oportunidad de transformar espacios y mejorar
                 vidas.
               </p>
-              </div>
+              </div> */}
 
-                <div className="xl:hidden">
+                <div  >
                      <p>
                 <span className="text-primary font-bold">Grupo Fadiar </span>
                 es una empresa en crecimiento, enfocada en ofrecer

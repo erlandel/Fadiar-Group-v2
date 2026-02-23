@@ -1,8 +1,8 @@
 "use client";
 
 import {  useRef } from "react";
-import { InputField } from "../inputField/inputField";
-import PhoneInput from "../phoneInput/phoneInput";
+import { InputField } from "../../inputField/inputField";
+import PhoneInput from "../../phoneInput/phoneInput";
 import { Check, ChevronDown, X } from "lucide-react";
 import { FormData as MatterFormData } from "@/store/matterCart1Store";
 import { NotoV1Information } from "@/icons/icons";
@@ -205,7 +205,7 @@ export default function ModalRecipientPaymentDetails({
                     </div>
 
                     {openMunicipalities && (
-                      <ul className="absolute left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-2xl z-[100] max-h-40 overflow-y-auto overflow-x-hidden">
+                      <ul className="absolute left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-2xl shadow-2xl z-100 max-h-40 overflow-y-auto overflow-x-hidden">
                         {municipalitiesWithCommonDelivery.map((mun) => (
                           <li
                             key={mun.id}

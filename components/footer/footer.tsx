@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import ModalLegal from "@/components/modalLegal/modalLegal";
+import ModalLegal from "@/components/modal/modalLegal/modalLegal";
 import { privacyPolicy } from "@/data/privacyPolicy";
 import { termsConditions } from "@/data/termsConditions";
 import {

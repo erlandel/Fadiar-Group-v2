@@ -10,8 +10,8 @@ import useLocation from "@/hooks/locationRequests/useLocation";
 import { cart1Schema } from "@/validations/cart1Schema";
 import cartStore from "@/store/cartStore";
 import { useStore } from "zustand";
-import ModalRecipientPaymentDetails from "../modalRecipientPaymentDetails/modalRecipientPaymentDetails";
-import ModalPaymentDetails from "../modalPaymentDetails/modalPaymentDetails";
+import ModalRecipientPaymentDetails from "../modal/modalRecipientPaymentDetails/modalRecipientPaymentDetails";
+import ModalPaymentDetails from "../modal/modalPaymentDetails/modalPaymentDetails";
 
 export default function RecipientPaymentDetails() {
   const { formData } = MatterCart1Store();
