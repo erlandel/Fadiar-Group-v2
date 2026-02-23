@@ -41,7 +41,10 @@ export default function Amount() {
   const items = useStore(cartStore, (state) => state.items);
   const rawCart = useStore(cartStore, (state) => (state as any).rawCart);
 
-  const [formData, setFormData] = useState<MatterFormData>(defaultFormData);
+  const updateFormData = MatterCart1Store((state) => state.updateFormData);
+  const storeFormData = MatterCart1Store((state) => state.formData);
+  const formData = isClient ? storeFormData : defaultFormData;
+
   const [lastNameInput, setLastNameInput] = useState("");
 
   // Items del carrito (sin filtrar por domicilio)
@@ -99,15 +102,7 @@ export default function Amount() {
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
-
-  useEffect(() => {
     const persistedFormData = MatterCart1Store.getState().formData;
-    setFormData((prev) => ({
-      ...prev,
-      ...persistedFormData,
-    }));
-    // Inicializar el input de apellidos con los datos persistidos
     const initialLastName = `${persistedFormData.lastName1 || ""} ${persistedFormData.lastName2 || ""}`.trim();
     setLastNameInput(initialLastName);
   }, []);
@@ -115,13 +110,24 @@ export default function Amount() {
   // Sync store values with local form data initially or when store changes
   useEffect(() => {
     if (isClient) {
-      setFormData((prev) => ({
-        ...prev,
-        province: storeProvince || prev.province,
-        municipality: storeMunicipality || prev.municipality,
-      }));
+      if (
+        (storeProvince && storeProvince !== formData.province) ||
+        (storeMunicipality && storeMunicipality !== formData.municipality)
+      ) {
+        updateFormData({
+          province: storeProvince || formData.province,
+          municipality: storeMunicipality || formData.municipality,
+        });
+      }
     }
-  }, [isClient, storeProvince, storeMunicipality]);
+  }, [
+    isClient,
+    storeProvince,
+    storeMunicipality,
+    formData.province,
+    formData.municipality,
+    updateFormData,
+  ]);
 
   // Función para manejar cambios en los inputs
   const handleInputChange = (
@@ -139,11 +145,10 @@ export default function Amount() {
       const lastName1 = names[0] || "";
       const lastName2 = names.slice(1).join(" ") || "";
 
-      setFormData((prev) => ({
-        ...prev,
+      updateFormData({
         lastName1,
         lastName2,
-      }));
+      });
 
       if (errors.lastName1) {
         setErrors((prev) => ({ ...prev, lastName1: undefined }));
@@ -154,7 +159,7 @@ export default function Amount() {
       return;
     }
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    updateFormData({ [name]: value });
     // Limpiar error cuando se escribe
     const fieldName = name as keyof MatterFormData;
     if (errors[fieldName]) {
@@ -164,7 +169,7 @@ export default function Amount() {
 
   // Función para manejar cambios en el teléfono
   const handlePhoneChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, phone: value }));
+    updateFormData({ phone: value });
     // Limpiar error del teléfono cuando se escribe
     if (errors.phone) {
       setErrors((prev) => ({ ...prev, phone: undefined }));
@@ -286,11 +291,7 @@ export default function Amount() {
 
       if (!storeMunicipality || !isCurrentValid) {
         const defaultMun = municipalitiesWithCommonDelivery[0];
-        setFormData((prev) => ({
-          ...prev,
-          municipality: defaultMun.municipio,
-        }));
-        MatterCart1Store.getState().updateFormData({
+        updateFormData({
           municipality: defaultMun.municipio,
         });
         handleMunicipalityChange(defaultMun);
@@ -331,8 +332,7 @@ export default function Amount() {
               checked={formData.delivery}
               onChange={(e) => {
                 const isChecked = e.target.checked;
-                setFormData((prev) => ({ ...prev, delivery: isChecked }));
-                MatterCart1Store.getState().updateFormData({
+                updateFormData({
                   delivery: isChecked,
                 });
                 if (!isChecked && errors.address) {
@@ -466,8 +466,7 @@ export default function Amount() {
                         onClick={() => {
                           handleMunicipalityChange(mun, (m) => {
                             const update = { municipality: m.municipio };
-                            setFormData((prev) => ({ ...prev, ...update }));
-                            MatterCart1Store.getState().updateFormData(update);
+                            updateFormData(update);
                             setErrors((prev) => ({
                               ...prev,
                               municipality: undefined,

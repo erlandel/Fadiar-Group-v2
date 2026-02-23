@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import useCartStore, { CartItem } from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
+import MatterCart1Store from "@/store/matterCart1Store";
 import { refreshToken } from "@/utils/refreshToken";
 import { get_cart_productsUrl } from "@/urlApi/urlApi";
 
@@ -45,6 +46,10 @@ export const useSyncCart = () => {
         const rawCarrito = data.carrito || [];
 
         setRawCart(rawCarrito);
+
+        if (rawCarrito.length > 0) {
+          MatterCart1Store.getState().updateFormData({ delivery: false });
+        }
 
         rawCarrito.forEach((tienda: any) => {
           const tiendaId = tienda.id;

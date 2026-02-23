@@ -9,14 +9,12 @@ import { SectionMobile } from "@/sections/sectionMobile";
 import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useCartStore from "@/store/cartStore";
-import MatterCart1Store from "@/store/matterCart1Store";
 import StoreSelector from "@/components/storeSelector/storeSelector";
 import ListByStore from "@/components/listByStore/listByStore";
 
 export default function Cart1() {
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
-
   const [isClient, setIsClient] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | number>(
     "all",
