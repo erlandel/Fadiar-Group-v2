@@ -18,7 +18,7 @@ export function payWithZelle(params: {
   };
   supportNumber?: string;
 }) {
-  const { orderId, items, formData, supportNumber = "50230233" } = params;
+  const { orderId, items, formData, supportNumber = "+53 55065908" } = params;
   const orderLabel = orderId
     ? String(orderId).startsWith("#")
       ? String(orderId)
