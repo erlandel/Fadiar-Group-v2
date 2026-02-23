@@ -141,7 +141,10 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
                 <Link href="/" className="text-gray-400 cursor-pointer">
                   Inicio -{" "}
                 </Link>
-                <span className="text-gray-400">Products - </span>
+                  <Link href="/products" className="text-gray-400 cursor-pointer">
+                  Productos -
+                </Link>
+              
                 <span className="text-primary font-semibold">
                   {product.categoria?.name}
                 </span>
