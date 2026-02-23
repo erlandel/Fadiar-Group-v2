@@ -9,23 +9,11 @@ import InputAuth from "@/components/inputAuth/inputAuth";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { useMutation } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
-import { useEffect } from "react";
 import { loginUrl } from "@/urlApi/urlApi";
 
 export default function Login() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
-
-  const [verificationLink, setVerificationLink] = useState("/enterEmail");
-
-  useEffect(() => {
-    const storedEmail = localStorage.getItem("verificationEmail");
-    if (storedEmail) {
-      setVerificationLink("/verificationCodeEmail");
-    } else {
-      setVerificationLink("/enterEmail");
-    }
-  }, []);
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
@@ -223,7 +211,7 @@ export default function Login() {
 
               <div>
                 <Link
-                  href={verificationLink}
+                  href="/enterEmail"
                   className="  no-underline  hover:underline transition-colors"
                 >
                   ¿No has verificado tu cuenta?

@@ -5,15 +5,20 @@ import { RecoverPasswordSchemaFormData, recoverPasswordSchema } from "@/validati
 import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function EnterEmail() {
   const router = useRouter();
-  
   const [formData, setFormData] = useState<RecoverPasswordSchemaFormData>({
     email: "",
-    
   });
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("verificationEmail");
+    if (storedEmail) {
+      setFormData((prev) => ({ ...prev, email: storedEmail }));
+    }
+  }, []);
   const [errors, setErrors] = useState<
     Partial<Record<keyof RecoverPasswordSchemaFormData, string>>
   >({});
