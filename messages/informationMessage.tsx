@@ -26,7 +26,7 @@ const InformationMessage = ({
   return (
     <div>
       {showInfo && (
-        <div className="mb-6 bg-blue-50  rounded-xl py-6 px-8 flex flex-col gap-4 relative transition-all animate-in fade-in slide-in-from-top-2 ">
+        <div className="mb-6 bg-blue-50  rounded-xl py-6 px-4 md:px-8 flex flex-col gap-4 relative transition-all animate-in fade-in slide-in-from-top-2 ">
           <button
             onClick={handleClose}
             className="absolute  top-4 right-4 text-[#5b7aa7] hover:text-primary transition-colors cursor-pointer"
@@ -35,20 +35,20 @@ const InformationMessage = ({
           </button>
 
           <div className="w-full text-center  mt-4 ">
-            <h4 className="text-2xl md:text-[40px] font-bold text-primary ">
+            <h4 className="text-3xl  md:text-[40px] font-bold text-primary ">
               {title}
             </h4>
             <div className="mx-auto mt-3 h-2 w-25 bg-primary rounded-full" />
           </div>
 
-          <div className="space-y-8 mt-4">
+          <div className="space-y-4  md:space-y-8  md:mt-4">
             <div className="flex items-center gap-3">
               <img
                 src="/images/iconsSVG/CheckCircle.svg"
                 alt="Confirmación"
-                className="w-6 h-6 md:h-12 md:w-12 shrink-0"
+                className="w-10 h-10 md:h-12 md:w-12 shrink-0"
               />
-              <div className="text-lg text-primary leading-snug">
+              <div className=" text-sm md:text-lg text-primary leading-snug">
                 <p>Su pedido ha sido confirmado exitosamente.</p>
                 <p>
                   Número pedido: <span className="font-bold">#{orderId}</span>.
@@ -60,9 +60,9 @@ const InformationMessage = ({
               <img
                 src="/images/iconsSVG/CalendarClock.svg"
                 alt="Plazo"
-                className="w-6 h-6 md:h-12 md:w-12 shrink-0"
+                className="w-10 h-10 md:h-12 md:w-12 shrink-0"
               />
-              <p className="text-lg text-primary leading-snug">
+              <p className="text-sm md:text-lg text-primary leading-snug">
                 {variant === "delivery"
                   ? "La entrega se realizará en un plazo de 24 a 48 horas."
                   : "Puede recogerlo en nuestra sede en un plazo de 7 días hábiles."}
@@ -77,9 +77,9 @@ const InformationMessage = ({
                     : "/images/iconsSVG/FileText.svg"
                 }
                 alt={variant === "delivery" ? "Contacto" : "Documento"}
-                className="w-6 h-6 md:h-14 md:w-12 shrink-0"
+                className="w-10 h-12 md:h-14 md:w-12 shrink-0"
               />
-              <p className="text-lg text-primary leading-snug">
+              <p className="text-sm md:text-lg text-primary leading-snug">
                 {variant === "delivery"
                   ? "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles."
                   : "Deberá presentar su número de pedido al momento de la recogida."}
@@ -88,7 +88,7 @@ const InformationMessage = ({
 
             {variant === "pickup" && (
               <div className="flex ml-3 ">
-                <p className="text-lg text-primary leading-snug">
+                <p className="text-sm md:text-lg text-primary leading-snug">
                   Si necesita más información, nuestro equipo estará disponible
                   para asistirle.
                 </p>
@@ -96,7 +96,7 @@ const InformationMessage = ({
             )}
           </div>
 
-          <div className="text-center text-primary font-bold uppercase text-[22px] mt-2 mb-4">
+          <div className="text-center text-primary font-bold uppercase text-md md:text-[22px] mt-2 mb-4">
             Gracias por confiar en Grupo Fadiar.
           </div>
         </div>

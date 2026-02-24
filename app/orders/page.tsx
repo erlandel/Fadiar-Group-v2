@@ -79,7 +79,7 @@ export default function Orders() {
   return (
     <>
       {showOverlay && (
-        <div className="fixed inset-0 z-250 h-screen flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+        <div className="fixed inset-0 z-250 h-screen flex items-center justify-center bg-black/50 backdrop-blur-xs px-2 md:p-4">
           <div className="max-w-140 w-full">
             <InformationMessage
               onClose={() => {
