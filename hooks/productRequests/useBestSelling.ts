@@ -8,6 +8,8 @@ export const useBestSelling = (count: number = 9) => {
 
   return useQuery<Product[]>({
     queryKey: ["best-selling", municipalityId, count],
+
+ 
     queryFn: async () => {
       const res = await fetch(`${best_selling_productsUrl}`, {
         method: "POST",

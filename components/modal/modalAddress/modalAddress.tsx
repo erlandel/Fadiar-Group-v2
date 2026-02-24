@@ -56,6 +56,7 @@ export default function ModalAddress({
   useEffect(() => {
     if (!isOpen) return;
     if (mode === "add") {
+      setValue("");
       setSelectedProvince("");
       setSelectedProvinceId(null);
       setSelectedMunicipality("");
