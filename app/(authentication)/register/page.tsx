@@ -168,14 +168,21 @@ export default function Register() {
     };
 
     try {
+
+            // ⬇️ Timeout de 2 minutos (120000 ms)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 120000);
+
       const response = await fetch(`${registerUrl}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(dataToSend),
+         signal: controller.signal,
       });
 
+         clearTimeout(timeoutId);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
 

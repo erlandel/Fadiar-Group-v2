@@ -66,14 +66,20 @@ export const usePersonalData = () => {
       console.log(`${key}:`, value);
     }
 
+      // ⬇️ Timeout de 2 minutos (120000 ms)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 120000);
+
     const response = await fetch(`${editUserUrl}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${currentAccessToken}`,
       },
       body: data,
+     signal: controller.signal,
     });
-
+   clearTimeout(timeoutId);
+   
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.error || errorMessage);

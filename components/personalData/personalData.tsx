@@ -208,8 +208,8 @@ export default function PersonalData() {
                   <Loader className="animate-spin text-accent" />
                 </div>
               ) : isErrorAddresses ? (
-                <div className="text-red-500 text-center py-4 text-sm">
-                  Error al cargar las direcciones
+                <div className="text-gray-500 font-bold text-center py-4 text-sm">
+                  No hay direcciones registradas
                 </div>
               ) : addresses && addresses.length > 0 ? (
                 <div className="flex flex-col gap-3">
