@@ -15,6 +15,7 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
 import useLocation from "@/hooks/locationRequests/useLocation";
 import { NotoV1Information } from "@/icons/icons";
+import ModalSelectAddress from "../modal/modalSelectAddress/modalSelectAddress";
 
 export default function Amount() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Amount() {
     province: storeProvince,
     municipality: storeMunicipality,
     municipalityId: storeMunicipalityId,
+    setLocation,
   } = useProductsByLocationStore();
   const {
     municipalities: baseMunicipalities,
@@ -46,6 +48,7 @@ export default function Amount() {
   const formData = isClient ? storeFormData : defaultFormData;
 
   const [lastNameInput, setLastNameInput] = useState("");
+  const [showAddressModal, setShowAddressModal] = useState(false);
 
   // Items del carrito (sin filtrar por domicilio)
   const filteredItems = items;
@@ -527,7 +530,8 @@ export default function Amount() {
                  flex items-center justify-center
                  bg-[#F5F7FA]
                  text-gray-700 hover:text-accent
-                 transition-all rounded-l-2xl cursor-pointer"                   
+                 transition-all rounded-l-2xl cursor-pointer"
+                    onClick={() => setShowAddressModal(true)}
                   >
                     <MapPin className="w-5.5 h-5.5" strokeWidth={2} />
                   </button>
@@ -542,6 +546,31 @@ export default function Amount() {
                   </p>
                 )}
               </div>
+              <ModalSelectAddress
+                show={showAddressModal}
+                onClose={() => setShowAddressModal(false)}
+                province={storeProvince}
+                allowedMunicipalities={municipalitiesWithCommonDelivery}
+                onSelect={(addr, provinceId) => {
+                  setLocation(
+                    addr.provincia,
+                    provinceId,
+                    addr.municipio,
+                    addr.municipioId
+                  );
+                  updateFormData({
+                    address: addr.direccion,
+                    province: addr.provincia,
+                    municipality: addr.municipio,
+                  });
+                  setErrors((prev) => ({
+                    ...prev,
+                    address: undefined,
+                    municipality: undefined,
+                  }));
+                  setShowAddressModal(false);
+                }}
+              />
             </div>
 
             <div className="mt-5">
