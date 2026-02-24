@@ -52,8 +52,8 @@ export const get_addressesUrl = `${server_url}/obtener-direccion-domicilio-clien
 
 export const add_addressUrl = `${server_url}//crear-direccion-domicilio-cliente`;
 
-export const edit_addressUrl = `${server_url}/edit_address`;
+export const edit_addressUrl = `${server_url}/editar-direccion-domicilio-cliente`;
 
-export const delete_addressUrl = `${server_url}/delete_address`;
+export const delete_addressUrl = `${server_url}/eliminar-direccion-domicilio-cliente`;
 
 export const noteUrl = `${server_url}/get_messages`;

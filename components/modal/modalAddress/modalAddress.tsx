@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { X, Loader, ChevronDown } from "lucide-react";
 import useLocation from "@/hooks/locationRequests/useLocation";
 
@@ -7,6 +7,8 @@ interface ModalAddressProps {
   onClose: () => void;
   mode: "add" | "edit";
   initialValue?: string;
+  initialProvince?: string;
+  initialMunicipalityId?: string | null;
   onConfirm: (data: { address: string; municipalityId: string }) => void;
   isPending?: boolean;
 }
@@ -16,6 +18,8 @@ export default function ModalAddress({
   onClose,
   mode,
   initialValue = "",
+  initialProvince,
+  initialMunicipalityId = null,
   onConfirm,
   isPending = false,
 }: ModalAddressProps) {
@@ -34,6 +38,10 @@ export default function ModalAddress({
     municipalities,
     handleProvinceChange,
     handleMunicipalityChange,
+    setSelectedProvince,
+    setSelectedProvinceId,
+    setSelectedMunicipality,
+    setSelectedMunicipalityId,
     openProvinces,
     setOpenProvinces,
     openMunicipalities,
@@ -45,23 +53,71 @@ export default function ModalAddress({
   const [validationError, setValidationError] = useState(false);
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    if (mode === "add") {
+      setSelectedProvince("");
+      setSelectedProvinceId(null);
+      setSelectedMunicipality("");
+      setSelectedMunicipalityId(null);
+      setOpenProvinces(false);
+      setOpenMunicipalities(false);
+      setValidationError(false);
+      setSubmitAttempted(false);
+    }
+  }, [isOpen, mode]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    if (mode !== "edit") return;
+    if (!data || data.length === 0) return;
+    if (!initialProvince) return;
+    // Preseleccionar provincia
+    const prov = data.find((p) => p.provincia === initialProvince);
+    if (prov) {
+      setSelectedProvince(prov.provincia);
+      setSelectedProvinceId(prov.id);
+      // Preseleccionar municipio si lo tenemos
+      if (initialMunicipalityId) {
+        const mun = prov.municipios.find((m) => m.id === initialMunicipalityId);
+        if (mun) {
+          setSelectedMunicipality(mun.municipio);
+          setSelectedMunicipalityId(mun.id);
+        }
+      }
+    }
+  }, [isOpen, mode, initialProvince, initialMunicipalityId, data]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-500 flex items-center justify-center bg-black/50 ">
       <div className="bg-white rounded-lg w-full max-w-2xl p-6 relative shadow-lg mx-2">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <X className="w-6 h-6" />
-        </button>
+        <div>
+          <div>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 cursor-pointer"
+            >
+              <X className="w-6 h-6" strokeWidth={2} />
+            </button>
+          </div>
+
+          <div>
+            <h5 className="text-primary font-bold text-2xl">
+              {mode === "add" ? "Añadir Dirección" : "Editar Dirección"}
+            </h5>
+          </div>
+        </div>
 
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (selectedMunicipalityId && value) {
-              onConfirm({ address: value, municipalityId: selectedMunicipalityId });
+              onConfirm({
+                address: value,
+                municipalityId: selectedMunicipalityId,
+              });
             } else {
               setValidationError(true);
               setSubmitAttempted(true);
@@ -121,7 +177,10 @@ export default function ModalAddress({
               </div>
 
               {/* Municipio */}
-              <div className="flex flex-col relative w-full" ref={municipalitiesRef}>
+              <div
+                className="flex flex-col relative w-full"
+                ref={municipalitiesRef}
+              >
                 <label className="mb-1 text-sm font-medium">Municipio</label>
                 <div
                   tabIndex={0}
@@ -182,14 +241,8 @@ export default function ModalAddress({
               </div>
             </div>
           </div>
-          
-          <div className="flex justify-between items-center w-full mt-4 md:mt-6">
-            <div>
-              <h5 className="text-primary font-bold text-xl">
-                {mode === "add" ? "Direcciones" : "Editar Dirección"}
-              </h5>
-            </div>
 
+          <div className="flex justify-between items-center w-full mt-4 md:mt-6">
             <div>
               <div>
                 <button

@@ -9,21 +9,29 @@ export const useEditAddress = () => {
   const { auth, setAuth } = useAuthStore();
   const queryClient = useQueryClient();
 
-  const editAddress = async ({ id_address, address }: { id_address: string; address: string }) => {
+  const editAddress = async ({
+    id_direccion,
+    municipio,
+    direccion,
+  }: {
+    id_direccion: string;
+    municipio: string;
+    direccion: string;
+  }) => {
     if (!auth) throw new Error("No hay sesión activa");
     
     const currentAccessToken = await refreshToken(auth, setAuth);
     
     const response = await fetch(edit_addressUrl, {
-      method: "PUT",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentAccessToken}`,
       },
-      body: JSON.stringify({ 
-        id_user: auth.user.id, 
-        id_address,
-        address 
+      body: JSON.stringify({
+        id_direccion,
+        municipio,
+        direccion,
       }),
     });
 

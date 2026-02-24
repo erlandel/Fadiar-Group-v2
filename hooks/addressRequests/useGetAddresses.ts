@@ -37,11 +37,15 @@ export const useGetAddresses = () => {
 
     // Mapeamos los datos para que personalData pueda mostrarlos
     // El backend devuelve 'to_jsonb' con el nombre del municipio
-    return addresses.map((addr: any) => ({
-      ...addr,
-      municipio: addr.to_jsonb || addr.municipio, 
-      provincia: addr.provincia // Asumimos que viene en la respuesta según indicación
-    }));
+    return addresses.map((addr: any) => {
+      const municipioNombre = addr.to_jsonb || addr.municipio;
+      return {
+        ...addr,
+        municipio: municipioNombre,
+        municipioId: addr.id_municipio,
+        provincia: addr.provincia,
+      };
+    });
   };
 
   const {

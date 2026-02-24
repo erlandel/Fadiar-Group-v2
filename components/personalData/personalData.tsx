@@ -7,10 +7,15 @@ import { usePersonalData } from "../../hooks/myProfileRequests/usePersonalData";
 import { useGetAddresses } from "../../hooks/addressRequests/useGetAddresses";
 import ModalAddress from "../modal/modalAddress/modalAddress";
 import { useAddAddress } from "../../hooks/addressRequests/useAddAddress";
+import { useEditAddress } from "../../hooks/addressRequests/useEditAddress";
+import { useDeleteAddress } from "../../hooks/addressRequests/useDeleteAddress";
 
 export default function PersonalData() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [initialAddress, setInitialAddress] = useState<string>("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const {
     formData,
@@ -32,21 +37,55 @@ export default function PersonalData() {
   } = useGetAddresses();
 
   const { addAddressMutation, isPending: isAddingAddress } = useAddAddress();
+  const { editAddressMutation, isPending: isEditingAddress } = useEditAddress();
+  const { deleteAddressMutation } = useDeleteAddress();
 
   const handleOpenAddModal = () => {
     setModalMode("add");
+    setInitialAddress("");
+    setEditingId(null);
     setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (addr: any) => {
+    setModalMode("edit");
+    setEditingId(addr.id);
+    setInitialAddress(addr.direccion || "");
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteAddress = (id: string) => {
+    setDeletingId(id);
+    deleteAddressMutation(id, {
+      onSettled: () => setDeletingId(null),
+    });
   };
 
   const handleModalConfirm = (data: {
     address: string;
     municipalityId: string;
   }) => {
-    addAddressMutation(data, {
-      onSuccess: () => {
-        setIsModalOpen(false);
-      },
-    });
+    if (modalMode === "add") {
+      addAddressMutation(data, {
+        onSuccess: () => {
+          setIsModalOpen(false);
+        },
+      });
+    } else if (modalMode === "edit" && editingId) {
+      editAddressMutation(
+        {
+          id_direccion: editingId,
+          municipio: data.municipalityId,
+          direccion: data.address,
+        },
+        {
+          onSuccess: () => {
+            setIsModalOpen(false);
+            setEditingId(null);
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -205,18 +244,27 @@ export default function PersonalData() {
                         <div className="flex gap-2">
                           <button
                             type="button"
-                            className="text-[#D69F04]    cursor-pointer "
+                            className="text-[#D69F04] cursor-pointer"
                             title="Editar"
+                            onClick={() => handleOpenEditModal(addr)}
                           >
-                            <Pencil className="w-5 h-5 sm:w-6  sm:h-6" />
+                            <Pencil className="w-5 h-5 sm:w-6 sm:h-6" />
                           </button>
-                          <button
-                            type="button"
-                            className="text-red-500   cursor-pointer"
-                            title="Eliminar"
-                          >
-                            <Trash2 className="w-5 h-5 sm:w-6  sm:h-6" />
-                          </button>
+                          {deletingId === addr.id ? (
+                            <Trash2
+                              className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer text-red-500 transition-colors
+                                animate__animated  animate__flash animate__infinite"
+                            />
+                          ) : (
+                            <button
+                              type="button"
+                              className="text-red-500 transition-colors cursor-pointer"
+                              title="Eliminar"
+                              onClick={() => handleDeleteAddress(addr.id)}
+                            >
+                              <Trash2 className="w-5 h-5 sm:w-6 sm:h-6" />
+                            </button>
+                          )}
                         </div>
                       </div>
 
@@ -303,8 +351,11 @@ export default function PersonalData() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         mode={modalMode}
+        initialValue={initialAddress}
+        initialProvince={addresses?.find((a: any) => a.id === editingId)?.provincia}
+        initialMunicipalityId={addresses?.find((a: any) => a.id === editingId)?.municipioId ?? null}
         onConfirm={(value) => handleModalConfirm(value)}
-        isPending={isAddingAddress}
+        isPending={modalMode === "add" ? isAddingAddress : isEditingAddress}
       />
     </>
   );
