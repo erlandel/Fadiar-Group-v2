@@ -165,7 +165,7 @@ export default function PersonalData() {
 
           <div className="mt-3">
             <h6>Listdo de direcciones</h6>
-            <div className="w-full rounded-lg px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent mt-2 min-h-[100px]">
+            <div className="w-full rounded-lg px-2 sm:px-4 py-3 bg-[#F5F7FA] text-gray-700 placeholder:text-gray-500 resize-none focus:outline-none focus:ring-2 focus:ring-accent mt-2 min-h-[100px] max-h-[400px] overflow-y-auto ">
               {isLoadingAddresses ? (
                 <div className="flex justify-center items-center h-20">
                   <Loader className="animate-spin text-accent" />
@@ -179,11 +179,11 @@ export default function PersonalData() {
                   {addresses.map((addr: any) => (
                     <div
                       key={addr.id}
-                      className="flex justify-between items-center bg-white p-3 rounded-md shadow-sm border border-gray-100 group hover:border-accent/30 transition-all"
+                      className="flex flex-col justify-between  bg-white p-3 rounded-md shadow-sm border border-gray-100 group hover:border-accent/30 transition-all text-sm sm:text-base gap-1"
                     >
-                      <div className="flex flex-col gap-1">
-                        <div className="flex flex-col  gap-2 mb-1">
-                          <div className="gap-1">
+                      <div className="w-full flex justify-between items-start">
+                        <div>
+                          <div className="gap-1  ">
                             <span className="text-primary font-bold">
                               Provincia:
                             </span>
@@ -191,40 +191,42 @@ export default function PersonalData() {
                               {addr.provincia}
                             </span>
                           </div>
-                          <div>
+
+                          <div className="gap-1 ">
                             <span className="text-primary font-bold">
                               Municipio:
                             </span>
-                            <span className=" ml-0.5 text-gray-600  py-0.5 rounded-full">
+                            <span className=" ml-0.5 text-gray-600  py-0.5 ">
                               {addr.municipio}
                             </span>
                           </div>
                         </div>
-                        <div className="flex">
-                          <span className="text-primary font-bold">
-                            Direccion:
-                          </span>
-                          <p className="ml-0.5 text-gray-800 font-medium wrap-break-word">
-                            {addr.direccion}
-                          </p>
+
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            className="text-[#D69F04]    cursor-pointer "
+                            title="Editar"
+                          >
+                            <Pencil className="w-5 h-5 sm:w-6  sm:h-6" />
+                          </button>
+                          <button
+                            type="button"
+                            className="text-red-500   cursor-pointer"
+                            title="Eliminar"
+                          >
+                            <Trash2 className="w-5 h-5 sm:w-6  sm:h-6" />
+                          </button>
                         </div>
                       </div>
 
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          type="button"
-                          className="text-primary p-1.5  cursor-pointer "
-                          title="Editar"
-                        >
-                          <Pencil className="w-6 h-6" />
-                        </button>
-                        <button
-                          type="button"
-                          className="text-red-500  p-1.5   cursor-pointer"
-                          title="Eliminar"
-                        >
-                          <Trash2 className="w-6 h-6" />
-                        </button>
+                      <div >
+                        <span className="text-primary font-bold">
+                          Direccion:
+                        </span>
+                        <span className="ml-1 text-gray-800 wrap-break-word">
+                          {addr.direccion}
+                        </span>
                       </div>
                     </div>
                   ))}

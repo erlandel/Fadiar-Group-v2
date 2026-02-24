@@ -20,7 +20,7 @@ Nota: El servicio de garantía no se ofrece los sábados.`,
     answer: `En Grupo Fadiar contamos con tres líneas de negocio principales:
 	•	EÓN Electrodomésticos:
 Comercialización y distribución de electrodomésticos y artículos del hogar, con una reconocida garantía real y servicio postventa.
-	•	Lámmina Mobiliario Modular:
+	•	Lammina Mobiliario Modular:
 Producción de muebles modulares que optimizan y embellecen cualquier espacio.
 	•	Vital Papel Sanitario:
 Fabricación nacional de papel higiénico con altos estándares de higiene y calidad.`,
