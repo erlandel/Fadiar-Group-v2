@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { X, Loader, ChevronDown } from "lucide-react";
 import useLocation from "@/hooks/locationRequests/useLocation";
 
@@ -127,7 +127,7 @@ export default function ModalAddress({
           <div className="mt-4 w-full">
             <div className="flex flex-col md:flex-row gap-4 w-full">
               <div className="flex flex-col relative w-full" ref={provincesRef}>
-                <label className="mb-1 text-sm font-medium">Provincia</label>
+                <label className="mb-1 ">Provincia</label>
                 <div
                   tabIndex={0}
                   className="flex h-12 items-center justify-between rounded-xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent w-full"
@@ -181,7 +181,7 @@ export default function ModalAddress({
                 className="flex flex-col relative w-full"
                 ref={municipalitiesRef}
               >
-                <label className="mb-1 text-sm font-medium">Municipio</label>
+                <label className="mb-1 ">Municipio</label>
                 <div
                   tabIndex={0}
                   className="flex h-12 items-center justify-between rounded-2xl border border-gray-100 bg-[#F5F7FA] px-3 cursor-pointer focus-within:ring-2 focus-within:ring-accent focus:outline-none focus:ring-2 focus:ring-accent w-full"
@@ -242,8 +242,17 @@ export default function ModalAddress({
             </div>
           </div>
 
-          <div className="flex justify-between items-center w-full mt-4 md:mt-6">
-            <div>
+   
+          <div className="mt-4">
+            <div className="flex justify-between">
+              <div>
+                <label htmlFor="address">
+                  {mode === "add"
+                    ? "Agregar nueva dirección"
+                    : "Editar dirección"}
+                </label>
+              </div>
+
               <div>
                 <button
                   type="submit"
@@ -264,12 +273,6 @@ export default function ModalAddress({
                 </button>
               </div>
             </div>
-          </div>
-
-          <div className="mt-3">
-            <label htmlFor="address">
-              {mode === "add" ? "Agregar nueva dirección" : "Editar dirección"}
-            </label>
             <textarea
               placeholder="Escriba su dirección"
               rows={5}
