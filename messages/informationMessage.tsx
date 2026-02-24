@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { Info, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface InformationMessageProps {
   onClose?: () => void;
   title?: string;
-  bodyLines?: string[];
+  variant?: "delivery" | "pickup";
+  orderId?: string;
 }
 
 const InformationMessage = ({
   onClose,
   title = "¡Gracias por su compra!",
-  bodyLines = [],
+  variant = "delivery",
+  orderId = "",
 }: InformationMessageProps) => {
   const [showInfo, setShowInfo] = useState(true);
 
@@ -24,42 +26,78 @@ const InformationMessage = ({
   return (
     <div>
       {showInfo && (
-        <div className="mb-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex flex-col items-start gap-1 relative transition-all animate-in fade-in slide-in-from-top-2 ">
-          <div className="flex">
-            <div className="bg-blue-100 p-1 rounded-lg">
-              <Info className="w-5 h-5 md:h-7 md:w-7 text-blue-800" />
-            </div>
-            <div className="flex-1 ml-2 ">
-              <h4 className="text-xl md:text-2xl font-bold text-blue-900 mb-1">
-                {title}
-              </h4>
+        <div className="mb-6 bg-blue-50  rounded-xl py-6 px-8 flex flex-col gap-4 relative transition-all animate-in fade-in slide-in-from-top-2 ">
+          <button
+            onClick={handleClose}
+            className="absolute  top-4 right-4 text-[#5b7aa7] hover:text-primary transition-colors cursor-pointer"
+          >
+            <X className="h-5 w-5" strokeWidth={4} />
+          </button>
+
+          <div className="w-full text-center  mt-4 ">
+            <h4 className="text-2xl md:text-[40px] font-bold text-primary ">
+              {title}
+            </h4>
+            <div className="mx-auto mt-3 h-2 w-25 bg-primary rounded-full" />
+          </div>
+
+          <div className="space-y-8 mt-4">
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/iconsSVG/CheckCircle.svg"
+                alt="Confirmación"
+                className="w-6 h-6 md:h-12 md:w-12 shrink-0"
+              />
+              <div className="text-lg text-primary leading-snug">
+                <p>Su pedido ha sido confirmado exitosamente.</p>
+                <p>
+                  Número pedido: <span className="font-bold">#{orderId}</span>.
+                </p>
+              </div>
             </div>
 
-            <button
-              onClick={handleClose}
-              className="absolute top-4 right-4 text-blue-400 hover:text-blue-600 transition-colors cursor-pointer"
-            >
-              <X className="h-5 w-5" strokeWidth={4} />
-            </button>
-          </div>
-          <div className="xl:ml-15">
-            {bodyLines.map((line, idx) => {
-              const isOrderIdLine = /^Número pedido:/i.test(line);
-              if (isOrderIdLine) {
-                const idText = line.replace(/^Número pedido:\s*/i, "");
-                return (
-                  <p key={idx} className="text-md md:text-xl text-blue-800 leading-relaxed">
-                    {"Número pedido:"}{" "}
-                    <span className="font-bold">{idText}</span>
-                  </p>
-                );
-              }
-              return (
-                <p key={idx} className="text-md md:text-xl text-blue-800 leading-relaxed">
-                  {line}
+            <div className="flex items-center gap-3">
+              <img
+                src="/images/iconsSVG/CalendarClock.svg"
+                alt="Plazo"
+                className="w-6 h-6 md:h-12 md:w-12 shrink-0"
+              />
+              <p className="text-lg text-primary leading-snug">
+                {variant === "delivery"
+                  ? "La entrega se realizará en un plazo de 24 a 48 horas."
+                  : "Puede recogerlo en nuestra sede en un plazo de 7 días hábiles."}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <img
+                src={
+                  variant === "delivery"
+                    ? "/images/iconsSVG/Smartphone.svg"
+                    : "/images/iconsSVG/FileText.svg"
+                }
+                alt={variant === "delivery" ? "Contacto" : "Documento"}
+                className="w-6 h-6 md:h-14 md:w-12 shrink-0"
+              />
+              <p className="text-lg text-primary leading-snug">
+                {variant === "delivery"
+                  ? "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles."
+                  : "Deberá presentar su número de pedido al momento de la recogida."}
+              </p>
+            </div>
+
+            {variant === "pickup" && (
+              <div className="flex ml-3 ">
+                <p className="text-lg text-primary leading-snug">
+                  Si necesita más información, nuestro equipo estará disponible
+                  para asistirle.
                 </p>
-              );
-            })}
+              </div>
+            )}
+          </div>
+
+          <div className="text-center text-primary font-bold uppercase text-[22px] mt-2 mb-4">
+            Gracias por confiar en Grupo Fadiar.
           </div>
         </div>
       )}
