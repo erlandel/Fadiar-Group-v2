@@ -78,8 +78,8 @@ export default function ModalSelectAddress({
               <Loader className="animate-spin text-accent" />
             </div>
           ) : isError ? (
-            <div className="text-red-500 text-center py-4 text-sm">
-              Error al cargar las direcciones
+            <div className="text-gray-500 font-bold text-center py-4 ">
+              No hay direcciones registradas
             </div>
           ) : filtered && filtered.length > 0 ? (
             <div className="flex flex-col gap-4">
