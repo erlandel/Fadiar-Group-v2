@@ -1,5 +1,5 @@
 import { X, Loader } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MunicipalityData } from "@/types/location";
 import { useGetAddresses } from "@/hooks/addressRequests/useGetAddresses";
 import useLocation from "@/hooks/locationRequests/useLocation";
@@ -29,6 +29,7 @@ export default function ModalSelectAddress({
 }: ModalSelectAddressProps) {
   const { addresses, isLoading, isError } = useGetAddresses();
   const { data } = useLocation();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const provinceId = useMemo(() => {
     const p = data.find((d) => d.provincia === province);
@@ -71,7 +72,7 @@ export default function ModalSelectAddress({
 
         <h5 className="text-primary font-bold text-2xl">Seleccionar Dirección</h5>
 
-        <div className="w-full rounded-lg px-2 sm:px-4 py-3 bg-[#F5F7FA] text-gray-700 mt-4 min-h-[120px] max-h-[480px] overflow-y-auto">
+        <div className="w-full   sm:px-4 py-3  text-gray-700 mt-4 min-h-[120px] max-h-[480px] overflow-y-auto">
           {isLoading ? (
             <div className="flex justify-center items-center h-20">
               <Loader className="animate-spin text-accent" />
@@ -81,32 +82,47 @@ export default function ModalSelectAddress({
               Error al cargar las direcciones
             </div>
           ) : filtered && filtered.length > 0 ? (
-            <div className="flex flex-col gap-3">
-              {filtered.map((addr) => (
-                <button
-                  key={addr.id}
-                  type="button"
-                  onClick={() => onSelect(addr, provinceId)}
-                  className="flex flex-col text-left justify-between bg-white p-3 rounded-md shadow-sm border border-gray-100 group hover:border-accent/30 transition-all text-sm sm:text-base gap-1 cursor-pointer"
-                >
-                  <div className="w-full flex justify-between items-start">
-                    <div>
-                      <div className="gap-1">
-                        <span className="text-primary font-bold">Provincia:</span>
-                        <span className="ml-0.5 text-gray-600">{addr.provincia}</span>
-                      </div>
-                      <div className="gap-1">
-                        <span className="text-primary font-bold">Municipio:</span>
-                        <span className="ml-0.5 text-gray-600">{addr.municipio}</span>
+            <div className="flex flex-col gap-4">
+              {filtered.map((addr) => {
+                const isSelected = selectedId === addr.id;
+                return (
+                  <label
+                    key={addr.id}
+                    className={`flex items-center justify-between gap-4 cursor-pointer p-4 border rounded-2xl transition-all focus-within:ring-0 focus-within:outline-none ${
+                      isSelected ? "border-gray-300" : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex flex-col">
+                        <span className="text-[#022954]   font-bold">
+                          Provincia: <span className="font-normal text-gray-700">{addr.provincia}</span>
+                        </span>
+                        <span className="text-primary font-bold">
+                          Municipio: <span className="text-gray-700 font-normal">{addr.municipio}</span>
+                        </span>
+                          <span className="text-primary font-bold">
+                          Direccion: <span className="text-gray-800 font-normal">{addr.direccion}</span>
+                        </span>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <span className="text-primary font-bold">Direccion:</span>
-                    <span className="ml-1 text-gray-800">{addr.direccion}</span>
-                  </div>
-                </button>
-              ))}
+
+                    <div className="relative flex items-center justify-center">
+                      <input
+                        type="radio"
+                        name="addressSelect"
+                        value={addr.id}
+                        checked={isSelected}
+                        onChange={() => {
+                          setSelectedId(addr.id);
+                          onSelect(addr, provinceId);
+                        }}
+                        className="peer absolute opacity-0 w-6 h-6 cursor-pointer"
+                      />
+                      <span className="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:border-[#022954] peer-checked:after:w-3 peer-checked:after:h-3 peer-checked:after:rounded-full peer-checked:after:bg-[#022954] peer-checked:after:block after:hidden transition-all" />
+                    </div>
+                  </label>
+                );
+              })}
             </div>
           ) : (
             <div className="text-gray-500 text-center py-4 italic text-sm">
