@@ -262,7 +262,7 @@ export default function ModalAddress({
                   {isPending ? (
                     <span className="inline-flex items-center justify-center ">
                       <Loader
-                        className="h-5 w-5 animate-spin text-white"
+                        className="h-5 w-5 animate-spin text-accent"
                         strokeWidth={3}
                       />
                       Guardar
