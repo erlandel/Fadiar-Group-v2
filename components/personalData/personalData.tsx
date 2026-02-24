@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { InputField } from "../inputField/inputField";
 import PhoneInput from "../phoneInput/phoneInput";
-import { Loader, ChevronDown, Pencil, Trash2 } from "lucide-react";
+import { Loader, Pencil, Trash2 } from "lucide-react";
 import { usePersonalData } from "../../hooks/myProfileRequests/usePersonalData";
 import { useGetAddresses } from "../../hooks/addressRequests/useGetAddresses";
 import ModalAddress from "../modal/modalAddress/modalAddress";
@@ -23,10 +23,8 @@ export default function PersonalData() {
     handleInputChange,
     handlePhoneChange,
     handleSavePersonalData,
-    handleSaveAddress,
     handleUpdatePassword,
     isPersonalDataPending,
-    isAddressPending,
     isPasswordPending,
   } = usePersonalData();
 
