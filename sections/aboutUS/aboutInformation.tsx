@@ -17,7 +17,6 @@ export const AboutInformation = () => {
         <div className="flex flex-col xl:flex-row items-stretch justify-between gap-5 sm:gap-10  my-5 text-sm sm:text-lg lg:text-xl 3xl:text-2xl">
           <div className="xl:w-2/3 flex flex-col text-justify">
             <div className="h-full flex flex-col ">
-
               {/* <div className="hidden xl:block">
               <p>
                 <span className="text-primary font-bold">Grupo Fadiar </span>
@@ -54,32 +53,38 @@ export const AboutInformation = () => {
               </p>
               </div> */}
 
-                <div  >
-                     <p>
-                <span className="text-primary font-bold">Grupo Fadiar </span>
-                es una empresa en crecimiento, enfocada en ofrecer
-                soluciones innovadoras que elevan la calidad, funcionalidad y
-                confort de los hogares y espacios de trabajo. Desde nuestra
-                fundación, trabajamos con un firme compromiso hacia la
-                excelencia, integrando tecnología, diseño y eficiencia en cada
-                proyecto que desarrollamos. Nuestra evolución ha sido dinámica y
-                estratégica, fortaleciendo procesos productivos y operativos que
-                nos permiten garantizar resultados confiables y productos de
-                alto estándar. 
-              </p>
+              <div>
+                <p>
+                  <span className="text-primary font-bold">Grupo Fadiar </span>
+                  es una empresa con dos años de trayectoria y un crecimiento
+                  constante, impulsada por una visión clara: elevar los
+                  estándares de calidad, innovación y funcionalidad en cada
+                  solución que desarrollamos.
+                </p>
 
-              <p className="mt-5">
-                Esto nos ha consolidado como una empresa cercana,
-                responsable y orientada a superar las expectativas de nuestros
-                clientes. Entendemos que cada espacio es único. Por eso,
-                ofrecemos soluciones prácticas, modernas y adaptadas a las
-                necesidades reales de las personas, contribuyendo a crear
-                entornos más cómodos, visión que guía nuestro crecimiento
-                continuo.
-              </p>
-                  
-                </div>
-           
+                <p className="mt-5">
+                  Desde nuestros inicios asumimos un compromiso firme con la
+                  excelencia, convencidos de que cada producto debe aportar
+                  valor real y transformar los hogares en espacios más
+                  eficientes, cómodos y adaptados a las necesidades actuales.
+                </p>
+
+                <p className="mt-5">
+                  Hemos evolucionado de manera estratégica, fortaleciendo
+                  nuestros procesos y optimizando nuestra capacidad productiva
+                  para garantizar resultados superiores. Hoy nos consolidamos
+                  como una empresa confiable, con diversidad de soluciones y un
+                  solo compromiso: superar las expectativas de nuestros
+                  clientes.
+                </p>
+
+                <p className="mt-5">
+                  Creemos que cada hogar es único. Por eso trabajamos con
+                  precisión y dedicación para integrar tecnología, diseño y
+                  funcionalidad en cada proyecto, construyendo bienestar a
+                  través de soluciones que marcan la diferencia.
+                </p>
+              </div>
 
               {/* <p className="mt-7">
                 Para más información sobre la empresa matriz consulte el

@@ -1,8 +1,9 @@
 export const homeDeliveryPolicy = [
   {
-    question: "Política de Envío a Domicilio de Grupo Fadiar",
+    question: "Política de Envío a Domicilio",
     answer:
-     `En Grupo Fadiar, nos esforzamos por ofrecer un servicio de entrega eficiente y conveniente para todos nuestros clientes. A continuación, detallamos nuestras políticas de envío a domicilio, con información clara sobre costos y tiempos de entrega.`
+     `En Grupo Fadiar ofrecemos una garantía real en Cuba para todos los electrodomésticos EÓN.
+Nuestro compromiso va más allá de la venta: brindamos un respaldo sólido, local y transparente que garantiza a cada cliente seguridad, confianza y una atención eficiente ante cualquier eventualidad. Porque para nosotros, la experiencia no termina con la compra, comienza con el acompañamiento.`
   },
   {
     question: "Condiciones Generales",
