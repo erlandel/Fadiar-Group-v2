@@ -36,6 +36,6 @@ export const useLatestProducts = (count: number = 6) => {
     },
     staleTime: Infinity, // Solo cambia si cambia la provincia o se invalida manualmente
     refetchOnWindowFocus: false,
-    enabled: !!provinceId, // Solo se ejecuta si hay una provincia seleccionada
+    // enabled: !provinceId, // Solo se ejecuta si hay una provincia seleccionada
   });
 };
