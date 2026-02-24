@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronDown, Loader } from "lucide-react";
+import { Check, ChevronDown, Loader, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { InputField } from "../inputField/inputField";
@@ -14,7 +14,7 @@ import MatterCart1Store, {
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import useAuthStore from "@/store/authStore";
 import useLocation from "@/hooks/locationRequests/useLocation";
-import {  NotoV1Information } from "@/icons/icons";
+import { NotoV1Information } from "@/icons/icons";
 
 export default function Amount() {
   const router = useRouter();
@@ -103,7 +103,8 @@ export default function Amount() {
   useEffect(() => {
     setIsClient(true);
     const persistedFormData = MatterCart1Store.getState().formData;
-    const initialLastName = `${persistedFormData.lastName1 || ""} ${persistedFormData.lastName2 || ""}`.trim();
+    const initialLastName =
+      `${persistedFormData.lastName1 || ""} ${persistedFormData.lastName2 || ""}`.trim();
     setLastNameInput(initialLastName);
   }, []);
 
@@ -353,15 +354,14 @@ export default function Amount() {
           </div>
         </div>
 
-    
         {isClient && formData.delivery && (
           <div>
-             <div className="w-full flex justify-center mt-3">
-            <p className=" flex  sm:items-center text-accent text-md  ">
-              <NotoV1Information className="h-4.5 w-4.5 mr-0.5 min-w-5 mt-1 sm:mt-0 " />
-              Revise los municipios a los cuales se está haciendo domicilio.
-            </p>
-          </div>
+            <div className="w-full flex justify-center mt-3">
+              <p className=" flex  sm:items-center text-accent text-md  ">
+                <NotoV1Information className="h-4.5 w-4.5 mr-0.5 min-w-5 mt-1 sm:mt-0 " />
+                Revise los municipios a los cuales se está haciendo domicilio.
+              </p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  text-md mt-3 ">
               <div id="field-firstName">
                 <label className="ml-2 font-medium text-gray-600">Nombre</label>
@@ -420,7 +420,11 @@ export default function Amount() {
                 )}
               </div>
 
-              <div className="flex flex-col relative" ref={municipalitiesRef} id="field-municipality">
+              <div
+                className="flex flex-col relative"
+                ref={municipalitiesRef}
+                id="field-municipality"
+              >
                 <label className="ml-2 font-medium text-gray-600">
                   Municipio
                 </label>
@@ -503,17 +507,35 @@ export default function Amount() {
                 </div>
               </div>
 
-              <div id="field-address">
+              <div id="field-address" className="space-y-1">
                 <label className="ml-2 font-medium text-gray-600">
                   Dirección
                 </label>
-                <InputField
-                  type="text"
-                  placeholder="Dirección"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                />
+
+                <div className="relative">
+                  <InputField
+                    type="text"
+                    placeholder="Dirección"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className="pl-14"
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 left-0 px-3
+                 flex items-center justify-center
+                 bg-[#F5F7FA]
+                 text-gray-700 hover:text-accent
+                 transition-all rounded-l-2xl cursor-pointer"                   
+                  >
+                    <MapPin className="w-5.5 h-5.5" strokeWidth={2} />
+                  </button>
+                  <span className="absolute inset-y-0 left-[44px] flex items-center text-gray-600 pointer-events-none">
+                    |
+                  </span>
+                </div>
+
                 {errors.address && (
                   <p className="text-red-500 text-xs mt-1 ml-2">
                     {errors.address}
@@ -521,7 +543,6 @@ export default function Amount() {
                 )}
               </div>
             </div>
-
 
             <div className="mt-5">
               <label className="ml-2  font-medium text-gray-600">Nota</label>
@@ -549,14 +570,16 @@ export default function Amount() {
               <div className="flex justify-between items-center p-4 text-[#022954]">
                 <span className="sm:text-xl">Subtotal</span>
                 <span className="sm:text-xl">
-                  $ {isClient ? totalPrice.toFixed(2) : "0.00"} {currency ?? "USD"}
+                  $ {isClient ? totalPrice.toFixed(2) : "0.00"}{" "}
+                  {currency ?? "USD"}
                 </span>
               </div>
 
               <div className="flex justify-between items-center p-4 text-[#022954]">
                 <span className="sm:text-xl">Domicilio</span>
                 <span className="sm:text-xl">
-                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"} {currency ?? "USD"}
+                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"}{" "}
+                  {currency ?? "USD"}
                 </span>
               </div>
             </div>
