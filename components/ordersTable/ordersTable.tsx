@@ -46,7 +46,7 @@ export default function OrdersTable({
     updateFormData({
       showDeliveryOverlay: true,
       overlayDelivery: hasDelivery,
-      orderId: order.id,
+      orderId: order.codigo,
     });
   };
 
@@ -131,7 +131,7 @@ export default function OrdersTable({
                         >
                           {order.id.toString().startsWith("#")
                             ? order.id
-                            : `#${order.id}`}
+                            : `#${order.codigo}`}
                         </div>
                         <div className="text-center">{order.date}</div>
                         <div className="text-center">{order.time}</div>
@@ -162,7 +162,7 @@ export default function OrdersTable({
                         </div>
                         <div className="flex justify-center ">
                           <WhatsApp
-                            onClick={() => openWhatsAppHelp(order.id)}
+                            onClick={() => openWhatsAppHelp(order.codigo)}
                             className="h-9.5 w-9.5 cursor-pointer    transition-all duration-300 ease-out hover:scale-110 "
                           />
                         </div>

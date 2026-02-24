@@ -70,7 +70,7 @@ export default function Orders() {
   };
 
   const firstOrderId =
-    formData.orderId || (orders.length > 0 ? orders[0].id : "");
+    formData.orderId || (orders.length > 0 ? orders[0].codigo : "");
 
   const messageTitle = "¡Gracias por su compra!";
   const effectiveDelivery = formData.overlayDelivery ?? formData.delivery;

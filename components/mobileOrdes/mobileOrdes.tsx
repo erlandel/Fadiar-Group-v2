@@ -47,7 +47,7 @@ export default function MobileOrdes({
     updateFormData({
       showDeliveryOverlay: true,
       overlayDelivery: hasDelivery,
-      orderId: order.id,
+      orderId: order.codigo,
     });
   };
 
@@ -133,7 +133,7 @@ export default function MobileOrdes({
                       >
                         {order.id.toString().startsWith("#")
                           ? order.id
-                          : `#${order.id}`}
+                          : `#${order.codigo}`}
                       </p>
 
                       {/* Fecha */}
@@ -186,7 +186,7 @@ export default function MobileOrdes({
                       <p className="text-sm sm:text-lg">Ayuda</p>
                       <p className=" flex justify-end">
                         <WhatsApp
-                          onClick={() => openWhatsAppHelp(order.id)}
+                          onClick={() => openWhatsAppHelp(order.codigo)}
                           className="h-9 w-9 cursor-pointer transition-all duration-300 ease-out hover:scale-110"
                         />
                       </p>

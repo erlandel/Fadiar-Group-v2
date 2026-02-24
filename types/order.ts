@@ -12,6 +12,7 @@ export type OrderProduct = {
 
 export type Order = {
   id: string;
+  codigo: string;
   date: string;
   time: string;
   client_ci: string;
