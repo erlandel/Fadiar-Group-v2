@@ -198,7 +198,7 @@ export default function CardCarousel<T>({
         onTouchStart={handleInteraction}
       >
         {duplicatedItems.map((item, index) => (
-          <div key={index} className="shrink-0">
+          <div key={index} className="shrink-0 w-55">
             {renderItem(item, index)}
           </div>
         ))}
