@@ -31,12 +31,12 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
         className="w-auto h-auto  mt-20 xl:mt-30  "
       >
         <div className="flex flex-col items-start mb-5  mx-4 xl:mx-10 2xl:mx-20">
-          <h2 className="text-[20px] font-bold text-[#022954]">
-            Lo que le gusta a la gente!!!
-          </h2>
-          <h1 className="text-[24px] font-bold text-accent mb-2">
-            Lo más Vendido
+          <h1 className="text-[24px] font-bold text-[#022954]">
+            Tendencias para el hogar !!!
           </h1>
+          {/* <h1 className="text-[24px] font-bold text-accent mb-2">
+            Lo más Vendido
+          </h1> */}
         </div>
 
         <div className="w-full">

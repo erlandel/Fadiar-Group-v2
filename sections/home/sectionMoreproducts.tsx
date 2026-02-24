@@ -35,12 +35,12 @@ export default function SectionMoreproducts() {
   return (
     <>
       <div className=" mx-4 xl:mx-10  2xl:mx-20  mt-20 xl:mt-30 text-start animate__animated  animate__lightSpeedInLeft">
-        <span className="text-[#022954] text-xl font-bold">
+        {/* <span className="text-[#022954] text-xl font-bold">
           Entra y consulta
-          <h3 className="text-accent text-2xl font-bold">
-            Categorias destacadas
+        </span> */}
+          <h3 className="text-primary text-2xl font-bold">
+           Elige tu solución ideal !!!
           </h3>
-        </span>
       </div>
 
       <div className="flex  flex-col mx-4 mt-5 sm:mt-0 xl:flex-row justify-center items-center gap-5">
