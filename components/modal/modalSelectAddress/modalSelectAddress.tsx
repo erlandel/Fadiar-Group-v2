@@ -101,7 +101,7 @@ export default function ModalSelectAddress({
                           Municipio: <span className="text-gray-700 font-normal">{addr.municipio}</span>
                         </span>
                           <span className="text-primary font-bold">
-                          Direccion: <span className="text-gray-800 font-normal">{addr.direccion}</span>
+                          Dirección: <span className="text-gray-800 font-normal">{addr.direccion}</span>
                         </span>
                       </div>
                     </div>
