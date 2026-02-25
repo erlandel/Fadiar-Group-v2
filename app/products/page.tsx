@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import { useInventory } from "@/hooks/productRequests/useInventory";
 import Pagination from "@/components/ui/pagination";
 import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
-import Pot from "@/sections/pot/pot";
+import BannerPotProducts from "@/components/banner/bannerPotProducts";
 import { LatestProducts } from "@/sections/sectionsProducts/latestProducts";
 import CardAllProducts from "@/components/ui/cardAllProducts";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
@@ -438,7 +438,9 @@ export default function Products() {
           </div>
 
           <div className="hidden xl:block">
-            <Pot />
+            
+          
+            <BannerPotProducts />
           </div>
 
           <div className="xl:ml-2">

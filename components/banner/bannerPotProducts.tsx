@@ -1,12 +1,11 @@
- "use client";
 import "@fontsource/just-me-again-down-here";
 import { useEffect, useRef, useState } from "react";
 
-export default function BannerPot() {
-  const images = [
-    "/images/imagesPot/Ollas.png",
+export default function BannerPotProducts() {
+const images = [
     "/images/imagesPot/Calderos.png",
     "/images/imagesPot/Estación.png",
+    "/images/imagesPot/Ollas.png",
   ];
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -37,11 +36,11 @@ export default function BannerPot() {
   return (
     <>
       <div className="grid h-[400px] sm:h-[360px] md:h-[320px] lg:h-[300px] xl:h-[360px]  2xl:h-[400px]  ">
-        <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[380px] row-start-1 col-start-1"></div>
+        <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[320px] row-start-1 col-start-1"></div>
 
-        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between  gap-2 mx-4 xl:ml-10 2xl:mx-20">
+        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between  gap-2 mx-4 xl:ml-10 2xl:mx-10">
           <div id="lorem" className=" text-white md:mb-30 md:w-5/9 lg:w-4/9  ">
-            <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-4xl 2xl:text-[40px] font-bold  animate__animated  animate__lightSpeedInLeft">
+            <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-4xl 2xl:text-[32px] font-bold  animate__animated  animate__lightSpeedInLeft">
               <samp className="text-[#D69F04] block  ">
                 Diversidad de soluciones
               </samp>
@@ -61,7 +60,7 @@ export default function BannerPot() {
                 src={src}
                 alt="Background"
                 fetchPriority="high"
-                className={`row-start-1 col-start-1 h-60 md:h-60 lg:h-80 xl:h-110 2xl:h-110 object-cover mt-1 ${
+                className={`row-start-1 col-start-1 z-10 h-60 md:h-60 lg:h-80 xl:h-110 2xl:h-90 object-cover mt-1 ${
                   i === index
                     ? "block animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
                     : i === prevIndex
@@ -76,4 +75,3 @@ export default function BannerPot() {
     </>
   );
 }
-

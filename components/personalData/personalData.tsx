@@ -216,11 +216,11 @@ export default function PersonalData() {
                   {addresses.map((addr: any) => (
                     <div
                       key={addr.id}
-                      className="flex flex-col justify-between  bg-white p-3 rounded-md shadow-sm border border-gray-100 group hover:border-accent/30 transition-all text-sm sm:text-base gap-1"
+                      className="flex flex-col justify-between  bg-white p-3 rounded-md shadow-sm border border-gray-100 group hover:border-accent/30 transition-all text-sm sm:text-base "
                     >
                       <div className="w-full flex justify-between items-start">
                         <div>
-                          <div className="gap-1  ">
+                          <div className="gap-1">
                             <span className="text-primary font-bold">
                               Provincia:
                             </span>
@@ -268,7 +268,7 @@ export default function PersonalData() {
 
                       <div >
                         <span className="text-primary font-bold">
-                          Direccion:
+                          Dirección:
                         </span>
                         <span className="ml-1 text-gray-800 wrap-break-word">
                           {addr.direccion}
