@@ -36,17 +36,17 @@ export default function BannerPotProducts() {
   return (
     <>
       <div className="grid h-[400px] sm:h-[360px] md:h-[320px] lg:h-[300px] xl:h-[360px]  2xl:h-[400px]  ">
-        <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[320px] row-start-1 col-start-1"></div>
+        <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[280px]  2xl:h-[320px] row-start-1 col-start-1"></div>
 
         <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between  gap-2 mx-4 xl:ml-10 2xl:mx-10">
           <div id="lorem" className=" text-white md:mb-30 md:w-5/9 lg:w-4/9  ">
-            <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-4xl 2xl:text-[32px] font-bold  animate__animated  animate__lightSpeedInLeft">
+            <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-3xl 2xl:text-[32px] font-bold  animate__animated  animate__lightSpeedInLeft">
               <samp className="text-[#D69F04] block  ">
                 Diversidad de soluciones
               </samp>
               <span> para cada espacio de tu hogar</span>
             </h1>
-            <p className=" mt-4 leading-snug sm:leading-normal xl:mt-8  xl:w-135 text-md  xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
+            <p className=" mt-4 leading-snug sm:leading-normal xl:mt-8  2xl:w-135 text-md  2xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
               Ponemos a tu alcance una amplia gama de electrodomésticos que
               combinan tecnología, funcionalidad y diseño para crear un hogar
               más eficiente para el día a día.
@@ -60,7 +60,7 @@ export default function BannerPotProducts() {
                 src={src}
                 alt="Background"
                 fetchPriority="high"
-                className={`row-start-1 col-start-1 z-10 h-60 md:h-60 lg:h-80 xl:h-110 2xl:h-90 object-cover mt-1 ${
+                className={`row-start-1 col-start-1 z-10 h-60 md:h-60 lg:h-80 xl:h-80 2xl:h-90 object-cover mt-1 ${
                   i === index
                     ? "block animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
                     : i === prevIndex
