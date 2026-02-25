@@ -38,8 +38,8 @@ export default function BannerPotProducts() {
       <div className="grid h-[400px] sm:h-[360px] md:h-[320px] lg:h-[300px] xl:h-[360px]  2xl:h-[400px]  ">
         <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[280px]  2xl:h-[320px] row-start-1 col-start-1"></div>
 
-        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between  gap-2 mx-4 xl:ml-10 2xl:mx-10">
-          <div id="lorem" className=" text-white md:mb-30 md:w-5/9 lg:w-4/9  ">
+        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between 2xl:justify-center  gap-5 mx-4 xl:ml-10 2xl:mx-10">
+          <div id="lorem" className=" text-white md:mb-30 w-1/2 ">
             <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-3xl 2xl:text-[32px] font-bold  animate__animated  animate__lightSpeedInLeft">
               <samp className="text-[#D69F04] block  ">
                 Diversidad de soluciones
