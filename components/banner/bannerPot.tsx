@@ -39,16 +39,16 @@ export default function BannerPot() {
       <div className="grid h-[400px] sm:h-[360px] md:h-[320px] lg:h-[300px] xl:h-[360px]  2xl:h-[400px]  ">
         <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[380px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[380px] row-start-1 col-start-1"></div>
 
-        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between  gap-2 mx-4 xl:mx-10 2xl:mx-20 text-justify sm:text-left">
+        <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between 2xl:justify-center gap-2 mx-4 xl:mx-10 2xl:mx-20 text-justify sm:text-left">
      
           <div id="lorem" className=" text-white md:mb-30 md:w-5/9 lg:w-4/9 mx-1.5 sm:mx-0  ">
-            <h1 className="text-2xl sm:text-[28px] md:text-2xl  xl:text-4xl 2xl:text-[40px] font-bold  animate__animated  animate__lightSpeedInLeft">
+            <h1 className="text-xl sm:text-[28px] md:text-2xl  xl:text-4xl 2xl:text-[40px] font-bold  animate__animated  animate__lightSpeedInLeft">
               <samp className="text-[#D69F04] block  ">
                 Diversidad de soluciones
               </samp>
               <span> para cada espacio de tu hogar</span>
             </h1>
-            <p className=" mt-4 leading-snug sm:leading-normal xl:mt-8  xl:w-135 text-md  xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
+            <p className=" mt-4 text-md leading-snug sm:leading-normal xl:mt-8  xl:w-135   xl:text-xl animate__animated  animate__fadeInUp  [animation-delay:0.5s]">
               Ponemos a tu alcance una amplia gama de electrodomésticos que
               combinan tecnología, funcionalidad y diseño para crear un hogar
               más eficiente para el día a día.
