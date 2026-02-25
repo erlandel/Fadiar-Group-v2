@@ -70,15 +70,19 @@ const InformationMessage = ({
             </div>
 
             <div className="flex items-center gap-3">
-              <img
-                src={
-                  variant === "delivery"
-                    ? "/images/iconsSVG/Smartphone.svg"
-                    : "/images/iconsSVG/FileText.svg"
-                }
-                alt={variant === "delivery" ? "Contacto" : "Documento"}
-                className="w-10 h-12 md:h-14 md:w-12 shrink-0"
-              />
+              {variant === "delivery" ? (
+                <img
+                  src="/images/iconsSVG/Smartphone.svg"
+                  alt="Contacto"
+                  className="w-10 h-12 md:h-14 md:w-12 shrink-0"
+                />
+              ) : (
+                <img
+                  src="/images/iconsSVG/FileText.svg"
+                  alt="Documento"
+                  className="w-10 h-10 md:h-12 md:w-12 shrink-0"
+                />
+              )}
               <p className="text-sm md:text-lg text-primary leading-snug">
                 {variant === "delivery"
                   ? "Nuestro equipo logístico se comunicará al número telefónico proporcionado para coordinar los detalles."
