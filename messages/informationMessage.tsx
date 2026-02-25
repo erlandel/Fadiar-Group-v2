@@ -74,7 +74,7 @@ const InformationMessage = ({
                 <img
                   src="/images/iconsSVG/Smartphone.svg"
                   alt="Contacto"
-                  className="w-10 h-14 md:h-15 md:w-12 shrink-0"
+                  className="w-10 h-13.5 md:h-15 md:w-12 shrink-0"
                 />
               ) : (
                 <img
