@@ -2,10 +2,10 @@ import "@fontsource/just-me-again-down-here";
 import { useEffect, useRef, useState } from "react";
 
 export default function BannerPotProducts() {
-const images = [
+  const images = [
+    "/images/imagesPot/Ollas.png",
     "/images/imagesPot/Calderos.png",
     "/images/imagesPot/Estación.png",
-    "/images/imagesPot/Ollas.png",
   ];
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -53,7 +53,7 @@ const images = [
             </p>
           </div>
 
-         <div className="grid h-full items-end">
+          <div className="grid h-full items-end">
             {images.map((src, i) => (
               <img
                 key={src}
@@ -64,8 +64,8 @@ const images = [
                   i === index
                     ? "block animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
                     : i === prevIndex
-                    ? "block animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]"
-                    : "hidden"
+                      ? "block animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]"
+                      : "hidden"
                 }`}
               />
             ))}
