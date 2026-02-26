@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Share2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface InformationMessageProps {
   onClose?: () => void;
@@ -15,6 +16,7 @@ const InformationMessage = ({
   orderId = "",
 }: InformationMessageProps) => {
   const [showInfo, setShowInfo] = useState(true);
+  const router = useRouter();
 
   const handleClose = () => {
     setShowInfo(false);
@@ -26,15 +28,9 @@ const InformationMessage = ({
   return (
     <div>
       {showInfo && (
-        <div className="mb-6 bg-blue-50  rounded-xl py-6 px-4 md:px-8 flex flex-col gap-4 relative transition-all animate-in fade-in slide-in-from-top-2 ">
-          <button
-            onClick={handleClose}
-            className="absolute  top-4 right-4 text-[#5b7aa7] hover:text-primary transition-colors cursor-pointer"
-          >
-            <X className="h-5 w-5" strokeWidth={4} />
-          </button>
+        <div className=" bg-blue-50  rounded-xl  py-7 sm:py-10 px-4  md:px-8 flex flex-col gap-4 relative transition-all animate-in fade-in slide-in-from-top-2  ">
 
-          <div className="w-full text-center  mt-4 ">
+          <div className="w-full text-center ">
             <h4 className="text-3xl  md:text-[40px] font-bold text-primary ">
               {title}
             </h4>
@@ -100,8 +96,30 @@ const InformationMessage = ({
             )}
           </div>
 
-          <div className="text-center text-primary font-bold uppercase text-md md:text-[22px] mt-2 mb-4">
+          <div className="text-center text-primary font-bold uppercase text-md md:text-[22px] mt-2 ">
             Gracias por confiar en Grupo Fadiar.
+          </div>
+
+          <div className="flex justify-between space-x-2 sm:space-x-4 mt-4">
+            <div className="w-full">
+              <button
+                 onClick={() => router.push("/")}
+               className=" text-primary border border-primary h-14 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer flex items-center justify-center ">
+                Seguir comprando
+              </button>
+            </div>
+            <div className="w-full">
+              <button
+                 onClick={handleClose}
+                className="bg-[#022954] text-white h-14 w-full font-semibold rounded-xl hover:scale-103 transition cursor-pointer hover:bg-[#034078] hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                Mis pedidos
+              </button>
+            </div>
+
+          
+
+
           </div>
         </div>
       )}
