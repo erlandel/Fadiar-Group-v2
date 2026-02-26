@@ -77,6 +77,11 @@ export default function Login() {
 },
     onError: (error: Error) => {
       setShowErrors(true);
+      if (error.message === "Su cuenta no ha sido verificada") {
+        localStorage.setItem("verificationEmail", formData.email);
+        router.push("/verificationCodeEmail");
+        return;
+      }
       setErrorBannerMessage(
         error.message || "Usuario no encontrado. Verifica tu correo electrónico."
       );
