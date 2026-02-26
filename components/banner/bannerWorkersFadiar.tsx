@@ -32,7 +32,7 @@ export const BannerWorkersFadiar = () => {
         <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative z-10 w-full h-full flex items-end px-4 sm:px-20">
-          <div className="w-full gap-8 sm:gap-0 flex items-end justify-around px-6 sm:px-0 mb-2">
+          <div className="w-full gap-8 sm:gap-0 flex items-end justify-around px-6 sm:px-0 mb-10 sm:mb-20 xl:mb-10">
             {statistics.map((item, index) => (
               <div
                 key={index}
