@@ -101,7 +101,7 @@ export default function SectionMoreproducts() {
 
           <div className="mt-5">
             <img
-              src="/images/Fridge.webp"
+              src="/images/Fridge1.webp"
               alt="vent"
               className="object-cover"
             />
