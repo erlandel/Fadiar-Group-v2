@@ -39,9 +39,10 @@ export default function CardProduct({
 
   useEffect(() => {
     if (quantityProducts && quantityProducts > 0) {
-      setQuantity(quantityProducts);
+      const initialQuantity = count !== undefined ? Math.min(quantityProducts, count) : quantityProducts;
+      setQuantity(Math.max(1, initialQuantity));
     }
-  }, [quantityProducts]);
+  }, [quantityProducts, count]);
 
   const handleCardClick = () => {
     if (productId) {
@@ -57,7 +58,12 @@ export default function CardProduct({
 
   const adjustQuantity = (delta: number) => (e: React.MouseEvent) => {
     e.stopPropagation();
-    setQuantity((prev) => Math.max(1, prev + delta));
+    setQuantity((prev) => {
+      const next = prev + delta;
+      if (next < 1) return 1;
+      if (count !== undefined && next > count) return prev;
+      return next;
+    });
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
