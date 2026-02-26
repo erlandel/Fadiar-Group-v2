@@ -262,7 +262,13 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
                         {qty}
                       </span>
                       <button
-                        onClick={() => setQty(qty + 1)}
+                        onClick={() => {
+                          if (product.count !== undefined) {
+                            setQty(Math.min(qty + 1, product.count));
+                          } else {
+                            setQty(qty + 1);
+                          }
+                        }}
                         className="px-5 py-3 text-yellow-500 hover:bg-gray-100 rounded-r-xl"
                       >
                         +
