@@ -43,18 +43,18 @@ export default function SectionMoreproducts() {
           </h3>
       </div>
 
-      <div className="flex  flex-col mx-4 mt-5 sm:mt-0 xl:flex-row justify-center items-center gap-5">
+      <div className="flex  flex-col mx-4 mt-5 sm:mt-0 xl:flex-row justify-between xl:justify-center items-center xl:items-end gap-5 xl:mx-20 ">
+
         <div
           id="card1"
           data-animate="animate__backInLeft"
-          className=" flex justify-center items-center w-auto sm:w-140 2xl:w-160 xl:mt-7 xl:ml-20  overflow-hidden rounded-xl animate-on-scroll "
+          className=" flex justify-center items-center w-auto sm:w-140  xl:w-160  xl:mt-7   overflow-hidden animate-on-scroll max-w-100 sm:max-w-none "
         >
           <div className="z-10 w-1/3  xl:mb-10">
             <div className="text-black  ">
               <h4 className="font-bold text-xl">Ventiladores</h4>
-              <p className="text-xs w-42 sm:text-base sm:w-64 2xl:w-72">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
-                scelerisque.
+              <p className="text-xs w-42 sm:text-base sm:w-64  xl:w-60 2xl:w-72">
+              Frescura y confort para cada ambiente, con modelos eficientes que se adaptan a cualquier espacio.
               </p>
               <div className="mt-5 w-30 sm:w-auto">
                 <ButtonPromoHome1
@@ -69,7 +69,7 @@ export default function SectionMoreproducts() {
 
           <div>
             <img
-              src="/images/vent.webp"
+              src="/images/fan.webp"
               alt="vent"
               className=" object-cover "
             />
@@ -79,13 +79,12 @@ export default function SectionMoreproducts() {
         <div
           id="card2"
           data-animate="animate__backInRight"
-          className=" flex w-auto  sm:w-140 2xl:w-160  justify-center items-center   animate-on-scroll"
+          className=" flex w-auto  sm:w-140 xl:w-160  justify-center items-center   animate-on-scroll max-w-100 sm:max-w-none "
         >
           <div className="w-1/9   text-black z-10 xl:mb-5">
-            <h4 className="font-bold text-xl w-50">Refrigeradores y Neveras</h4>
-            <p className="text-xs sm:text-base w-40 sm:w-64 xl:w-72  ">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit hendrerit
-              scelerisque, blandit duis sapien.
+            <h4 className="font-bold text-xl w-50 xl:w-72">Refrigeradores y Neveras</h4>
+            <p className="text-xs sm:text-base w-40 sm:w-64 xl:w-65 2xl:w-75  ">
+              Conserva tus alimentos con la frescura y eficiencia que el hogar necesita, cada día.
             </p>
 
             <div className="mt-1 md:mt-5 w-40">
@@ -104,10 +103,12 @@ export default function SectionMoreproducts() {
             <img
               src="/images/Fridge.webp"
               alt="vent"
-              className="object-cover  sm:mt-5  ml-4 xl:mt-0"
+              className="object-cover"
             />
           </div>
         </div>
+
+        
       </div>
     </>
   );

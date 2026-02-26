@@ -26,7 +26,7 @@ export const BannerMobilePay = () => {
             <img
               className="animate-on-scroll  [animation-delay:0.5s] h-50 sm:h-70  md:h-85 lg:h-auto"
               data-animate="animate__zoomIn"
-              src="/images/Ilustración.webp"
+              src="/images/Illustration.webp"
               alt="Ilustración"
             />
           </div>
