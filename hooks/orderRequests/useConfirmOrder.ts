@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "@/store/authStore";
 import { refreshToken } from "@/utils/refreshToken";
 import { add_orderUrl } from "@/urlApi/urlApi";
@@ -13,6 +13,7 @@ import { payWithZelle } from "@/utils/payWithZelle";
 
 export const useConfirmOrder = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const formData = MatterCart1Store((state) => state.formData);
   const { municipalityId } = useProductsByLocationStore();
   const clearCart = cartStore((state) => state.clearCart);
@@ -94,6 +95,9 @@ export const useConfirmOrder = () => {
     onSuccess: (data) => {
       console.log("Respuesta del backend (agregar pedido):", data);
       
+      // Invalidar el cache de las órdenes para que se actualice la lista
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+
       const orderId = data.orders?.[0]?.codigo;
       
       SuccesMessage(`Orden confirmada correctamente`);

@@ -12,10 +12,18 @@ import InformationMessage from "@/messages/informationMessage";
 import MatterCart1Store from "@/store/matterCart1Store";
 
 export default function Orders() {
-  const { orders, hasMore, fetchOrders, updateOrderProducts, updateOrderNote } =
-    useGetOrders();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
+  const { 
+    orders, 
+    hasMore, 
+    loading, 
+    fetchOrders, 
+    updateOrderProducts, 
+    updateOrderNote 
+  } = useGetOrders("", (currentPage - 1) * itemsPerPage, "");
+
   const titleRef = useRef<HTMLDivElement | null>(null);
   const formData = MatterCart1Store((state) => state.formData);
   const updateFormData = MatterCart1Store((state) => state.updateFormData);
@@ -28,26 +36,16 @@ export default function Orders() {
     }
   }, [formData.showDeliveryOverlay, updateFormData]);
 
-  const fetchOrdersMutation = useMutation({
-    mutationFn: (params: {
-      lastId: string ;
-      size: number;
-      searchText: string;
-    }) => fetchOrders(params.lastId, params.size, params.searchText),
-  });
-
-  useEffect(() => {
-    fetchOrdersMutation.mutate({
-      lastId: "",
-      size: (currentPage - 1) * itemsPerPage,
-      searchText: "",
-    });
-  }, [currentPage]);
+  // Objeto simulado para mantener compatibilidad con componentes hijos
+  const fetchOrdersStatus = {
+    isPending: loading,
+    status: loading ? "pending" : "success",
+    mutate: fetchOrders
+  };
 
   useEffect(() => {
     if (
-      !fetchOrdersMutation.isPending &&
-      fetchOrdersMutation.isSuccess &&
+      !loading &&
       currentPage > 1
     ) {
       const startIndex = (currentPage - 1) * itemsPerPage;
@@ -58,8 +56,7 @@ export default function Orders() {
   }, [
     orders.length,
     currentPage,
-    fetchOrdersMutation.isPending,
-    fetchOrdersMutation.isSuccess,
+    loading,
   ]);
 
   const handlePageChange = (page: number) => {
@@ -111,7 +108,7 @@ export default function Orders() {
         <div className="xl:hidden">
           <MobileOrdes
             orders={orders}
-            fetchOrdersMutation={fetchOrdersMutation}
+            fetchOrdersMutation={fetchOrdersStatus}
             updateOrderProducts={updateOrderProducts}
             hasMore={hasMore}
             currentPage={currentPage}
@@ -122,7 +119,7 @@ export default function Orders() {
         <div className="hidden xl:block">
           <OrdersTable
             orders={orders}
-            fetchOrdersMutation={fetchOrdersMutation}
+            fetchOrdersMutation={fetchOrdersStatus}
             updateOrderProducts={updateOrderProducts}
             updateOrderNote={updateOrderNote}
             hasMore={hasMore}
