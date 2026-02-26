@@ -81,7 +81,7 @@ export default function SectionMoreproducts() {
           data-animate="animate__backInRight"
           className=" flex w-auto  sm:w-140 xl:w-160  justify-center items-center   animate-on-scroll max-w-100 sm:max-w-none "
         >
-          <div className="w-1/9   text-black z-10 xl:mb-5">
+          <div className="w-2/12   text-black z-10 xl:mb-5">
             <h4 className="font-bold text-xl w-50 xl:w-72">Refrigeradores y Neveras</h4>
             <p className="text-xs sm:text-base w-40 sm:w-64 xl:w-65 2xl:w-75  ">
               Conserva tus alimentos con la frescura y eficiencia que el hogar necesita, cada día.
