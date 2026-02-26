@@ -8,7 +8,7 @@ import useAuthStore from "@/store/authStore";
 import InputAuth from "@/components/inputAuth/inputAuth";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
 import { useMutation } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
+import { Loader, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { loginUrl } from "@/urlApi/urlApi";
 
 export default function Login() {
@@ -24,6 +24,7 @@ export default function Login() {
   >({});
 
   const [showErrors, setShowErrors] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [errorBannerMessage, setErrorBannerMessage] = useState<string>("");
   const [editedFields, setEditedFields] = useState<
     Partial<Record<keyof LoginFormData, boolean>>
@@ -127,7 +128,6 @@ export default function Login() {
   const isEmailValid = (email: string) =>
     loginSchema.shape.email.safeParse(email).success;
 
-
   return (
     <div className="bg-[#e7e8e9] min-h-dvh w-full flex items-center justify-center overflow-hidden">
       <div className="bg-white w-120 h-auto rounded-2xl mx-4 shadow-xl">
@@ -145,6 +145,8 @@ export default function Login() {
             >
               <div>
                 <InputAuth
+                  icon={Mail}
+                  iconClassName="h-6 w-6"
                   placeholder="Correo electrónico"
                   type="email"
                   name="email"
@@ -158,14 +160,19 @@ export default function Login() {
 
               <div>
                 <InputAuth
+                  icon={Lock}
+                  iconClassName="h-6 w-6"
                   placeholder="Contraseña"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange("password")}
                   hasError={showErrors ? (!!errors.password && !editedFields.password) : false}
                   hideErrorMessage
+                  endIcon={showPassword ? EyeOff : Eye}
+                  endIconClassName="h-5 w-5"
+                  onEndIconClick={() => setShowPassword((v) => !v)}
                 />
               </div>
             </form>

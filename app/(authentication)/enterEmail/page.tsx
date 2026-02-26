@@ -6,6 +6,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Mail } from "lucide-react";
 
 export default function EnterEmail() {
   const router = useRouter();
@@ -84,6 +85,8 @@ export default function EnterEmail() {
             >
               <div>
                 <InputAuth
+                  icon={Mail}
+                  iconClassName="h-6 w-6"
                   placeholder="Correo electrónico"
                   type="email"
                   name="email"
