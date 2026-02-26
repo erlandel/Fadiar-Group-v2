@@ -24,7 +24,7 @@ export default function BannerPotProducts() {
         }, 1000);
         return next;
       });
-    }, 5000);
+    }, 7000);
     return () => {
       clearInterval(id);
       if (exitTimeoutRef.current) {
