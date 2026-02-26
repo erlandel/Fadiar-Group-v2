@@ -205,10 +205,10 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
 
               {/* 📌 INFORMACIÓN */}
               <div className="md:w-2/3">
-                <p className="text-xs text-gray-500 mb-3">
+                <p className="text-sm text-gray-500 mb-3">
                   {product.categoria?.name || "Sin categoría"}
                 </p>
-                <h2 className="text-3xl font-bold text-[#1A2B49]">
+                <h2 className="text-4xl font-bold text-[#1A2B49]">
                   {product.name}
                 </h2>
                 <p className="text-3xl text-[#022954] font-medium">
@@ -217,7 +217,7 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
 
                 {/* Descripción */}
                 {product.description && (
-                  <p className="text-[#1E1E1E] text-sm mt-3 max-w-xl leading-relaxed">
+                  <p className="text-[#1E1E1E] text-md sm:text-lg mt-3 text-justify">
                     {product.description}
                   </p>
                 )}
