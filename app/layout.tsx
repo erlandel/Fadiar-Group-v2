@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Grupo Fadiar",
-  description: "Grupo de tiendas de venta de productos de alta calidad",
+  description: "Venta de electrodomésticos",
 };
 
 export default function RootLayout({
