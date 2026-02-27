@@ -1,6 +1,6 @@
 export function openWhatsAppHelp(
   orderId: string | number,
-  supportNumber = "50230233",
+  supportNumber = "+53 63513228",
 ) {
   const label =
     String(orderId).startsWith("#") ? String(orderId) : `#${orderId}`;
