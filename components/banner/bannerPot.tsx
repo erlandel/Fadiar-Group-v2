@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 export default function BannerPot() {
   const images = [
     "/images/imagesPot/Ollas1.png",
-    "/images/imagesPot/Calderos.png",
-    "/images/imagesPot/Estación.png",
+    "/images/imagesPot/Calderos.webp",
+    "/images/imagesPot/Estación.webp",
   ];
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -37,7 +37,7 @@ export default function BannerPot() {
   return (
     <>
       <div className="grid h-[400px] sm:h-[360px] md:h-[320px] lg:h-[300px] xl:h-[360px]  2xl:h-[400px]  ">
-        <div className="bg-[url('/images/Banner.jpg')] bg-cover bg-center w-full h-[400px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[380px] row-start-1 col-start-1"></div>
+        <div className="bg-[url('/images/Banner.webp')] bg-cover bg-center w-full h-[400px] sm:h-[360px] md:h-[280px] lg:h-[300px] xl:h-[360px]  2xl:h-[380px] row-start-1 col-start-1"></div>
 
         <div className="z-10  mt-8 row-start-1 col-start-1 flex flex-col md:flex-row items-center justify-between 2xl:justify-center gap-5 mx-4 lg:mx-10 2xl:mx-20 text-justify sm:text-left ">
      
