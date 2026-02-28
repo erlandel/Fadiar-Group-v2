@@ -26,7 +26,7 @@ export default function Footer() {
             <img src="/images/logoWhite.svg" alt="logo" className="w-40 h-20" />
           </div>
           <div className="hidden md:block">
-            <p>© 2026 Fadiar. Todos los derechos reservados.</p>
+            <p>© 2026 Grupo Fadiar. Todos los derechos reservados.</p>
           </div>
         </div>
 
