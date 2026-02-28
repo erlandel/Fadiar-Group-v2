@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function BannerPotProducts() {
   const images = [
-    "/images/imagesPot/Ollas1.png",
+    "/images/imagesPot/Ollas.webp",
     "/images/imagesPot/Calderos.webp",
     "/images/imagesPot/Estación.webp",
   ];
