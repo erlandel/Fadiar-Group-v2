@@ -114,7 +114,7 @@ export default function Footer() {
 
         </div>
          <div className=" mt-14 md:mt-25 text-sm md:hidden">
-            <p>© 2026 Fadiar. Todos los derechos reservados.</p>
+            <p>© 2026 Grupo Fadiar. Todos los derechos reservados.</p>
           </div>
       </div>
         
