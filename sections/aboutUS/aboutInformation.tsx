@@ -86,34 +86,16 @@ export const AboutInformation = () => {
                 </p>
               </div>
 
-              {/* <p className="mt-7">
-                Para más información sobre la empresa matriz consulte el
-                siguiente sitio web:
-                <a
-                  href="https://www.fadiar.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-accent font-bold cursor-pointer"
-                >
-                  {" "}
-                  www.fadiar.com
-                </a>
-              </p> */}
+       
             </div>
           </div>
 
-          <div className="xl:w-1/3 flex ">
+          <div className="xl:w-1/3 flex justify-center ">
             <img
               src="/images/worker.webp"
               alt="dealer"
-              className="w-full h-full object-cover object-top hidden xl:block"
-            />
-
-            <img
-              src="/images/workerMobile.webp"
-              alt="dealer"
-              className="w-full h-full  object-cover object-top xl:hidden "
-            />
+              className=" object-cover xl:h-115"
+            />         
           </div>
         </div>
       </div>
