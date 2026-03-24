@@ -2,6 +2,7 @@
 import CardSkeleton from "@/components/ui/skeletonCard";
 import { Product } from "@/types/product";
 import { useBestSelling } from "@/hooks/productRequests/useBestSelling";
+import { useInventory } from "@/hooks/productRequests/useInventory";
 import { useMemo } from "react";
 import CardProduct from "@/components/ui/cardProduct";
 import CardCarousel from "@/components/ui/cardCarousel";
@@ -12,17 +13,42 @@ type BestSellingProps = {
 
 export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
   // Usar el hook de caché
-  const { data: bestSellingProducts = [] } = useBestSelling(10);
+  const { data: bestSellingProducts = [], isLoading: isBestSellingLoading } = useBestSelling(10);
+  // Obtener el inventario de la cache
+  const { data: inventoryData, isLoading: isInventoryLoading } = useInventory();
 
   // Usar productos del estado de caché si no vienen como prop
   const productsToUse: Product[] = Array.isArray(productsProp)
     ? productsProp
     : bestSellingProducts;
 
-  const sortedProducts = useMemo(
-    () => [...productsToUse].sort((a, b) => b.id.localeCompare(a.id)),
-    [productsToUse],
-  );
+  const filteredAndSortedProducts = useMemo(() => {
+    // Si no hay inventario cargado, retornamos vacío para evitar mostrar nada mientras carga
+    if (!inventoryData?.products) return [];
+
+    // Enriquecer productos con los datos del inventario si existen, o marcarlos como agotados
+    const enrichedProducts = productsToUse.map((bestSellingProduct) => {
+      // Buscar el producto en el inventario por su ID
+      const inventoryProduct = inventoryData.products.find(
+        (invProduct) => String(invProduct.id) === String(bestSellingProduct.id)
+      );
+
+      if (inventoryProduct) {
+        // Si está en el inventario, usamos esos datos (precio, stock real, etc.)
+        return inventoryProduct;
+      } else {
+        // Si no está en el inventario de la provincia, lo marcamos como agotado (count: 0)
+        return {
+          ...bestSellingProduct,
+          count: 0,
+        };
+      }
+    });
+
+    return [...enrichedProducts].sort((a, b) => b.id.localeCompare(a.id));
+  }, [productsToUse, inventoryData]);
+
+  const isLoading = isBestSellingLoading || isInventoryLoading;
 
   return (
     <>
@@ -40,10 +66,10 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
         </div>
 
         <div className="w-full">
-          {sortedProducts.length > 0 ? (
+          {!isLoading && filteredAndSortedProducts.length > 0 ? (
             <CardCarousel
              direction="right"
-              items={sortedProducts}
+              items={filteredAndSortedProducts}
               renderItem={(product) => (
                 <CardProduct
                   category={product.categoria?.name}

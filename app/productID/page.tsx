@@ -13,6 +13,7 @@ import { ProductID } from "@/types/productId";
 import RelatedProds from "@/sections/sectionsProducts/relatedProds";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import { useInventory } from "@/hooks/productRequests/useInventory";
+import { useBestSelling } from "@/hooks/productRequests/useBestSelling";
 import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
@@ -26,18 +27,40 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
   const [isInCart, setIsInCart] = useState(false);
 
   const { data: inventoryData, isLoading: isInventoryLoading } = useInventory();
+  const { data: bestSellingProducts, isLoading: isBestSellingLoading } = useBestSelling(10);
   const { data: upcomingProducts, isLoading: isUpcomingLoading } = useUpcomingProducts();
   const allProducts = useMemo(() => {
     if (isPreSale) {
       return (upcomingProducts || []) as unknown as ProductID[];
     }
-    return (inventoryData?.products || []) as unknown as ProductID[];
-  }, [isPreSale, upcomingProducts, inventoryData]);
+    
+    // Obtener productos de inventario
+    const inventoryProds = (inventoryData?.products || []) as unknown as ProductID[];
+    // Obtener productos de los más vendidos
+    const bestSellingProds = (bestSellingProducts || []) as unknown as ProductID[];
+
+    // Combinar inventario y más vendidos para asegurar que el producto sea encontrado
+    // Si el producto está en "más vendidos" pero no en inventario, se marca como agotado
+    const combinedProducts = [...inventoryProds];
+    
+    bestSellingProds.forEach(bsProduct => {
+      const existsInInventory = inventoryProds.some(invProduct => String(invProduct.id) === String(bsProduct.id));
+      if (!existsInInventory) {
+        // Añadir el producto de "más vendidos" como agotado si no está en inventario
+        combinedProducts.push({
+          ...bsProduct,
+          count: 0
+        });
+      }
+    });
+
+    return combinedProducts;
+  }, [isPreSale, upcomingProducts, inventoryData, bestSellingProducts]);
   const inventoryProducts = useMemo(
     () => (inventoryData?.products || []) as unknown as ProductID[],
     [inventoryData]
   );
-  const isLoading = isPreSale ? isUpcomingLoading : isInventoryLoading;
+  const isLoading = isPreSale ? isUpcomingLoading : (isInventoryLoading || isBestSellingLoading);
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   useEffect(() => {
