@@ -18,6 +18,7 @@ import { useUpcomingProducts } from "@/hooks/productRequests/useUpcomingProducts
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
+import WarningMenssage from "@/messages/warningMenssage";
 
 function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boolean }) {
   const [qty, setQty] = useState(1);
@@ -287,7 +288,11 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
                       <button
                         onClick={() => {
                           if (product.count !== undefined) {
-                            setQty(Math.min(qty + 1, product.count));
+                            if (qty + 1 > product.count) {
+                              WarningMenssage(`Solo quedan ${product.count} unidades disponibles`);
+                            } else {
+                              setQty(qty + 1);
+                            }
                           } else {
                             setQty(qty + 1);
                           }

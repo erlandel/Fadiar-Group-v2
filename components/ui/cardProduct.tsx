@@ -8,6 +8,7 @@ import useCartStore from "@/store/cartStore";
 import { Loader } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
+import WarningMenssage from "@/messages/warningMenssage";
 
 export default function CardProduct({
   category,
@@ -61,7 +62,10 @@ export default function CardProduct({
     setQuantity((prev) => {
       const next = prev + delta;
       if (next < 1) return 1;
-      if (count !== undefined && next > count) return prev;
+      if (count !== undefined && next > count) {
+        WarningMenssage(`Solo quedan ${count} unidades disponibles`);
+        return prev;
+      }
       return next;
     });
   };
