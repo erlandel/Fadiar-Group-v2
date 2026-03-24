@@ -62,7 +62,11 @@ export default function CardAllProducts({
       const next = prev + delta;
       if (next < 1) return 1;
       if (count !== undefined && next > count) {
-        WarningMenssage(`Solo quedan ${count} unidades disponibles`);
+        if (count === 0) {
+          WarningMenssage("No hay unidades disponibles");
+        } else {
+          WarningMenssage(`Solo quedan ${count} unidades disponibles`);
+        }
         return prev;
       }
       return next;
@@ -171,10 +175,10 @@ export default function CardAllProducts({
           )}
 
           <div
-            className="mt-auto flex flex-wrap items-center justify-between xl:gap-3 pt-2 font-bold"
+            className="mt-auto flex items-center justify-between xl:gap-3 pt-2 font-bold"
             onClick={handleButtonClick}
           >
-            <div className="flex items-center rounded-xl border border-gray-200 bg-white cursor-default ">
+            <div className="flex items-center rounded-xl border border-gray-200 bg-white cursor-default shrink-0">
               <button
                 className="px-2 py-2 sm:px-3 sm:py-2  text-accent hover:bg-gray-50 transition-colors"
                 aria-label="Restar"
@@ -182,7 +186,7 @@ export default function CardAllProducts({
               >
                 −
               </button>
-              <span className="px-1 sm:px-2 2xl:px-4 py-1 border-x border-gray-300 min-w-8 sm:min-w-10 text-center">
+              <span className="py-1 border-x border-gray-300 w-10 sm:w-10 2xl:w-12 text-center shrink-0">
                 {quantity}
               </span>
               <button
@@ -195,7 +199,7 @@ export default function CardAllProducts({
             </div>
 
             <button
-              className={`rounded-xl border border-primary transition-colors px-3.5 py-2 sm:px-4 2xl:py-2.5 2xl:px-5 ${
+              className={`rounded-xl border border-primary transition-colors px-3 py-2 sm:px-4 2xl:py-2.5 2xl:px-5 ${
                 count === 0
                   ? "opacity-50 bg-gray-100 text-gray-400 border-gray-300"
                   : loading

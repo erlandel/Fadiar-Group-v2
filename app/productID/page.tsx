@@ -295,7 +295,11 @@ function ProductContent({ id, isPreSale, fromBestSelling }: { id: string | null;
                         onClick={() => {
                           if (product.count !== undefined) {
                             if (qty + 1 > product.count) {
-                              WarningMenssage(`Solo quedan ${product.count} unidades disponibles`);
+                              if (product.count === 0) {
+                                WarningMenssage("No hay unidades disponibles");
+                              } else {
+                                WarningMenssage(`Solo quedan ${product.count} unidades disponibles`);
+                              }
                             } else {
                               setQty(qty + 1);
                             }
