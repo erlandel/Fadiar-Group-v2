@@ -12,6 +12,7 @@ export type CardProps = {
   temporal_price?: string;
   productId?: string;
   tiendaId?: string;
+  fromBestSelling?: boolean;
   currency?: {
     currency: string;
   };

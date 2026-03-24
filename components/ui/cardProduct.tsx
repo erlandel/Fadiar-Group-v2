@@ -24,6 +24,7 @@ export default function CardProduct({
   tiendaId,
   currency,
   count,
+  fromBestSelling,
 }: CardProps) {
   const router = useRouter();
   const { addToCart, loading } = useAddToCart();
@@ -48,7 +49,8 @@ export default function CardProduct({
   const handleCardClick = () => {
     if (productId) {
       startLoading();
-      router.push(`/productID?id=${productId}`);
+      const url = `/productID?id=${productId}${fromBestSelling ? "&fromBestSelling=true" : ""}`;
+      router.push(url);
     }
   };
 

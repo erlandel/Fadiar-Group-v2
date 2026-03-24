@@ -84,6 +84,7 @@ export const BestSelling = ({ products: productsProp }: BestSellingProps) => {
                   productId={product.id}                  
                   tiendaId={product.tiendaId || product.id_tienda}
                   count={product.count}
+                  fromBestSelling={true}
                 />
               )}
               gap={1}

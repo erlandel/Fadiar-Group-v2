@@ -20,7 +20,7 @@ import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
 import WarningMenssage from "@/messages/warningMenssage";
 
-function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boolean }) {
+function ProductContent({ id, isPreSale, fromBestSelling }: { id: string | null; isPreSale: boolean; fromBestSelling: boolean }) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const { addToCart, loading } = useAddToCart();
@@ -37,6 +37,12 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
     
     // Obtener productos de inventario
     const inventoryProds = (inventoryData?.products || []) as unknown as ProductID[];
+    
+    // Si no viene de BestSelling, solo buscamos en el inventario normal
+    if (!fromBestSelling) {
+      return inventoryProds;
+    }
+
     // Obtener productos de los más vendidos
     const bestSellingProds = (bestSellingProducts || []) as unknown as ProductID[];
 
@@ -56,7 +62,7 @@ function ProductContent({ id, isPreSale }: { id: string | null; isPreSale: boole
     });
 
     return combinedProducts;
-  }, [isPreSale, upcomingProducts, inventoryData, bestSellingProducts]);
+  }, [isPreSale, upcomingProducts, inventoryData, bestSellingProducts, fromBestSelling]);
   const inventoryProducts = useMemo(
     () => (inventoryData?.products || []) as unknown as ProductID[],
     [inventoryData]
@@ -367,7 +373,7 @@ export default function Product() {
     <main>
       <Suspense>
         <SearchParamsProvider>
-          {({ id, isPreSale }) => <ProductContent id={id} isPreSale={isPreSale} />}
+          {({ id, isPreSale, fromBestSelling }) => <ProductContent id={id} isPreSale={isPreSale} fromBestSelling={fromBestSelling} />}
         </SearchParamsProvider>
       </Suspense>
 
