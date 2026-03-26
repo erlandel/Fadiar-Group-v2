@@ -213,7 +213,7 @@ export default function Register() {
   return (
 
     <>
-      <div className="bg-[#e7e8e9] h-screen w-screen flex justify-center items-center">
+      <div className="bg-[#e7e8e9] min-h-dvh w-full flex justify-center items-center">
         <div className="bg-white w-110 h-auto rounded-2xl mx-4 shadow-xl">
           <div className="flex justify-center items-center flex-col p-7">
             <div>
