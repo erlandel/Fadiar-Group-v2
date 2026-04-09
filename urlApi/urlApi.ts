@@ -1,6 +1,6 @@
-export const server_url = 'https://app.fadiar.com:444/prueba/api';
+// export const server_url = 'https://app.fadiar.com:444/prueba/api';
 
-// export const server_url = 'https://zlgwqq5f-5001.use2.devtunnels.ms';
+export const server_url = 'https://59z4798b-5001.use.devtunnels.ms';
 
 export const loginUrl = `${server_url}/login`;
 
@@ -32,9 +32,9 @@ export const latest_productsUrl = `${server_url}/getNewerProducts`;
 
 export const most_viewed_productsUrl = `${server_url}/img_mas_vendido`;
 
-export const refresh_tokenUrl = `${server_url}/refresh-token`;
+export const refresh_tokenUrl = `${server_url}/refresh_token`;
 
-export const get_provinces_municipalitiesUrl = `${server_url}/obtener-provincias-municipios`;
+export const get_provinces_municipalitiesUrl = `${server_url}/obtener_provincias_municipios`;
 
 export const logoutUrl = `${server_url}/logout`;
 
@@ -48,12 +48,12 @@ export const statistics_about_usUrl = `${server_url}/estadisticas_acerca_de_noso
 
 export const upcomingProductsUrl = `${server_url}/inventory_new_releases_manager`;
 
-export const get_addressesUrl = `${server_url}/obtener-direccion-domicilio-cliente`;
+export const get_addressesUrl = `${server_url}/obtener_direccion_domicilio_cliente`;
 
-export const add_addressUrl = `${server_url}//crear-direccion-domicilio-cliente`;
+export const add_addressUrl = `${server_url}//crear_direccion_domicilio_cliente`;
 
-export const edit_addressUrl = `${server_url}/editar-direccion-domicilio-cliente`;
+export const edit_addressUrl = `${server_url}/editar_direccion_domicilio_cliente`;
 
-export const delete_addressUrl = `${server_url}/eliminar-direccion-domicilio-cliente`;
+export const delete_addressUrl = `${server_url}/eliminar_direccion_domicilio_cliente`;
 
 export const noteUrl = `${server_url}/get_messages`;

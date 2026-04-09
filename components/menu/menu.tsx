@@ -72,7 +72,30 @@ export default function Menu() {
     prevPathRef.current = pathname;
   }, [pathname, setSelectedCategories]);
 
-  
+  // Cerrar el submenu de productos al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isProductsSubmenuOpen &&
+        productsItemRef.current &&
+        !productsItemRef.current.contains(event.target as Node)
+      ) {
+        setIsProductsSubmenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isProductsSubmenuOpen]);
+
+  // Resetear el submenu cuando se cierra el menú principal
+  useEffect(() => {
+    if (!isOpen) {
+      setIsProductsSubmenuOpen(false);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -117,16 +140,6 @@ export default function Menu() {
           {/* Links del menú móvil */}
           <nav
             className="flex flex-col gap-6"
-            onPointerDown={(e) => {
-              if (!isProductsSubmenuOpen) return;
-              const target = e.target as Node;
-              if (
-                productsItemRef.current &&
-                !productsItemRef.current.contains(target)
-              ) {
-                setIsProductsSubmenuOpen(false);
-              }
-            }}
           >
             {links.map((link) => (
                 <div

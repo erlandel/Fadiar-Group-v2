@@ -36,10 +36,15 @@ const useLocation = (config?: { useGlobalStore?: boolean }) => {
     queryFn: async () => {
       const res = await fetch(get_provinces_municipalitiesUrl);
       const json = await res.json();
-      if (!Array.isArray(json)) {
+      console.log("respuesta municipios", json);
+
+      // Si la respuesta viene envuelta en un objeto 'data'
+      const provinceData = Array.isArray(json) ? json : json.data;
+ 
+      if (!Array.isArray(provinceData)) {
         throw new Error("Error al cargar las provincias");
       }
-      return json as ProvinceData[];
+      return provinceData as ProvinceData[];
     },
     staleTime: Infinity,
     gcTime: Infinity,

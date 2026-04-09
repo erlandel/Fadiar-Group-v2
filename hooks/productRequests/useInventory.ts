@@ -11,12 +11,14 @@ export interface InventoryData {
 
 export const useInventory = <T = InventoryData>(select?: (data: InventoryData) => T) => {
   const { provinceId } = useProductsByLocationStore();
+  const productos=true;
 
   return useQuery<InventoryData, Error, T>({
     queryKey: ["inventory", provinceId],
     queryFn: async () => {
       const queryParams = new URLSearchParams();
       queryParams.append("emisor", "web");
+      queryParams.append("productos", "true");
       
       if (provinceId) {
         queryParams.append("provincia", provinceId.toString());
@@ -25,6 +27,7 @@ export const useInventory = <T = InventoryData>(select?: (data: InventoryData) =
       const res = await fetch(
         `${inventory_managerUrl}?${queryParams.toString()}`,
         {
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -36,6 +39,7 @@ export const useInventory = <T = InventoryData>(select?: (data: InventoryData) =
       }
 
       const data = await res.json();
+      console.log("respuesta inventario:", data);
       console.log("data:", data);
       
       const realTiendas = data.tiendas?.filter((t: any) => t.active) || [];
