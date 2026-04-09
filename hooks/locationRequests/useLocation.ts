@@ -34,7 +34,12 @@ const useLocation = (config?: { useGlobalStore?: boolean }) => {
   const provincesQuery = useQuery<ProvinceData[], Error>({
     queryKey: ["provinces-municipalities"],
     queryFn: async () => {
-      const res = await fetch(get_provinces_municipalitiesUrl);
+      const res = await fetch(get_provinces_municipalitiesUrl,{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const json = await res.json();
       console.log("respuesta municipios", json);
 
