@@ -79,7 +79,7 @@ export default function ModalSelectAddress({
             </div>
           ) : isError ? (
             <div className="text-gray-500 font-bold text-center py-4 ">
-              No hay direcciones registradas
+              No hay direcciones disponibles
             </div>
           ) : filtered && filtered.length > 0 ? (
             <div className="flex flex-col gap-4">
