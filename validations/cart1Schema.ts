@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const lettersRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
 
@@ -81,13 +82,34 @@ export const cart1Schema = z
           path: ["phone"],
         });
       } else {
-        const phoneParts = data.phone.trim().split(" ");
-        const number = phoneParts.slice(1).join("");
+        const phone = data.phone.trim();
+        const phoneNumber = parsePhoneNumberFromString(phone);
 
-        if (phoneParts.length < 2 || !number || !/^\d+$/.test(number)) {
+        if (!phoneNumber || !phoneNumber.isValid()) {
+          let errorMessage = "Número de teléfono no válido";
+
+          const parts = phone.split(" ");
+          const hasNumber = parts.length > 1 && parts[1].trim().length > 0;
+
+          if (!hasNumber) {
+            errorMessage = "Debe ingresar el número de teléfono completo";
+          } else if (phoneNumber) {
+            if (!phoneNumber.isPossible()) {
+              errorMessage = "Número de teléfono no es posible para este país";
+            } else {
+              errorMessage = "Número de teléfono inválido (longitud incorrecta)";
+            }
+          } else {
+            if (!phone.startsWith("+")) {
+              errorMessage = "Falta el código de país (debe empezar con +)";
+            } else {
+              errorMessage = "Formato de teléfono incorrecto";
+            }
+          }
+
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Número de teléfono inválido",
+            message: errorMessage,
             path: ["phone"],
           });
         }

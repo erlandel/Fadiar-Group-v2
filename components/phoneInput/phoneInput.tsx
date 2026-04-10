@@ -146,7 +146,7 @@ export default function PhoneInput({
   return (
     <div ref={dropdownRef} className="relative w-full">
       <div className="w-full flex items-center gap-2 rounded-2xl px-4 py-3 bg-[#F5F7FA] focus-within:ring-2 focus-within:ring-accent">
-      <div className="flex min-w-5">
+      <div className="flex shrink-0">
         <button
           type="button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -155,15 +155,19 @@ export default function PhoneInput({
           <img
             src={(selectedCountry as Country).flag || `data:image/svg+xml;utf8,${encodeURIComponent(getCountryListMap()[selectedCountry.code]?.flag ?? "")}`}
             alt={selectedCountry.name}
-            className="w-6 h-auto"
+            className="w-6 h-auto shrink-0"
           />
+ 
           {isDropdownOpen ? (
-            <ChevronUp className="h-4 w-4 " strokeWidth={2} />
+            <ChevronUp className="h-4 w-4 shrink-0" strokeWidth={2} />
           ) : (
-            <ChevronDown className="h-4 w-4 "  strokeWidth={2}/>
+            <ChevronDown className="h-4 w-4 shrink-0"  strokeWidth={2}/>
           )}
-        </button>
 
+                   <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+            {selectedCountry.phoneCode}
+          </span>
+        </button>
       </div>
         <span className="text-gray-600 ">|</span>
 
@@ -210,7 +214,8 @@ export default function PhoneInput({
                   alt={country.name}
                   className="w-6 h-auto"
                 />
-                <span>{country.name}</span>
+                <span className="flex-1">{country.name}</span>
+                <span className="text-gray-400 text-sm">{country.phoneCode}</span>
               </button>
             ))
           ) : (
