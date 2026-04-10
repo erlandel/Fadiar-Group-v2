@@ -60,7 +60,13 @@ export default function CheckoutPayment() {
                 <div>
                   <div className="flex justify-between items-center gap-6 xl:gap-0 px-6 py-2 text-[#022954]">
                     <span className="text-md">Domicilio:</span>
-                    <span className="font-medium whitespace-nowrap text-xl">$ {deliveryCost.toFixed(2)} USD</span>
+                    <span className="font-medium whitespace-nowrap text-xl">
+                      {deliveryCost === 0 ? (
+                          <span className="text-primary font-serif uppercase">Gratis!!!</span>
+                      ) : (
+                        `$ ${deliveryCost.toFixed(2)} USD`
+                      )}
+                    </span>
                   </div>
                 </div>
               </>

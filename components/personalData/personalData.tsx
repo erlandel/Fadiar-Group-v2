@@ -157,7 +157,7 @@ export default function PersonalData() {
                   onChange={handlePhoneChange}
                   placeholder="Teléfono"
                   inputMode="numeric"
-                  pattern="[0-9]*"
+                  // pattern="[0-9]*"
                 />
                 {errors.phone && (
                   <span className="text-red-500 text-sm">{errors.phone}</span>

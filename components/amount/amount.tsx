@@ -500,7 +500,7 @@ export default function Amount() {
                     onChange={handlePhoneChange}
                     placeholder="Teléfono"
                     inputMode="numeric"
-                    pattern="[0-9]*"
+                    // pattern="[0-9]*"
                   />
                   {errors.phone && (
                     <p className="text-red-500 text-xs mt-1 ml-2">
@@ -607,8 +607,15 @@ export default function Amount() {
               <div className="flex justify-between items-center p-4 text-[#022954]">
                 <span className="sm:text-xl">Domicilio</span>
                 <span className="sm:text-xl">
-                  $ {isClient ? deliveryPrice.toFixed(2) : "0.00"}{" "}
-                  {currency ?? "USD"}
+                  {isClient ? (
+                    deliveryPrice === 0 ? (
+                      <span className="text-primary font-serif uppercase">Gratis!!!</span>
+                    ) : (
+                      `$ ${deliveryPrice.toFixed(2)} ${currency ?? "USD"}`
+                    )
+                  ) : (
+                    "$ 0.00 USD"
+                  )}
                 </span>
               </div>
             </div>

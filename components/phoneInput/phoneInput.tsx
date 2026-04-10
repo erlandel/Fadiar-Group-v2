@@ -106,9 +106,26 @@ export default function PhoneInput({
   useEffect(() => {
     if (!value) return;
 
-    const parts = value.split(" ");
-    const dialCode = parts[0];
-    const phoneNum = parts.slice(1).join(" ");
+    // Si tiene espacio, lo manejamos (para retrocompatibilidad o primer render)
+    // Si no, buscamos el prefijo
+    let dialCode = "";
+    let phoneNum = "";
+
+    if (value.includes(" ")) {
+      const parts = value.split(" ");
+      dialCode = parts[0];
+      phoneNum = parts.slice(1).join("").replace(/\D/g, "");
+    } else if (value.startsWith("+")) {
+      // Ordenar por longitud descendente para que +1-242 coincida antes que +1
+      const sorted = [...countriesList].sort(
+        (a, b) => b.phoneCode.length - a.phoneCode.length
+      );
+      const matched = sorted.find((c) => value.startsWith(c.phoneCode));
+      if (matched) {
+        dialCode = matched.phoneCode;
+        phoneNum = value.slice(dialCode.length).replace(/\D/g, "");
+      }
+    }
 
     setInputPhoneValue(phoneNum);
 
@@ -130,8 +147,10 @@ export default function PhoneInput({
 
   /* ===== HANDLERS ===== */
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
+    // Solo permitir números
+    const newVal = e.target.value.replace(/\D/g, "");
     setInputPhoneValue(newVal);
+    // Para el onChange, enviamos el código y el número con un espacio entre ellos
     onChange?.(`${selectedCountry.phoneCode} ${newVal}`);
   };
 
@@ -139,7 +158,8 @@ export default function PhoneInput({
     setSelectedCountry(country);
     setIsDropdownOpen(false);
     setSearchQuery("");
-    onChange?.(`${country.phoneCode} ${inputPhoneValue}`);
+    const cleanNumber = inputPhoneValue.replace(/\D/g, "");
+    onChange?.(`${country.phoneCode} ${cleanNumber}`);
   };
 
   /* ===== RENDER ===== */

@@ -58,7 +58,11 @@ export default function PaymentConfirmation() {
                         <div className="flex justify-between items-center text-[#022954]">
                           <span className="text-md">Domicilio:</span>
                           <span className="font-medium whitespace-nowrap text-xl">
-                            $ {(formData.deliveryPrice || 0).toFixed(2)} USD
+                            {(formData.deliveryPrice || 0) === 0 ? (
+                              <span className="text-primary font-serif uppercase">Gratis!!!</span>
+                            ) : (
+                              `$ ${(formData.deliveryPrice || 0).toFixed(2)} USD`
+                            )}
                           </span>
                         </div>
                       </div>
