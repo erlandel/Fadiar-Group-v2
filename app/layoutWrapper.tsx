@@ -16,6 +16,7 @@ import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { useSyncCart } from "@/hooks/cartRequests/useSyncCart";
 import useAuthStore from "@/store/authStore";
 import useCartStore from "@/store/cartStore";
+import useClockStore from "@/store/clockStore";
 
 function ScrollToTop() {
   const pathname = usePathname();
@@ -77,6 +78,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const { syncCart } = useSyncCart(true);
   const auth = useAuthStore((state) => state.auth);
   const items = useCartStore((state) => state.items);
+  const startClock = useClockStore((state) => state.startClock);
   const [isHydrated, setIsHydrated] = useState(false);
   const hasSynced = useRef(false);
 
@@ -86,6 +88,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     setIsHydrated(true);
+    startClock();
   }, []);
 
   // Protección de rutas del carrito

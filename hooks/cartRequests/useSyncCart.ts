@@ -100,6 +100,28 @@ export const useSyncCart = (autoSync: boolean = false) => {
         });
 
         setItems(mappedItems);
+
+        // Sincronizar stores de cart3: quitar productos expirados y actualizar expiryTimestamp
+        const currentStores = MatterCart1Store.getState().formData.stores;
+        if (currentStores && currentStores.length > 0) {
+          const updatedStores = currentStores
+            .map((store) => ({
+              ...store,
+              products: store.products
+                .filter((p: any) =>
+                  mappedItems.some((item) => String(item.productId) === String(p.productId))
+                )
+                .map((p: any) => {
+                  const updated = mappedItems.find(
+                    (item) => String(item.productId) === String(p.productId)
+                  );
+                  return updated ? { ...p, expiryTimestamp: updated.expiryTimestamp } : p;
+                }),
+            }))
+            .filter((store) => store.products.length > 0);
+
+          MatterCart1Store.getState().updateFormData({ stores: updatedStores });
+        }
       } else {
         const errorData = await response.json().catch(() => ({}));
         console.error("Error al obtener el carrito:", errorData);
@@ -152,10 +174,10 @@ export const useSyncCart = (autoSync: boolean = false) => {
         // Luego mostramos warning y redirigimos
         if (expiredItem) {
           WarningMenssage(`El producto "${expiredItem.title}" ha expirado y fue removido del carrito`);
-          const cartPaths = ["/cart2", "/cart3"];
+          const cartPaths = ["/cart1","/cart2", "/cart3"];
           const shouldRedirect = cartPaths.some(path => pathname?.includes(path));
-          if (shouldRedirect) {
-            router.push("/cart1");
+          if (shouldRedirect && useCartStore.getState().items.length === 0) {
+            router.push("/");
           }
         }
       }, delay + 2000);

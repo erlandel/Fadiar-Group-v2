@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import cartStore from "@/store/cartStore";
 import MatterCart1Store from "@/store/matterCart1Store";
-import useClockStore from "@/store/clockStore";
 import PayerPaymentDetails from "./payerPaymentDetails";
 import RecipientPaymentDetails from "./recipientPaymentDetails";
 import ProductListConfirmation from "./productListConfirmation";
@@ -16,13 +15,9 @@ export default function PaymentConfirmation() {
   const totalPrice = cartStore((state) => state.getTotalPrice());
   const formData = MatterCart1Store((state) => state.formData);
   const { confirmOrder, isLoading } = useConfirmOrder();
-  const startClock = useClockStore((state) => state.startClock);
-  const stopClock = useClockStore((state) => state.stopClock);
 
   useEffect(() => {
     setMounted(true);
-    startClock();
-    return () => stopClock();
   }, []);
 
   return (

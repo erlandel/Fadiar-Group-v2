@@ -158,7 +158,7 @@ export default function VerificationCodeEmail() {
               </div>
 
               <div className="text-gray-500 mt-2 sm:mt-3 text-xs ">
-                Revisa tu bandeja de entrada y spam. El código expira en 10
+                Revisa tu bandeja de entrada y spam. El código expira en 15
                 minutos.
               </div>
 
