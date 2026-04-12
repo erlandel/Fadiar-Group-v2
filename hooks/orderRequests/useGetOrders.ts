@@ -9,6 +9,8 @@ import { Order, OrderProduct } from "../../types/order";
 
 export const useGetOrders = (lastId: string = "", size: number = 10, searchText: string = "") => {
   const queryClient = useQueryClient();
+  const { auth } = useAuthStore();
+  const userId = auth?.user?.id;
 
   const fetchOrdersFn = async () => {
     const requestSize = size + 11;
@@ -102,12 +104,12 @@ export const useGetOrders = (lastId: string = "", size: number = 10, searchText:
     }
   };
 
-  const queryKey = ["orders", lastId, size, searchText];
+  const queryKey = ["orders", userId, lastId, size, searchText];
 
   const { data, isLoading, refetch } = useQuery({
     queryKey,
     queryFn: fetchOrdersFn,
-    staleTime: Infinity, // Solo se actualiza si se invalida manualmente
+    staleTime: 1000 * 60 * 30, // 30 minutos
     gcTime: 1000 * 60 * 30, // Mantener en caché por 30 minutos
   });
 
