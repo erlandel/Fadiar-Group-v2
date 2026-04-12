@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import cartStore from "@/store/cartStore";
+import useClockStore from "@/store/clockStore";
 import { useDeleteFromCart } from "@/hooks/cartRequests/useDeleteFromCart";
 import { useUpdateCart } from "@/hooks/cartRequests/useUpdateCart";
-import { ShoppingCart, Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2, AlarmClock, Timer } from "lucide-react";
 import { server_url } from "@/urlApi/urlApi";
 import LoadingDots from "../loadingDots/loadingDots";
 
@@ -26,6 +27,7 @@ interface CardCartProps {
   cartId?: number;
   tiendaId?: string;
   onDelete?: (productId: string) => void;
+  expiryTimestamp?: number;
 }
 
 export default function CartCard({
@@ -45,14 +47,24 @@ export default function CartCard({
   cartId,
   tiendaId,
   onDelete,
+  expiryTimestamp,
 }: CardCartProps) {
   const { getItemQuantity } = cartStore();
   const currentQuantity = productId ? getItemQuantity(productId) : 0;
+  const currentTime = useClockStore((state) => state.currentTime);
   const { deleteFromCart, loading: deleting } = useDeleteFromCart();
   const { updateQuantity, loading: updating } = useUpdateCart();
-  const [loadingType, setLoadingType] = useState<
-    "increment" | "decrement" | null
-  >(null);
+  const [loadingType, setLoadingType] = useState<"increment" | "decrement" | null>(null);
+
+  const formatCountdown = (expiry: number): string => {
+    const remaining = Math.max(0, Math.floor((expiry - currentTime) / 1000));
+    if (remaining === 0) return "Expirado";
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = remaining % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  };
 
   const handleDelete = async () => {
     if (!productId) return;
@@ -80,12 +92,26 @@ export default function CartCard({
       <div
         className={`${bgColor} ${width} ${padding} w-full border border-gray-300 rounded-2xl shadow-sm h-full flex flex-row `}
       >
-        <div className="w-32 h-[124px] overflow-hidden rounded-2xl shrink-0">
-          <img
-            className="w-full h-full object-contain"
-            src={`${server_url}/${image}`}
-            alt={title}
-          />
+        <div className="w-32 shrink-0 flex flex-col gap-1">
+          <div className="w-32 h-[124px] overflow-hidden rounded-2xl">
+            <img
+              className="w-full h-full object-contain"
+              src={`${server_url}/${image}`}
+              alt={title}
+            />
+          </div>
+          {expiryTimestamp && (
+            <p className={`text-center md:text-lg font-semibold mt-1 ${
+              Math.max(0, expiryTimestamp - currentTime) <= 60000
+                ? "text-red-500 animate-[pulse_1s_ease-in-out_infinite]"
+                : "text-primary"
+            }`}>
+              <span className="flex justify-center items-center gap-0.5">
+                <Timer className="w-5 h-5" strokeWidth={2.5} />
+                {formatCountdown(expiryTimestamp)}
+              </span>
+            </p>
+          )}
         </div>
 
         <div className="flex-1 flex flex-col ml-4 min-w-0">

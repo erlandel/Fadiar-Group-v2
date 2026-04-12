@@ -110,7 +110,7 @@ export const useGetOrders = (lastId: string = "", size: number = 10, searchText:
     queryKey,
     queryFn: fetchOrdersFn,
     staleTime: 1000 * 60 * 30, // 30 minutos
-    gcTime: 1000 * 60 * 30, // Mantener en caché por 30 minutos
+    gcTime: 1000 * 60 * 30, // Mantener en caché por 30 minutos    
   });
 
   const orders = data?.orders || [];

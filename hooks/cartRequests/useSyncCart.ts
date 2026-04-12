@@ -1,14 +1,22 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import useCartStore, { CartItem } from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
 import MatterCart1Store from "@/store/matterCart1Store";
 import { refreshToken } from "@/utils/refreshToken";
 import { get_cart_productsUrl } from "@/urlApi/urlApi";
+import WarningMenssage from "@/messages/warningMenssage";
 
-export const useSyncCart = () => {
+export const useSyncCart = (autoSync: boolean = false) => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
   const setItems = useCartStore((state) => state.setItems);
   const setRawCart = useCartStore((state) => state.setRawCart);
+  const items = useCartStore((state) => state.items);
+
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const scheduledExpiryRef = useRef<number | null>(null);
 
   const syncCart = useCallback(async () => {
     const { auth, setAuth } = useAuthStore.getState();
@@ -23,7 +31,11 @@ export const useSyncCart = () => {
       if (!token) {
         return;
       }
-
+  // Si el carrito se vació localmente mientras esperábamos el token o la petición, abortamos
+      if (useCartStore.getState().items.length === 0 && items.length > 0) {
+        setLoading(false);
+        return false;
+      }
       const response = await fetch(`${get_cart_productsUrl}`, {
         method: "POST",
         headers: {
@@ -59,7 +71,8 @@ export const useSyncCart = () => {
           
           productos.forEach((item: any) => {
             const p = item.producto;
-            if (p) {
+            // Solo añadimos el producto si existe y si NO ha expirado (aliveUntil > 0)
+            if (p && item.aliveUntil > 0) {
               mappedItems.push({
                 cartId: item.id,
                 productId: String(p.id),
@@ -76,6 +89,7 @@ export const useSyncCart = () => {
                   : undefined,
                 image: p.img,
                 quantity: item.en_carrito,
+                expiryTimestamp: item.aliveUntil ? Date.now() + Number(item.aliveUntil) * 1000 : undefined,
                 currency: p.currency,
                 tiendaId: tiendaId,
                 tiendaName: tiendaName,
@@ -95,7 +109,63 @@ export const useSyncCart = () => {
     } finally {
       setLoading(false);
     }
-  }, [setItems]);
+  }, [setItems, setRawCart]);
+
+  useEffect(() => {
+    if (!autoSync || items.length === 0) {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      scheduledExpiryRef.current = null;
+      return;
+    }
+
+    const now = Date.now();
+    let minExpiry = Infinity;
+
+    items.forEach((item) => {
+      if (item.expiryTimestamp && item.expiryTimestamp > now) {
+        if (item.expiryTimestamp < minExpiry) {
+          minExpiry = item.expiryTimestamp;
+        }
+      }
+    });
+
+    if (minExpiry !== Infinity && minExpiry !== scheduledExpiryRef.current) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      
+      scheduledExpiryRef.current = minExpiry;
+      const delay = minExpiry - now;
+
+      timerRef.current = setTimeout(async () => {
+        const expiredItem = items.find(
+          (item) => item.expiryTimestamp && item.expiryTimestamp <= Date.now()
+        );
+
+        console.log("Un producto ha expirado. Sincronizando carrito automáticamente...");
+        scheduledExpiryRef.current = null;
+
+        // Primero sincronizamos el carrito (remueve items expirados del store)
+        await syncCart();
+
+        // Luego mostramos warning y redirigimos
+        if (expiredItem) {
+          WarningMenssage(`El producto "${expiredItem.title}" ha expirado y fue removido del carrito`);
+          const cartPaths = ["/cart2", "/cart3"];
+          const shouldRedirect = cartPaths.some(path => pathname?.includes(path));
+          if (shouldRedirect) {
+            router.push("/cart1");
+          }
+        }
+      }, delay + 2000);
+    }
+
+    return () => {
+      // No limpiamos el timer aquí para permitir que persista entre renders 
+      // si el carrito no ha cambiado
+    };
+  }, [items, syncCart, autoSync]);
 
   return { syncCart, loading };
 };

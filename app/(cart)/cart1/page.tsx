@@ -9,12 +9,15 @@ import { SectionMobile } from "@/sections/sectionMobile";
 import { BannerMobilePay } from "@/components/banner/bannerMobilePay";
 import { BestSelling } from "@/sections/sectionsProducts/bestSelling";
 import useCartStore from "@/store/cartStore";
+import useClockStore from "@/store/clockStore";
 import StoreSelector from "@/components/storeSelector/storeSelector";
 import ListByStore from "@/components/listByStore/listByStore";
 
 export default function Cart1() {
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
+  const startClock = useClockStore((state) => state.startClock);
+  const stopClock = useClockStore((state) => state.stopClock);
   const [isClient, setIsClient] = useState(false);
   const [selectedStoreId, setSelectedStoreId] = useState<string | number>(
     "all",
@@ -22,6 +25,8 @@ export default function Cart1() {
 
   useEffect(() => {
     setIsClient(true);
+    startClock();
+    return () => stopClock();
   }, []);
 
   // Items del carrito (sin filtrar por domicilio)
@@ -148,6 +153,7 @@ export default function Cart1() {
                             cartId={item.cartId}
                             tiendaId={item.tiendaId}
                             onDelete={removeItem}
+                            expiryTimestamp={item.expiryTimestamp}
                           />
                         )}
                       />

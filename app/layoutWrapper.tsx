@@ -74,7 +74,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const router = useRouter();
   const { province, municipality, isOpen, setIsOpen } = useProductsByLocationStore();
-  const { syncCart } = useSyncCart();
+  const { syncCart } = useSyncCart(true);
   const auth = useAuthStore((state) => state.auth);
   const items = useCartStore((state) => state.items);
   const [isHydrated, setIsHydrated] = useState(false);

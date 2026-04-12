@@ -76,6 +76,7 @@ export default function ProductListConfirmation() {
                 bgColor="bg-white"
                 width="w-full"
                 padding="p-2"
+                expiryTimestamp={item.expiryTimestamp}
               />
             )}
           />

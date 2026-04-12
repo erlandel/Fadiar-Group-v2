@@ -12,6 +12,7 @@ export type CartItem = {
   temporal_price?: string;
   image: string;
   quantity: number;
+  expiryTimestamp?: number;
   currency?: {
     currency: string;
   };
