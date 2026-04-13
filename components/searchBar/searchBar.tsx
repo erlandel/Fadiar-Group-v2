@@ -176,12 +176,23 @@ export default function Searchbar() {
   };
 
   const handleProductClick = (productId: string, isPreSale?: boolean) => {
-    startLoading();
-    if (isPreSale) {
-      router.push(`/productID?id=${productId}&preSale=true`);
-    } else {
-      router.push(`/productID?id=${productId}`);
+    const targetUrl = isPreSale
+      ? `/productID?id=${productId}&preSale=true`
+      : `/productID?id=${productId}`;
+
+    const currentPath = window.location.pathname;
+    const currentSearch = window.location.search;
+    const targetPath = "/productID";
+    const targetSearch = isPreSale
+      ? `?id=${productId}&preSale=true`
+      : `?id=${productId}`;
+
+    // Solo activar el loading si realmente cambia la URL
+    if (currentPath !== targetPath || currentSearch !== targetSearch) {
+      startLoading();
     }
+
+    router.push(targetUrl);
     setIsOpen(false);
     setQuery("");
   };

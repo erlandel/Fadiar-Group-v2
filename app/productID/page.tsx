@@ -69,11 +69,19 @@ function ProductContent({ id, isPreSale, fromBestSelling }: { id: string | null;
   );
   const isLoading = isPreSale ? isUpcomingLoading : (isInventoryLoading || isBestSellingLoading);
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
+  const stopLoading = useLoadingStore((state) => state.stopLoading);
 
   useEffect(() => {
     setIsLoading(isLoading);
     return () => setIsLoading(false);
   }, [isLoading, setIsLoading]);
+
+  // Cuando el id cambia y los datos ya están en caché (isLoading=false), forzar stopLoading
+  useEffect(() => {
+    if (!isLoading) {
+      stopLoading();
+    }
+  }, [id, isLoading, stopLoading]);
 
   // Encontrar el producto actual
   const product = useMemo(() => {

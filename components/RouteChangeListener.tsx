@@ -20,13 +20,12 @@ export default function RouteChangeListener() {
       sessionStorage.removeItem('products-current-page');
     }
 
-    // En estático, el cambio de ruta puede ser instantáneo o fallar en disparar el useEffect
-    // si la ruta se normaliza internamente por Next.js.
     // Usamos un pequeño delay para asegurar que el DOM se haya actualizado
-    const handle = requestAnimationFrame(() => {
+    // y que cualquier startLoading() posterior al push ya se haya ejecutado
+    const handle = setTimeout(() => {
       stopLoading();
-    });
-    return () => cancelAnimationFrame(handle);
+    }, 50);
+    return () => clearTimeout(handle);
   }, [pathname, searchParams, stopLoading]);
 
   // Interceptar clicks globales en enlaces para activar el loader
