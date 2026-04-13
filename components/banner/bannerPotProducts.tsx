@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 
 export default function BannerPotProducts() {
   const images = [
-    "/images/imagesPot/Ollas.webp",
-    "/images/imagesPot/Calderos.webp",
-    "/images/imagesPot/Estación.webp",
+    { desktop: "/images/imagesPot/Ollas.webp", mobile: "/images/imagesPot/OllasMovil.webp" },
+    { desktop: "/images/imagesPot/Calderos.webp", mobile: "/images/imagesPot/CalderosMovil.webp" },
+    { desktop: "/images/imagesPot/Estacion.webp", mobile: "/images/imagesPot/EstacionMovil.webp" },
   ];
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -54,21 +54,30 @@ export default function BannerPotProducts() {
           </div>
 
           <div className="grid h-full items-end">
-            {images.map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt="Background"
-                fetchPriority="high"
-                className={`row-start-1 col-start-1 z-10 h-60 md:h-60 lg:h-80 xl:h-80 2xl:h-90 object-cover mt-1 ${
-                  i === index
-                    ? "block animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
-                    : i === prevIndex
-                      ? "block animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]"
-                      : "hidden"
-                }`}
-              />
-            ))}
+            {images.map((img, i) => {
+              const isActive = i === index;
+              const isExiting = i === prevIndex;
+              const isHidden = !isActive && !isExiting;
+              const anim = isActive
+                ? "animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
+                : "animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]";
+              return (
+                <div key={img.desktop} className={`row-start-1 col-start-1 z-10 ${isHidden ? "hidden" : anim}`}>
+                  <img
+                    src={img.mobile}
+                    alt="Background"
+                    fetchPriority="high"
+                    className="h-60 object-cover mt-1 sm:hidden"
+                  />
+                  <img
+                    src={img.desktop}
+                    alt="Background"
+                    fetchPriority="high"
+                    className="h-60 md:h-60 lg:h-80 xl:h-80 2xl:h-90 object-cover mt-1 hidden sm:block"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
