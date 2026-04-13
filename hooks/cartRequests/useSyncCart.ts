@@ -56,6 +56,7 @@ export const useSyncCart = (autoSync: boolean = false) => {
 
         const mappedItems: CartItem[] = [];
         const rawCarrito = data.carrito || [];
+        const expiran: boolean = data.expiran; 
 
         setRawCart(rawCarrito);
 
@@ -89,7 +90,7 @@ export const useSyncCart = (autoSync: boolean = false) => {
                   : undefined,
                 image: p.img,
                 quantity: item.en_carrito,
-                expiryTimestamp: item.aliveUntil ? Date.now() + Number(item.aliveUntil) * 1000 : undefined,
+                expiryTimestamp: expiran && item.aliveUntil ? Date.now() + Number(item.aliveUntil) * 1000 : undefined,
                 currency: p.currency,
                 tiendaId: tiendaId,
                 tiendaName: tiendaName,
@@ -153,6 +154,15 @@ export const useSyncCart = (autoSync: boolean = false) => {
         }
       }
     });
+
+    if (minExpiry === Infinity) {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      scheduledExpiryRef.current = null;
+      return;
+    }
 
     if (minExpiry !== Infinity && minExpiry !== scheduledExpiryRef.current) {
       if (timerRef.current) clearTimeout(timerRef.current);
