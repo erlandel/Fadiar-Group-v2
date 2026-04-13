@@ -174,7 +174,7 @@ export default function UserDropdown() {
                 </div>
 
                 <span className="text-[#777777] group-hover:text-[#022954] font-medium group-hover:font-bold ml-2 transition-colors">
-                  Registrse
+                  Registrarse
                 </span>
               </Link>
             </>

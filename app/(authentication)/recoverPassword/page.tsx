@@ -1,6 +1,7 @@
 "use client";
 import InputAuth from "@/components/inputAuth/inputAuth";
 import MessageErrorAuth from "@/components/messageErrorAuth/messageErrorAuth";
+import SuccesMessage from "@/messages/succesMessage";
 import { recover_credentials_by_emailUrl } from "@/urlApi/urlApi";
 import { RecoverPasswordSchemaFormData, recoverPasswordSchema } from "@/validations/recoverPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
@@ -53,6 +54,7 @@ export default function RecoverPassword() {
       return data;
     },
     onSuccess: () => {
+      SuccesMessage("Se ha enviado un correo con su nueva contraseña.");
       router.push("/login");
     },
 
