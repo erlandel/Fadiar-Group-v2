@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 
 export default function BannerPot() {
   const images = [
-    { desktop: "/images/imagesPot/Ollas.webp", mobile: "/images/imagesPot/OllasMovil.webp" },
-    { desktop: "/images/imagesPot/Calderos.webp", mobile: "/images/imagesPot/CalderosMovil.webp" },
-    { desktop: "/images/imagesPot/Estacion.webp", mobile: "/images/imagesPot/EstacionMovil.webp" },
+    "/images/imagesPot/Ollas.webp",
+    "/images/imagesPot/Calderos.webp",
+    "/images/imagesPot/Estacion.webp",
   ];
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
@@ -57,30 +57,21 @@ export default function BannerPot() {
           </div>
 
          <div className="grid h-full items-end">
-            {images.map((img, i) => {
-              const isActive = i === index;
-              const isExiting = i === prevIndex;
-              const isHidden = !isActive && !isExiting;
-              const anim = isActive
-                ? "animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
-                : "animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]";
-              return (
-                <div key={img.desktop} className={`row-start-1 col-start-1 ${isHidden ? "hidden" : anim}`}>
-                  <img
-                    src={img.mobile}
-                    alt="Background"
-                    fetchPriority="high"
-                    className="h-60 object-cover mt-1 sm:hidden"
-                  />
-                  <img
-                    src={img.desktop}
-                    alt="Background"
-                    fetchPriority="high"
-                    className="h-60 md:h-60 lg:h-80 xl:h-110 2xl:h-110 object-cover mt-1 hidden sm:block"
-                  />
-                </div>
-              );
-            })}
+            {images.map((src, i) => (
+              <img
+                key={src}
+                src={src}
+                alt="Background"
+                fetchPriority="high"
+                className={`row-start-1 col-start-1 h-60 md:h-60 lg:h-80 xl:h-110 2xl:h-110 object-cover mt-1 ${
+                  i === index
+                    ? "block animate__animated animate__zoomIn z-20 [animation-duration:2s] [animation-timing-function:ease-in-out]"
+                    : i === prevIndex
+                    ? "block animate__animated animate__zoomOut z-10 [animation-duration:2s] [animation-timing-function:ease-in-out]"
+                    : "hidden"
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>
