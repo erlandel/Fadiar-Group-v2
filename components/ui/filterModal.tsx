@@ -191,9 +191,9 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   };
 
   return (
-    <div className="relative font-bold bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-x-hidden">
+    <div className="relative font-bold bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
       {/* Title */}
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full font-semibold text-[#1A2B49] text-base mb-4 flex items-center justify-between hover:text-[#17243b] transition-colors pr-4"
       >
@@ -204,8 +204,8 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       </button>
 
       {/* Content - Collapsible */}
-      <div className={`transition-all duration-300 ease-in-out custom-scrollbar overflow-x-hidden ${
-        isOpen 
+      <div className={`transition-all duration-300 ease-in-out custom-scrollbar ${
+        isOpen
           ? 'max-h-[450px] opacity-100 overflow-y-auto'
           : 'max-h-0 opacity-0 overflow-hidden'
       }`}>
@@ -272,7 +272,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
 
         {/* RANGE */}
         {type === "range" && (
-          <div className="mt-4">
+          <div className="mt-4 overflow-x-hidden">
             {/* Dual Range Slider */}
             <div className="relative mb-8 pt-8 px-4 pb-2 pr-8">
               {/* Track container */}
@@ -386,7 +386,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
             <div className="mt-4 pr-4">
               <button
                 onClick={handleApply}
-                className="w-full bg-[#17243b] text-white font-medium py-2.5 px-4 rounded-lg hover:bg-[#1A2B49] active:scale-[0.98] transition-all duration-150 shadow-sm hover:shadow"
+                className="w-full bg-[#17243b] text-white font-medium py-2.5 px-4 rounded-lg hover:bg-[#1A2B49] active:scale-[0.98] transition-all duration-150 shadow-sm hover:shadow cursor-pointer"
               >
                 Aplicar Filtro
               </button>
