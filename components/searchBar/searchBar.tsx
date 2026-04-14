@@ -120,6 +120,7 @@ export default function Searchbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const startLoading = useLoadingStore((state) => state.startLoading);
+  const stopLoading = useLoadingStore((state) => state.stopLoading);
   const router = useRouter();
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -175,19 +176,39 @@ export default function Searchbar() {
     setIsOpen(true);
   };
 
+  /**
+   * Misma ficha de producto (id + modo preventa), ignorando otros query params
+   * como fromBestSelling u orden distinto — evita loader colgado y navegación innecesaria.
+   */
+  const isAlreadyOnThisProduct = (productId: string, isPreSale?: boolean) => {
+    const path = window.location.pathname.replace(/\/$/, "") || "/";
+    if (path !== "/productID") return false;
+    const params = new URLSearchParams(window.location.search);
+    const currentId = params.get("id");
+    if (currentId == null || String(currentId) !== String(productId)) return false;
+    const urlPreSale = params.get("preSale") === "true";
+    return Boolean(isPreSale) === urlPreSale;
+  };
+
   const handleProductClick = (productId: string, isPreSale?: boolean) => {
+    if (isAlreadyOnThisProduct(productId, isPreSale)) {
+      stopLoading();
+      setIsOpen(false);
+      setQuery("");
+      return;
+    }
+
     const targetUrl = isPreSale
       ? `/productID?id=${productId}&preSale=true`
       : `/productID?id=${productId}`;
 
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
     const currentSearch = window.location.search;
     const targetPath = "/productID";
     const targetSearch = isPreSale
       ? `?id=${productId}&preSale=true`
       : `?id=${productId}`;
 
-    // Solo activar el loading si realmente cambia la URL
     if (currentPath !== targetPath || currentSearch !== targetSearch) {
       startLoading();
     }

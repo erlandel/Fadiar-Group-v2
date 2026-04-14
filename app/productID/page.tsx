@@ -20,7 +20,15 @@ import { server_url } from "@/urlApi/urlApi";
 import useLoadingStore from "@/store/loadingStore";
 import WarningMenssage from "@/messages/warningMenssage";
 
-function ProductContent({ id, isPreSale, fromBestSelling }: { id: string | null; isPreSale: boolean; fromBestSelling: boolean }) {
+function ProductContent({
+  id,
+  isPreSale,
+  fromBestSelling,
+}: {
+  id: string | null;
+  isPreSale: boolean;
+  fromBestSelling: boolean;
+}) {
   const [qty, setQty] = useState(1);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const { addToCart, loading } = useAddToCart();
@@ -76,12 +84,13 @@ function ProductContent({ id, isPreSale, fromBestSelling }: { id: string | null;
     return () => setIsLoading(false);
   }, [isLoading, setIsLoading]);
 
-  // Cuando el id cambia y los datos ya están en caché (isLoading=false), forzar stopLoading
+  // Al cambiar id o cualquier query relevante, asegurar cierre del loader de ruta
+  // (mismo id pero distinto fromBestSelling/preSale dejaba el overlay activo).
   useEffect(() => {
     if (!isLoading) {
       stopLoading();
     }
-  }, [id, isLoading, stopLoading]);
+  }, [id, isPreSale, fromBestSelling, isLoading, stopLoading]);
 
   // Encontrar el producto actual
   const product = useMemo(() => {
