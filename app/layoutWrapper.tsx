@@ -14,8 +14,8 @@ import ButtonFloatingCart from "@/components/buttonFloatingCart/buttonFloatingCa
 import ModalProductsByLocation from "@/components/modal/modalProductsByLocation/modalProductsByLocation";
 import useProductsByLocationStore from "@/store/productsByLocationStore";
 import { useSyncCart } from "@/hooks/cartRequests/useSyncCart";
-import useAuthStore from "@/store/authStore";
-import useCartStore from "@/store/cartStore";
+import useAuthStore, { initializeAuthSync } from "@/store/authStore";
+import useCartStore, { initializeCartSync } from "@/store/cartStore";
 import useClockStore from "@/store/clockStore";
 
 function ScrollToTop() {
@@ -89,6 +89,16 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   useEffect(() => {
     setIsHydrated(true);
     startClock();
+  }, []);
+
+  useEffect(() => {
+    const cleanupAuth = initializeAuthSync();
+    const cleanupCart = initializeCartSync();
+
+    return () => {
+      cleanupAuth();
+      cleanupCart();
+    };
   }, []);
 
   // Protección de rutas del carrito
