@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useId } from "react";
+import React, { useRef, useEffect, useState, useId, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
 
 export type FilterOption = {
@@ -26,7 +26,7 @@ interface FilterSectionProps {
 
   // Handlers
   onChange?: (value: any) => void;
-  onApply?: (value: any) => void; // Se llama cuando termina de ajustar el rango
+  onApply?: (value: any) => void;
 }
 
 export const FilterSection: React.FC<FilterSectionProps> = ({
@@ -45,8 +45,20 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDraggingMin, setIsDraggingMin] = useState(false);
   const [isDraggingMax, setIsDraggingMax] = useState(false);
-  const [isOpen, setIsOpen] = useState(true); // Por defecto abierto
+  const [isOpen, setIsOpen] = useState(true);
+  const [localMin, setLocalMin] = useState(valueMin);
+  const [localMax, setLocalMax] = useState(valueMax);
+  const [inputMin, setInputMin] = useState(valueMin.toString());
+  const [inputMax, setInputMax] = useState(valueMax.toString());
   const radioGroupId = useId();
+
+  // Sync local state with props
+  useEffect(() => {
+    setLocalMin(valueMin);
+    setLocalMax(valueMax);
+    setInputMin(valueMin.toString());
+    setInputMax(valueMax.toString());
+  }, [valueMin, valueMax]);
 
   const getPercentage = (value: number) => {
     if (max === min) return 0;
@@ -58,18 +70,15 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
     return Math.max(minVal, Math.min(maxVal, value));
   };
 
-  // Función para evitar que los thumbs se superpongan (más flexible)
-  const getClampedMin = (value: number) => {
-    // Permitir que se acerquen más, solo evitar superposición total
-    const minGap = Math.max(1, Math.floor((max - min) * 0.01)); // 1% del rango como mínimo
-    return Math.max(min, Math.min(value, valueMax - minGap));
-  };
+  const getClampedMin = useCallback((value: number) => {
+    const minGap = Math.max(1, Math.floor((max - min) * 0.01));
+    return Math.max(min, Math.min(value, localMax - minGap));
+  }, [min, max, localMax]);
 
-  const getClampedMax = (value: number) => {
-    // Permitir que se acerquen más, solo evitar superposición total
-    const minGap = Math.max(1, Math.floor((max - min) * 0.01)); // 1% del rango como mínimo
-    return Math.min(max, Math.max(value, valueMin + minGap));
-  };
+  const getClampedMax = useCallback((value: number) => {
+    const minGap = Math.max(1, Math.floor((max - min) * 0.01));
+    return Math.min(max, Math.max(value, localMin + minGap));
+  }, [min, max, localMin]);
 
   const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!trackRef.current || isDraggingMin || isDraggingMax) return;
@@ -79,15 +88,19 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
     const percentage = (x / rect.width) * 100;
     const value = Math.round((percentage / 100) * (max - min) + min);
     
-    const distToMin = Math.abs(value - valueMin);
-    const distToMax = Math.abs(value - valueMax);
+    const distToMin = Math.abs(value - localMin);
+    const distToMax = Math.abs(value - localMax);
     
     if (distToMin < distToMax) {
       const newMin = getClampedMin(value);
-      onChange?.([newMin, valueMax]);
+      setLocalMin(newMin);
+      setInputMin(newMin.toString());
+      onChange?.([newMin, localMax]);
     } else {
       const newMax = getClampedMax(value);
-      onChange?.([valueMin, newMax]);
+      setLocalMax(newMax);
+      setInputMax(newMax.toString());
+      onChange?.([localMin, newMax]);
     }
   };
 
@@ -97,34 +110,33 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       
       const rect = trackRef.current.getBoundingClientRect();
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      const x = clientX - rect.left;
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      // Hacer el movimiento más suave y preciso
+      const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+      const percentage = (x / rect.width) * 100;
       const rawValue = (percentage / 100) * (max - min) + min;
       const value = Math.round(rawValue);
       
       if (isDraggingMin) {
         const newMin = getClampedMin(value);
-        onChange?.([newMin, valueMax]);
+        setLocalMin(newMin);
+        setInputMin(newMin.toString());
+        onChange?.([newMin, localMax]);
       } else if (isDraggingMax) {
         const newMax = getClampedMax(value);
-        onChange?.([valueMin, newMax]);
+        setLocalMax(newMax);
+        setInputMax(newMax.toString());
+        onChange?.([localMin, newMax]);
       }
     };
 
     const handleEnd = () => {
       setIsDraggingMin(false);
       setIsDraggingMax(false);
-      // Llamar a onApply cuando el usuario termina de ajustar el rango
-      if (type === "range") {
-        onApply?.([valueMin, valueMax]);
-      }
     };
 
     if (isDraggingMin || isDraggingMax) {
       document.addEventListener('mousemove', handleMove);
       document.addEventListener('mouseup', handleEnd);
-      document.addEventListener('touchmove', handleMove);
+      document.addEventListener('touchmove', handleMove, { passive: true });
       document.addEventListener('touchend', handleEnd);
     }
 
@@ -134,20 +146,52 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       document.removeEventListener('touchmove', handleMove);
       document.removeEventListener('touchend', handleEnd);
     };
-  }, [isDraggingMin, isDraggingMax, valueMin, valueMax, min, max, onChange]);
+  }, [isDraggingMin, isDraggingMax, localMin, localMax, min, max, onChange, getClampedMin, getClampedMax]);
 
-  const handleMinInputChange = (val: number) => {
-    const newMin = clampValue(val, min, valueMax);
-    onChange?.([newMin, valueMax]);
+  const handleInputMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, '');
+    setInputMin(rawValue);
   };
 
-  const handleMaxInputChange = (val: number) => {
-    const newMax = clampValue(val, valueMin, max);
-    onChange?.([valueMin, newMax]);
+  const handleInputMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, '');
+    setInputMax(rawValue);
+  };
+
+  const handleInputMinBlur = () => {
+    let numValue = parseInt(inputMin) || min;
+    numValue = clampValue(numValue, min, localMax);
+    setLocalMin(numValue);
+    setInputMin(numValue.toString());
+    onChange?.([numValue, localMax]);
+  };
+
+  const handleInputMaxBlur = () => {
+    let numValue = parseInt(inputMax) || max;
+    numValue = clampValue(numValue, localMin, max);
+    setLocalMax(numValue);
+    setInputMax(numValue.toString());
+    onChange?.([localMin, numValue]);
+  };
+
+  const handleInputMinKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputMinBlur();
+    }
+  };
+
+  const handleInputMaxKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleInputMaxBlur();
+    }
+  };
+
+  const handleApply = () => {
+    onApply?.([localMin, localMax]);
   };
 
   return (
-    <div className="relative font-bold bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="relative font-bold bg-[#F5F7FA] rounded-2xl border border-gray-200 pl-6 pt-6 pb-6 pr-2 mb-5 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-x-hidden">
       {/* Title */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
@@ -160,9 +204,9 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       </button>
 
       {/* Content - Collapsible */}
-      <div className={`transition-all duration-300 ease-in-out custom-scrollbar ${
+      <div className={`transition-all duration-300 ease-in-out custom-scrollbar overflow-x-hidden ${
         isOpen 
-          ? 'max-h-[450px] opacity-100 overflow-y-auto' 
+          ? 'max-h-[450px] opacity-100 overflow-y-auto'
           : 'max-h-0 opacity-0 overflow-hidden'
       }`}>
         {/* CHECKBOX */}
@@ -226,97 +270,128 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
             );
           })}
 
-          {/* RANGE */}
-          {type === "range" && (
-        <div className="mt-4">
-          {/* Dual Range Slider */}
-          <div className="relative mb-8 pt-6 px-4 pb-2">
-            {/* Track container */}
-            <div
-              ref={trackRef}
-              onClick={handleTrackClick}
-              className="relative h-2 bg-gray-200 rounded-full cursor-pointer"
-            >
-              {/* Active range */}
+        {/* RANGE */}
+        {type === "range" && (
+          <div className="mt-4">
+            {/* Dual Range Slider */}
+            <div className="relative mb-8 pt-8 px-4 pb-2 pr-8">
+              {/* Track container */}
               <div
-                className="absolute h-full bg-[#17243b] rounded-full transition-all duration-150"
-                style={{
-                  left: `${getPercentage(valueMin)}%`,
-                  right: `${100 - getPercentage(valueMax)}%`,
-                }}
-              ></div>
-
-              {/* Min thumb */}
-              <div
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all duration-200"
-                style={{ 
-                  left: `${getPercentage(valueMin)}%`,
-                  zIndex: isDraggingMin ? 30 : 25
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  setIsDraggingMin(true);
-                }}
-                onTouchStart={(e) => {
-                  e.stopPropagation();
-                  setIsDraggingMin(true);
-                }}
+                ref={trackRef}
+                onClick={handleTrackClick}
+                className="relative h-2 bg-gray-200 rounded-full cursor-pointer mr-2"
               >
-                {/* Thumb visual */}
-                <div className="w-4 h-4 bg-white border-2 border-[#17243b] rounded-full shadow-md hover:shadow-lg"></div>
-                {/* Tooltip min */}
-                {isDraggingMin && (
-                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none" style={{ zIndex: 70 }}>
-                    ${valueMin.toLocaleString()}
-                  </div>
-                )}
-              </div>
+                {/* Active range */}
+                <div
+                  className="absolute h-full bg-[#17243b] rounded-full"
+                  style={{
+                    left: `${getPercentage(localMin)}%`,
+                    right: `${100 - getPercentage(localMax)}%`,
+                  }}
+                ></div>
 
-              {/* Max thumb */}
-              <div
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-all duration-200"
-                style={{ 
-                  left: `${getPercentage(valueMax)}%`,
-                  zIndex: isDraggingMax ? 30 : 25
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                  setIsDraggingMax(true);
-                }}
-                onTouchStart={(e) => {
-                  e.stopPropagation();
-                  setIsDraggingMax(true);
-                }}
-              >
-                {/* Thumb visual */}
-                <div className="w-4 h-4 bg-white border-2 border-[#17243b] rounded-full shadow-md hover:shadow-lg"></div>       
+                {/* Min thumb */}
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-transform duration-150"
+                  style={{ 
+                    left: `${getPercentage(localMin)}%`,
+                    zIndex: isDraggingMin ? 30 : 25,
+                    touchAction: 'none'
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDraggingMin(true);
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    setIsDraggingMin(true);
+                  }}
+                >
+                  {/* Thumb visual */}
+                  <div className="w-4 h-4 bg-white border-2 border-[#17243b] rounded-full shadow-md hover:shadow-lg"></div>
+                  {/* Tooltip min */}
+                  {isDraggingMin && (
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none z-50 shadow-lg">
+                      ${localMin.toLocaleString()}
+                    </div>
+                  )}
+                </div>
+
+                {/* Max thumb */}
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-6 h-6 flex items-center justify-center cursor-grab active:cursor-grabbing hover:scale-110 transition-transform duration-150"
+                  style={{ 
+                    left: `${getPercentage(localMax)}%`,
+                    zIndex: isDraggingMax ? 30 : 25,
+                    touchAction: 'none'
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDraggingMax(true);
+                  }}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    setIsDraggingMax(true);
+                  }}
+                >
+                  {/* Thumb visual */}
+                  <div className="w-4 h-4 bg-white border-2 border-[#17243b] rounded-full shadow-md hover:shadow-lg"></div>
+                  {/* Tooltip max */}
+                  {isDraggingMax && (
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none z-50 shadow-lg">
+                      ${localMax.toLocaleString()}
+                    </div>
+                  )}
+                </div>
               </div>
-              
+            </div>
+
+            {/* Input boxes */}
+            <div className="flex items-center gap-3 mt-4 pr-4">
+              <div className="flex-1">
+                <label className="block text-xs text-gray-600 mb-1 font-medium">Mínimo</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={inputMin}
+                    onChange={handleInputMinChange}
+                    onBlur={handleInputMinBlur}
+                    onKeyDown={handleInputMinKeyDown}
+                    className="w-full border border-gray-300 bg-white rounded-lg pl-6 pr-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#17243b]/20 focus:border-[#17243b] transition-all"
+                  />
+                </div>
+              </div>
+              <div className="flex-1">
+                <label className="block text-xs text-gray-600 mb-1 font-medium">Máximo</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={inputMax}
+                    onChange={handleInputMaxChange}
+                    onBlur={handleInputMaxBlur}
+                    onKeyDown={handleInputMaxKeyDown}
+                    className="w-full border border-gray-300 bg-white rounded-lg pl-6 pr-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#17243b]/20 focus:border-[#17243b] transition-all"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Botón Aplicar */}
+            <div className="mt-4 pr-4">
+              <button
+                onClick={handleApply}
+                className="w-full bg-[#17243b] text-white font-medium py-2.5 px-4 rounded-lg hover:bg-[#1A2B49] active:scale-[0.98] transition-all duration-150 shadow-sm hover:shadow"
+              >
+                Aplicar Filtro
+              </button>
             </div>
           </div>
-
-          {/* Input boxes */}
-          <div className="flex items-center gap-3 mt-4">
-            <div className="flex-1">
-              <label className="block text-xs text-gray-600 mb-1">Mínimo</label>
-              <input
-                type="text"
-                value={`$${valueMin.toLocaleString()}`}
-                readOnly 
-                className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none cursor-default"
-              />
-            </div>
-            <div className="flex-1">
-              <label className="block text-xs text-gray-600 mb-1">Máximo</label>
-              <input
-                type="text"
-                value={`$${valueMax.toLocaleString()}`}
-                readOnly 
-                className="w-full border border-gray-300 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none cursor-default"
-              />
-            </div>
-          </div>
-        </div>
         )}
       </div>
     </div>
