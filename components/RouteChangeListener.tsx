@@ -20,12 +20,18 @@ export default function RouteChangeListener() {
       sessionStorage.removeItem('products-current-page');
     }
 
-    // Usamos un pequeño delay para asegurar que el DOM se haya actualizado
-    // y que cualquier startLoading() posterior al push ya se haya ejecutado
-    const handle = setTimeout(() => {
-      stopLoading();
-    }, 50);
-    return () => clearTimeout(handle);
+    // Esperamos dos frames para asegurar que el browser pintó el nuevo contenido
+    // antes de parar el loader, sin importar redirects intermedios
+    let raf1: number, raf2: number;
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        stopLoading();
+      });
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [pathname, searchParams, stopLoading]);
 
   // Interceptar clicks globales en enlaces para activar el loader
