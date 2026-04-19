@@ -2,6 +2,7 @@
 
 import { ReactNode, useRef, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import useProductsByLocationStore from "@/store/productsByLocationStore";
 
 interface CardCarouselProps<T> {
   items: T[];
@@ -24,6 +25,7 @@ export default function CardCarousel<T>({
   const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const isModalOpen = useProductsByLocationStore((state) => state.isOpen);
 
   if (!items || items.length === 0) return null;
 
@@ -58,7 +60,7 @@ export default function CardCarousel<T>({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || isPaused) return;
+    if (!container || isPaused || isModalOpen) return;
 
     let animationFrameId: number;
     
@@ -79,7 +81,7 @@ export default function CardCarousel<T>({
 
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isPaused, speed, direction]);
+  }, [isPaused, isModalOpen, speed, direction]);
 
   const handleScroll = () => {
     const container = containerRef.current;

@@ -13,7 +13,7 @@ export const useSyncCart = (autoSync: boolean = false) => {
   const pathname = usePathname();
   const setItems = useCartStore((state) => state.setItems);
   const setRawCart = useCartStore((state) => state.setRawCart);
-  const items = useCartStore((state) => state.items);
+  const items = useCartStore((state) => state.items); // usado en el useEffect de autoSync
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const scheduledExpiryRef = useRef<number | null>(null);
@@ -31,11 +31,7 @@ export const useSyncCart = (autoSync: boolean = false) => {
       if (!token) {
         return;
       }
-  // Si el carrito se vació localmente mientras esperábamos el token o la petición, abortamos
-      if (useCartStore.getState().items.length === 0 && items.length > 0) {
-        setLoading(false);
-        return false;
-      }
+
       const response = await fetch(`${get_cart_productsUrl}`, {
         method: "POST",
         headers: {
@@ -132,7 +128,7 @@ export const useSyncCart = (autoSync: boolean = false) => {
     } finally {
       setLoading(false);
     }
-  }, [setItems, setRawCart]);
+  }, [setItems, setRawCart]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!autoSync || items.length === 0) {
